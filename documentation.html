@@ -5,24 +5,58 @@ layout: default
 
 <h1>Documentation</h1>
 
+<h3>Code Snippet</h3>
 <ul>
-	<li><a href="https://sites.google.com/a/rl-community.org/critterbot/software/rlpark/code-sn"><b>RLPark
-				Code Snippets</b></a> (in Java, Python and Clojure)</li>
+	<li><a href="doc_codejavalearning.html">Reinforcement Learning</a> in Java</li>
+	<li><a href="doc_codejavacreate.html">Using an iRobot Create</a> in Java</li>
+	<li><a href="doc_codejavacritterbot.html">Using the Critterbot</a> in Java</li>
+	<li><a href="doc_codejythoncreate.html">Using an iRobot Create</a> in Jython</li>
+	<li><a href="doc_codejythondemons.html">Using demons</a> in Jython</li>
+</ul>
+
+<h3>Tutorials</h3>
+
+<ul>
+  <li><a href="doc_tutorialcreate.html">iRobot Create Introduction Session</a></li>
+  <li><a href="doc_tutorialsurprise.html">iRobot Create being surprised</a></li>
+</ul>
+
+
+<h3>Links</h3>
+<ul>
 	<li><a href="http://www.ualberta.ca/%7Edegris/doxygen/html/">Documentation</a> generated from the code source</li>
-	<li>See <a href="https://sites.google.com/a/rl-community.org/critterbot/software/zephyr">Zephyr Tutorials</a> to
-		use Zephyr, run RLPark in Zephyr or extend Zephyr<br>
-	</li>
-	<li>See <a href="https://sites.google.com/a/rl-community.org/critterbot/software/zephyr">Zephyr External
-			Tutorials</a> to extends Zephyr/Crittergui with new menu items, keyboard shortcuts, views...
-	</li>
 	<li><a
 		href="https://sites.google.com/a/rl-community.org/critterbot/hardware/the-irobot-create/create-introduction-session">iRobot
 			Create Introduction Session</a></li>
 </ul>
-</li>
-<li><a href="https://sites.google.com/a/rl-community.org/critterbot/software/rlpark/distribution">Installation/Source
-		code<br>
-</a></li>
-<li><a href="https://sites.google.com/a/rl-community.org/critterbot/software/rlpark/structure">Framework
-		Structure</a></li>
+
+<h3>Framework dependencies</h3>
+
+The structure of dependencies in RLPark projects:
+<ul>
+	<li>zephyr.plugin.core.api
+		<ul>
+			<li>rlpark.plugin.rltoys
+				<ul>
+					<li>rlpark.plugin.robot
+						<ul>
+							<li>rlpark.plugin.irobot
+								<ul>
+									<li>rlpark.plugin.irobotview</li>
+								</ul>
+							</li>
+							<li>rlpark.plugin.critterbot
+								<ul>
+									<li>rlpark.plugin.critterview</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>rlpark.plugin.rltoysview</li>
+				</ul>
+			</li>
+			<li>rlpark.plugin.opencv</li>
+			<li>rlpark.plugin.xugglers</li>
+		</ul>
+	</li>
 </ul>

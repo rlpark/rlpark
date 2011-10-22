@@ -1,0 +1,44 @@
+--- 
+title: Code Snippet iRobot Creates in Java 
+layout: documentation 
+---
+
+<h1>Code Snippet: iRobot Creates in Java</h1>
+
+<ul>
+	<li>Running a Create agent with a robot: <a
+		href="https://github.com/ThomasDegris/rlpark/blob/master/rlpark.example.robots/src/rlpark/example/robots/irobot/CreateIntroSession.java">CreateIntroSession.java</a></li>
+	<li>Running nexting on a Create with a generate and test recursive random network, adaptive density, adaptive
+		threshold in units, using gray code raw input and comparing predictions with returns (in the future) with Zephyr: <a
+		href="https://github.com/ThomasDegris/rlpark/blob/master/rlpark.example.robots/src/rlpark/example/robots/irobot/CreateRawDataRecursiveRandomNetworkNexting.java">CreateRawDataRecursiveRandomNetworkNexting.java</a><br>
+		<b>Notes</b>:
+	<ul>
+		<li>Use the class <span class='code'>RandomNetwork</span> for a non-adaptive
+			random network
+		</li>
+		<li>Use the class <span class='code'>LTUThreshold</span> for a non-adaptive
+			threshold unit in the network
+		</li>
+		<li>Modify the <span class='code'>StateUpdate</span> for not using the observation
+			in the state
+		</li>
+		<li>See the classes <span class='code'>DiscoLogger</span> and <span class='code'>DiscoLogFile</span> to respectively log and play raw binary data from a
+			disco socket (should work with a Critterbot connection, a Create connection or a EMG signals connection but not with
+			log files)
+		</li>
+		<li>one unit is replaced every 1000 time steps (see in the main loop to change that)<br>
+		</li>
+		<li>You may quickly run out of memory. Use the option <span style="font-family: courier new, monospace">-Xmx2048</span>
+			to give more memory to the Java Virtual Machine. <br>
+		</li>
+	</ul>
+	</li>
+</ul>
+
+<h4>Dependencies</h4>
+<span class='file'>zephyr.plugin.core.api</span>, <span class='file'>rlpark.plugin.rltoys</span>, <span class='file'>rlpark.plugin.robot</span>, <span class='file'>rlpark.plugin.irobot</span>
+
+<h4>How to run this code</h4>
+If the class contains a main method, then you can run it as a plain Java project (assuming RLPark and Zephyr are in the
+Java classpath). If it does not, then you need set up a Zephyr project (or an existing one) as described in the tutorial
+<a href="http://thomasdegris.github.com/Zephyr/tutorial_plugins.html">Using Zephyr Plugins</a>

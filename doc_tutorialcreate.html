@@ -1,0 +1,148 @@
+--- 
+title: Tutorial Interacting with the Create 
+layout: documentation 
+---
+
+<h1>Interacting with the Create</h1>
+
+<h3>Connecting to the Create with Zephyr</h3>
+<ol>
+	<li>Making the Create bluetooth aware:
+		<ul>
+			<li>Turn off the robot</li>
+			<li>Plug the bluetooth adapter on the robot</li>
+			<li>Turn on the robot</li>
+		</ul>
+	</li>
+	<li>Pairing the Create bluetooth adapter with your computer (with Mac OS X):
+		<ul>
+			<li><span class='menu'>System Preferences-&gt;Bluetooth</span></li>
+			<li>Make sure the bluetooth is turned on on the computer</li>
+			<li>Click the + button</li>
+			<li>Select the bluetooth adapter. If a pairing key is needed, it is 0000 or 1234.</li>
+			<li>Back to the Preferences, click on the <span class='menu'>Gear Icon-&gt;Edit Serial Ports...</span> the path
+				of the serial link created on your computer
+			</li>
+		</ul>
+	</li>
+	<li>Connecting to the Create with Zephyr (optional):
+		<ul>
+			<li>Download and install the application <a href="http://thomasdegris.github.com/Zephyr/download.html">Zephyr</a></li>
+			<li><a href="http://thomasdegris.github.com/rlpark/download.html">Install RLPark plugins</a> in Zephyr</li>
+			<li>Start Zephyr</li>
+			<li>Click on <span class="menu">File-&gt;Connect to a Create...</span></li>
+			<li>Choose the port corresponding to the bluetooth adapter</li>
+			<li>You should have a view opened showing the data coming in from the Create</li>
+		</ul>
+	</li>
+</ol>
+
+<h3>Creating a new Eclipse project to control the robot in Java with Zephyr</h3>
+<ol>
+	<li>Install Zephyr plugins in Eclipse by following <a href="http://thomasdegris.github.com/Zephyr/download.html">Zephyr
+			plugins installation instructions</a></li>
+	<li>Create a new Eclipse project: <br>
+		<ul>
+			<li><span class="menu">File-&gt;New-&gt;Other...</span> and then <span class="menu">Plug-in
+					Development-&gt;Plug-in Project</span> then click <span class="menu">Next</span></li>
+			<li>Give a name to the project and click <span class="menu">Next</span></li>
+			<li>Disable the different options in the <span class="menu">Options</span> tab
+			</li>
+			<li>Click <span class="menu">Finish</span></li>
+		</ul>
+	</li>
+	<li>On the left, in the Package Explorer view, Eclipse has added your new project. Open it and you should see: <span
+		style="font-family: courier new, monospace">JRE System Library</span> (the Java environment you are using), a <span
+		style="font-family: courier new, monospace">META-INF</span> folder with a <span
+		style="font-family: courier new, monospace">MANIFEST.MF</span> file (this is meta-information about your project: what
+		is its name, its version, its dependencies...), a <span style="font-family: courier new, monospace">build.properties</span>
+		file (how to build your project). <span style="font-family: courier new, monospace">MANIFEST.MF <span
+			style="font-family: arial, sans-serif">and</span>
+	</span><span style="font-family: courier new, monospace">build.properties <font face="arial,sans-serif">are text
+				files but when you double-click on them, Eclipse opens special editors.</font><br>
+	</span></li>
+	<li>Set up the dependencies in your project:
+		<ul>
+			<li>Open <span style="font-family: courier new, monospace">MANIFEST.MF</span>, open <span
+				style="font-family: courier new, monospace">Dependencies</span> tab
+			</li>
+			<li>In <span style="font-family: courier new, monospace">Required Plug-ins</span><font face="arial,sans-serif">,
+					click <span style="font-family: courier new, monospace">Add...</span>
+			</font> and add the following plug-ins: zephyr.plugin.core, zephyr.plugin.core.api, rlpark.plugin.irobot,
+				rlpark.plugin.rltoys, rlpark.plugin.robot
+			</li>
+			<li>Save</li>
+		</ul>
+	</li>
+	<li>Writing the code to interact with the Create:
+		<ul>
+			<li>Right-click on the <span style="font-family: courier new, monospace">src</span> folder in your project and
+				then <span style="font-family: courier new, monospace">New-&gt;Class</span><br>
+			</li>
+			<li>Give a name to your class. To be compatible with Zephyr, your class should also implement the interface <span
+				style="font-family: courier new, monospace">zephyr.plugin.core.api.ZephyrRunnable</span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif">Implement your
+						class using as a template the class <a
+						href="https://github.com/ThomasDegris/rlpark/blob/master/rlpark.example.robots/src/rlpark/example/robots/irobot/CreateIntroSession.java"><code>CreateIntroSessionZephyr</code></a>
+				</font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif">Don't forget
+						to put your path to the serial port on line 15 (or close to this line)</font></span></li>
+		</ul>
+	</li>
+</ol>
+<h3>Running the project</h3>
+<ol>
+	<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif">Adding some
+				meta-information to let Zephyr know what class it should start when loading your jar:</font></span>
+		<ul>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif">Open <span
+						style="font-family: courier new, monospace">MANIFEST.MF</span></font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif"><span
+						style="font-family: courier new, monospace"><span style="font-family: arial, sans-serif">Open the
+								tab </span>Extensions</span></font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif"><span
+						style="font-family: courier new, monospace"><span style="font-family: arial, sans-serif">Click&nbsp;
+						</span>Add... <span style="font-family: arial, sans-serif">and select</span> zephyr.runnable <span
+							style="font-family: arial, sans-serif">(if it does not appear: check your dependencies: you are probably
+								missing </span>zephyr.plugin.core<span style="font-family: arial, sans-serif">)</span></span></font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif"><span
+						style="font-family: courier new, monospace"><span style="font-family: arial, sans-serif">Right-click
+								on </span>zephyr.runnable<span style="font-family: arial, sans-serif">, then </span>New-&gt;client</span></font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif"><span
+						style="font-family: courier new, monospace"><span style="font-family: arial, sans-serif">Click on
+								the new client and in the </span>Extension Element Details<span style="font-family: arial, sans-serif">, in the
+								field </span>class, <span style="font-family: arial, sans-serif">browse to select your class</span></span></font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif"><span
+						style="font-family: courier new, monospace"><span style="font-family: arial, sans-serif">Save:
+								Eclipse created a xml file in your project, namely </span>plugin.xml<span style="font-family: arial, sans-serif">,
+								to indicate the extension you provide in your plugin</span><br style="font-family: arial, sans-serif"> </span></font></span></li>
+		</ul></li>
+	<li style="font-family: arial, sans-serif">Running your code with Zephyr:
+		<ul>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif">In Eclipse, go
+						to the menu <span style="font-family: courier new, monospace">Run-&gt;Run Configurations...</span><br>
+				</font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif">On the left,
+						create a new Eclipse Application by right-clicking on Eclipse Application-&gt;New</font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif">Give a name to
+						your configuration</font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif">In <span
+						style="font-family: courier new, monospace">Program to Run</span>, in <span
+						style="font-family: courier new, monospace">Run a product</span>, select <span
+						style="font-family: courier new, monospace">rlpark.plugin.critterview.crittergui</span></font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif"><span
+						style="font-family: courier new, monospace"><span style="font-family: arial, sans-serif">Go to <span
+								style="font-family: arial, sans-serif">the </span>tab
+						</span> Plug-ins, <span style="font-family: arial, sans-serif">in </span>Launch with:<span
+							style="font-family: arial, sans-serif"> select</span> plug-ins selected below only, <span
+							style="font-family: arial, sans-serif">then click </span>Deselect All<span style="font-family: arial, sans-serif">,
+								then select for activation your project/plug-in (should be one of the first in the plugin list), and then</span> Add
+							Required Plug-ins</span></font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif"><span
+						style="font-family: courier new, monospace"><span style="font-family: arial, sans-serif">Click on </span>Run</span></font></span></li>
+			<li><span style="font-family: courier new, monospace"><font face="arial,sans-serif"><span
+						style="font-family: courier new, monospace"><span style="font-family: arial, sans-serif">Note that
+								your run configuration can directly be started from the icons on the toolbar</span></span></font></span></li>
+		</ul>
+	</li>
+</ol>
