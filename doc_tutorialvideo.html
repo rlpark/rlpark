@@ -1,21 +1,51 @@
 --- 
-title: Tutorial Video
+title: Tutorial Video 
 layout: documentation 
 ---
 
 <h1>Tutorial: video with OpenCV, JavaCV, RLPark and Zephyr</h1>
-This tutorial is about using video processing with RLPark and Zephyr. 
+This tutorial is about using video processing with RLPark and Zephyr.
 <p align=center>
-	<img border="0" height="280" width="400" src="http://thomasdegris.github.com/Zephyr/screenshots/ZephyrBackgroundSubtraction.png" />
+	<img border="0" height="280" width="400"
+		src="http://thomasdegris.github.com/Zephyr/screenshots/ZephyrBackgroundSubtraction.png" />
 </p>
 <h3>Running the demo in Zephyr</h3>
 <ol>
-	<li><a href='http://thomasdegris.github.com/Zephyr/download.html'>Download</a> Zephyr application</li>
-	<li><a href='download.html'>Install RLPark plugins</a>, including the demos, in Zephyr application</li>
+	<li><a href='http://thomasdegris.github.com/Zephyr/download.html'>Download</a>
+		Zephyr application</li>
+	<li><a href='download.html'>Install RLPark plugins</a>, including
+		the demos, in Zephyr application</li>
 	<li>Install opencv binaries</li>
-	<li>Add the path to opencv binaries to the dynamic library loading path when required. Binaries for Mac OS X are available at this address:<a href='http://www.ualberta.ca/~degris/videobinaries.tar.bz2'>videobinaries.tar.bz2</a></li>
+	<li>Add the path to opencv binaries to the dynamic library loading
+		path when required.</br> For Mac OS X:
+		<ul>
+			<li>Binaries for Mac OS X are available at this address:<a
+				href='http://www.ualberta.ca/%7Edegris/videobinaries.tar.bz2'>videobinaries.tar.bz2</a></li>
+			<li>Uncompress in the folder of your choice: for example in <span
+				class='file'>/usr/local</span>
+			<li>Add the path to the library binaries to <span
+				class='DYLD_LIBRARY_PATH'></span>. One way is to add it to <span
+				class='code'>~/.MacOSX/environment.plist</span>. The content of
+				the file could be:
+<pre>
+&lt?xml version="1.0" encoding="UTF-8"?&gt;
+&lt!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+	&lt;key&gt;MANPATH&lt;/key&gt;
+	&lt;string&gt;/usr/local/man:/usr/share/man:/usr/local/share/man:/usr/X11/man:/usr/local/git/man&lt;/string&gt;
+	&lt;key&gt;PATH&lt;/key&gt;
+	&lt;string&gt;/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/opt/local/bin:/usr/local/git/bin&lt;/string&gt;
+	&lt;key&gt;DYLD_LIBRARY_PATH&lt;/key&gt;
+	&lt;string&gt;/usr/local/xuggler/lib:/usr/local/opencv-2.3.0/lib&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</pre>				
+		</ul>
+	</li>
 	<li>Start Zephyr with RLPark plugins installed</li>
-	<li>Start the demo by going to: <span class='menu'>Demos-&gt;Motion Detection</span>
+	<li>Start the demo by going to: <span class='menu'>Demos-&gt;Motion
+			Detection</span>
 </ol>
 <h3>Use an Eclipse project</h3>
 <ol>
@@ -31,8 +61,8 @@ This tutorial is about using video processing with RLPark and Zephyr.
 		href='http://thomasdegris.github.com/Zephyr/tutorial_plugins.html'>Using
 			Zephyr Plugins tutorial</a>. Note that <span class='code'>Autostart</span>
 		is <span class='code'>false</span> by default. So, you need to add the
-		id <span class='code'>rlpark.example.javacv.motiondetectionrunnable</span> to
-		the program arguments of your <span class='menu'>Run
+		id <span class='code'>rlpark.example.javacv.motiondetectionrunnable</span>
+		to the program arguments of your <span class='menu'>Run
 			Configuration</span>.
 	<li>Once the example runs, check the code starting from the main
 		class: <a
