@@ -1,22 +1,44 @@
---- title: Tutorial a Surprised Create layout: documentation ---
+--- 
+title: Tutorial a Surprised Create 
+layout: documentation 
+---
 
 <h1>Tutorial: a Surprised Create</h1>
-This demo learns a set of predictions. The iRobot Create beeps when the variance of the TD error is bigger than usual.
+This demo learns a set of on-policy and off-policy predictions. The
+iRobot Create beeps when the variance of the TD error is bigger than
+usual.
 <p align=center>
-	<iframe width="420" height="315" src="http://www.youtube.com/embed/h3M9_iQrTk4" frameborder="0"></iframe>
+	<iframe width="420" height="315"
+		src="http://www.youtube.com/embed/h3M9_iQrTk4" frameborder="0"></iframe>
 </p>
 <ol>
-	<li><b>Requirements</b>: make sure Zephyr plugins are installed in Eclipse (see <a
-		href='http://thomasdegris.github.com/Zephyr/download.html'>Download</a> in Zephyr), make sure Eclipse plugins are
-		installed in Eclipse (see <a href='download.html'>Download</a> in RLPark)</li>
-	<li>Download the project <a href='http://www.ualberta.ca/%7Edegris/examples/rlpark.example.surprise.tar.gz'>rlpark.example.surprise.tar.gz</a></li>
-	<li>Import the project in Eclipse by going to: <span class='menu'>File&gt;Import...</span> then <span class='menu'>Existing
-			Project into Workspace</span> then select the project <span class='file'>rlpark.example.surprise.tar.gz</span> and follow
-		Eclipse instructions
-	<li>Follow the instructions on the <a href='http://thomasdegris.github.com/Zephyr/tutorial_plugins.html'>Zephyr
-			tutorial</a> about Using Zephyr Plugins, starting from <span class='file'>Running Zephyr with your client</span>. Note
-		that <span class='code'>Autostart</span> is <span class='code'>false</span> by default. So, you need to add the id <span
-		class='code'>rlpark.example.surprise.createsurprise</span> to the list of program arguments.
-	<li>Once the example runs, check the code starting from the main class: <a
+	<li><b>Requirements</b>: make sure Zephyr plugins are installed in
+		Eclipse (see <a
+		href='http://thomasdegris.github.com/Zephyr/download.html'>Download</a>
+		in Zephyr), make sure Eclipse plugins are installed in Eclipse (see <a
+		href='download.html'>Download</a> in RLPark). Make sure to do (or
+		understand) the tutorial <a href='doc_tutorialcreate.html'>Interacting
+			with the Create.</a></li>
+	<li>Start a server to connect to the Create robot</li>
+	<li><b>Optional</b>: you can run this demo directly from the
+		Zephyr application (with RLPark plugins installed) by going to: <span
+		class='menu'>Demos-&gt;iRobot Create Surprise</span></li>
+	<li>Download the project <a
+		href='http://www.ualberta.ca/%7Edegris/examples/rlpark.example.surprise.tar.gz'>rlpark.example.surprise.tar.gz</a></li>
+	<li>Import the project in Eclipse by going to: <span class='menu'>File-&gt;Import...</span>
+		then <span class='menu'>Existing Project into Workspace</span> then
+		select the project <span class='file'>rlpark.example.surprise.tar.gz</span>
+		and follow Eclipse instructions
+	<li>Follow the instructions in <a
+		href='http://thomasdegris.github.com/Zephyr/tutorial_plugins.html#running'>Running
+			Zephyr with your client</a> from <a
+		href='http://thomasdegris.github.com/Zephyr/tutorial_plugins.html'>Using
+			Zephyr Plugins tutorial</a>. Note that <span class='code'>Autostart</span>
+		is <span class='code'>false</span> by default. So, you need to add the
+		id <span class='code'>rlpark.example.surprise.createsurprise</span> to
+		the program arguments of your <span class='menu'>Run
+			Configuration</span>.
+	<li>Once the example runs, check the code starting from the main
+		class: <a
 		href='https://github.com/ThomasDegris/rlpark/blob/master/rlpark.example.surprise/src/rlpark/example/surprise/CreateSurprise.java'>CreateSurprise.java</a>
 </ol>
