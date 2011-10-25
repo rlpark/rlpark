@@ -169,12 +169,12 @@ a img {
 /*****************************************************************************/
 
 #footer {
-  width: 560px;	
-  position: relative;	
+  width: 920px;
+  margin: -20px auto 0;
   font-size:13px;
   color: #636363;
-  margin: 1em 0;
-  float: left;
+  margin-top:50px;
+  border-top:1px solid #c9c9c9;
 }
 
 
