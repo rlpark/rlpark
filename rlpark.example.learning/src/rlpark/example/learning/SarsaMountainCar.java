@@ -22,7 +22,7 @@ public class SarsaMountainCar {
     tileCoders.addFullTilings(10, 10);
     tileCoders.includeActiveFeature();
     TabularAction toStateAction = new TabularAction(problem.actions(), tileCoders.vectorSize());
-    double alpha = .2 / tileCoders.nbActive();
+    double alpha = .2 / tileCoders.vectorNorm();
     double gamma = 0.99;
     double lambda = .3;
     Sarsa sarsa = new Sarsa(alpha, gamma, lambda, toStateAction.vectorSize(), new AMaxTraces());

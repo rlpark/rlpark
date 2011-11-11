@@ -34,7 +34,7 @@ public abstract class TileCoders implements Projector {
   }
 
   private BinaryVector newVectorInstance() {
-    return new BVector(vectorSize(), nbActive());
+    return new BVector(vectorSize(), (int) vectorNorm());
   }
 
   public void addIndependentTilings(int gridResolution, int nbTilings) {
@@ -71,13 +71,15 @@ public abstract class TileCoders implements Projector {
     return nbInputs;
   }
 
-  public int nbActive() {
+  @Override
+  public double vectorNorm() {
     int nbActiveTiles = 0;
     for (TileCoder tileCoder : tileCoders)
       nbActiveTiles += tileCoder.nbTilings();
     return includeActiveFeature ? nbActiveTiles + 1 : nbActiveTiles;
   }
 
+  @Override
   public int vectorSize() {
     int vectorSize = computeVectorSize();
     return includeActiveFeature ? vectorSize + 1 : vectorSize;

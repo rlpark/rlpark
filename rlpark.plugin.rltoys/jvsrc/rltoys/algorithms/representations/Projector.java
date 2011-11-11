@@ -14,4 +14,14 @@ public interface Projector extends Serializable {
    * @return a non-null vector
    */
   RealVector project(double[] obs);
+
+  /**
+   * @return size of the vector after projection
+   */
+  int vectorSize();
+
+  /**
+   * @return the expected norm of the vector after projection
+   */
+  double vectorNorm();
 }

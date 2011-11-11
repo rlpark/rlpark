@@ -89,6 +89,16 @@ public class OffPolicyComponentTest {
         public RealVector project(double[] ds) {
           return new PVector(1.0);
         }
+
+        @Override
+        public int vectorSize() {
+          return 1;
+        }
+
+        @Override
+        public double vectorNorm() {
+          return 1.0;
+        }
       };
     }
   }

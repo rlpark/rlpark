@@ -21,7 +21,7 @@ public class TileCodersNoHashingTest {
     TileCoders coders = new TileCodersNoHashing(2, -1, 1);
     coders.addIndependentTilings(2, 1);
     Assert.assertEquals(4, coders.vectorSize());
-    Assert.assertEquals(2, coders.nbActive());
+    Assert.assertEquals(2.0, coders.vectorNorm(), 0.0);
     coders.project(new double[] { -0.5, 0.5 });
     VectorsTestsUtils.assertEquals(new PVector(1, 0, 0, 1), coders.vector());
     coders.project(new double[] { 0.5, -0.5 });
@@ -33,7 +33,7 @@ public class TileCodersNoHashingTest {
     TileCoders coders = new TileCodersNoHashing(3, -1, 1);
     coders.addIndependentTilings(2, 1);
     Assert.assertEquals(6, coders.vectorSize());
-    Assert.assertEquals(3, coders.nbActive());
+    Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
     coders.project(new double[] { -0.5, 0.5, 0.0 });
     VectorsTestsUtils.assertEquals(new PVector(1, 0, 0, 1, 0, 1), coders.vector());
     coders.project(new double[] { 0.5, -0.5, 0.0 });
@@ -45,7 +45,7 @@ public class TileCodersNoHashingTest {
     TileCoders coders = new TileCodersNoHashing(2, -1, 1);
     coders.addFullTilings(2, 3);
     Assert.assertEquals(2 * 2 * 3, coders.vectorSize());
-    Assert.assertEquals(3, coders.nbActive());
+    Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
     coders.project(new double[] { 0.0, 0.0 });
     VectorsTestsUtils.assertEquals(new PVector(0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0), coders.vector());
     coders.project(new double[] { -0.9, -0.9 });
@@ -64,7 +64,7 @@ public class TileCodersNoHashingTest {
     coders.addFullTilings(2, 1);
     coders.includeActiveFeature();
     Assert.assertEquals(2 * 2 + 1, coders.vectorSize());
-    Assert.assertEquals(1 + 1, coders.nbActive());
+    Assert.assertEquals(1 + 1, coders.vectorNorm(), 0.0);
     coders.project(new double[] { 0.1, 0.1 });
     VectorsTestsUtils.assertEquals(new PVector(0, 0, 0, 1, 1), coders.vector());
     coders.project(new double[] { -0.1, -0.1 });
@@ -120,7 +120,7 @@ public class TileCodersNoHashingTest {
       sum += f;
     }
     int nbSamples = step * step;
-    Assert.assertEquals(nbSamples * coders.nbActive(), sum);
+    Assert.assertEquals(nbSamples * coders.vectorNorm(), sum, 0.0);
     int nbTiles = (int) (Math.pow(gridResolution, inputs.length) * nbTilings);
     assert nbTiles >= nbActivated;
     Assert.assertTrue(nbActivated > gridResolution * gridResolution);

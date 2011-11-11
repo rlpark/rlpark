@@ -5,6 +5,7 @@ import java.io.File;
 import junit.framework.Assert;
 import rltoys.agents.AgentFA;
 import rltoys.algorithms.learning.control.Control;
+import rltoys.algorithms.representations.Projector;
 import rltoys.algorithms.representations.tilescoding.TileCoders;
 import rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
 import rltoys.environments.envio.Runner;
@@ -26,7 +27,7 @@ public abstract class MountainCarOnPolicyTest {
   }
 
   protected interface MountainCarControlFactory {
-    Control createControl(MountainCar mountainCar, TileCoders tilesCoder);
+    Control createControl(MountainCar mountainCar, Projector projector);
   };
 
   protected interface TileCodersFactory {

@@ -54,7 +54,7 @@ public class GQQLambdaTest {
     }
 
     private QLearningControl createQLearning(TileCoders representation, Action[] actions) {
-      double alpha = Alpha / representation.nbActive();
+      double alpha = Alpha / representation.vectorNorm();
       TabularAction toStateAction = new TabularAction(actions, representation.vectorSize());
       QLearning qlearning = new QLearning(actions, alpha, Gamma, Lambda, toStateAction, toStateAction.vectorSize(),
                                           new RTraces());
@@ -64,7 +64,7 @@ public class GQQLambdaTest {
 
     private GreedyGQ createGreedyGQ(Policy behaviourPolicy, TileCoders representation, Action[] actions) {
       TabularAction toStateAction = new TabularAction(actions, representation.vectorSize());
-      double alpha = Alpha / representation.nbActive();
+      double alpha = Alpha / representation.vectorNorm();
       GQ gq = new GQ(alpha, 0.0, 1 - Gamma, Lambda, toStateAction.vectorSize(), new AMaxTraces(1.0));
       Greedy acting = new Greedy(gq, actions, toStateAction);
       return new GreedyGQ(gq, actions, toStateAction, acting, behaviourPolicy);

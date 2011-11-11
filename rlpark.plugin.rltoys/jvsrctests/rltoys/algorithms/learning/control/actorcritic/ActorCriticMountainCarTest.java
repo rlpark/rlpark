@@ -13,10 +13,10 @@ import rltoys.algorithms.learning.control.mountaincar.MountainCarOnPolicyTest;
 import rltoys.algorithms.learning.predictions.td.OnPolicyTD;
 import rltoys.algorithms.learning.predictions.td.TDLambda;
 import rltoys.algorithms.learning.predictions.td.TDLambdaAutostep;
+import rltoys.algorithms.representations.Projector;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
 import rltoys.algorithms.representations.actions.StateToStateAction;
 import rltoys.algorithms.representations.actions.TabularAction;
-import rltoys.algorithms.representations.tilescoding.TileCoders;
 import rltoys.algorithms.representations.traces.ATraces;
 import rltoys.environments.mountaincar.MountainCar;
 
@@ -24,19 +24,19 @@ import rltoys.environments.mountaincar.MountainCar;
 public class ActorCriticMountainCarTest extends MountainCarOnPolicyTest {
   static class MountainCarActorCriticControlFactory implements MountainCarControlFactory {
     @Override
-    public Control createControl(MountainCar mountainCar, TileCoders tilesCoder) {
+    public Control createControl(MountainCar mountainCar, Projector projector) {
       final double lambda = .3;
       final double gamma = .99;
-      OnPolicyTD critic = createCritic(tilesCoder, lambda, gamma);
-      StateToStateAction toStateAction = new TabularAction(mountainCar.actions(), tilesCoder.vectorSize());
+      OnPolicyTD critic = createCritic(projector, lambda, gamma);
+      StateToStateAction toStateAction = new TabularAction(mountainCar.actions(), projector.vectorSize());
       PolicyDistribution distribution = new BoltzmannDistribution(new Random(0), mountainCar.actions(), toStateAction);
-      ActorLambda actor = new ActorLambda(lambda, distribution, .01 / tilesCoder.nbActive(), tilesCoder.vectorSize());
+      ActorLambda actor = new ActorLambda(lambda, distribution, .01 / projector.vectorNorm(), projector.vectorSize());
       return new ActorCritic(critic, actor);
     }
 
-    protected OnPolicyTD createCritic(TileCoders tilesCoder, final double lambda, final double gamma) {
-      return new TDLambda(lambda, gamma, .1 / tilesCoder.nbActive(), tilesCoder.vectorSize(),
-                          new ATraces(tilesCoder.nbActive() * 100, 0.05));
+    protected OnPolicyTD createCritic(Projector projector, final double lambda, final double gamma) {
+      return new TDLambda(lambda, gamma, .1 / projector.vectorNorm(), projector.vectorSize(),
+                          new ATraces((int) (projector.vectorNorm() * 100), 0.05));
     }
   }
 
@@ -49,8 +49,8 @@ public class ActorCriticMountainCarTest extends MountainCarOnPolicyTest {
   public void testDiscreteAutostepActorCriticOnMountainCar() {
     runTestOnOnMountainCar(new MountainCarActorCriticControlFactory() {
       @Override
-      protected OnPolicyTD createCritic(TileCoders tilesCoder, final double lambda, final double gamma) {
-        return new TDLambdaAutostep(lambda, gamma, tilesCoder.vectorSize());
+      protected OnPolicyTD createCritic(Projector projector, final double lambda, final double gamma) {
+        return new TDLambdaAutostep(lambda, gamma, projector.vectorSize());
       }
     });
   }

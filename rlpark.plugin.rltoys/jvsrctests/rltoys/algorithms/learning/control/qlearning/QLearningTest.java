@@ -7,9 +7,9 @@ import rltoys.algorithms.learning.control.acting.EpsilonGreedy;
 import rltoys.algorithms.learning.control.mountaincar.ActionValueMountainCarAgentFactory;
 import rltoys.algorithms.learning.control.mountaincar.MountainCarOnPolicyTest;
 import rltoys.algorithms.learning.predictions.Predictor;
+import rltoys.algorithms.representations.Projector;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.actions.StateToStateAction;
-import rltoys.algorithms.representations.tilescoding.TileCoders;
 import rltoys.algorithms.representations.traces.ATraces;
 
 public class QLearningTest extends MountainCarOnPolicyTest {
@@ -17,7 +17,7 @@ public class QLearningTest extends MountainCarOnPolicyTest {
   public void testQLearningOnMountainCar() {
     runTestOnOnMountainCar(new ActionValueMountainCarAgentFactory() {
       @Override
-      protected Control createControl(Predictor predictor, TileCoders tilesCoder, StateToStateAction toStateAction,
+      protected Control createControl(Predictor predictor, Projector projector, StateToStateAction toStateAction,
           EpsilonGreedy acting) {
         return new QLearningControl(acting, (QLearning) predictor);
       }

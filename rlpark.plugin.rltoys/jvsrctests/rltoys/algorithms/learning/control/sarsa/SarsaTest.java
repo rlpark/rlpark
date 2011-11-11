@@ -10,6 +10,7 @@ import rltoys.algorithms.learning.control.acting.EpsilonGreedy;
 import rltoys.algorithms.learning.control.mountaincar.ActionValueMountainCarAgentFactory;
 import rltoys.algorithms.learning.control.mountaincar.MountainCarOnPolicyTest;
 import rltoys.algorithms.learning.predictions.Predictor;
+import rltoys.algorithms.representations.Projector;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.actions.StateToStateAction;
 import rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
@@ -42,7 +43,7 @@ public class SarsaTest extends MountainCarOnPolicyTest {
     }
 
     @Override
-    protected Control createControl(Predictor predictor, TileCoders tilesCoder, StateToStateAction toStateAction,
+    protected Control createControl(Predictor predictor, Projector projector, StateToStateAction toStateAction,
         EpsilonGreedy acting) {
       return createControl(acting, toStateAction, (Sarsa) predictor);
     }

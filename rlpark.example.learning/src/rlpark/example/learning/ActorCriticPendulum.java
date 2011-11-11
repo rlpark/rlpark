@@ -31,11 +31,11 @@ public class ActorCriticPendulum implements Runnable {
     tileCoders.addFullTilings(10, 10);
     double gamma = 0.99;
     double lambda = .3;
-    int nbActive = tileCoders.nbActive();
+    double vectorNorm = tileCoders.vectorNorm();
     int vectorSize = tileCoders.vectorSize();
-    OnPolicyTD critic = new TDLambda(lambda, gamma, .1 / nbActive, vectorSize);
+    OnPolicyTD critic = new TDLambda(lambda, gamma, .1 / vectorNorm, vectorSize);
     PolicyDistribution policyDistribution = new NormalDistributionSkewed(new Random(0), 0.0, 1.0);
-    Actor actor = new Actor(policyDistribution, 0.01 / nbActive, vectorSize);
+    Actor actor = new Actor(policyDistribution, 0.01 / vectorNorm, vectorSize);
     actorCritic = new ActorCritic(critic, actor);
     Zephyr.advertise(clock, this);
   }
