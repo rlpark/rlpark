@@ -2,11 +2,12 @@ package rltoys.algorithms.learning.predictions.td;
 
 
 import rltoys.algorithms.representations.traces.ATraces;
+import rltoys.algorithms.representations.traces.EligibilityTraceAlgorithm;
 import rltoys.algorithms.representations.traces.Traces;
 import rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class TDLambda extends TD {
+public class TDLambda extends TD implements EligibilityTraceAlgorithm {
   private static final long serialVersionUID = 8613865620293286722L;
   private final double lambda;
   @Monitor
@@ -43,5 +44,10 @@ public class TDLambda extends TD {
   public void resetWeight(int index) {
     super.resetWeight(index);
     e.vect().setEntry(index, 0);
+  }
+
+  @Override
+  public Traces trace() {
+    return e;
   }
 }
