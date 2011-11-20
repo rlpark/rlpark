@@ -3,6 +3,7 @@ package rltoys.algorithms.learning.control.gq;
 import rltoys.algorithms.learning.predictions.LinearLearner;
 import rltoys.algorithms.learning.predictions.Predictor;
 import rltoys.algorithms.representations.traces.ATraces;
+import rltoys.algorithms.representations.traces.EligibilityTraceAlgorithm;
 import rltoys.algorithms.representations.traces.Traces;
 import rltoys.math.vector.MutableVector;
 import rltoys.math.vector.RealVector;
@@ -11,7 +12,7 @@ import rltoys.math.vector.implementations.SVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
-public class GQ implements Predictor, LinearLearner {
+public class GQ implements Predictor, LinearLearner, EligibilityTraceAlgorithm {
   private static final long serialVersionUID = -4971665888576276439L;
   @Monitor(level = 4)
   public final PVector v;
@@ -76,5 +77,10 @@ public class GQ implements Predictor, LinearLearner {
   @Override
   public double error() {
     return delta_t;
+  }
+
+  @Override
+  public Traces trace() {
+    return e;
   }
 }
