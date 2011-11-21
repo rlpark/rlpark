@@ -27,7 +27,7 @@ public class RealVectorBarView extends BackgroundCanvasView<RealVector> implemen
   @Override
   public void createPartControl(Composite parent) {
     super.createPartControl(parent);
-    mouseSearch = new MouseSearch(bar, backgroundCanvas.canvas());
+    mouseSearch = new MouseSearch(bar.dataBuffer(), backgroundCanvas.canvas());
     backgroundCanvas.addOverlay(mouseSearch);
   }
 
