@@ -1,8 +1,8 @@
 package rlpark.plugin.robot.statemachine;
 
-import rltoys.environments.envio.observations.TStep;
+import rltoys.environments.envio.observations.TRStep;
 
-public abstract class TimedState implements StateNode<TStep> {
+public abstract class TimedState implements StateNode<TRStep> {
   final private int nbTimeSteps;
   private int currentTimeSteps;
 
@@ -21,7 +21,7 @@ public abstract class TimedState implements StateNode<TStep> {
   }
 
   @Override
-  public void step(TStep step) {
+  public void step(TRStep step) {
     currentTimeSteps++;
   }
 

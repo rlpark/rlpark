@@ -8,7 +8,6 @@ import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.Agent;
 import rltoys.environments.envio.observations.Legend;
 import rltoys.environments.envio.observations.ObsFilter;
-import rltoys.environments.envio.observations.TStep;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -88,10 +87,6 @@ public class CritterbotEnvironment extends RobotEnvironment implements Critterbo
 
   public CritterbotObservation getCritterbotObservation(long time, double[] obs) {
     return new CritterbotObservation(legend(), time, obs);
-  }
-
-  public CritterbotObservation getCritterbotObservation(TStep step) {
-    return getCritterbotObservation(step.time, step.o_tp1);
   }
 
   public ObsFilter getDefaultFilter() {

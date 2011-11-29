@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import rltoys.environments.envio.observations.TStep;
+import rltoys.environments.envio.observations.TRStep;
 
 
 public class StateMachineTest {
@@ -16,7 +16,7 @@ public class StateMachineTest {
     }
 
     @Override
-    public void step(TStep step) {
+    public void step(TRStep step) {
       super.step(step);
       v++;
     }
@@ -28,7 +28,7 @@ public class StateMachineTest {
   @Test
   public void testStateMachine() {
     @SuppressWarnings("unchecked")
-    StateMachine<TStep> stateMachine = new StateMachine<TStep>(a, b);
+    StateMachine<TRStep> stateMachine = new StateMachine<TRStep>(a, b);
     for (int i = 0; i < 30; i++)
       stateMachine.step(null);
     Assert.assertEquals(a.v, 20);
