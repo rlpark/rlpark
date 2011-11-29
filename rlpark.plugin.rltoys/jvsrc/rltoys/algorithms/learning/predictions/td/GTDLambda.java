@@ -50,8 +50,8 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
     RealVector e_delta = e.vect().mapMultiply(delta_t);
     RealVector correction = x_tp1 != null ? x_tp1.mapMultiply(e.vect().dotProduct(w) * gamma_tp1 * (1 - lambda))
         : new SVector(w.size);
-    v.addToSelf(e_delta.subtract(correction).mapMultiplyToSelf(alpha_v));
-    w.addToSelf(e_delta.subtract(x_t.mapMultiply(w.dotProduct(x_t))).mapMultiplyToSelf(alpha_w));
+    v.addToSelf(alpha_v, e_delta.subtract(correction));
+    w.addToSelf(alpha_w, e_delta.subtract(x_t.mapMultiply(w.dotProduct(x_t))));
     gamma_t = gamma_tp1;
     return delta_t;
   }
