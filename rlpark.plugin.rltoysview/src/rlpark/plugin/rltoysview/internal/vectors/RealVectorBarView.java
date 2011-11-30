@@ -38,7 +38,7 @@ public class RealVectorBarView extends BackgroundCanvasView<RealVector> implemen
 
   @Override
   public boolean synchronize() {
-    data = instance().accessData();
+    data = instance.current().accessData();
     return true;
   }
 

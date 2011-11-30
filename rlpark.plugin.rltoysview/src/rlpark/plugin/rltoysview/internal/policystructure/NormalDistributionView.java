@@ -54,9 +54,10 @@ public class NormalDistributionView extends Plot2DView<NormalDistribution> {
   private final Data2D data = new Data2D(HistoryLength);
 
   synchronized protected void updateData() {
-    if (instance.isNull())
+    NormalDistribution distribution = instance.current();
+    if (distribution == null)
       return;
-    actionHistory.append(instance().a_t);
+    actionHistory.append(distribution.a_t);
     if (actorCritic != null) {
       double delta_t = ((LinearLearner) actorCritic.critic).error();
       tdErrorNormalized.update(delta_t);
@@ -87,7 +88,7 @@ public class NormalDistributionView extends Plot2DView<NormalDistribution> {
   @Override
   synchronized public boolean synchronize() {
     if (initialNormalDistributionDrawer == null) {
-      initialNormalDistributionDrawer = new NormalDistributionDrawer(plot, instance());
+      initialNormalDistributionDrawer = new NormalDistributionDrawer(plot, instance.current());
       initialNormalDistributionDrawer.synchronize();
     }
     if (plot.axes().y.transformationValid) {
@@ -139,14 +140,14 @@ public class NormalDistributionView extends Plot2DView<NormalDistribution> {
     ClassNode actorCriticParentNode = CodeTrees.findParent(codeNode, ActorCritic.class);
     actorCritic = actorCriticParentNode != null ? (ActorCritic) actorCriticParentNode.instance() : null;
     CodeTrees.clockOf(codeNode).onTick.connect(clockListener);
-    normalDistributionDrawer = new NormalDistributionDrawer(plot, instance());
+    normalDistributionDrawer = new NormalDistributionDrawer(plot, instance.current());
     super.onInstanceSet();
   }
 
   @Override
   protected void setLayout() {
     CodeNode codeNode = instance.codeNode();
-    setViewName(String.format("%s[%s]", instance().getClass().getSimpleName(), codeNode.label()), "");
+    setViewName(String.format("%s[%s]", instance.current().getClass().getSimpleName(), codeNode.label()), "");
   }
 
   @Override

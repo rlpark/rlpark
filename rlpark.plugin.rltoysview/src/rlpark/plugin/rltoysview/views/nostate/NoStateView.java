@@ -37,7 +37,7 @@ public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
     @Override
     public void listen(Clock eventInfo) {
       @SuppressWarnings("synthetic-access")
-      TRStep step = instance().step();
+      TRStep step = instance.current().step();
       final double action = ((ActionArray) step.a_t).actions[0];
       actionHistory.append(action);
       rewardHistory.append(step.r_tp1);
@@ -109,7 +109,7 @@ public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
 
   @Override
   protected void setLayout() {
-    NormalDistribution policy = (NormalDistribution) ((ActorCritic) instance().control).actors[0].policy();
+    NormalDistribution policy = (NormalDistribution) ((ActorCritic) instance.current().control).actors[0].policy();
     data = new Data2D("Reward", experimentData.actionHistory.length);
     normalDistributionDrawer = new NormalDistributionDrawer(plot, policy, rewardNormalizer.newInstance());
     setViewName(policy.getClass().getSimpleName(), "");

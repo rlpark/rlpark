@@ -42,6 +42,7 @@ import rltoys.math.ranges.Range;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Chrono;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.observations.ObsLayout;
 import zephyr.plugin.core.observations.ObsWidget;
 import zephyr.plugin.core.observations.SensorCollection;
@@ -107,9 +108,10 @@ public class RoombaView extends IRobotView {
       @SuppressWarnings("synthetic-access")
       @Override
       public String currentText() {
-        if (instance.isNull())
+        Clock clock = instance.clock();
+        if (clock == null)
           return "0000ms";
-        return Chrono.toPeriodString(clock().lastPeriodNano());
+        return Chrono.toPeriodString(clock.lastPeriodNano());
       }
     };
     return new SensorTextGroup("Info", loopTimeTextClient, new IntegerTextClient(ChargingState, "Charging State:"),

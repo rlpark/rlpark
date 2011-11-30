@@ -10,13 +10,15 @@ import rlpark.plugin.robot.sync.ObservationVersatileArray;
 import rltoys.environments.envio.observations.Legend;
 import rltoys.utils.Utils;
 import zephyr.plugin.core.api.logfiles.LogFile;
-import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
+import zephyr.plugin.core.api.parsing.LabelProvider;
 import critterbot.CritterbotProblem;
 import critterbot.actions.CritterbotAction;
+import critterbot.environment.CritterbotEnvironments;
 
-public class CrtrLogFile implements CritterbotProblem, RobotLog {
+public class CrtrLogFile implements CritterbotProblem, RobotLog, MonitorContainer {
   public final String filepath;
-  @Monitor(emptyLabel = true)
   private final LogFile logfile;
   private ObservationVersatile currentObservation;
   private final Legend legend;
@@ -46,6 +48,11 @@ public class CrtrLogFile implements CritterbotProblem, RobotLog {
       legendLabels.add(labels[i]);
     }
     return new Legend(legendLabels);
+  }
+
+  @LabelProvider(ids = { "values" })
+  String observationLabel(int index) {
+    return legend.label(index);
   }
 
   @Override
@@ -107,11 +114,16 @@ public class CrtrLogFile implements CritterbotProblem, RobotLog {
 
   @Override
   public double[] lastReceivedObs() {
-    return currentObservation.doubleValues();
+    return currentObservation != null ? currentObservation.doubleValues() : null;
   }
 
   @Override
   public int observationPacketSize() {
     return logfile.labels().length * 4;
+  }
+
+  @Override
+  public void addToMonitor(DataMonitor monitor) {
+    CritterbotEnvironments.addObservationsLogged(this, monitor);
   }
 }

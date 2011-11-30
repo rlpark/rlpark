@@ -48,7 +48,7 @@ public abstract class IRobotView extends EnvironmentView<RobotLive> implements C
     @SuppressWarnings("synthetic-access")
     public IntegerTextClient(String obsLabel, String textLabel, String defaultString, String suffix) {
       super(textLabel);
-      labelIndex = instance().legend().indexOf(obsLabel);
+      labelIndex = instance.current().legend().indexOf(obsLabel);
       this.defaultString = defaultString;
       this.suffix = suffix;
       assert labelIndex >= 0;
@@ -97,12 +97,12 @@ public abstract class IRobotView extends EnvironmentView<RobotLive> implements C
   }
 
   protected Legend legend() {
-    return instance().legend();
+    return instance.current().legend();
   }
 
   @Override
   public boolean synchronize() {
-    currentObservation = Robots.toDoubles(instance().lastReceivedRawObs());
+    currentObservation = Robots.toDoubles(instance.current().lastReceivedRawObs());
     synchronize(currentObservation);
     return true;
   }
@@ -110,18 +110,19 @@ public abstract class IRobotView extends EnvironmentView<RobotLive> implements C
   @Override
   protected void setLayout() {
     super.setLayout();
-    restartAction.setEnabled(instance() instanceof IRobotLogFile);
+    restartAction.setEnabled(instance.current() instanceof IRobotLogFile);
     terminateAction.setEnabled(true);
     setViewTitle();
   }
 
   private void setViewTitle() {
-    if (instance.isNull()) {
+    RobotLive robot = instance.current();
+    if (robot == null) {
       setViewName("Observation", "");
       return;
     }
-    IRobotLogFile logFile = instance() instanceof IRobotLogFile ? (IRobotLogFile) instance() : null;
-    String viewTitle = logFile == null ? instance().getClass().getSimpleName() : new File(logFile.filepath()).getName();
+    IRobotLogFile logFile = robot instanceof IRobotLogFile ? (IRobotLogFile) robot : null;
+    String viewTitle = logFile == null ? robot.getClass().getSimpleName() : new File(logFile.filepath()).getName();
     String tooltip = logFile == null ? "" : logFile.filepath();
     setViewName(viewTitle, tooltip);
   }
@@ -135,9 +136,9 @@ public abstract class IRobotView extends EnvironmentView<RobotLive> implements C
 
   @Override
   public void restart() {
-    if (!(instance() instanceof IRobotLogFile))
+    if (!(instance.current() instanceof IRobotLogFile))
       return;
-    final String filepath = ((IRobotLogFile) instance()).filepath();
+    final String filepath = ((IRobotLogFile) instance.current()).filepath();
     close();
     ZephyrCore.start(new Runnable() {
       @Override

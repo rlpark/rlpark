@@ -28,6 +28,7 @@ import zephyr.ZephyrCore;
 import zephyr.plugin.core.actions.RestartAction;
 import zephyr.plugin.core.actions.TerminateAction;
 import zephyr.plugin.core.api.synchronization.Chrono;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Closeable;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.observations.EnvironmentView;
@@ -79,7 +80,7 @@ public class ObservationView extends EnvironmentView<CritterbotProblem> implemen
   }
 
   public Legend legend() {
-    return instance().legend();
+    return instance.current().legend();
   }
 
   @Override
@@ -125,9 +126,10 @@ public class ObservationView extends EnvironmentView<CritterbotProblem> implemen
     TextClient loopTimeTextClient = new TextClient("Loop Time:") {
       @Override
       public String currentText() {
-        if (instance.isNull())
+        Clock clock = instance.clock();
+        if (clock == null)
           return "00ms";
-        return Chrono.toPeriodString(instance.clock().lastPeriodNano());
+        return Chrono.toPeriodString(clock.lastPeriodNano());
       }
     };
     TextClient cycleTimeTextClient = new TextClient("Cycle Time:") {
@@ -158,19 +160,21 @@ public class ObservationView extends EnvironmentView<CritterbotProblem> implemen
   }
 
   private void setViewTitle() {
-    if (instance.isNull())
+    CritterbotProblem problem = instance.current();
+    if (problem == null)
       setViewName("Observation", "");
-    CrtrLogFile logFile = instance() instanceof CrtrLogFile ? (CrtrLogFile) instance() : null;
-    String viewTitle = logFile == null ? instance().getClass().getSimpleName() : new File(logFile.filepath).getName();
+    CrtrLogFile logFile = problem instanceof CrtrLogFile ? (CrtrLogFile) problem : null;
+    String viewTitle = logFile == null ? problem.getClass().getSimpleName() : new File(logFile.filepath).getName();
     String tooltip = logFile == null ? "" : logFile.filepath;
     setViewName(viewTitle, tooltip);
   }
 
   @Override
   public void restart() {
-    if (!(instance() instanceof CrtrLogFile))
+    CritterbotProblem problem = instance.current();
+    if (!(problem instanceof CrtrLogFile))
       return;
-    final String filepath = ((CrtrLogFile) instance()).filepath;
+    final String filepath = ((CrtrLogFile) problem).filepath;
     close();
     ZephyrCore.start(new Runnable() {
       @Override
@@ -194,14 +198,14 @@ public class ObservationView extends EnvironmentView<CritterbotProblem> implemen
   @Override
   protected void setLayout() {
     super.setLayout();
-    restartAction.setEnabled(instance() instanceof CrtrLogFile);
+    restartAction.setEnabled(instance.current() instanceof CrtrLogFile);
     terminateAction.setEnabled(true);
     setViewTitle();
   }
 
   @Override
   protected boolean synchronize() {
-    currentObservation = instance().lastReceivedObs();
+    currentObservation = instance.current().lastReceivedObs();
     synchronize(currentObservation);
     return true;
   }

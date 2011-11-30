@@ -1,5 +1,6 @@
 package zephyr.plugin.critterview;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class FileHandler implements IFileHandler {
 
   static public void handle(String filepath) {
     CrtrLogFile logfile = CrtrLogFile.load(filepath);
-    Clock clock = new Clock(filepath);
+    Clock clock = new Clock(new File(filepath).getName());
     Zephyr.advertise(clock, logfile);
     while (clock.tick() && logfile.hasNextStep())
       logfile.step();
