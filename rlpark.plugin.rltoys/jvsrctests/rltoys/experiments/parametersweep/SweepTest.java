@@ -39,8 +39,8 @@ public class SweepTest {
 
   @Test(timeout = SchedulerTest.Timeout)
   public void testSweepNetworkScheduler() throws IOException {
-    ServerScheduler scheduler = UnreliableNetworkClientTest.createServerScheduler();
-    UnreliableNetworkClientTest.startUnreliableClients(5);
+    ServerScheduler scheduler = UnreliableNetworkClientTest.createServerScheduler(true);
+    UnreliableNetworkClientTest.startUnreliableClients(5, true);
     testSweep(scheduler);
     scheduler.dispose();
   }

@@ -59,18 +59,18 @@ public class UnreliableNetworkClientTest {
 
   @Test(timeout = SchedulerTestsUtils.Timeout)
   public void testServerSchedulerWithMultipleClients() throws IOException {
-    ServerScheduler scheduler = createServerScheduler();
-    startUnreliableClients(5);
+    ServerScheduler scheduler = createServerScheduler(false);
+    startUnreliableClients(5, false);
     testServerScheduler(scheduler, 5000);
     scheduler.dispose();
   }
 
-  static public ServerScheduler createServerScheduler() throws IOException {
+  static public ServerScheduler createServerScheduler(final boolean useContextClassLoader) throws IOException {
     ServerScheduler scheduler = new ServerScheduler(SchedulerTestsUtils.Port, 0);
     scheduler.onClientDisconnected.connect(new Listener<ServerScheduler>() {
       @Override
       public void listen(ServerScheduler eventInfo) {
-        startUnreliableClients(1);
+        startUnreliableClients(1, useContextClassLoader);
       }
     });
     scheduler.start();
@@ -88,7 +88,7 @@ public class UnreliableNetworkClientTest {
     return null;
   }
 
-  public static void startUnreliableClients(int nbClients) {
+  public static void startUnreliableClients(int nbClients, final boolean useContextClassLoader) {
     for (int i = 0; i < nbClients; i++) {
       final UnreliableNetworkQueue queue = newUnreliableQueue();
       Runnable target = new Runnable() {
@@ -96,6 +96,8 @@ public class UnreliableNetworkClientTest {
         public void run() {
           LocalScheduler localScheduler = new LocalScheduler(queue);
           NetworkClient client = new NetworkClient(localScheduler);
+          if (useContextClassLoader)
+            client.queue().classLoader().setDefaultClassLoader(Thread.currentThread().getContextClassLoader());
           client.run();
           client.dispose();
         }

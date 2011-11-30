@@ -16,5 +16,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: rlpark.plugin.rltoys;bundle-version="1.0.0",
  zephyr.plugin.core.api;bundle-version="1.0.0",
  rlpark.plugin.robot;bundle-version="1.0.0",
- zephyr.plugin.core;bundle-version="1.0.0"
+ zephyr.plugin.core;bundle-version="1.0.0",
+ org.junit;bundle-version="4.8.2";resolution:=optional
 Bundle-Vendor: Thomas

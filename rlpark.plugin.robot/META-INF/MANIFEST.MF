@@ -16,5 +16,5 @@ Export-Package: rlpark.plugin.robot,
  rlpark.plugin.robot.sync
 Require-Bundle: rlpark.plugin.rltoys;bundle-version="1.0.0",
  zephyr.plugin.core.api;bundle-version="1.0.0",
- org.junit4;bundle-version="4.8.1";resolution:=optional,
- zephyr.plugin.core;bundle-version="1.0.0"
+ zephyr.plugin.core;bundle-version="1.0.0",
+ org.junit;bundle-version="4.8.2";resolution:=optional

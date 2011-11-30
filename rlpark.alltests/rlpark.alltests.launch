@@ -5,7 +5,7 @@
 <listEntry value="/rlpark.plugin.rltoys/bin"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/rlpark.alltests/jvsrctests/rlpark/alltests/RLParkAllTests.java"/>
+<listEntry value="/rlpark.plugin.junittesting/src/rlpark/plugin/junittesting/RLParkAllTests.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -14,7 +14,7 @@
 <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
 <stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
 <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="rlpark.alltests.RLParkAllTests"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="rlpark.alltests"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="rlpark.plugin.junittesting.RLParkAllTests"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="rlpark.plugin.junittesting"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea"/>
 </launchConfiguration>

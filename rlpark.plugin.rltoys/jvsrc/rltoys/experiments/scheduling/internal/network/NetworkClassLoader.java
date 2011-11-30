@@ -13,6 +13,7 @@ public class NetworkClassLoader extends ClassLoader implements NetworkFindClass 
   private final SyncSocket socket;
   private final Map<String, Class<?>> cache = new HashMap<String, Class<?>>();
   private boolean isDisposed = false;
+  private ClassLoader contextClassLoader = null;
 
   public NetworkClassLoader(SyncSocket socket) {
     this.socket = socket;
@@ -26,10 +27,18 @@ public class NetworkClassLoader extends ClassLoader implements NetworkFindClass 
   }
 
   @Override
-  public Class<?> findClass(String name) {
+  synchronized public Class<?> findClass(String name) {
     if (isDisposed)
       return null;
-    Class<?> result = cache.get(name);
+    Class<?> result = null;
+    if (contextClassLoader != null)
+      try {
+        result = contextClassLoader.loadClass(name);
+      } catch (ClassNotFoundException e1) {
+      }
+    if (result != null)
+      return result;
+    result = cache.get(name);
     if (result != null)
       return result;
     try {
@@ -55,5 +64,9 @@ public class NetworkClassLoader extends ClassLoader implements NetworkFindClass 
         return new NetworkClassLoader(socket);
       }
     });
+  }
+
+  public void setDefaultClassLoader(ClassLoader contextClassLoader) {
+    this.contextClassLoader = contextClassLoader;
   }
 }

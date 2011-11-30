@@ -92,4 +92,8 @@ public class NetworkJobQueue implements JobQueue {
   public void denyNewJobRequest() {
     denyNewJobRequest = true;
   }
+
+  public NetworkClassLoader classLoader() {
+    return classLoader;
+  }
 }

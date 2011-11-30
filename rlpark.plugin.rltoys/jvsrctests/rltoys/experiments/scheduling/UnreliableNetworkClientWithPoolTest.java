@@ -27,8 +27,8 @@ public class UnreliableNetworkClientWithPoolTest {
 
   @Test(timeout = SchedulerTestsUtils.Timeout)
   public void testServerSchedulerWithMultipleClients() throws IOException {
-    ServerScheduler scheduler = UnreliableNetworkClientTest.createServerScheduler();
-    UnreliableNetworkClientTest.startUnreliableClients(5);
+    ServerScheduler scheduler = UnreliableNetworkClientTest.createServerScheduler(false);
+    UnreliableNetworkClientTest.startUnreliableClients(5, false);
     testServerSchedulerWithPool(scheduler, 1000, 100);
     scheduler.dispose();
   }

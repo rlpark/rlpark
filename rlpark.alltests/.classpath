@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/rlpark.plugin.eclipse"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/rlpark.plugin.rltoys"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/rlpark.plugin.robot"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

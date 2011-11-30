@@ -125,4 +125,8 @@ public class NetworkClient {
       e.printStackTrace();
     }
   }
+
+  public NetworkJobQueue queue() {
+    return networkJobQueue;
+  }
 }
