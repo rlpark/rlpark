@@ -13,14 +13,14 @@
       </view>
       <view
             allowMultiple="true"
-            class="rlpark.plugin.rltoysview.views.nostate.NoStateView"
+            class="rlpark.plugin.rltoysview.internal.nostate.NoStateView"
             id="zephyr.rlpark.plugin.rltoysview.notstateview"
             name="NoState"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            class="rlpark.plugin.rltoysview.views.pendulum.SwingPendulumView"
+            class="rlpark.plugin.rltoysview.internal.pendulum.SwingPendulumView"
             id="zephyr.rlpark.plugin.rltoysview.swingpendulumview"
             name="Swing Pendulum"
             restorable="true">
@@ -41,16 +41,24 @@
             name="Vector Bar"
             restorable="true">
       </view>
+      <view
+            allowMultiple="true"
+            class="rlpark.plugin.rltoysview.internal.continuousgridworld.ContinuousGridworldView"
+            icon="icons/continuousgridworld.png"
+            id="zephyr.rlpark.plugin.rltoysview.continuousgridworldview"
+            name="Continuous Gridworld"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="zephyr.viewprovider">
       <client
-            class="rlpark.plugin.rltoysview.views.nostate.NoStateView$Provider"
+            class="rlpark.plugin.rltoysview.internal.nostate.NoStateView$Provider"
             name="NoState View"
             viewid="zephyr.rlpark.plugin.rltoysview.notstateview">
       </client>
       <client
-            class="rlpark.plugin.rltoysview.views.pendulum.SwingPendulumView$Provider"
+            class="rlpark.plugin.rltoysview.internal.pendulum.SwingPendulumView$Provider"
             name="Swing Pendulum"
             viewid="zephyr.rlpark.plugin.rltoysview.swingpendulumview">
       </client>
@@ -74,6 +82,12 @@
             name="Vector Bar View"
             popup="false"
             viewid="zephyr.rlpark.plugin.rltoysview.vectorbarview">
+      </client>
+      <client
+            class="rlpark.plugin.rltoysview.internal.continuousgridworld.ContinuousGridworldView$Provider"
+            icon="icons/continuousgridworld.png"
+            name="Continuous Gridworld"
+            viewid="zephyr.rlpark.plugin.rltoysview.continuousgridworldview">
       </client>
    </extension>
    <extension

@@ -39,9 +39,13 @@ public class TestContinuousGridworld {
   @Test
   public void testEpisode() {
     Random random = new Random(0);
-    double[] start = new double[] { -49, -49 };
-    double[] target = new double[] { 49, 49 };
-    ContinuousGridworld world = new ContinuousGridworld(random, start, target, new TestRewardFunction(start.length));
+    Range observationRange = new Range(-50, 50);
+    Range actionRange = new Range(-1, 1);
+    double noise = .1;
+    ContinuousGridworld world = new ContinuousGridworld(random, 2, observationRange, actionRange, noise);
+    world.setStart(new double[] { -49, -49 });
+    world.setRewardFunction(new TestRewardFunction(2));
+    world.setTermination(new TargetReachedTermination(new double[] { 49, 49 }, actionRange.max() + 2 * noise));
     TRStep step = world.initialize();
     while (!step.isEpisodeEnding()) {
       Assert.assertEquals(step.o_tp1[0] + step.o_tp1[1], step.r_tp1, 0.0);

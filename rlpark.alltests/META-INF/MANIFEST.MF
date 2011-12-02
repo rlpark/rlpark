@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: rlpark.alltests
-Bundle-SymbolicName: rlpark.alltests
+Bundle-SymbolicName: rlpark.alltests;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Thomas
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

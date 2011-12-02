@@ -15,69 +15,94 @@ import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 
 public class ContinuousGridworld implements ProblemBounded, ProblemContinuousAction, MonitorContainer {
-  static private final Range SpaceRange = new Range(-50, 50);
-  static private final Range ActionRange = new Range(-1, 1);
-  static private final double Noise = .1;
   protected TRStep step = null;
-  private final int nbDimension;
-  private final double[] target;
-  private final double[] start;
-  private final ContinuousFunction rewardFunction;
+  private final int nbDimensions;
+  private double[] start = null;
+  private ContinuousFunction rewardFunction = null;
   private final Legend legend;
   private final Random random;
+  private TerminationFunction terminationFunction = null;
+  private final Range observationRange;
+  private final Range actionRange;
+  private final double absoluteNoise;
 
-  public ContinuousGridworld(Random random, double[] start, double[] target, ContinuousFunction rewardFunction) {
+  public ContinuousGridworld(Random random, int nbDimension, Range observationRange, Range actionRange,
+      double relativeNoise) {
     this.random = random;
-    nbDimension = start.length;
-    this.rewardFunction = rewardFunction != null ? rewardFunction : new ConstantFunction(nbDimension, 0);
-    this.start = start;
-    this.target = target;
+    this.observationRange = observationRange;
+    this.actionRange = actionRange;
+    this.nbDimensions = nbDimension;
+    this.absoluteNoise = (actionRange.length() / 2.0) * relativeNoise;
     legend = createLegend();
   }
 
+  public void setStart(double[] start) {
+    this.start = start;
+  }
+
+  public void setRewardFunction(ContinuousFunction rewardFunction) {
+    this.rewardFunction = rewardFunction;
+  }
+
+  public void setTermination(TerminationFunction terminationFunction) {
+    this.terminationFunction = terminationFunction;
+  }
+
   private Legend createLegend() {
-    String[] labels = new String[nbDimension];
-    for (int i = 0; i < nbDimension; i++)
+    String[] labels = new String[nbDimensions];
+    for (int i = 0; i < nbDimensions; i++)
       labels[i] = "x" + i;
     return new Legend(labels);
   }
 
   @Override
   public TRStep initialize() {
-    step = new TRStep(start, rewardFunction.fun(start));
+    double[] position = start;
+    if (position == null) {
+      position = new double[nbDimensions];
+      for (int i = 0; i < position.length; i++)
+        position[i] = observationRange.choose(random);
+    }
+    step = new TRStep(position, reward(position));
     return step;
+  }
+
+  public double[] currentPosition() {
+    if (step == null || step.isEpisodeEnding())
+      return null;
+    return step.o_tp1;
   }
 
   @Override
   public TRStep step(Action action) {
     double[] envAction = computeEnvironmentAction(action);
-    double[] x_tp1 = new double[nbDimension];
+    double[] x_tp1 = new double[nbDimensions];
     for (int i = 0; i < x_tp1.length; i++)
-      x_tp1[i] = SpaceRange.bound(step.o_tp1[i] + envAction[i]);
-    step = new TRStep(step, action, x_tp1, rewardFunction.fun(x_tp1));
-    if (isTargetReached())
+      x_tp1[i] = observationRange.bound(step.o_tp1[i] + envAction[i]);
+    step = new TRStep(step, action, x_tp1, reward(x_tp1));
+    if (isTerminated(x_tp1))
       step = step.createEndingStep();
     return step;
   }
 
-  private boolean isTargetReached() {
-    if (target == null)
+  private double reward(double[] position) {
+    if (rewardFunction == null)
+      return 0.0;
+    return rewardFunction.fun(position);
+  }
+
+  private boolean isTerminated(double[] position) {
+    if (terminationFunction == null)
       return false;
-    double distance = 0.0;
-    for (int i = 0; i < nbDimension; i++) {
-      double diff = target[i] - step.o_tp1[i];
-      distance += diff * diff;
-    }
-    distance = Math.sqrt(distance);
-    return (distance < ActionRange.max() + 2 * Noise);
+    return terminationFunction.isTerminated(position);
   }
 
   private double[] computeEnvironmentAction(Action action) {
     double[] agentAction = ((ActionArray) action).actions;
     double[] envAction = new double[agentAction.length];
     for (int i = 0; i < envAction.length; i++) {
-      double noise = (random.nextDouble() * Noise) - (Noise / 2);
-      envAction[i] = ActionRange.bound(agentAction[i]) + noise;
+      double noise = (random.nextDouble() * absoluteNoise) - (absoluteNoise / 2);
+      envAction[i] = actionRange.bound(agentAction[i]) + noise;
     }
     return envAction;
   }
@@ -89,15 +114,15 @@ public class ContinuousGridworld implements ProblemBounded, ProblemContinuousAct
 
   @Override
   public Range[] actionRanges() {
-    Range[] ranges = new Range[nbDimension];
-    Arrays.fill(ranges, ActionRange);
+    Range[] ranges = new Range[nbDimensions];
+    Arrays.fill(ranges, actionRange);
     return ranges;
   }
 
   @Override
   public Range[] getObservationRanges() {
-    Range[] ranges = new Range[nbDimension];
-    Arrays.fill(ranges, SpaceRange);
+    Range[] ranges = new Range[nbDimensions];
+    Arrays.fill(ranges, observationRange);
     return ranges;
   }
 
@@ -118,5 +143,13 @@ public class ContinuousGridworld implements ProblemBounded, ProblemContinuousAct
         }
       });
     }
+  }
+
+  public int nbDimensions() {
+    return nbDimensions;
+  }
+
+  public ContinuousFunction rewardFunction() {
+    return rewardFunction;
   }
 }

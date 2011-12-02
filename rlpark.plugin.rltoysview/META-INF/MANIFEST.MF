@@ -12,6 +12,6 @@ Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
  org.eclipse.core.runtime;bundle-version="3.5.0",
  rlpark.plugin.robot;bundle-version="1.0.0",
  zephyr.plugin.plotting;bundle-version="1.0.0"
-Export-Package: rlpark.plugin.rltoysview.views.nostate
+Export-Package: rlpark.plugin.rltoysview.internal.nostate
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: rlpark.plugin.rltoysview.internal.RLToysViewPlugin

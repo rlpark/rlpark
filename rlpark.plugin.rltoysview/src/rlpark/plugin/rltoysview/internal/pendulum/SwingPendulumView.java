@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoysview.views.pendulum;
+package rlpark.plugin.rltoysview.internal.pendulum;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;

@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoysview.views.nostate;
+package rlpark.plugin.rltoysview.internal.nostate;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
