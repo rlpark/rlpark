@@ -17,7 +17,7 @@ public class RLParkViewsTesting {
     Assert.assertEquals(0, ControlChecks.countChildren("zephyr.plugin.critterview.view.observation"));
   }
 
-  @Test
+  @Test(timeout = RunnableFilesTests.TimeOut)
   public void testContinuousGridworldView() {
     ZephyrCore.setSynchronous(true);
     RunnableTests.startRunnable("rlpark.alltests.testcontinuousgridworld.runnable", new NumberTickCondition(50));

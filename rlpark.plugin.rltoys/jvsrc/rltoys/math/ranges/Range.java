@@ -11,6 +11,11 @@ public class Range implements Serializable {
   private double min;
   private double max;
 
+  public Range() {
+    this(Double.MAX_VALUE, -Double.MAX_VALUE);
+  }
+
+
   public Range(Range range) {
     this(range.min, range.max);
   }
@@ -58,7 +63,7 @@ public class Range implements Serializable {
   }
 
   public double scale(double value) {
-    assert value >= min && value <= max;
+    assert value >= min - 1e-6 && value <= max + 1e-6;
     return (value - min) / length();
   }
 
@@ -78,5 +83,10 @@ public class Range implements Serializable {
 
   public double max() {
     return max;
+  }
+
+  public void reset() {
+    min = Double.MAX_VALUE;
+    max = -Double.MAX_VALUE;
   }
 }

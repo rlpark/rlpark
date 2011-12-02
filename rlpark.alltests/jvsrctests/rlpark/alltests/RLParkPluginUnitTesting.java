@@ -7,6 +7,6 @@ import rlpark.alltests.rlparkview.RLParkViewsTesting;
 import zephyr.plugin.junittesting.ZephyrUnitTesting;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ ZephyrUnitTesting.class, RLParkAllTests.class, RLParkViewsTesting.class })
+@Suite.SuiteClasses({ RLParkAllTests.class, ZephyrUnitTesting.class, RLParkViewsTesting.class })
 public class RLParkPluginUnitTesting {
 }

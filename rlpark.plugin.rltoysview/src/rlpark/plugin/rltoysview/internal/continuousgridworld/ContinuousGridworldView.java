@@ -3,7 +3,6 @@ package rlpark.plugin.rltoysview.internal.continuousgridworld;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 
-import rltoys.environments.continuousgridworld.ContinuousFunction;
 import rltoys.environments.continuousgridworld.ContinuousGridworld;
 import rltoys.math.ranges.Range;
 import zephyr.ZephyrPlotting;
@@ -30,7 +29,9 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     @SuppressWarnings("synthetic-access")
     @Override
     public void listen(Clock eventInfo) {
-      trajectory.append(instance.current().currentPosition());
+      ContinuousGridworld current = instance.current();
+      if (current != null)
+        trajectory.append(current.currentPosition());
     }
   }
 
@@ -38,7 +39,7 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   private final Axes axes = new Axes();
   final Trajectory trajectory = new Trajectory();
   private final Listener<Clock> listener = new TickListener();
-  private final Function2DDrawer rewardDrawer = new Function2DDrawer(colors, axes);
+  private final Function2DDrawer rewardDrawer = new Function2DDrawer(colors);
 
   @Override
   protected void paint(GC gc) {
@@ -77,10 +78,6 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
 
   @Override
   protected boolean synchronize() {
-    ContinuousFunction rewardFunction = instance.current().rewardFunction();
-    if (rewardFunction == null)
-      return true;
-    rewardDrawer.synchronize(rewardFunction);
     return true;
   }
 
@@ -89,8 +86,8 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     super.onInstanceSet();
     trajectory.setLength(1000);
     instance.clock().onTick.connect(listener);
+    rewardDrawer.set(instance.current(), 200);
     updateAxes();
-    rewardDrawer.reset();
   }
 
   private void updateAxes() {
@@ -107,6 +104,6 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   public void onInstanceUnset() {
     super.onInstanceUnset();
     instance.clock().onTick.disconnect(listener);
-    rewardDrawer.reset();
+    rewardDrawer.unset();
   }
 }
