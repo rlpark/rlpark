@@ -22,11 +22,6 @@ public class TestContinuousGridworldRunnable implements Runnable {
     continuousGridworld = new ContinuousGridworld(random, 2, ObservationRange, new Range(-1, 1), .1);
     continuousGridworld.setRewardFunction(new ContinuousFunction() {
       @Override
-      public Range range() {
-        return new Range(ObservationRange.min() * 2, ObservationRange.max() * 2);
-      }
-
-      @Override
       public int nbDimension() {
         return 2;
       }

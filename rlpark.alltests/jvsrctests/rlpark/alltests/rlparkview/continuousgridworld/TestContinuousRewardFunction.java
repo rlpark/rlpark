@@ -1,7 +1,6 @@
 package rlpark.alltests.rlparkview.continuousgridworld;
 
 import rltoys.environments.continuousgridworld.ContinuousFunction;
-import rltoys.math.ranges.Range;
 
 public class TestContinuousRewardFunction implements ContinuousFunction {
 
@@ -16,10 +15,5 @@ public class TestContinuousRewardFunction implements ContinuousFunction {
   @Override
   public int nbDimension() {
     return 2;
-  }
-
-  @Override
-  public Range range() {
-    return new Range(-2, 2);
   }
 }

@@ -1,6 +1,5 @@
 package rltoys.environments.continuousgridworld;
 
-import rltoys.math.ranges.Range;
 import zephyr.plugin.core.api.labels.Labeled;
 
 public class ConstantFunction implements ContinuousFunction, Labeled {
@@ -20,11 +19,6 @@ public class ConstantFunction implements ContinuousFunction, Labeled {
   @Override
   public int nbDimension() {
     return nbDimension;
-  }
-
-  @Override
-  public Range range() {
-    return new Range(value - 1, value + 1);
   }
 
   @Override

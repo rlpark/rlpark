@@ -29,11 +29,6 @@ public class TestContinuousGridworld {
     public int nbDimension() {
       return nbDim;
     }
-
-    @Override
-    public Range range() {
-      return null;
-    }
   }
 
   @Test

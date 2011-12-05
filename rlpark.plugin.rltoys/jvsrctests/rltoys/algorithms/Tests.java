@@ -7,6 +7,7 @@ import rltoys.algorithms.learning.control.acting.SoftMaxTest;
 import rltoys.algorithms.learning.control.actorcritic.ActorCriticMountainCarTest;
 import rltoys.algorithms.learning.control.actorcritic.ActorCriticOnPolicyOnPendulumTest;
 import rltoys.algorithms.learning.control.actorcritic.ActorCriticOnPolicyOnStateTest;
+import rltoys.algorithms.learning.control.actorcritic.policystructure.TestJointDistribution;
 import rltoys.algorithms.learning.control.gq.GQOnPolicyTest;
 import rltoys.algorithms.learning.control.gq.GQQLambdaTest;
 import rltoys.algorithms.learning.control.gq.GQTest;
@@ -32,10 +33,10 @@ import rltoys.algorithms.representations.traces.ATracesTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ AveBinsTest.class, AveBinsTreeTest.class, ConstantPolicyTest.class, ObsHistoryTest.class,
-    TabularActionTest.class, SoftMaxTest.class, TileCodersNoHashingTest.class, TestRBFs.class, ATracesTest.class,
-    TileCodersHashingTest.class, MurmurHash2Test.class, AdalineTest.class, IDBDTest.class, K1Test.class, TDTest.class,
-    GTDLambdaTest.class, SarsaTest.class, QLearningTest.class, GQTest.class, GQOnPolicyTest.class, TracesTest.class,
-    GQQLambdaTest.class, ActorCriticOnPolicyOnStateTest.class, ActorCriticOnPolicyOnPendulumTest.class,
-    ActorCriticMountainCarTest.class, RandomNetworkTest.class })
+    TabularActionTest.class, SoftMaxTest.class, TestJointDistribution.class, TileCodersNoHashingTest.class,
+    TestRBFs.class, ATracesTest.class, TileCodersHashingTest.class, MurmurHash2Test.class, AdalineTest.class,
+    IDBDTest.class, K1Test.class, TDTest.class, GTDLambdaTest.class, SarsaTest.class, QLearningTest.class,
+    GQTest.class, GQOnPolicyTest.class, TracesTest.class, GQQLambdaTest.class, ActorCriticOnPolicyOnStateTest.class,
+    ActorCriticOnPolicyOnPendulumTest.class, ActorCriticMountainCarTest.class, RandomNetworkTest.class })
 public class Tests {
 }

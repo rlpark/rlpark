@@ -1,7 +1,9 @@
 package rltoys.algorithms.representations.rbf;
 
+import rltoys.algorithms.representations.LocalFeature;
 
-public class RBF {
+
+public class RBF implements LocalFeature {
   private final int[] patternIndexes;
   private final double[] patternValues;
   private final double variance;
@@ -12,6 +14,7 @@ public class RBF {
     this.variance = stddev * stddev;
   }
 
+  @Override
   public double value(double[] input) {
     double distance = 0.0;
     for (int i = 0; i < patternIndexes.length; i++) {
