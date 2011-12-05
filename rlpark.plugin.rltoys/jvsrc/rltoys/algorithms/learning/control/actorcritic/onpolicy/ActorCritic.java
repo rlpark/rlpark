@@ -11,14 +11,14 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 public class ActorCritic implements Control {
   private static final long serialVersionUID = 3772938582043052714L;
   public final OnPolicyTD critic;
-  public final Actor[] actors;
-  protected final Action[] lastAction;
+  public final Actor actor;
+  protected Action lastAction;
   protected double reward = 0.0;
 
-  public ActorCritic(OnPolicyTD critic, Actor... actors) {
+  public ActorCritic(OnPolicyTD critic, Actor actor) {
     this.critic = critic;
-    this.actors = actors;
-    lastAction = new Action[actors.length];
+    this.actor = actor;
+    lastAction = null;
   }
 
   protected double updateCritic(RealVector x_t, RealVector x_tp1, double r_tp1) {
@@ -26,14 +26,12 @@ public class ActorCritic implements Control {
   }
 
   protected void updateActors(RealVector x_t, double delta) {
-    for (int i = 0; i < actors.length; i++)
-      if (lastAction[i] != null)
-        actors[i].update(x_t, lastAction[i], delta);
+    if (lastAction != null)
+      actor.update(x_t, lastAction, delta);
   }
 
   protected Action computeAction(RealVector x_tp1) {
-    for (int i = 0; i < actors.length; i++)
-      lastAction[i] = x_tp1 != null ? actors[i].proposeAction(x_tp1) : null;
+    lastAction = x_tp1 != null ? actor.proposeAction(x_tp1) : null;
     return x_tp1 != null ? ActionArray.merge(lastAction) : null;
   }
 
@@ -48,5 +46,9 @@ public class ActorCritic implements Control {
   @Override
   public Action proposeAction(RealVector x) {
     return computeAction(x);
+  }
+
+  public Actor actor() {
+    return actor;
   }
 }

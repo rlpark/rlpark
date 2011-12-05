@@ -65,6 +65,6 @@ public class SwingPendulumExperiment implements Labeled {
 
   @Override
   public String label() {
-    return ((ActorCritic) control()).actors[0].policy().getClass().getSimpleName();
+    return ((ActorCritic) control()).actor().policy().getClass().getSimpleName();
   }
 }

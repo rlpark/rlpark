@@ -109,7 +109,7 @@ public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
 
   @Override
   protected void setLayout() {
-    NormalDistribution policy = (NormalDistribution) ((ActorCritic) instance.current().control).actors[0].policy();
+    NormalDistribution policy = (NormalDistribution) ((ActorCritic) instance.current().control).actor().policy();
     data = new Data2D("Reward", experimentData.actionHistory.length);
     normalDistributionDrawer = new NormalDistributionDrawer(plot, policy, rewardNormalizer.newInstance());
     setViewName(policy.getClass().getSimpleName(), "");
