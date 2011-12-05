@@ -107,7 +107,7 @@ public class SVector extends AbstractVector implements SparseRealVector {
   }
 
   @Override
-  public MutableVector copy() {
+  public SVector copy() {
     return new SVector(this);
   }
 
