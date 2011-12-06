@@ -44,8 +44,20 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   @Override
   protected void paint(GC gc) {
     axes.updateScaling(gc.getClipping());
-    rewardDrawer.paint(gc, canvas, 4);
+    rewardDrawer.paint(gc, canvas);
+    ContinuousGridworld current = instance.current();
+    drawStartPosition(gc, current);
     drawTrajectory(gc);
+  }
+
+  private void drawStartPosition(GC gc, ContinuousGridworld current) {
+    double[] start = current.start();
+    if (start == null)
+      return;
+    int lineSize = ZephyrPlotting.preferredLineSize();
+    gc.setBackground(colors.color(gc, Colors.COLOR_BLACK));
+    int size = lineSize * 6;
+    gc.fillOval(axes.toGX(start[0]) - (size / 2), axes.toGY(start[1]) - (size / 2), size, size);
   }
 
   private void drawTrajectory(GC gc) {
@@ -58,7 +70,7 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     for (float[] position : trajectory.getData()) {
       Point point = position != null ? axes.toG(position[0], position[1]) : null;
       if (lastPoint != null && point == null)
-        gc.fillRectangle(point.x - (extremities / 2), point.y - (extremities / 2), extremities, extremities);
+        gc.fillRectangle(lastPoint.x - (extremities / 2), lastPoint.y - (extremities / 2), extremities, extremities);
       if (lastPoint != null && point != null)
         gc.drawLine(lastPoint.x, lastPoint.y, point.x, point.y);
       lastPoint = point;

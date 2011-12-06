@@ -152,4 +152,8 @@ public class ContinuousGridworld implements ProblemBounded, ProblemContinuousAct
   public ContinuousFunction rewardFunction() {
     return rewardFunction;
   }
+
+  public double[] start() {
+    return start;
+  }
 }

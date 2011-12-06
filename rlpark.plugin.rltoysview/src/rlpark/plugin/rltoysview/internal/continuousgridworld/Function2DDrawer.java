@@ -59,7 +59,7 @@ public class Function2DDrawer {
     updateImageData(continuousGridworld.getObservationRanges(), rewardFunction);
   }
 
-  public void paint(GC gc, Canvas canvas, int resolution) {
+  public void paint(GC gc, Canvas canvas) {
     if (imageData == null) {
       gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
       gc.fillRectangle(gc.getClipping());
@@ -70,14 +70,17 @@ public class Function2DDrawer {
   }
 
   private void updateBufferedImage(Rectangle rectangle) {
+    if (bufferedImage != null
+        && (bufferedImage.getWidth() != rectangle.width || bufferedImage.getHeight() != rectangle.height))
+      bufferedImage = null;
     if (bufferedImage == null) {
       bufferedImage = new BufferedImage(rectangle.width, rectangle.height, BufferedImage.TYPE_INT_ARGB);
       dirty = true;
     }
     if (!dirty)
       return;
-    final float pixelSizeX = Math.max(1.0f, (float) rectangle.width / resolution);
-    final float pixelSizeY = Math.max(1.0f, (float) rectangle.height / resolution);
+    final float pixelSizeX = (float) rectangle.width / resolution;
+    final float pixelSizeY = (float) rectangle.height / resolution;
     for (int ax = 0; ax < imageData.length; ax++) {
       float gx = ax * pixelSizeX;
       for (int ay = 0; ay < imageData[ax].length; ay++) {
