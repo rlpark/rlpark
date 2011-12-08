@@ -3,7 +3,6 @@ bin
 build
 dist
 private
-doxygen
 zephyr.jar
 .junittests_*
 .junitdiscofile.bin
