@@ -19,8 +19,9 @@ import rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluatio
 import rltoys.experiments.parametersweep.parameters.Parameters;
 import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgent;
 import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
-import rltoys.experiments.parametersweep.reinforcementlearning.ProblemFactory;
+import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.ProjectorFactory;
+import rltoys.experiments.reinforcementlearning.problemtest.AbstractRLProblemFactoryTest;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 import rltoys.utils.Utils;
@@ -29,9 +30,9 @@ import rltoys.utils.Utils;
 public class OffPolicyComponentTest {
   static class OffPolicySweepDescriptor implements SweepDescriptor {
     private final OffPolicyEvaluation evaluation;
-    private final ProblemFactory problemFactory;
+    private final OffPolicyProblemFactory problemFactory;
 
-    public OffPolicySweepDescriptor(ProblemFactory problemFactory, OffPolicyEvaluation evaluation) {
+    public OffPolicySweepDescriptor(OffPolicyProblemFactory problemFactory, OffPolicyEvaluation evaluation) {
       this.evaluation = evaluation;
       this.problemFactory = problemFactory;
     }
@@ -40,8 +41,8 @@ public class OffPolicyComponentTest {
     public List<? extends Context> provideContexts() {
       ProjectorFactory projectorFactory = new ProjectorFactoryTest();
       OffPolicyAgentFactoryTest[] factories = new OffPolicyAgentFactoryTest[] {
-          new OffPolicyAgentFactoryTest("Action01", RLProblemFactoryTest.Action01),
-          new OffPolicyAgentFactoryTest("Action02", RLProblemFactoryTest.Action02) };
+          new OffPolicyAgentFactoryTest("Action01", AbstractRLProblemFactoryTest.Action01),
+          new OffPolicyAgentFactoryTest("Action02", AbstractRLProblemFactoryTest.Action02) };
       List<ContextEvaluation> result = new ArrayList<ContextEvaluation>();
       for (OffPolicyAgentFactoryTest factory : factories)
         result.add(new ContextEvaluation(problemFactory, projectorFactory, factory, evaluation));

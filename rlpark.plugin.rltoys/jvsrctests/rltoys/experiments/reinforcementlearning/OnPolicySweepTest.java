@@ -15,6 +15,8 @@ import rltoys.experiments.parametersweep.parameters.RunInfo;
 import rltoys.experiments.parametersweep.reinforcementlearning.AgentFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.ProblemFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
+import rltoys.experiments.reinforcementlearning.problemtest.AbstractRLProblemFactoryTest;
+import rltoys.experiments.reinforcementlearning.problemtest.OnPolicyRLProblemFactoryTest;
 import rltoys.utils.Utils;
 
 public class OnPolicySweepTest extends RLSweepTest {
@@ -33,8 +35,8 @@ public class OnPolicySweepTest extends RLSweepTest {
 
     @Override
     public List<? extends Context> provideContexts() {
-      AgentFactory agentFactory = new RLAgentFactoryTest(divergeAfter, RLProblemFactoryTest.Action01);
-      ProblemFactory problemFactory = new RLProblemFactoryTest(nbEpisode, nbTimeSteps);
+      AgentFactory agentFactory = new RLAgentFactoryTest(divergeAfter, AbstractRLProblemFactoryTest.Action01);
+      ProblemFactory problemFactory = new OnPolicyRLProblemFactoryTest(nbEpisode, nbTimeSteps);
       return Utils.asList(new ContextEvaluation(problemFactory, agentFactory, NbRewardCheckPoint));
     }
 

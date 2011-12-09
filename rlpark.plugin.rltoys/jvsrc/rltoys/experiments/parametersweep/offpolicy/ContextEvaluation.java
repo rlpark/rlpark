@@ -12,13 +12,13 @@ import rltoys.experiments.parametersweep.parameters.Parameters;
 import rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgent;
 import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
-import rltoys.experiments.parametersweep.reinforcementlearning.ProblemFactory;
+import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.ProjectorFactory;
 
 public class ContextEvaluation extends AbstractContextOffPolicy implements OffPolicyEvaluationContext {
   private static final long serialVersionUID = -593900122821568271L;
 
-  public ContextEvaluation(ProblemFactory environmentFactory, ProjectorFactory projectorFactory,
+  public ContextEvaluation(OffPolicyProblemFactory environmentFactory, ProjectorFactory projectorFactory,
       OffPolicyAgentFactory agentFactory, OffPolicyEvaluation evaluation) {
     super(environmentFactory, projectorFactory, agentFactory, evaluation);
   }

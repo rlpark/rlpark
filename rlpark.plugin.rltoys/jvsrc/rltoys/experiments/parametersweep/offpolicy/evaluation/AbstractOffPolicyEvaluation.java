@@ -5,7 +5,7 @@ import rltoys.environments.envio.OffPolicyLearner;
 import rltoys.environments.envio.RLAgent;
 import rltoys.environments.envio.problems.RLProblem;
 import rltoys.experiments.ExperimentCounter;
-import rltoys.experiments.parametersweep.reinforcementlearning.ProblemFactory;
+import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.ProjectorFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.internal.EvaluatedOffPolicyLearner;
 
@@ -23,8 +23,8 @@ public abstract class AbstractOffPolicyEvaluation implements OffPolicyEvaluation
     return agent;
   }
 
-  protected RLProblem createProblem(int counter, ProblemFactory problemFactory) {
-    return problemFactory.createEnvironment(ExperimentCounter.newRandom(counter));
+  protected RLProblem createEvaluationProblem(int counter, OffPolicyProblemFactory problemFactory) {
+    return problemFactory.createEvaluationEnvironment(ExperimentCounter.newRandom(counter));
   }
 
   @Override

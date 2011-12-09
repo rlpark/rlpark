@@ -8,7 +8,7 @@ import rltoys.environments.envio.problems.RLProblem;
 import rltoys.experiments.parametersweep.offpolicy.internal.OffPolicyEpisodeRewardMonitor;
 import rltoys.experiments.parametersweep.parameters.Parameters;
 import rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
-import rltoys.experiments.parametersweep.reinforcementlearning.ProblemFactory;
+import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.ProjectorFactory;
 import zephyr.plugin.core.api.signals.Listener;
 
@@ -25,9 +25,9 @@ public class EpisodeBasedOffPolicyEvaluation extends AbstractOffPolicyEvaluation
 
   @Override
   public AgentEvaluator connectEvaluator(final int counter, Runner behaviourRunner,
-      final ProblemFactory problemFactory, final ProjectorFactory projectorFactory, final OffPolicyLearner learner,
-      final Parameters parameters) {
-    RLProblem problem = createProblem(counter, problemFactory);
+      final OffPolicyProblemFactory problemFactory, final ProjectorFactory projectorFactory,
+      final OffPolicyLearner learner, final Parameters parameters) {
+    RLProblem problem = createEvaluationProblem(counter, problemFactory);
     RLAgent agent = createEvaluatedAgent(problem, projectorFactory, learner);
     Runner runner = new Runner(problem, agent, Integer.MAX_VALUE, maxTimeStepsPerEpisode);
     final OffPolicyEpisodeRewardMonitor rewardMonitor = new OffPolicyEpisodeRewardMonitor(runner, nbRewardCheckpoint,
