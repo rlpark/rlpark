@@ -278,4 +278,10 @@ public class Utils {
       throw new RuntimeException(e);
     }
   }
+
+  static public double[] newFilledArray(int length, double value) {
+    double[] result = new double[length];
+    Arrays.fill(result, value);
+    return result;
+  }
 }

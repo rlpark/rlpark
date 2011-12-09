@@ -73,5 +73,6 @@ public class RealVectorBarView extends BackgroundCanvasView<RealVector> implemen
 
   @Override
   protected void unsetLayout() {
+    bar.clearData();
   }
 }

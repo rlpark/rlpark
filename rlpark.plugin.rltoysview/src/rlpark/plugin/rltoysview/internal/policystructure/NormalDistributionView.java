@@ -163,10 +163,6 @@ public class NormalDistributionView extends Plot2DView<NormalDistribution> {
   }
 
   @Override
-  public void unsetLayout() {
-  }
-
-  @Override
   protected boolean isInstanceSupported(Object instance) {
     return NormalDistribution.class.isInstance(instance);
   }

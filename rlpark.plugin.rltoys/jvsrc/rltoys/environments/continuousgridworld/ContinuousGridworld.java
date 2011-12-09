@@ -9,12 +9,16 @@ import rltoys.environments.envio.observations.Legend;
 import rltoys.environments.envio.observations.TRStep;
 import rltoys.environments.envio.problems.ProblemBounded;
 import rltoys.environments.envio.problems.ProblemContinuousAction;
+import rltoys.environments.envio.problems.ProblemDiscreteAction;
 import rltoys.math.ranges.Range;
+import rltoys.utils.Utils;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 
-public class ContinuousGridworld implements ProblemBounded, ProblemContinuousAction, MonitorContainer {
+public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteAction, ProblemContinuousAction,
+    MonitorContainer {
+  private final Action[] actions;
   protected TRStep step = null;
   private final int nbDimensions;
   private double[] start = null;
@@ -34,6 +38,23 @@ public class ContinuousGridworld implements ProblemBounded, ProblemContinuousAct
     this.nbDimensions = nbDimension;
     this.absoluteNoise = (actionRange.length() / 2.0) * relativeNoise;
     legend = createLegend();
+    actions = createActions();
+  }
+
+  private Action[] createActions() {
+    Action[] actions = new Action[2 * nbDimensions + 1];
+    for (int i = 0; i < actions.length - 1; i++) {
+      int dimension = i / 2;
+      int dimensionAction = i % 2;
+      double[] actionValues = Utils.newFilledArray(nbDimensions, 0);
+      if (dimensionAction == 0)
+        actionValues[dimension] = -1;
+      else
+        actionValues[dimension] = 1;
+      actions[i] = new ActionArray(actionValues);
+    }
+    actions[actions.length - 1] = new ActionArray(Utils.newFilledArray(nbDimensions, 0));
+    return actions;
   }
 
   public void setStart(double[] start) {
@@ -155,5 +176,10 @@ public class ContinuousGridworld implements ProblemBounded, ProblemContinuousAct
 
   public double[] start() {
     return start;
+  }
+
+  @Override
+  public Action[] actions() {
+    return actions;
   }
 }
