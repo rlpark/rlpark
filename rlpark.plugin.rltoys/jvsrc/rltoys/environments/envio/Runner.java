@@ -5,9 +5,12 @@ import java.io.Serializable;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.observations.TRStep;
 import rltoys.environments.envio.problems.RLProblem;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.signals.Signal;
 
-public class Runner implements Serializable {
+public class Runner implements Serializable, MonitorContainer {
   private static final long serialVersionUID = 465593140388569561L;
 
   static public class RunnerEvent {
@@ -29,6 +32,10 @@ public class Runner implements Serializable {
   private final RLProblem environment;
   private final int maxEpisodeTimeSteps;
   private final int nbEpisode;
+
+  public Runner(RLProblem environment, RLAgent agent) {
+    this(environment, agent, 1, -1);
+  }
 
   public Runner(RLProblem environment, RLAgent agent, int nbEpisode, int maxEpisodeTimeSteps) {
     this.environment = environment;
@@ -84,5 +91,17 @@ public class Runner implements Serializable {
 
   public RLAgent agent() {
     return agent;
+  }
+
+  @Override
+  public void addToMonitor(DataMonitor monitor) {
+    monitor.add("Reward", 0, new Monitored() {
+      @Override
+      public double monitoredValue() {
+        if (runnerEvent.step == null)
+          return 0;
+        return runnerEvent.step.r_tp1;
+      }
+    });
   }
 }

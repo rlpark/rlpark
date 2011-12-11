@@ -2,13 +2,13 @@ package rlpark.plugin.robot.sync;
 
 import java.util.List;
 
-import rltoys.algorithms.representations.observations.ObsArray;
+import rltoys.environments.envio.observations.ObsAsDoubles;
 import rltoys.math.GrayCode;
 import rltoys.math.vector.BinaryVector;
 import rltoys.math.vector.implementations.BVector;
 
 
-public class ObservationVersatileArray implements ObsArray {
+public class ObservationVersatileArray implements ObsAsDoubles {
   private final ObservationVersatile[] observations;
 
   public ObservationVersatileArray(List<ObservationVersatile> observations) {

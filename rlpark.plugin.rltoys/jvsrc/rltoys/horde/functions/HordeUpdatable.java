@@ -1,7 +1,7 @@
 package rltoys.horde.functions;
 
 import rltoys.algorithms.representations.actions.Action;
-import rltoys.algorithms.representations.observations.Observation;
+import rltoys.environments.envio.observations.Observation;
 import rltoys.math.vector.RealVector;
 
 public interface HordeUpdatable {

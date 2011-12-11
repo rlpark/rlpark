@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import rltoys.algorithms.representations.actions.Action;
 
-public class TRStep {
+public class TRStep implements ObsAsDoubles {
   // Time of o_tp1
   final public long time;
   final public double[] o_t;
@@ -50,5 +50,10 @@ public class TRStep {
 
   public boolean isEpisodeEnding() {
     return o_t != null && o_tp1 == null;
+  }
+
+  @Override
+  public double[] doubleValues() {
+    return o_tp1;
   }
 }

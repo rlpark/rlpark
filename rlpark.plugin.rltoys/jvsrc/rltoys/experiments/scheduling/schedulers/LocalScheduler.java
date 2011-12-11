@@ -7,8 +7,8 @@ import java.util.concurrent.Future;
 
 import rltoys.experiments.scheduling.interfaces.JobQueue;
 import rltoys.experiments.scheduling.interfaces.Scheduler;
+import rltoys.experiments.scheduling.internal.SchedulingThreadFactory;
 import rltoys.experiments.scheduling.queue.LocalQueue;
-import rltoys.utils.Scheduling;
 import zephyr.plugin.core.api.synchronization.Chrono;
 
 public class LocalScheduler implements Scheduler {
@@ -17,7 +17,7 @@ public class LocalScheduler implements Scheduler {
     public void run() {
       try {
         Runnable runnable = runnables.request();
-        while (runnable != null) {
+        while (exceptionThrown == null && runnable != null) {
           runnable.run();
           runnables.done(runnable, runnable);
           runnable = runnables.request();
@@ -30,7 +30,7 @@ public class LocalScheduler implements Scheduler {
     }
   }
 
-  Throwable exceptionThrown;
+  Throwable exceptionThrown = null;
   private final ExecutorService executor;
   private final List<RunnableProcessor> updaters = new ArrayList<RunnableProcessor>();
   private final Future<?>[] futurs;
@@ -60,7 +60,7 @@ public class LocalScheduler implements Scheduler {
     for (int i = 0; i < nbThread; i++)
       updaters.add(new RunnableProcessor());
     futurs = new Future<?>[nbThread];
-    executor = Scheduling.newFixedThreadPool("LocalScheduler", nbThread);
+    executor = SchedulingThreadFactory.newFixedThreadPool("LocalScheduler", nbThread);
   }
 
   synchronized public void start() {

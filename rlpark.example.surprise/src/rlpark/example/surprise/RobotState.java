@@ -2,7 +2,7 @@ package rlpark.example.surprise;
 
 import rltoys.algorithms.representations.AgentState;
 import rltoys.algorithms.representations.actions.Action;
-import rltoys.algorithms.representations.observations.Observation;
+import rltoys.environments.envio.observations.Observation;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 

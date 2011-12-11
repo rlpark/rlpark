@@ -15,13 +15,13 @@ import rltoys.algorithms.learning.predictions.td.TDLambda;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
 import rltoys.environments.envio.problems.RLProblem;
 import rltoys.environments.nostate.NoStateProblem;
-import rltoys.environments.nostate.NoStateProblem.RewardFunction;
+import rltoys.environments.nostate.NoStateProblem.NoStateRewardFunction;
 import rltoys.experiments.continuousaction.NoStateExperiment;
 
 public class ActorCriticOnPolicyOnStateTest {
   static final double gamma = 0.9;
   static final double RewardRequired = 0.6;
-  public static final RewardFunction rewardFunction = new NoStateProblem.NormalReward(0.2, 0.5);
+  public static final NoStateRewardFunction rewardFunction = new NoStateProblem.NormalReward(0.2, 0.5);
 
   private ActorCritic createActorCritic(PolicyDistribution policyDistribution, int nbFeatures) {
     TD critic = new TD(gamma, 0.1 / nbFeatures, nbFeatures);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rltoys.algorithms.representations.actions.Action;
-import rltoys.algorithms.representations.observations.Observation;
+import rltoys.environments.envio.observations.Observation;
 import rltoys.horde.demons.Demon;
 import rltoys.horde.demons.DemonScheduler;
 import rltoys.horde.functions.GammaFunction;
@@ -68,5 +68,13 @@ public class Horde {
 
   public List<Demon> demons() {
     return demons;
+  }
+
+  public boolean addFunction(HordeUpdatable function) {
+    return functions.add(function);
+  }
+
+  public boolean addDemon(Demon demon) {
+    return demons.add(demon);
   }
 }

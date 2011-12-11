@@ -9,11 +9,11 @@ import rltoys.environments.envio.problems.RLProblem;
 import rltoys.math.ranges.Range;
 
 public class NoStateProblem implements RLProblem {
-  public interface RewardFunction {
+  public interface NoStateRewardFunction {
     double reward(double action);
   }
 
-  public static class NormalReward implements RewardFunction {
+  public static class NormalReward implements NoStateRewardFunction {
     public final double mu;
     private final double sigma;
 
@@ -30,16 +30,16 @@ public class NoStateProblem implements RLProblem {
 
   private final double[] state = { 1.0 };
   private TRStep current = null;
-  private final RewardFunction reward;
+  private final NoStateRewardFunction reward;
   public final Range range;
   private static final Legend legend = new Legend("State");
 
-  public NoStateProblem(RewardFunction reward) {
+  public NoStateProblem(NoStateRewardFunction reward) {
     this(null, reward);
   }
 
 
-  public NoStateProblem(Range range, RewardFunction reward) {
+  public NoStateProblem(Range range, NoStateRewardFunction reward) {
     this.reward = reward;
     this.range = range;
   }

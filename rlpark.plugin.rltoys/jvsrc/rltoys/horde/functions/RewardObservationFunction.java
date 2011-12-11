@@ -1,9 +1,9 @@
 package rltoys.horde.functions;
 
 import rltoys.algorithms.representations.actions.Action;
-import rltoys.algorithms.representations.observations.ObsArray;
-import rltoys.algorithms.representations.observations.Observation;
 import rltoys.environments.envio.observations.Legend;
+import rltoys.environments.envio.observations.ObsAsDoubles;
+import rltoys.environments.envio.observations.Observation;
 import rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.labels.Labeled;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -38,6 +38,6 @@ public class RewardObservationFunction implements RewardFunction, Labeled, Horde
 
   @Override
   public void update(Observation o_tp1, RealVector x_t, Action a_t, RealVector x_tp1) {
-    update(((ObsArray) o_tp1).doubleValues());
+    update(((ObsAsDoubles) o_tp1).doubleValues());
   }
 }
