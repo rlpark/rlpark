@@ -1,11 +1,10 @@
 package rltoys.experiments.scheduling.internal.queue;
 
-import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rltoys.experiments.scheduling.interfaces.JobQueue;
@@ -29,8 +28,8 @@ public class NetworkJobQueue implements JobQueue {
   private boolean denyNewJobRequest = false;
   private final LocalQueue localQueue = new LocalQueue();
 
-  public NetworkJobQueue(String serverHostName, int port) throws UnknownHostException, IOException {
-    syncSocket = new SyncSocket(new Socket(serverHostName, port));
+  public NetworkJobQueue(String serverHostName, int port) {
+    syncSocket = new SyncSocket(connectToServer(serverHostName, port));
     syncSocket.sendClientName();
     classLoader = NetworkClassLoader.newClassLoader(syncSocket);
   }
@@ -95,5 +94,39 @@ public class NetworkJobQueue implements JobQueue {
 
   public NetworkClassLoader classLoader() {
     return classLoader;
+  }
+
+  static private Socket connectToServer(String serverHostName, int port) {
+    Socket socket = null;
+    Random random = null;
+    Exception lastException = null;
+    Chrono connectionTime = new Chrono();
+    while (socket == null) {
+      try {
+        if (lastException != null)
+          System.err.println("Retrying to connect...");
+        socket = new Socket(serverHostName, port);
+      } catch (Exception e) {
+        e.printStackTrace();
+        lastException = e;
+        if (random == null)
+          random = new Random();
+        if (connectionTime.getCurrentChrono() > 3600)
+          break;
+        sleepForConnection(random, 120);
+      }
+    }
+    if (lastException != null)
+      throw new RuntimeException(lastException);
+    return socket;
+  }
+
+  private static void sleepForConnection(Random random, int maxWaitingTime) {
+    long sleepingTime = (long) (random.nextDouble() * maxWaitingTime + 5);
+    System.err.println(sleepingTime + "s of sleeping time before another attempt to connect");
+    try {
+      Thread.sleep(sleepingTime * 1000);
+    } catch (InterruptedException e) {
+    }
   }
 }

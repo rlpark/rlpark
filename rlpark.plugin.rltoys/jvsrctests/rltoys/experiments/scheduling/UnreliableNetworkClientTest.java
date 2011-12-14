@@ -3,7 +3,6 @@ package rltoys.experiments.scheduling;
 import static rltoys.experiments.scheduling.SchedulerTestsUtils.testServerScheduler;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Random;
 
 import org.junit.BeforeClass;
@@ -24,7 +23,7 @@ public class UnreliableNetworkClientTest {
     private final Random random = new Random(nbUnreliableQueue);
     volatile private boolean terminated = false;
 
-    public UnreliableNetworkQueue(String serverHostName, int port) throws UnknownHostException, IOException {
+    public UnreliableNetworkQueue(String serverHostName, int port) {
       super(serverHostName, port);
       nbUnreliableQueue++;
     }
@@ -78,14 +77,7 @@ public class UnreliableNetworkClientTest {
   }
 
   static private UnreliableNetworkQueue newUnreliableQueue() {
-    try {
-      return new UnreliableNetworkQueue(SchedulerTestsUtils.Localhost, SchedulerTestsUtils.Port);
-    } catch (UnknownHostException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
+    return new UnreliableNetworkQueue(SchedulerTestsUtils.Localhost, SchedulerTestsUtils.Port);
   }
 
   public static void startUnreliableClients(int nbClients, final boolean useContextClassLoader) {

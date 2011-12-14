@@ -1,8 +1,5 @@
 package rltoys.experiments.scheduling.network;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
-
 import rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rltoys.experiments.scheduling.interfaces.JobQueue;
 import rltoys.experiments.scheduling.internal.queue.NetworkJobQueue;
@@ -19,11 +16,11 @@ public class NetworkClient {
   private final LocalScheduler localScheduler;
   final protected NetworkJobQueue networkJobQueue;
 
-  public NetworkClient(String serverHost, int port) throws UnknownHostException, IOException {
+  public NetworkClient(String serverHost, int port) {
     this(new LocalScheduler(createJobQueue(serverHost, port)));
   }
 
-  public NetworkClient(int nbThread, String serverHost, int port) throws UnknownHostException, IOException {
+  public NetworkClient(int nbThread, String serverHost, int port) {
     this(new LocalScheduler(nbThread, createJobQueue(serverHost, port)));
   }
 
@@ -40,7 +37,7 @@ public class NetworkClient {
     });
   }
 
-  private static NetworkJobQueue createJobQueue(String serverHost, int port) throws UnknownHostException, IOException {
+  private static NetworkJobQueue createJobQueue(String serverHost, int port) {
     return new NetworkJobQueue(serverHost, port);
   }
 
@@ -99,7 +96,7 @@ public class NetworkClient {
       serverPort = Integer.parseInt(arg.substring(portSeparator));
   }
 
-  public static void runClient() throws UnknownHostException, IOException {
+  public static void runClient() {
     NetworkClient scheduler = new NetworkClient(nbCore, serverHost, serverPort);
     if (maximumMinutesTime > 0)
       scheduler.setMaximumTime(maximumMinutesTime * 60);
