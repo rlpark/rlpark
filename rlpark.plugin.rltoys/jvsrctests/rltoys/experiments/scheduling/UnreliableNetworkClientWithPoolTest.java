@@ -14,6 +14,7 @@ import rltoys.experiments.scheduling.SchedulerTestsUtils.JobDoneListener;
 import rltoys.experiments.scheduling.internal.messages.ClassLoading;
 import rltoys.experiments.scheduling.internal.messages.Messages;
 import rltoys.experiments.scheduling.network.ServerScheduler;
+import rltoys.experiments.scheduling.pools.PoolResults;
 
 public class UnreliableNetworkClientWithPoolTest {
   static int nbUnreliableQueue = 0;
@@ -34,16 +35,15 @@ public class UnreliableNetworkClientWithPoolTest {
   }
 
   private void testServerSchedulerWithPool(ServerScheduler scheduler, int nbJobs, int nbPools) {
-    for (int i = 0; i < 2; i++) {
-      List<Job> jobs = SchedulerTestsUtils.createJobs(nbJobs);
-      SchedulerTestsUtils.assertAreDone(jobs, false);
-      JobDoneListener jobListener = SchedulerTestsUtils.createListener();
-      JobPoolListenerTest poolListener = new JobPoolTest.JobPoolListenerTest();
-      SchedulerTestsUtils.submitJobsInPool(scheduler, jobs, jobListener, poolListener, nbPools);
-      scheduler.runAll();
-      SchedulerTestsUtils.assertAreDone(jobListener.jobDone(), true);
-      Assert.assertEquals(nbJobs, jobListener.nbJobDone());
-      Assert.assertEquals(nbPools, poolListener.nbPoolDone());
-    }
+    List<Job> jobs = SchedulerTestsUtils.createJobs(nbJobs);
+    SchedulerTestsUtils.assertAreDone(jobs, false);
+    JobDoneListener jobListener = SchedulerTestsUtils.createListener();
+    JobPoolListenerTest poolListener = new JobPoolTest.JobPoolListenerTest();
+    PoolResults poolResults = SchedulerTestsUtils.submitJobsInPool(scheduler, jobs, jobListener, poolListener, nbPools);
+    scheduler.start();
+    poolResults.waitPools();
+    SchedulerTestsUtils.assertAreDone(jobListener.jobDone(), true);
+    Assert.assertEquals(nbJobs, jobListener.nbJobDone());
+    Assert.assertEquals(nbPools, poolListener.nbPoolDone());
   }
 }

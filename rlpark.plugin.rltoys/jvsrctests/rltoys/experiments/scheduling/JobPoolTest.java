@@ -13,6 +13,7 @@ import rltoys.experiments.scheduling.interfaces.JobPool;
 import rltoys.experiments.scheduling.interfaces.JobPool.JobPoolListener;
 import rltoys.experiments.scheduling.pools.FileJobPool;
 import rltoys.experiments.scheduling.pools.MemoryJobPool;
+import rltoys.experiments.scheduling.pools.PoolResults;
 import rltoys.experiments.scheduling.schedulers.LocalScheduler;
 import zephyr.plugin.core.api.signals.Listener;
 
@@ -61,11 +62,13 @@ public class JobPoolTest {
     LocalScheduler scheduler = new LocalScheduler(10);
     JobDoneListener jobListener = SchedulerTestsUtils.createListener();
     JobPoolListenerTest poolListener = new JobPoolListenerTest();
+    PoolResults poolResults = new PoolResults();
     for (int i = 0; i < NbPool; i++) {
       JobPool jobPool = preparePool(poolFactory, poolListener, jobListener);
-      jobPool.submitTo(scheduler);
+      poolResults.add(jobPool.submitTo(scheduler));
     }
     scheduler.runAll();
+    poolResults.waitPools();
     Assert.assertEquals(NbPool, poolListener.poolDone);
     Assert.assertEquals(NbJobs * NbPool, jobListener.nbJobDone());
     SchedulerTestsUtils.assertAreDone(jobListener.jobDone(), true);

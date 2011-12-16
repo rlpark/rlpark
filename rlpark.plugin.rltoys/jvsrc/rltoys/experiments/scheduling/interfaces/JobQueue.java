@@ -8,4 +8,6 @@ public interface JobQueue {
   void done(Runnable todo, Runnable done);
 
   Signal<JobDoneEvent> onJobDone();
+
+  void dispose();
 }

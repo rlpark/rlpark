@@ -17,14 +17,17 @@ import rltoys.experiments.parametersweep.parameters.Parameters;
 import rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rltoys.experiments.scheduling.interfaces.JobPool;
 import rltoys.experiments.scheduling.interfaces.JobPool.JobPoolListener;
+import rltoys.experiments.scheduling.interfaces.PoolResult;
 import rltoys.experiments.scheduling.interfaces.Scheduler;
 import rltoys.experiments.scheduling.pools.FileJobPool;
+import rltoys.experiments.scheduling.pools.PoolResults;
 import rltoys.experiments.scheduling.schedulers.LocalScheduler;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class SweepAll {
   static private boolean verbose = true;
   private final Scheduler scheduler;
+  private final PoolResults poolResults = new PoolResults();
   int nbJobs;
 
 
@@ -67,7 +70,8 @@ public class SweepAll {
     JobPool pool = new FileJobPool(extractName(logFile), poolListener, jobListener);
     for (Runnable job : todoJobList)
       pool.add(job);
-    pool.submitTo(scheduler);
+    PoolResult poolResult = pool.submitTo(scheduler);
+    poolResults.add(poolResult);
   }
 
   private String extractName(ParametersLogFileWriter logFile) {
@@ -110,6 +114,7 @@ public class SweepAll {
 
   public void runAll() {
     scheduler.runAll();
+    poolResults.waitPools();
   }
 
   public void submitSweep(SweepDescriptor sweepDescriptor, ExperimentCounter counter) {

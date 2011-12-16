@@ -74,6 +74,15 @@ public class LocalScheduler implements Scheduler {
   @Override
   public void runAll() {
     start();
+    if (runnables instanceof LocalQueue)
+      LocalQueue.waitAllDone((LocalQueue) runnables);
+    else
+      waitFuturs();
+    if (exceptionThrown != null)
+      throw new RuntimeException(exceptionThrown);
+  }
+
+  private void waitFuturs() {
     for (Future<?> future : futurs)
       try {
         future.get();
@@ -81,8 +90,6 @@ public class LocalScheduler implements Scheduler {
         exceptionThrown = e;
         break;
       }
-    if (exceptionThrown != null)
-      throw new RuntimeException(exceptionThrown);
   }
 
   public long updateTimeAverage() {
@@ -92,6 +99,7 @@ public class LocalScheduler implements Scheduler {
   @Override
   synchronized public void dispose() {
     executor.shutdown();
+    runnables.dispose();
   }
 
   public Chrono chrono() {

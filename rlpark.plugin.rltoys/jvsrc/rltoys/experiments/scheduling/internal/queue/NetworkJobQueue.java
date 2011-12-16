@@ -71,6 +71,8 @@ public class NetworkJobQueue implements JobQueue {
       chrono.start();
       nbJobsSinceLastMessage = 0;
     }
+    if (localQueue.areAllDone())
+      requestJobsToServer();
     onJobDone.fire(new JobDoneEvent(todo, done));
   }
 
@@ -128,5 +130,11 @@ public class NetworkJobQueue implements JobQueue {
       Thread.sleep(sleepingTime * 1000);
     } catch (InterruptedException e) {
     }
+  }
+
+  @Override
+  public void dispose() {
+    syncSocket.close();
+    localQueue.dispose();
   }
 }

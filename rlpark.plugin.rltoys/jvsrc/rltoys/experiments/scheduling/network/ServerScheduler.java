@@ -141,6 +141,7 @@ public class ServerScheduler implements Scheduler {
     }
     if (localScheduler != null)
       localScheduler.dispose();
+    localQueue.dispose();
   }
 
   public boolean isLocalSchedulingEnabled() {

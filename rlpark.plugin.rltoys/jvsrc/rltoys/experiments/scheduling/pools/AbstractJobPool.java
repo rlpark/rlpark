@@ -1,11 +1,13 @@
 package rltoys.experiments.scheduling.pools;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rltoys.experiments.scheduling.interfaces.JobPool;
+import rltoys.experiments.scheduling.interfaces.PoolResult;
 import rltoys.experiments.scheduling.interfaces.Scheduler;
 import rltoys.experiments.scheduling.queue.LocalQueue;
 import zephyr.plugin.core.api.signals.Listener;
@@ -20,12 +22,12 @@ public abstract class AbstractJobPool implements JobPool {
     }
 
     @Override
-    public boolean hasNext() {
+    synchronized public boolean hasNext() {
       return iterator.hasNext();
     }
 
     @Override
-    public Runnable next() {
+    synchronized public Runnable next() {
       if (nbRequestedJob == 0)
         onPoolStart();
       Runnable next = iterator.next();
@@ -37,6 +39,10 @@ public abstract class AbstractJobPool implements JobPool {
     @Override
     public void remove() {
     }
+
+    synchronized public boolean noRemainingJob() {
+      return jobSubmitted.isEmpty() && !hasNext();
+    }
   }
 
   protected final JobPoolListener onAllJobDone;
@@ -47,9 +53,10 @@ public abstract class AbstractJobPool implements JobPool {
     }
   };
   protected final Listener<JobDoneEvent> onJobDone;
-  final List<Runnable> jobSubmitted = new ArrayList<Runnable>();
+  final List<Runnable> jobSubmitted = Collections.synchronizedList(new ArrayList<Runnable>());
   protected RunnableIterator jobIterator = null;
   protected int nbRequestedJob = 0;
+  protected PoolResult poolResult = null;
 
   public AbstractJobPool(JobPoolListener onAllJobDone, Listener<JobDoneEvent> onJobDone) {
     this.onAllJobDone = onAllJobDone;
@@ -63,14 +70,16 @@ public abstract class AbstractJobPool implements JobPool {
   }
 
   protected boolean hasBeenSubmitted() {
-    return jobIterator != null;
+    return jobIterator != null && poolResult != null;
   }
 
   @Override
-  public void submitTo(Scheduler scheduler) {
+  public PoolResult submitTo(Scheduler scheduler) {
     checkHasBeenSubmitted();
+    poolResult = new PoolResult();
     jobIterator = new RunnableIterator(createIterator());
     ((LocalQueue) scheduler.queue()).add(jobIterator, poolListener);
+    return poolResult;
   }
 
   protected void checkHasBeenSubmitted() {
@@ -83,9 +92,10 @@ public abstract class AbstractJobPool implements JobPool {
     if (onJobDone != null)
       onJobDone.listen(event);
     jobSubmitted.remove(event.todo);
-    if (jobSubmitted.isEmpty() && !jobIterator.hasNext()) {
-      onAllJobDone.listen(this);
+    if (jobIterator.noRemainingJob()) {
+      onAllJobDone.listen(AbstractJobPool.this);
       onPoolEnd();
+      poolResult.poolDone();
     }
   }
 

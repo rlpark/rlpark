@@ -9,6 +9,7 @@ import java.util.concurrent.Semaphore;
 
 import rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rltoys.experiments.scheduling.interfaces.JobQueue;
+import rltoys.experiments.scheduling.internal.JobDoneEventQueue;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 
@@ -27,8 +28,8 @@ public class LocalQueue implements JobQueue {
   private final Map<Iterator<? extends Runnable>, Listener<JobDoneEvent>> listeners = new HashMap<Iterator<? extends Runnable>, Listener<JobDoneEvent>>();
   private final LinkedList<Iterator<? extends Runnable>> waiting = new LinkedList<Iterator<? extends Runnable>>();
   private final Map<Runnable, Listener<JobDoneEvent>> pending = new LinkedHashMap<Runnable, Listener<JobDoneEvent>>();
-  private final Signal<JobDoneEvent> onJobDone = new Signal<JobDoneEvent>();
   private final LinkedList<JobInfo> canceled = new LinkedList<JobInfo>();
+  private final JobDoneEventQueue jobDoneEventQueue = new JobDoneEventQueue();
   private Iterator<? extends Runnable> currentJobIterator = null;
   private int nbJobsDone = 0;
 
@@ -72,19 +73,13 @@ public class LocalQueue implements JobQueue {
     if (!removed)
       return;
     Listener<JobDoneEvent> listener = pending.remove(todo);
-    onJobDone(todo, done, listener);
+    jobDoneEventQueue.onJobDone(new JobDoneEvent(todo, done), listener);
     nbJobsDone++;
   }
 
-  private void onJobDone(Runnable todo, Runnable done, Listener<JobDoneEvent> listener) {
-    JobDoneEvent event = new JobDoneEvent(todo, done);
-    if (listener != null)
-      listener.listen(event);
-    onJobDone.fire(event);
-  }
-
   synchronized public boolean areAllDone() {
-    return currentJobIterator == null && waiting.isEmpty() && pending.isEmpty() && canceled.isEmpty();
+    return currentJobIterator == null && waiting.isEmpty() && pending.isEmpty() && canceled.isEmpty()
+        && jobDoneEventQueue.isEmpty();
   }
 
   synchronized public void add(Iterator<? extends Runnable> jobIterator, Listener<JobDoneEvent> listener) {
@@ -92,7 +87,7 @@ public class LocalQueue implements JobQueue {
     waiting.add(jobIterator);
   }
 
-  static public void waitAllDone(LocalQueue queue) {
+  static public void waitAllDone(LocalQueue localQueue) {
     final Semaphore semaphore = new Semaphore(0);
     final Listener<JobDoneEvent> listener = new Listener<JobDoneEvent>() {
       @Override
@@ -100,22 +95,27 @@ public class LocalQueue implements JobQueue {
         semaphore.release();
       }
     };
-    queue.onJobDone.connect(listener);
-    while (!queue.areAllDone()) {
+    localQueue.onJobDone().connect(listener);
+    while (!localQueue.areAllDone()) {
       try {
         semaphore.acquire();
       } catch (InterruptedException e) {
       }
     }
-    queue.onJobDone.disconnect(listener);
+    localQueue.onJobDone().disconnect(listener);
   }
 
   @Override
   public Signal<JobDoneEvent> onJobDone() {
-    return onJobDone;
+    return jobDoneEventQueue.onJobDone;
   }
 
   public int nbJobsDone() {
     return nbJobsDone;
+  }
+
+  @Override
+  public void dispose() {
+    jobDoneEventQueue.dispose();
   }
 }

@@ -12,6 +12,7 @@ import rltoys.experiments.scheduling.interfaces.Scheduler;
 import rltoys.experiments.scheduling.internal.network.SocketClient;
 import rltoys.experiments.scheduling.network.ServerScheduler;
 import rltoys.experiments.scheduling.pools.FileJobPool;
+import rltoys.experiments.scheduling.pools.PoolResults;
 import rltoys.experiments.scheduling.schedulers.Schedulers;
 import zephyr.plugin.core.api.signals.Listener;
 
@@ -81,15 +82,13 @@ public class SchedulerTestsUtils {
   }
 
   static public void testScheduler(Scheduler scheduler, int nbJobs) {
-    for (int i = 0; i < 2; i++) {
-      List<Job> jobs = SchedulerTestsUtils.createJobs(nbJobs);
-      SchedulerTestsUtils.assertAreDone(jobs, false);
-      JobDoneListener listener = createListener();
-      Schedulers.addAll(scheduler, jobs, listener);
-      scheduler.runAll();
-      Assert.assertEquals(nbJobs, listener.nbJobDone());
-      SchedulerTestsUtils.assertAreDone(listener.jobDone(), true);
-    }
+    List<Job> jobs = SchedulerTestsUtils.createJobs(nbJobs);
+    SchedulerTestsUtils.assertAreDone(jobs, false);
+    JobDoneListener listener = createListener();
+    Schedulers.addAll(scheduler, jobs, listener);
+    scheduler.runAll();
+    Assert.assertEquals(nbJobs, listener.nbJobDone());
+    SchedulerTestsUtils.assertAreDone(listener.jobDone(), true);
   }
 
   static public JobDoneListener createListener() {
@@ -106,10 +105,12 @@ public class SchedulerTestsUtils {
     return pools;
   }
 
-  static public void submitJobsInPool(ServerScheduler scheduler, List<Job> jobs, JobDoneListener jobListener,
+  static public PoolResults submitJobsInPool(ServerScheduler scheduler, List<Job> jobs, JobDoneListener jobListener,
       JobPoolListener poolListener, int nbPool) {
     JobPool[] pools = createPools(jobs, jobListener, nbPool, poolListener);
+    PoolResults poolResults = new PoolResults();
     for (JobPool pool : pools)
-      pool.submitTo(scheduler);
+      poolResults.add(pool.submitTo(scheduler));
+    return poolResults;
   }
 }
