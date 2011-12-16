@@ -63,8 +63,7 @@ public class Range implements Serializable {
   }
 
   public double scale(double value) {
-    assert value >= min - 1e-6 && value <= max + 1e-6;
-    return (value - min) / length();
+    return Math.max(0.0, Math.min(1.0, (value - min) / length()));
   }
 
   @Override

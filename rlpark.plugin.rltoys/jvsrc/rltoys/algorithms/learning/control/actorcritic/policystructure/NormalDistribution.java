@@ -113,4 +113,12 @@ public class NormalDistribution implements PolicyDistribution, LabeledCollection
   public String label(int index) {
     return index == 0 ? "mean" : "stddev";
   }
+
+  static public JointDistribution newJointDistribution(Random random, int nbNormalDistribution, double mean,
+      double sigma) {
+    PolicyDistribution[] distributions = new PolicyDistribution[nbNormalDistribution];
+    for (int i = 0; i < distributions.length; i++)
+      distributions[i] = new NormalDistribution(random, mean, sigma);
+    return new JointDistribution(distributions);
+  }
 }

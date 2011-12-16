@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 import rlpark.plugin.opencv.zephyr.OpenCVImageProvider;
 import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
-import zephyr.plugin.core.api.video.ImageProvider;
+import zephyr.plugin.core.api.viewable.ImageProvider;
 
 import com.googlecode.javacv.cpp.opencv_core;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;

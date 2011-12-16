@@ -15,6 +15,8 @@ import rltoys.utils.Utils;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteAction, ProblemContinuousAction,
     MonitorContainer {
@@ -22,6 +24,7 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
   protected TRStep step = null;
   private final int nbDimensions;
   private double[] start = null;
+  @Monitor
   private ContinuousFunction rewardFunction = null;
   private final Legend legend;
   private final Random random;
@@ -29,6 +32,8 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
   private final Range observationRange;
   private final Range actionRange;
   private final double absoluteNoise;
+  @Monitor
+  private final double[] lastActions;
 
   public ContinuousGridworld(Random random, int nbDimension, Range observationRange, Range actionRange,
       double relativeNoise) {
@@ -39,6 +44,7 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
     this.absoluteNoise = (actionRange.length() / 2.0) * relativeNoise;
     legend = createLegend();
     actions = createActions();
+    lastActions = new double[nbDimension];
   }
 
   private Action[] createActions() {
@@ -109,7 +115,7 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
   private double reward(double[] position) {
     if (rewardFunction == null)
       return 0.0;
-    return rewardFunction.fun(position);
+    return rewardFunction.value(position);
   }
 
   private boolean isTerminated(double[] position) {
@@ -120,6 +126,7 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
 
   private double[] computeEnvironmentAction(Action action) {
     double[] agentAction = ((ActionArray) action).actions;
+    System.arraycopy(agentAction, 0, lastActions, 0, nbDimensions);
     double[] envAction = new double[agentAction.length];
     for (int i = 0; i < envAction.length; i++) {
       double noise = (random.nextDouble() * absoluteNoise) - (absoluteNoise / 2);

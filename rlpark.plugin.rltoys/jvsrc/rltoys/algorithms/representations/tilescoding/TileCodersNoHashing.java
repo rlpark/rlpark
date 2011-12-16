@@ -14,11 +14,11 @@ public class TileCodersNoHashing extends TileCoders {
   private final List<Identity> identities = new ArrayList<Identity>();
 
   public TileCodersNoHashing(int inputSize, double min, double max) {
-    this(new PartitionFactory(min, max, inputSize), inputSize);
+    this(new PartitionFactory(true, min, max, inputSize), inputSize);
   }
 
   public TileCodersNoHashing(Range... ranges) {
-    this(new PartitionFactory(ranges), ranges.length);
+    this(new PartitionFactory(true, ranges), ranges.length);
   }
 
   public TileCodersNoHashing(DiscretizerFactory discretizerFactory, int nbInputs) {

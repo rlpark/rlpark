@@ -32,7 +32,7 @@ public class ObsNormalizers {
   public Range[] getRanges() {
     Range[] ranges = new Range[normalizers.length];
     for (int i = 0; i < ranges.length; i++)
-      ranges[i] = normalizers[i].range();
+      ranges[i] = normalizers[i].targetRange();
     return ranges;
   }
 

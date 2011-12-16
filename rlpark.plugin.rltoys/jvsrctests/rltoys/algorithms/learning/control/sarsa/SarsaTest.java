@@ -107,7 +107,7 @@ public class SarsaTest extends MountainCarOnPolicyTest {
       @Override
       public TileCoders create(Range[] ranges) {
         Random random = new Random(0);
-        PartitionFactory discretizerFactory = new PartitionFactory(ranges);
+        PartitionFactory discretizerFactory = new PartitionFactory(true, ranges);
         discretizerFactory.setRandom(random, 0.1);
         TileCoders tileCoders = new TileCodersHashing(new UNH(random, 10000), discretizerFactory, ranges.length);
         return tileCoders;

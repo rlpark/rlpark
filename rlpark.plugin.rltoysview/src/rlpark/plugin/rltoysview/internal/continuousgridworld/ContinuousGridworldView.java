@@ -4,14 +4,18 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 
 import rltoys.environments.continuousgridworld.ContinuousGridworld;
+import rltoys.environments.continuousgridworld.NormalizedFunction;
 import rltoys.math.ranges.Range;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.api.viewable.ContinuousFunction;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.plotting.axes.Axes;
+import zephyr.plugin.plotting.heatmap.Function2DDrawer;
+import zephyr.plugin.plotting.heatmap.Interval;
 
 public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGridworld> {
   public static class Provider extends ClassViewProvider {
@@ -98,7 +102,16 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     super.onInstanceSet();
     trajectory.setLength(1000);
     instance.clock().onTick.connect(listener);
-    rewardDrawer.set(instance.current(), 200);
+    final ContinuousGridworld problem = instance.current();
+    ContinuousFunction rewardFunction = problem.rewardFunction();
+    if (rewardFunction != null) {
+      if (rewardFunction instanceof NormalizedFunction)
+        rewardFunction = ((NormalizedFunction) rewardFunction).function();
+      Range[] ranges = problem.getObservationRanges();
+      Interval xRange = new Interval(ranges[0].min(), ranges[0].max());
+      Interval yRange = new Interval(ranges[1].min(), ranges[1].max());
+      rewardDrawer.set(xRange, yRange, rewardFunction, 200);
+    }
     updateAxes();
   }
 

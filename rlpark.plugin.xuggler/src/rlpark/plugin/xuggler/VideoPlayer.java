@@ -9,7 +9,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.api.video.ImageProvider;
+import zephyr.plugin.core.api.viewable.ImageProvider;
 
 import com.xuggle.xuggler.Global;
 import com.xuggle.xuggler.IAudioSamples;

@@ -5,6 +5,7 @@ public class TargetReachedTermination implements TerminationFunction {
   private final double tolerance;
 
   public TargetReachedTermination(double[] target, double tolerance) {
+    assert tolerance > 0;
     this.target = target;
     this.tolerance = tolerance;
   }

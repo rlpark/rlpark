@@ -2,7 +2,6 @@ package rlpark.alltests.rlparkview.continuousgridworld;
 
 import java.util.Random;
 
-import rltoys.environments.continuousgridworld.ContinuousFunction;
 import rltoys.environments.continuousgridworld.ContinuousGridworld;
 import rltoys.environments.envio.actions.ActionArray;
 import rltoys.environments.envio.observations.TRStep;
@@ -10,6 +9,7 @@ import rltoys.math.ranges.Range;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 @Monitor
 public class TestContinuousGridworldRunnable implements Runnable {
@@ -22,12 +22,7 @@ public class TestContinuousGridworldRunnable implements Runnable {
     continuousGridworld = new ContinuousGridworld(random, 2, ObservationRange, new Range(-1, 1), .1);
     continuousGridworld.setRewardFunction(new ContinuousFunction() {
       @Override
-      public int nbDimension() {
-        return 2;
-      }
-
-      @Override
-      public double fun(double[] position) {
+      public double value(double[] position) {
         return position[0] + position[1];
       }
     });

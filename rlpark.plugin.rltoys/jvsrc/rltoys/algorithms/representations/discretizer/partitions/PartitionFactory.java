@@ -11,13 +11,15 @@ public class PartitionFactory implements DiscretizerFactory {
   private final Range[] ranges;
   private double randomShiftRatio = Double.NaN;
   private Random random;
+  private final boolean wrapped;
 
-  public PartitionFactory(Range... ranges) {
+  public PartitionFactory(boolean wrapped, Range... ranges) {
+    this.wrapped = wrapped;
     this.ranges = ranges;
   }
 
-  public PartitionFactory(double min, double max, int inputSize) {
-    this(getRanges(min, max, inputSize));
+  public PartitionFactory(boolean wrapped, double min, double max, int inputSize) {
+    this(wrapped, getRanges(min, max, inputSize));
   }
 
   public void setRandom(Random random, double randomShiftRatio) {
@@ -30,7 +32,9 @@ public class PartitionFactory implements DiscretizerFactory {
     Range range = ranges[inputIndex];
     double offset = range.length() / resolution / nbTilings;
     double shift = computeShift(offset, tilingIndex, inputIndex);
-    return new Partition(range.min() + shift, range.max() + shift, resolution);
+    double min = range.min() + shift;
+    double max = range.max() + shift;
+    return wrapped ? new WrappedPartition(min, max, resolution) : new BoundedPartition(min, max, resolution);
   }
 
   public static Range[] getRanges(double min, double max, int stateSize) {

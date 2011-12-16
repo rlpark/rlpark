@@ -10,26 +10,16 @@ import rltoys.environments.envio.actions.ActionArray;
 import rltoys.environments.envio.observations.TRStep;
 import rltoys.math.ranges.Range;
 import rltoys.utils.Utils;
+import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 public class TestContinuousGridworld {
   class TestRewardFunction implements ContinuousFunction {
-    private final int nbDim;
-
-    public TestRewardFunction(int nbDim) {
-      this.nbDim = nbDim;
-    }
-
     @Override
-    public double fun(double[] position) {
+    public double value(double[] position) {
       double sum = 0.0;
       for (int i = 0; i < position.length; i++)
         sum += position[i];
       return sum;
-    }
-
-    @Override
-    public int nbDimension() {
-      return nbDim;
     }
   }
 
@@ -39,7 +29,7 @@ public class TestContinuousGridworld {
     double noise = .1;
     ContinuousGridworld world = new ContinuousGridworld(random, 2, observationRange, actionRange, noise);
     world.setStart(new double[] { -49, -49 });
-    world.setRewardFunction(new TestRewardFunction(2));
+    world.setRewardFunction(new TestRewardFunction());
     world.setTermination(new TargetReachedTermination(new double[] { 49, 49 }, actionRange.max() + 2 * noise));
     return world;
   }

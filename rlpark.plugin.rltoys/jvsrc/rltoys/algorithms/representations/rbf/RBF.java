@@ -1,9 +1,9 @@
 package rltoys.algorithms.representations.rbf;
 
-import rltoys.algorithms.representations.LocalFeature;
+import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 
-public class RBF implements LocalFeature {
+public class RBF implements ContinuousFunction {
   private final int[] patternIndexes;
   private final double[] patternValues;
   private final double variance;

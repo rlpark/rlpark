@@ -56,6 +56,13 @@ public class ActionArray implements Action {
     return new ActionArray(result);
   }
 
+  public Action[] decompose() {
+    Action[] result = new Action[actions.length];
+    for (int i = 0; i < result.length; i++)
+      result[i] = new ActionArray(actions[i]);
+    return result;
+  }
+
   @Override
   public int hashCode() {
     return Arrays.hashCode(actions);

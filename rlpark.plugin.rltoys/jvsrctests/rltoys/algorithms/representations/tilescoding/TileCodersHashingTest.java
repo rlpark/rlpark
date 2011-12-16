@@ -42,7 +42,7 @@ public class TileCodersHashingTest {
     TileCodersNoHashingTest.checkFeatureActivationFrequency(new TileCodersFactory() {
       @Override
       public TileCoders create(int nbInputs, double min, double max) {
-        PartitionFactory discretizerFactory = new PartitionFactory(0, 1, nbInputs);
+        PartitionFactory discretizerFactory = new PartitionFactory(true, 0, 1, nbInputs);
         discretizerFactory.setRandom(new Random(0), 0.1);
         TileCoders coders = new TileCodersHashing(new UNH(new Random(0), memorySize), discretizerFactory, nbInputs);
         return coders;
@@ -68,7 +68,7 @@ public class TileCodersHashingTest {
     int missingTiles = TileCodersNoHashingTest.checkFeatureActivationFrequency(new TileCodersFactory() {
       @Override
       public TileCoders create(int nbInputs, double min, double max) {
-        PartitionFactory discretizerFactory = new PartitionFactory(0, 1, nbInputs);
+        PartitionFactory discretizerFactory = new PartitionFactory(true, 0, 1, nbInputs);
         discretizerFactory.setRandom(new Random(0), 0.1);
         TileCoders coders = new TileCodersHashing(hashing, discretizerFactory, nbInputs);
         return coders;

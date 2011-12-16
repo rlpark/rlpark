@@ -8,10 +8,15 @@ import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.actions.ActionArray;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
+import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
+@Monitor
 public class JointDistribution implements PolicyDistribution {
   private static final long serialVersionUID = -7545331400083047916L;
   private final PolicyDistribution[] distributions;
+  @IgnoreMonitor
+  private int[] weightsToAction;
 
   public JointDistribution(PolicyDistribution[] distributions) {
     this.distributions = distributions;
@@ -46,11 +51,17 @@ public class JointDistribution implements PolicyDistribution {
   @Override
   public PVector[] createParameters(int nbFeatures) {
     List<PVector> parameters = new ArrayList<PVector>();
-    for (PolicyDistribution distribution : distributions)
-      for (PVector parameterVector : distribution.createParameters(nbFeatures))
+    List<Integer> parametersToAction = new ArrayList<Integer>();
+    for (int i = 0; i < distributions.length; i++)
+      for (PVector parameterVector : distributions[i].createParameters(nbFeatures)) {
         parameters.add(parameterVector);
+        parametersToAction.add(i);
+      }
     PVector[] result = new PVector[parameters.size()];
     parameters.toArray(result);
+    weightsToAction = new int[parameters.size()];
+    for (int i = 0; i < weightsToAction.length; i++)
+      weightsToAction[i] = parametersToAction.get(i);
     return result;
   }
 
@@ -63,5 +74,13 @@ public class JointDistribution implements PolicyDistribution {
     RealVector[] result = new RealVector[gradLogs.size()];
     gradLogs.toArray(result);
     return result;
+  }
+
+  public int weightsIndexToActionIndex(int i) {
+    return weightsToAction[i];
+  }
+
+  public PolicyDistribution policy(int actionIndex) {
+    return distributions[actionIndex];
   }
 }

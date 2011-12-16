@@ -3,12 +3,12 @@ package rltoys.algorithms.representations.discretizer.partitions;
 import rltoys.algorithms.representations.discretizer.Discretizer;
 import rltoys.math.ranges.Range;
 
-public class Partition extends Range implements Discretizer {
-  private static final long serialVersionUID = -4881045704029128672L;
+public abstract class AbstractPartition extends Range implements Discretizer {
+  private static final long serialVersionUID = 5477929434176764517L;
   public final int resolution;
-  private final double partLength;
+  public final double partLength;
 
-  public Partition(double min, double max, int resolution) {
+  public AbstractPartition(double min, double max, int resolution) {
     super(min, max);
     this.resolution = resolution;
     partLength = length() / resolution;
@@ -17,14 +17,6 @@ public class Partition extends Range implements Discretizer {
   @Override
   public String toString() {
     return String.format("%f:%d:%f", min(), resolution, max());
-  }
-
-  @Override
-  public int discretize(double input) {
-    double n = (input - min()) / partLength;
-    if (n < 0)
-      n += ((int) (-n / resolution) + 1) * resolution;
-    return (int) (n % resolution);
   }
 
   @Override
@@ -41,6 +33,9 @@ public class Partition extends Range implements Discretizer {
   public boolean equals(Object object) {
     if (!super.equals(object))
       return false;
-    return ((Partition) object).resolution == resolution;
+    return ((AbstractPartition) object).resolution == resolution;
   }
+
+  @Override
+  abstract public int discretize(double input);
 }
