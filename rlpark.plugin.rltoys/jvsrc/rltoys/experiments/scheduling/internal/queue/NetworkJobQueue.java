@@ -109,7 +109,6 @@ public class NetworkJobQueue implements JobQueue {
           System.err.println("Retrying to connect...");
         socket = new Socket(serverHostName, port);
       } catch (Exception e) {
-        e.printStackTrace();
         lastException = e;
         if (random == null)
           random = new Random();
@@ -118,8 +117,10 @@ public class NetworkJobQueue implements JobQueue {
         sleepForConnection(random, 120);
       }
     }
-    if (lastException != null)
+    if (socket == null && lastException != null)
       throw new RuntimeException(lastException);
+    if (socket != null)
+      System.err.println("Finally connected");
     return socket;
   }
 

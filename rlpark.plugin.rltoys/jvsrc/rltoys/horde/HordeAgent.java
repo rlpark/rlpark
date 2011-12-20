@@ -2,6 +2,7 @@ package rltoys.horde;
 
 import rltoys.algorithms.learning.control.Control;
 import rltoys.algorithms.representations.Projector;
+import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.RLAgent;
 import rltoys.environments.envio.observations.TRStep;
@@ -46,5 +47,9 @@ public class HordeAgent implements RLAgent {
 
   public Horde horde() {
     return horde;
+  }
+
+  public Policy behaviourPolicy() {
+    return null;
   }
 }

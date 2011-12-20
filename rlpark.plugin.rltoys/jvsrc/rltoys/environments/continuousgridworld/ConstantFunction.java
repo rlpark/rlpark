@@ -5,20 +5,14 @@ import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 public class ConstantFunction implements ContinuousFunction, Labeled {
   private final double value;
-  private final int nbDimension;
 
-  public ConstantFunction(int nbDimension, double value) {
-    this.nbDimension = nbDimension;
+  public ConstantFunction(double value) {
     this.value = value;
   }
 
   @Override
   public double value(double[] position) {
     return value;
-  }
-
-  public int nbDimension() {
-    return nbDimension;
   }
 
   @Override

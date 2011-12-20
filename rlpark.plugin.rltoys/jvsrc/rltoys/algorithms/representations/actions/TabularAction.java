@@ -53,4 +53,8 @@ public class TabularAction implements StateToStateAction {
       }
     return null;
   }
+
+  public Action[] actions() {
+    return actions;
+  }
 }
