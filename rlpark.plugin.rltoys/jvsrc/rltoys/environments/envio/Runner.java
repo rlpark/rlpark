@@ -53,36 +53,30 @@ public class Runner implements Serializable, MonitorContainer {
   }
 
   public void runEpisode() {
-    assert runnerEvent.step == null;
+    assert runnerEvent.step == null || runnerEvent.step.isEpisodeEnding();
     do {
       step();
-    } while (runnerEvent.step != null);
+    } while (!runnerEvent.step.isEpisodeEnding());
   }
 
   public void step() {
+    // This code guarantee that o_tp1 and x_tp1 are non null
     assert runnerEvent.episode < nbEpisode;
-    // When we start a new episode
-    if (runnerEvent.step == null) {
+    if (runnerEvent.step == null || runnerEvent.step.isEpisodeEnding()) {
       runnerEvent.step = environment.initialize();
       assert runnerEvent.step.isEpisodeStarting();
       runnerEvent.episode += 1;
       runnerEvent.episodeReward = 0;
     }
-    // Fire the time step event
     onTimeStep.fire(runnerEvent);
     Action action = agent.getAtp1(runnerEvent.step);
-    // Check if the maximum number of steps in the episode is reached
+    runnerEvent.step = environment.step(action);
+    runnerEvent.episodeReward += runnerEvent.step.r_tp1;
+    runnerEvent.nbTotalTimeSteps++;
     if (runnerEvent.step.time == maxEpisodeTimeSteps)
       runnerEvent.step = runnerEvent.step.createEndingStep();
-    // Next step
-    if (!runnerEvent.step.isEpisodeEnding()) {
-      runnerEvent.step = environment.step(action);
-      runnerEvent.episodeReward += runnerEvent.step.r_tp1;
-      runnerEvent.nbTotalTimeSteps++;
-    } else {
+    if (runnerEvent.step.isEpisodeEnding())
       onEpisodeEnd.fire(runnerEvent);
-      runnerEvent.step = null;
-    }
   }
 
   public RunnerEvent runnerEvent() {

@@ -5,11 +5,11 @@ import rltoys.experiments.parametersweep.parameters.RunInfo;
 import rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 
 public abstract class AbstractRewardMonitor implements AgentEvaluator {
+  protected int currentSlice;
   protected final int[] starts;
+  protected final int[] sizes;
   private final double[] slices;
-  private final int[] sizes;
   private final String prefix;
-  private int currentSlice;
 
   public AbstractRewardMonitor(String prefix, int[] starts) {
     this.prefix = prefix;
@@ -30,14 +30,18 @@ public abstract class AbstractRewardMonitor implements AgentEvaluator {
     return value != -Float.MAX_VALUE ? value / size : -Float.MAX_VALUE;
   }
 
+  protected String criterionLabel(String label, int sliceIndex) {
+    return String.format("%s%s%02d", prefix, label, sliceIndex);
+  }
+
   @Override
   public void putResult(Parameters parameters) {
     RunInfo infos = parameters.infos();
     infos.put(prefix + "RewardNbCheckPoint", starts.length);
     for (int i = 0; i < starts.length; i++) {
-      String startLabel = String.format("%sRewardStart%02d", prefix, i);
+      String startLabel = criterionLabel("RewardStart", i);
       infos.put(startLabel, starts[i]);
-      String sliceLabel = String.format("%sRewardSliceMeasured%02d", prefix, i);
+      String sliceLabel = criterionLabel("RewardSliceMeasured", i);
       parameters.putResult(sliceLabel, divideBySize(slices[i], sizes[i]));
     }
     double cumulatedReward = 0.0;
@@ -48,16 +52,20 @@ public abstract class AbstractRewardMonitor implements AgentEvaluator {
         cumulatedReward += slices[i];
       else
         cumulatedReward = -Float.MAX_VALUE;
-      String rewardLabel = String.format("%sRewardCumulatedMeasured%02d", prefix, i);
+      String rewardLabel = criterionLabel("RewardCumulatedMeasured", i);
       parameters.putResult(rewardLabel, divideBySize(cumulatedReward, cumulatedSize));
     }
   }
 
   public void registerMeasurement(long measurementIndex, double reward) {
-    if (currentSlice < starts.length - 1 && measurementIndex >= starts[currentSlice + 1])
-      currentSlice++;
+    updateCurrentSlice(measurementIndex);
     slices[currentSlice] += reward;
     sizes[currentSlice]++;
+  }
+
+  private void updateCurrentSlice(long measurementIndex) {
+    if (currentSlice < starts.length - 1 && measurementIndex >= starts[currentSlice + 1])
+      currentSlice++;
   }
 
   @Override

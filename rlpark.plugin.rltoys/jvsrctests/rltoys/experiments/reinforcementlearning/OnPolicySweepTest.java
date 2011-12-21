@@ -84,8 +84,14 @@ public class OnPolicySweepTest extends RLSweepTest {
   @Override
   protected void checkParameters(String testFolder, String filename, int divergedOnSlice, FrozenParameters parameters) {
     double expectedReward = expectedReward(parameters.infos());
-    for (String label : parameters.labels())
+    for (String label : parameters.labels()) {
+      if (label.contains("NbTimeStepSliceMeasured")) {
+        int expected = NbTimeSteps;
+        Assert.assertEquals(expected, (int) parameters.get(label));
+        continue;
+      }
       checkRewardParameter(divergedOnSlice, label, expectedReward, parameters.get(label));
+    }
   }
 
   private void checkRewardParameter(int divergedOnSlice, String label, double expectedReward, double value) {

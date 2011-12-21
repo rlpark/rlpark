@@ -1,4 +1,4 @@
-package rltoys.experiments.parametersweep.reinforcementlearning.internal;
+package rltoys.experiments.parametersweep.reinforcementlearning;
 
 import rltoys.algorithms.representations.Projector;
 import rltoys.algorithms.representations.actions.Action;

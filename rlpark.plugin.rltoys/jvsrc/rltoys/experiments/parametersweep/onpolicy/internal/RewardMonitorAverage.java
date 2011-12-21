@@ -18,10 +18,10 @@ public class RewardMonitorAverage extends AbstractRewardMonitor implements OnPol
   public void connect(Runner runner) {
     runner.onTimeStep.connect(new Listener<Runner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
-        if (eventInfo.step.time == 0)
+      public void listen(RunnerEvent runnerEvent) {
+        if (runnerEvent.step.time == 0)
           return;
-        registerMeasurement(eventInfo.step.time - 1, eventInfo.step.r_tp1);
+        registerMeasurement(runnerEvent.step.time - 1, runnerEvent.step.r_tp1);
       }
     });
   }

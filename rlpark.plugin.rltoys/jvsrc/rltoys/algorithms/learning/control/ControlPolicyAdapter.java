@@ -4,7 +4,7 @@ import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.math.vector.RealVector;
 
-public class ControlPolicyAdapter implements Control {
+public class ControlPolicyAdapter implements PolicyBasedControl {
   private static final long serialVersionUID = 7405967970830537947L;
   private final Policy policy;
 
@@ -20,5 +20,10 @@ public class ControlPolicyAdapter implements Control {
   @Override
   public Action proposeAction(RealVector x) {
     return policy.decide(x);
+  }
+
+  @Override
+  public Policy policy() {
+    return policy;
   }
 }

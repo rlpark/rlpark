@@ -17,6 +17,8 @@ public class ExpectedSarsaControl extends SarsaControl {
 
   @Override
   public Action step(RealVector x_t, Action a_t, RealVector x_tp1, double r_tp1) {
+    if (x_t == null)
+      xa_t = null;
     Action a_tp1 = acting.decide(x_tp1);
     RealVector xa_tp1 = null;
     SVector phi_bar_tp1 = null;

@@ -119,7 +119,7 @@ public class NetworkJobQueue implements JobQueue {
     }
     if (socket == null && lastException != null)
       throw new RuntimeException(lastException);
-    if (socket != null)
+    if (socket != null && lastException != null)
       System.err.println("Finally connected");
     return socket;
   }

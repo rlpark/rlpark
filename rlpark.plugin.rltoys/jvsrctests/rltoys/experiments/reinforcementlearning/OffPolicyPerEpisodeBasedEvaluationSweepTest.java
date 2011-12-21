@@ -43,6 +43,10 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
   @Override
   protected void checkParameters(String testFolder, String filename, int divergedOnSlice, FrozenParameters parameters) {
     for (String label : parameters.labels()) {
+      if (label.contains("NbTimeStepSliceMeasured")) {
+        int expected = label.startsWith("Behaviour") ? NbTimeSteps : NbTimeStepsPerEvaluation;
+        Assert.assertEquals(expected, (int) parameters.get(label));
+      }
       if (!label.contains("Reward"))
         continue;
       checkRewardEntry(testFolder, filename, parameters.get(label), label);
@@ -81,8 +85,9 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
   private void checkTargetParameter(String testFolder, int checkPoint, String label, int value) {
     int multiplier = Integer.parseInt(testFolder.substring(testFolder.length() - 2));
     Assert.assertTrue(checkPoint < NbBehaviourRewardCheckpoint);
-    if (label.contains("Start"))
-      Assert.assertEquals(checkPoint * (NbEpisode / (NbBehaviourRewardCheckpoint - 1)), value);
+    if (label.contains("Start")) {
+      Assert.assertEquals(checkPoint * ((NbEpisode - 1) / NbBehaviourRewardCheckpoint), value);
+    }
     if (label.contains("Slice"))
       Assert.assertEquals(NbTimeStepsPerEvaluation * multiplier, value);
     if (label.contains("Cumulated"))

@@ -24,6 +24,8 @@ public class SarsaControl implements Control {
 
   @Override
   public Action step(RealVector x_t, Action a_t, RealVector x_tp1, double r_tp1) {
+    if (x_t == null)
+      xa_t = null;
     Action a_tp1 = acting.decide(x_tp1);
     RealVector xa_tp1 = toStateAction.stateAction(x_tp1, a_tp1);
     sarsa.update(xa_t, xa_tp1, r_tp1);

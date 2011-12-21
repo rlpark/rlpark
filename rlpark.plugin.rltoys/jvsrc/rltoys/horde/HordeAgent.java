@@ -1,6 +1,7 @@
 package rltoys.horde;
 
 import rltoys.algorithms.learning.control.Control;
+import rltoys.algorithms.learning.control.PolicyBasedControl;
 import rltoys.algorithms.representations.Projector;
 import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
@@ -13,14 +14,14 @@ public class HordeAgent implements RLAgent {
   private static final long serialVersionUID = -8430893512617299110L;
 
   @Monitor
-  protected final Control control;
+  protected final PolicyBasedControl control;
   @Monitor
   protected final Projector projector;
   protected RealVector x_t;
   @Monitor
   private final Horde horde;
 
-  public HordeAgent(Control control, Projector projector, Horde horde) {
+  public HordeAgent(PolicyBasedControl control, Projector projector, Horde horde) {
     this.control = control;
     this.projector = projector;
     this.horde = horde;
@@ -50,6 +51,6 @@ public class HordeAgent implements RLAgent {
   }
 
   public Policy behaviourPolicy() {
-    return null;
+    return control.policy();
   }
 }

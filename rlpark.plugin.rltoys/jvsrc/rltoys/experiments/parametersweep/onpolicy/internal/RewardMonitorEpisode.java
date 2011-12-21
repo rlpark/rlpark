@@ -2,10 +2,10 @@ package rltoys.experiments.parametersweep.onpolicy.internal;
 
 import rltoys.environments.envio.Runner;
 import rltoys.environments.envio.Runner.RunnerEvent;
-import rltoys.experiments.parametersweep.reinforcementlearning.internal.AbstractRewardMonitor;
+import rltoys.experiments.parametersweep.reinforcementlearning.internal.AbstractEpisodeRewardMonitor;
 import zephyr.plugin.core.api.signals.Listener;
 
-public class RewardMonitorEpisode extends AbstractRewardMonitor implements OnPolicyRewardMonitor {
+public class RewardMonitorEpisode extends AbstractEpisodeRewardMonitor implements OnPolicyRewardMonitor {
   public RewardMonitorEpisode(int nbBins, int nbEpisode) {
     this("", nbBins, nbEpisode);
   }
@@ -19,7 +19,7 @@ public class RewardMonitorEpisode extends AbstractRewardMonitor implements OnPol
     runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {
-        registerMeasurement(eventInfo.episode, eventInfo.episodeReward);
+        registerMeasurement(eventInfo.episode, eventInfo.episodeReward, eventInfo.step.time);
       }
     });
   }

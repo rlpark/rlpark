@@ -1,9 +1,10 @@
 package rltoys.experiments.parametersweep.offpolicy.internal;
 
 import rltoys.environments.envio.Runner;
-import rltoys.experiments.parametersweep.reinforcementlearning.internal.AbstractRewardMonitor;
+import rltoys.environments.envio.Runner.RunnerEvent;
+import rltoys.experiments.parametersweep.reinforcementlearning.internal.AbstractEpisodeRewardMonitor;
 
-public class OffPolicyEpisodeRewardMonitor extends AbstractRewardMonitor {
+public class OffPolicyEpisodeRewardMonitor extends AbstractEpisodeRewardMonitor {
   private final Runner runner;
   private int nextEvaluationIndex = 0;
   private final int nbEpisodePerEvaluation;
@@ -17,10 +18,9 @@ public class OffPolicyEpisodeRewardMonitor extends AbstractRewardMonitor {
 
   static protected int[] createStartingPoints(int nbLearnerEvaluation, int nbTotalBehaviourEpisodes) {
     int[] starts = new int[nbLearnerEvaluation];
-    double binSize = nbTotalBehaviourEpisodes / (nbLearnerEvaluation - 1);
+    double binSize = (nbTotalBehaviourEpisodes - 1) / nbLearnerEvaluation;
     for (int i = 0; i < starts.length; i++)
       starts[i] = (int) (i * binSize);
-    starts[starts.length - 1] = nbTotalBehaviourEpisodes - 1;
     return starts;
   }
 
@@ -29,7 +29,8 @@ public class OffPolicyEpisodeRewardMonitor extends AbstractRewardMonitor {
       return;
     for (int i = 0; i < nbEpisodePerEvaluation; i++) {
       runner.runEpisode();
-      registerMeasurement(episodeIndex, runner.runnerEvent().episodeReward);
+      RunnerEvent runnerEvent = runner.runnerEvent();
+      registerMeasurement(episodeIndex, runnerEvent.episodeReward, runnerEvent.step.time);
     }
     nextEvaluationIndex++;
   }
