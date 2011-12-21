@@ -20,7 +20,7 @@ public abstract class AbstractRewardMonitor implements AgentEvaluator {
 
   static protected int[] createStartingPoints(int nbBins, int nbMeasurements) {
     int[] starts = new int[nbBins];
-    double binSize = nbMeasurements / nbBins;
+    double binSize = (double) nbMeasurements / nbBins;
     for (int i = 0; i < starts.length; i++)
       starts[i] = (int) (i * binSize);
     return starts;

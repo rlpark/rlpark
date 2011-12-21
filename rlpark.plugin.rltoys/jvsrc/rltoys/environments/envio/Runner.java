@@ -71,11 +71,12 @@ public class Runner implements Serializable, MonitorContainer {
     onTimeStep.fire(runnerEvent);
     Action action = agent.getAtp1(runnerEvent.step);
     runnerEvent.step = environment.step(action);
-    runnerEvent.episodeReward += runnerEvent.step.r_tp1;
-    runnerEvent.nbTotalTimeSteps++;
     if (runnerEvent.step.time == maxEpisodeTimeSteps)
       runnerEvent.step = runnerEvent.step.createEndingStep();
-    if (runnerEvent.step.isEpisodeEnding())
+    if (!runnerEvent.step.isEpisodeEnding()) {
+      runnerEvent.episodeReward += runnerEvent.step.r_tp1;
+      runnerEvent.nbTotalTimeSteps++;
+    } else
       onEpisodeEnd.fire(runnerEvent);
   }
 
