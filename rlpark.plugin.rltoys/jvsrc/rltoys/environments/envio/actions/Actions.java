@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import rltoys.algorithms.representations.actions.Action;
 import rltoys.math.ranges.Range;
 
 public class Actions {
@@ -38,15 +39,17 @@ public class Actions {
     return result;
   }
 
-  static public List<ActionArray> createActions(Range... actionValues) {
+  static public Action[] createActions(Range... actionValues) {
     List<ActionArray> result = new ArrayList<ActionArray>();
     double[][] actions = createActionsAsArrays(actionValues);
     for (double[] action : actions)
       result.add(new ActionArray(action));
-    return result;
+    Action[] resultArray = new Action[result.size()];
+    result.toArray(resultArray);
+    return resultArray;
   }
 
-  static public List<ActionArray> createActions(double... actionValues) {
+  static public Action[] createActions(double... actionValues) {
     Range[] ranges = new Range[actionValues.length];
     for (int i = 0; i < ranges.length; i++)
       ranges[i] = new Range(-actionValues[i], actionValues[i]);

@@ -41,12 +41,16 @@ public class TestContinuousGridworld {
     Range actionRange = new Range(-1, 1);
     ContinuousGridworld world = new ContinuousGridworld(random, 2, observationRange, actionRange, .1);
     Action[] actions = world.actions();
-    Assert.assertEquals(5, actions.length);
-    Assert.assertArrayEquals(new double[] { -1, 0 }, toArray(actions[0]), 0);
-    Assert.assertArrayEquals(new double[] { 1, 0 }, toArray(actions[1]), 0);
-    Assert.assertArrayEquals(new double[] { 0, -1 }, toArray(actions[2]), 0);
-    Assert.assertArrayEquals(new double[] { 0, 1 }, toArray(actions[3]), 0);
+    Assert.assertEquals(9, actions.length);
+    Assert.assertArrayEquals(new double[] { -1, -1 }, toArray(actions[0]), 0);
+    Assert.assertArrayEquals(new double[] { -1, 0 }, toArray(actions[1]), 0);
+    Assert.assertArrayEquals(new double[] { -1, 1 }, toArray(actions[2]), 0);
+    Assert.assertArrayEquals(new double[] { 0, -1 }, toArray(actions[3]), 0);
     Assert.assertArrayEquals(new double[] { 0, 0 }, toArray(actions[4]), 0);
+    Assert.assertArrayEquals(new double[] { 0, 1 }, toArray(actions[5]), 0);
+    Assert.assertArrayEquals(new double[] { 1, -1 }, toArray(actions[6]), 0);
+    Assert.assertArrayEquals(new double[] { 1, 0 }, toArray(actions[7]), 0);
+    Assert.assertArrayEquals(new double[] { 1, 1 }, toArray(actions[8]), 0);
   }
 
   private double[] toArray(Action action) {

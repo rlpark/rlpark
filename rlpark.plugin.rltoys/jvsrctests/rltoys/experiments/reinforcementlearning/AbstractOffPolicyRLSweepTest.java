@@ -17,7 +17,7 @@ public abstract class AbstractOffPolicyRLSweepTest extends RLSweepTest {
       behaviourPerformance.put(key, value);
       return;
     }
-    Assert.assertEquals(behaviourPerformance.get(key), 5.0, 0.0);
+    Assert.assertEquals(5.0, behaviourPerformance.get(key), 0.1);
     behaviourPerformanceChecked = true;
   }
 

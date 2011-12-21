@@ -50,7 +50,7 @@ public abstract class RLSweepTest {
     if (diverged)
       Assert.assertEquals(-Float.MAX_VALUE, value, 0.0);
     else
-      Assert.assertEquals((int) expected, (int) value);
+      Assert.assertEquals(expected, value, 1.0);
   }
 
   protected RunInfo checkFile(String testFolder, int divergedOnSlice) {

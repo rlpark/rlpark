@@ -82,15 +82,15 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
     checkBehaviourPerformanceValue(filename, label, value / NbTimeSteps);
   }
 
-  private void checkTargetParameter(String testFolder, int checkPoint, String label, int value) {
+  private void checkTargetParameter(String testFolder, int checkPoint, String label, double value) {
     int multiplier = Integer.parseInt(testFolder.substring(testFolder.length() - 2));
     Assert.assertTrue(checkPoint < NbBehaviourRewardCheckpoint);
     if (label.contains("Start")) {
-      Assert.assertEquals(checkPoint * ((NbEpisode - 1) / NbBehaviourRewardCheckpoint), value);
+      Assert.assertEquals(checkPoint * ((NbEpisode - 1) / NbBehaviourRewardCheckpoint), value, 1.0);
     }
     if (label.contains("Slice"))
-      Assert.assertEquals(NbTimeStepsPerEvaluation * multiplier, value);
+      Assert.assertEquals(NbTimeStepsPerEvaluation * multiplier, value, multiplier);
     if (label.contains("Cumulated"))
-      Assert.assertEquals(NbTimeStepsPerEvaluation * multiplier, value);
+      Assert.assertEquals(NbTimeStepsPerEvaluation * multiplier, value, multiplier);
   }
 }
