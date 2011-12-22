@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import rltoys.algorithms.representations.Projector;
+import rltoys.environments.envio.states.Projector;
 import rltoys.math.ranges.Range;
 import rltoys.math.vector.implementations.SVector;
 import rltoys.utils.Utils;

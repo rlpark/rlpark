@@ -2,11 +2,8 @@ package rltoys.algorithms.learning.control.sarsa;
 
 import org.junit.Test;
 
-import rltoys.algorithms.learning.control.Control;
-import rltoys.algorithms.learning.control.acting.EpsilonGreedy;
 import rltoys.algorithms.learning.control.mountaincar.MountainCarOnPolicyTest;
 import rltoys.algorithms.learning.control.sarsa.SarsaTest.SarsaControlFactory;
-import rltoys.algorithms.representations.actions.StateToStateAction;
 import rltoys.algorithms.representations.traces.AMaxTraces;
 import rltoys.algorithms.representations.traces.ATraces;
 import rltoys.algorithms.representations.traces.MaxLengthTraces;
@@ -19,12 +16,7 @@ import rltoys.math.vector.implementations.SVector;
 
 public class TracesTest extends MountainCarOnPolicyTest {
   private void testTraces(final Traces traces) {
-    runTestOnOnMountainCar(new SarsaControlFactory(traces) {
-      @Override
-      protected Control createControl(EpsilonGreedy acting, StateToStateAction toStateAction, Sarsa predictor) {
-        return new SarsaControl(acting, toStateAction, predictor);
-      }
-    });
+    runTestOnOnMountainCar(new SarsaControlFactory(traces));
   }
 
   private void testTraces(MutableVector prototype) {

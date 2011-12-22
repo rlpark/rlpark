@@ -1,21 +1,27 @@
 package rltoys.algorithms.learning.control.mountaincar;
 
 import java.io.File;
+import java.util.Random;
 
 import junit.framework.Assert;
-import rltoys.agents.AgentFA;
-import rltoys.algorithms.learning.control.Control;
-import rltoys.algorithms.representations.Projector;
+import rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
+import rltoys.algorithms.representations.projectors.ProjectorFactory;
 import rltoys.algorithms.representations.tilescoding.TileCoders;
+import rltoys.algorithms.representations.tilescoding.TileCodersHashing;
 import rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
+import rltoys.algorithms.representations.tilescoding.hashing.UNH;
+import rltoys.environments.envio.RLAgent;
 import rltoys.environments.envio.Runner;
 import rltoys.environments.envio.Runner.RunnerEvent;
+import rltoys.environments.envio.problems.ProblemBounded;
+import rltoys.environments.envio.problems.RLProblem;
+import rltoys.environments.envio.states.Projector;
 import rltoys.environments.mountaincar.MountainCar;
 import rltoys.math.ranges.Range;
 import rltoys.utils.Utils;
 import zephyr.plugin.core.api.signals.Listener;
 
-
+@SuppressWarnings("serial")
 public abstract class MountainCarOnPolicyTest {
   private class PerformanceVerifier implements Listener<RunnerEvent> {
     @Override
@@ -26,33 +32,42 @@ public abstract class MountainCarOnPolicyTest {
     }
   }
 
-  protected interface MountainCarControlFactory {
-    Control createControl(MountainCar mountainCar, Projector projector);
+  protected interface MountainCarAgentFactory {
+    RLAgent createAgent(MountainCar mountainCar, Projector projector);
   };
 
-  protected interface TileCodersFactory {
-    TileCoders create(Range[] ranges);
-  }
-
-  private final TileCodersFactory defaultTileCodersFactory = new TileCodersFactory() {
+  private final ProjectorFactory defaultTileCodersFactory = new ProjectorFactory() {
     @Override
-    public TileCoders create(Range[] ranges) {
-      return new TileCodersNoHashing(ranges);
+    public Projector createProjector(long seed, RLProblem problem) {
+      TileCodersNoHashing projector = new TileCodersNoHashing(((ProblemBounded) problem).getObservationRanges());
+      projector.addFullTilings(9, 10);
+      return projector;
     }
   };
 
-  public void runTestOnOnMountainCar(MountainCarControlFactory controlFactory) {
+  public final static ProjectorFactory hashingTileCodersFactory = new ProjectorFactory() {
+    @Override
+    public Projector createProjector(long seed, RLProblem problem) {
+      Random random = new Random(seed);
+      Range[] ranges = ((ProblemBounded) problem).getObservationRanges();
+      PartitionFactory discretizerFactory = new PartitionFactory(true, ranges);
+      discretizerFactory.setRandom(random, 0.1);
+      TileCoders tileCoders = new TileCodersHashing(new UNH(random, 10000), discretizerFactory, ranges.length);
+      tileCoders.addFullTilings(9, 10);
+      return tileCoders;
+    }
+  };
+
+  public void runTestOnOnMountainCar(MountainCarAgentFactory controlFactory) {
     runTestOnOnMountainCar(defaultTileCodersFactory, controlFactory);
   }
 
   @SuppressWarnings("synthetic-access")
-  public void runTestOnOnMountainCar(TileCodersFactory tileCodersFactory, MountainCarControlFactory controlFactory) {
+  public void runTestOnOnMountainCar(ProjectorFactory projectorFactory, MountainCarAgentFactory agentFactory) {
     MountainCar mountainCar = new MountainCar(null);
     final int nbEpisode = 300;
-    TileCoders tilesCoder = tileCodersFactory.create(mountainCar.getObservationRanges());
-    tilesCoder.addFullTilings(9, 10);
-    Control control = controlFactory.createControl(mountainCar, tilesCoder);
-    AgentFA agent = new AgentFA(control, tilesCoder);
+    Projector projector = projectorFactory.createProjector(0, mountainCar);
+    RLAgent agent = agentFactory.createAgent(mountainCar, projector);
     Runner runner = new Runner(mountainCar, agent, nbEpisode, 5000);
     runner.onEpisodeEnd.connect(new PerformanceVerifier());
     runner.run();

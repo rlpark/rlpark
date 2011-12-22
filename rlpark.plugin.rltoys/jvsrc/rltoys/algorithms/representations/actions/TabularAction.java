@@ -9,18 +9,20 @@ import rltoys.math.vector.implementations.BVector;
 public class TabularAction implements StateToStateAction {
   private static final long serialVersionUID = 1705117400022134128L;
   private final Action[] actions;
-  private final int stateFeatureSize;
+  private final int vectorSize;
   private final BVector nullVector;
+  private final double vectorNorm;
 
-  public TabularAction(Action[] actions, int stateFeatureSize) {
+  public TabularAction(Action[] actions, double vectorNorm, int vectorSize) {
     this.actions = actions;
-    this.stateFeatureSize = stateFeatureSize;
+    this.vectorNorm = vectorNorm;
+    this.vectorSize = vectorSize;
     this.nullVector = new BVector(vectorSize());
   }
 
   @Override
   public int vectorSize() {
-    return stateFeatureSize * actions.length;
+    return vectorSize * actions.length;
   }
 
   @Override
@@ -32,7 +34,7 @@ public class TabularAction implements StateToStateAction {
     MutableVector phi_sa = s.newInstance(vectorSize());
     for (int i = 0; i < actions.length; i++)
       if (actions[i] == a) {
-        int offset = stateFeatureSize * i;
+        int offset = vectorSize * i;
         for (VectorEntry entry : s)
           phi_sa.setEntry(entry.index() + offset, entry.value());
         return phi_sa;
@@ -45,7 +47,7 @@ public class TabularAction implements StateToStateAction {
     phi_sa.setOrderedIndexes(s.activeIndexes());
     for (int i = 0; i < actions.length; i++)
       if (actions[i] == a) {
-        int offset = stateFeatureSize * i;
+        int offset = vectorSize * i;
         int[] indexes = phi_sa.activeIndexes();
         for (int j = 0; j < indexes.length; j++)
           indexes[j] += offset;
@@ -56,5 +58,10 @@ public class TabularAction implements StateToStateAction {
 
   public Action[] actions() {
     return actions;
+  }
+
+  @Override
+  public double vectorNorm() {
+    return vectorNorm;
   }
 }

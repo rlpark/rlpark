@@ -1,7 +1,7 @@
 package rltoys.experiments.parametersweep.offpolicy;
 
-import rltoys.algorithms.representations.Projector;
 import rltoys.algorithms.representations.acting.Policy;
+import rltoys.algorithms.representations.projectors.RepresentationFactory;
 import rltoys.environments.envio.RLAgent;
 import rltoys.environments.envio.Runner;
 import rltoys.environments.envio.problems.RLProblem;
@@ -12,7 +12,6 @@ import rltoys.experiments.parametersweep.parameters.RunInfo;
 import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.ProblemFactory;
-import rltoys.experiments.parametersweep.reinforcementlearning.ProjectorFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.ReinforcementLearningContext;
 
 public abstract class AbstractContextOffPolicy implements ReinforcementLearningContext {
@@ -20,9 +19,9 @@ public abstract class AbstractContextOffPolicy implements ReinforcementLearningC
   private final OffPolicyAgentFactory agentFactory;
   protected final OffPolicyProblemFactory environmentFactory;
   protected final OffPolicyEvaluation evaluation;
-  protected final ProjectorFactory projectorFactory;
+  protected final RepresentationFactory projectorFactory;
 
-  public AbstractContextOffPolicy(OffPolicyProblemFactory environmentFactory, ProjectorFactory projectorFactory,
+  public AbstractContextOffPolicy(OffPolicyProblemFactory environmentFactory, RepresentationFactory projectorFactory,
       OffPolicyAgentFactory agentFactory, OffPolicyEvaluation evaluation) {
     this.evaluation = evaluation;
     this.projectorFactory = projectorFactory;
@@ -33,10 +32,8 @@ public abstract class AbstractContextOffPolicy implements ReinforcementLearningC
   @Override
   public Runner createRunner(int seed, Parameters parameters) {
     RLProblem problem = environmentFactory.createEnvironment(ExperimentCounter.newRandom(seed));
-    Projector projector = projectorFactory.createProjector(problem);
-    Policy behaviourPolicy = agentFactory.createBehaviourPolicy(problem, ExperimentCounter.newRandom(seed));
-    RLAgent agent = agentFactory.createAgent(problem, projector, parameters, behaviourPolicy,
-                                             ExperimentCounter.newRandom(seed));
+    Policy behaviourPolicy = agentFactory.createBehaviourPolicy(problem, seed);
+    RLAgent agent = agentFactory.createAgent(problem, projectorFactory, parameters, behaviourPolicy, seed);
     int nbEpisode = parameters.nbEpisode();
     int maxEpisodeTimeSteps = parameters.maxEpisodeTimeSteps();
     return new Runner(problem, agent, nbEpisode, maxEpisodeTimeSteps);

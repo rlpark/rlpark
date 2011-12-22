@@ -1,6 +1,6 @@
 package rltoys.algorithms.representations.ltu.networks;
 
-import rltoys.algorithms.representations.Projector;
+import rltoys.environments.envio.states.Projector;
 import rltoys.math.vector.BinaryVector;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.BVector;

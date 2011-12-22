@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Random;
 
 import rltoys.algorithms.learning.predictions.Predictor;
-import rltoys.algorithms.representations.Projector;
 import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
-import rltoys.environments.envio.OffPolicyLearner;
+import rltoys.algorithms.representations.projectors.RepresentationFactory;
 import rltoys.environments.envio.actions.ActionArray;
+import rltoys.environments.envio.offpolicy.OffPolicyAgent;
+import rltoys.environments.envio.offpolicy.OffPolicyAgentDirect;
+import rltoys.environments.envio.offpolicy.OffPolicyLearner;
 import rltoys.environments.envio.problems.RLProblem;
 import rltoys.experiments.parametersweep.interfaces.Context;
 import rltoys.experiments.parametersweep.interfaces.SweepDescriptor;
@@ -17,13 +19,10 @@ import rltoys.experiments.parametersweep.offpolicy.AbstractContextOffPolicy;
 import rltoys.experiments.parametersweep.offpolicy.ContextEvaluation;
 import rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluation;
 import rltoys.experiments.parametersweep.parameters.Parameters;
-import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgent;
 import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
 import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
-import rltoys.experiments.parametersweep.reinforcementlearning.ProjectorFactory;
 import rltoys.experiments.reinforcementlearning.problemtest.AbstractRLProblemFactoryTest;
 import rltoys.math.vector.RealVector;
-import rltoys.math.vector.implementations.PVector;
 import rltoys.utils.Utils;
 
 @SuppressWarnings("serial")
@@ -39,13 +38,12 @@ public class OffPolicyComponentTest {
 
     @Override
     public List<? extends Context> provideContexts() {
-      ProjectorFactory projectorFactory = new ProjectorFactoryTest();
       OffPolicyAgentFactoryTest[] factories = new OffPolicyAgentFactoryTest[] {
           new OffPolicyAgentFactoryTest("Action01", AbstractRLProblemFactoryTest.Action01),
           new OffPolicyAgentFactoryTest("Action02", AbstractRLProblemFactoryTest.Action02) };
       List<ContextEvaluation> result = new ArrayList<ContextEvaluation>();
       for (OffPolicyAgentFactoryTest factory : factories)
-        result.add(new ContextEvaluation(problemFactory, projectorFactory, factory, evaluation));
+        result.add(new ContextEvaluation(problemFactory, null, factory, evaluation));
       return result;
     }
 
@@ -82,28 +80,6 @@ public class OffPolicyComponentTest {
     }
   }
 
-  static class ProjectorFactoryTest implements ProjectorFactory {
-    @Override
-    public Projector createProjector(RLProblem problem) {
-      return new Projector() {
-        @Override
-        public RealVector project(double[] ds) {
-          return new PVector(1.0);
-        }
-
-        @Override
-        public int vectorSize() {
-          return 1;
-        }
-
-        @Override
-        public double vectorNorm() {
-          return 1.0;
-        }
-      };
-    }
-  }
-
   static class OffPolicyAgentFactoryTest implements OffPolicyAgentFactory {
     private final Action action;
     private final String label;
@@ -114,7 +90,8 @@ public class OffPolicyComponentTest {
     }
 
     @Override
-    public Policy createBehaviourPolicy(RLProblem problem, final Random random) {
+    public Policy createBehaviourPolicy(RLProblem problem, long seed) {
+      final Random random = new Random(seed);
       return new Policy() {
         @Override
         public double pi(RealVector s, Action a) {
@@ -134,10 +111,10 @@ public class OffPolicyComponentTest {
     }
 
     @Override
-    public OffPolicyAgent createAgent(RLProblem problem, Projector projector, Parameters parameters,
-        Policy behaviourPolicy, final Random random) {
+    public OffPolicyAgent createAgent(RLProblem problem, RepresentationFactory projectorFactory, Parameters parameters,
+        Policy behaviourPolicy, final long seed) {
       OffPolicyLearner learner = new OffPolicyLearnerTest(action);
-      return new OffPolicyAgent(projector, behaviourPolicy, learner);
+      return new OffPolicyAgentDirect(behaviourPolicy, learner);
     }
   }
 }

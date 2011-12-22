@@ -1,12 +1,12 @@
 package rltoys.algorithms.learning.control.gq;
 
-import rltoys.algorithms.learning.control.Control;
 import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.actions.StateToStateAction;
+import rltoys.environments.envio.control.ControlLearner;
 import rltoys.math.vector.RealVector;
 
-public class GQOnPolicyControl implements Control {
+public class GQOnPolicyControl implements ControlLearner {
   private static final long serialVersionUID = -1583554276099167880L;
   private final GQ gq;
   private final StateToStateAction toStateAction;

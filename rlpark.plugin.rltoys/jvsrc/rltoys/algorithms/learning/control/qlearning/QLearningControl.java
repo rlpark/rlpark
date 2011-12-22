@@ -1,13 +1,13 @@
 package rltoys.algorithms.learning.control.qlearning;
 
-import rltoys.algorithms.learning.control.Control;
 import rltoys.algorithms.learning.predictions.Predictor;
 import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
-import rltoys.environments.envio.OffPolicyLearner;
+import rltoys.environments.envio.control.ControlLearner;
+import rltoys.environments.envio.offpolicy.OffPolicyLearner;
 import rltoys.math.vector.RealVector;
 
-public class QLearningControl implements Control, OffPolicyLearner {
+public class QLearningControl implements ControlLearner, OffPolicyLearner {
   private static final long serialVersionUID = 5784749108581105369L;
   private final QLearning qlearning;
   private final Policy acting;

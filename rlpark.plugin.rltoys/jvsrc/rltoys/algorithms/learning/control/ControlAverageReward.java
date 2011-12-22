@@ -1,16 +1,17 @@
 package rltoys.algorithms.learning.control;
 
 import rltoys.algorithms.representations.actions.Action;
+import rltoys.environments.envio.control.ControlLearner;
 import rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
-public class ControlAverageReward implements Control {
+public class ControlAverageReward implements ControlLearner {
   private static final long serialVersionUID = -8378404594670911282L;
   private final AverageReward averageReward;
-  private final Control control;
+  private final ControlLearner control;
 
-  public ControlAverageReward(AverageReward averageReward, Control control) {
+  public ControlAverageReward(AverageReward averageReward, ControlLearner control) {
     this.averageReward = averageReward;
     this.control = control;
   }

@@ -1,13 +1,13 @@
 package rltoys.algorithms.learning.control.sarsa;
 
-import rltoys.algorithms.learning.control.Control;
 import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.actions.StateToStateAction;
+import rltoys.environments.envio.control.ControlLearner;
 import rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class SarsaControl implements Control {
+public class SarsaControl implements ControlLearner {
   private static final long serialVersionUID = 2848271828496458933L;
   @Monitor
   protected final Sarsa sarsa;

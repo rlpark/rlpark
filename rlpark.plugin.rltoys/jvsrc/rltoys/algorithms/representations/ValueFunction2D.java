@@ -1,6 +1,7 @@
 package rltoys.algorithms.representations;
 
 import rltoys.algorithms.learning.predictions.Predictor;
+import rltoys.environments.envio.states.Projector;
 import rltoys.math.ranges.Range;
 import zephyr.plugin.core.api.viewable.ContinuousFunction;
 

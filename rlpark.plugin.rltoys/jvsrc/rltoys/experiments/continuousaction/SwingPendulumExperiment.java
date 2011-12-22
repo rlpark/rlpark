@@ -1,9 +1,9 @@
 package rltoys.experiments.continuousaction;
 
-import rltoys.algorithms.learning.control.Control;
 import rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorCritic;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.tilescoding.TileCoders;
+import rltoys.environments.envio.control.ControlLearner;
 import rltoys.environments.envio.observations.TRStep;
 import rltoys.environments.envio.problems.RLProblem;
 import rltoys.math.vector.RealVector;
@@ -13,7 +13,7 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 public class SwingPendulumExperiment implements Labeled {
   public final TileCoders tileCoders;
   @Monitor
-  public final Control control;
+  public final ControlLearner control;
   private TRStep step;
   private RealVector x_t = null;
   @Monitor
@@ -23,7 +23,7 @@ public class SwingPendulumExperiment implements Labeled {
   @Monitor
   private int nbEpisode = 0;
 
-  public SwingPendulumExperiment(RLProblem environnment, Control actorCritic, TileCoders tileCoders) {
+  public SwingPendulumExperiment(RLProblem environnment, ControlLearner actorCritic, TileCoders tileCoders) {
     this.control = actorCritic;
     this.tileCoders = tileCoders;
     this.environment = environnment;
@@ -44,7 +44,7 @@ public class SwingPendulumExperiment implements Labeled {
     return step;
   }
 
-  static public boolean checkActorCritic(RLProblem environnment, Control actorCritic, TileCoders tileCoders,
+  static public boolean checkActorCritic(RLProblem environnment, ControlLearner actorCritic, TileCoders tileCoders,
       int maxNbEpisode) {
     SwingPendulumExperiment experiment = new SwingPendulumExperiment(environnment, actorCritic, tileCoders);
     double cumulativeReward = 0.0;
@@ -59,7 +59,7 @@ public class SwingPendulumExperiment implements Labeled {
     return false;
   }
 
-  public Control control() {
+  public ControlLearner control() {
     return control;
   }
 

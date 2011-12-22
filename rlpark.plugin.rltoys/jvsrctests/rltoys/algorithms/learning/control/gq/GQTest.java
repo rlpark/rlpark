@@ -13,7 +13,7 @@ import rltoys.algorithms.representations.acting.ConstantPolicy;
 import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.actions.StateToStateAction;
-import rltoys.environments.envio.OffPolicyLearner;
+import rltoys.environments.envio.offpolicy.OffPolicyLearner;
 import rltoys.environments.stategraph.FSGAgentState;
 import rltoys.environments.stategraph.FiniteStateGraph.StepData;
 import rltoys.environments.stategraph.GraphState;

@@ -3,10 +3,10 @@ package rltoys.algorithms.representations.tilescoding;
 import java.util.ArrayList;
 import java.util.List;
 
-import rltoys.algorithms.representations.Projector;
 import rltoys.algorithms.representations.discretizer.Discretizer;
 import rltoys.algorithms.representations.discretizer.DiscretizerFactory;
 import rltoys.algorithms.representations.tilescoding.hashing.Tiling;
+import rltoys.environments.envio.states.Projector;
 import rltoys.math.vector.BinaryVector;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.BVector;

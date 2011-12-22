@@ -1,14 +1,14 @@
 package rltoys.algorithms.learning.control.actorcritic.onpolicy;
 
-import rltoys.algorithms.learning.control.Control;
 import rltoys.algorithms.learning.predictions.td.OnPolicyTD;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.actions.ActionArray;
+import rltoys.environments.envio.control.ControlLearner;
 import rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
-public class ActorCritic implements Control {
+public class ActorCritic implements ControlLearner {
   private static final long serialVersionUID = 3772938582043052714L;
   public final OnPolicyTD critic;
   public final Actor actor;

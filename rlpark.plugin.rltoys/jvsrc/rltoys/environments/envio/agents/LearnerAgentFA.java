@@ -1,7 +1,5 @@
-package rltoys.horde;
+package rltoys.environments.envio.agents;
 
-import rltoys.algorithms.learning.control.PolicyBasedControl;
-import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.RLAgent;
 import rltoys.environments.envio.control.ControlLearner;
@@ -10,21 +8,17 @@ import rltoys.environments.envio.states.Projector;
 import rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class HordeAgent implements RLAgent {
-  private static final long serialVersionUID = -8430893512617299110L;
-
+public class LearnerAgentFA implements RLAgent {
+  private static final long serialVersionUID = -8694734303900854141L;
   @Monitor
-  protected final PolicyBasedControl control;
+  protected final ControlLearner control;
   @Monitor
   protected final Projector projector;
   protected RealVector x_t;
-  @Monitor
-  private final Horde horde;
 
-  public HordeAgent(PolicyBasedControl control, Projector projector, Horde horde) {
+  public LearnerAgentFA(ControlLearner control, Projector projector) {
     this.control = control;
     this.projector = projector;
-    this.horde = horde;
   }
 
   @Override
@@ -33,7 +27,6 @@ public class HordeAgent implements RLAgent {
       x_t = null;
     RealVector x_tp1 = projector.project(step.o_tp1);
     Action a_tp1 = control.step(x_t, step.a_t, x_tp1, step.r_tp1);
-    horde.update(step, x_t, step.a_t, x_tp1);
     x_t = x_tp1;
     return a_tp1;
   }
@@ -44,13 +37,5 @@ public class HordeAgent implements RLAgent {
 
   public Projector projector() {
     return projector;
-  }
-
-  public Horde horde() {
-    return horde;
-  }
-
-  public Policy behaviourPolicy() {
-    return control.policy();
   }
 }

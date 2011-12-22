@@ -5,27 +5,34 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import rltoys.algorithms.learning.control.Control;
-import rltoys.algorithms.learning.control.acting.EpsilonGreedy;
 import rltoys.algorithms.learning.control.mountaincar.ActionValueMountainCarAgentFactory;
 import rltoys.algorithms.learning.control.mountaincar.MountainCarOnPolicyTest;
 import rltoys.algorithms.learning.predictions.Predictor;
-import rltoys.algorithms.representations.Projector;
+import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.actions.StateToStateAction;
+import rltoys.algorithms.representations.actions.StateToStateActionBuffer;
+import rltoys.algorithms.representations.discretizer.TabularActionDiscretizer;
 import rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
-import rltoys.algorithms.representations.tilescoding.TileCoders;
-import rltoys.algorithms.representations.tilescoding.TileCodersHashing;
-import rltoys.algorithms.representations.tilescoding.hashing.UNH;
-import rltoys.algorithms.representations.traces.AMaxTraces;
+import rltoys.algorithms.representations.projectors.IdentityProjector;
+import rltoys.algorithms.representations.projectors.ProjectorFactory;
+import rltoys.algorithms.representations.tilescoding.StateActionCoders;
+import rltoys.algorithms.representations.tilescoding.hashing.Hashing;
+import rltoys.algorithms.representations.tilescoding.hashing.MurmurHashing;
 import rltoys.algorithms.representations.traces.ATraces;
-import rltoys.algorithms.representations.traces.RTraces;
 import rltoys.algorithms.representations.traces.Traces;
+import rltoys.environments.envio.RLAgent;
+import rltoys.environments.envio.agents.LearnerAgent;
+import rltoys.environments.envio.control.ControlLearner;
+import rltoys.environments.envio.problems.ProblemBounded;
+import rltoys.environments.envio.problems.RLProblem;
+import rltoys.environments.envio.states.Projector;
+import rltoys.environments.mountaincar.MountainCar;
 import rltoys.math.ranges.Range;
 
-
+@SuppressWarnings("serial")
 public class SarsaTest extends MountainCarOnPolicyTest {
-  abstract static class SarsaControlFactory extends ActionValueMountainCarAgentFactory {
+  static class SarsaControlFactory extends ActionValueMountainCarAgentFactory {
     private final Traces traces;
 
     public SarsaControlFactory() {
@@ -37,85 +44,64 @@ public class SarsaTest extends MountainCarOnPolicyTest {
     }
 
     @Override
-    protected Predictor createPredictor(Action[] actions, StateToStateAction toStateAction, int nbActiveFatures,
-        int nbFeatures) {
-      return new Sarsa(0.2 / nbActiveFatures, 0.99, 0.3, nbFeatures, traces);
+    protected Predictor createPredictor(Action[] actions, StateToStateAction toStateAction, double vectorNorm,
+        int vectorSize) {
+      return new Sarsa(0.2 / vectorNorm, 0.99, 0.3, vectorSize, traces);
     }
 
     @Override
-    protected Control createControl(Predictor predictor, Projector projector, StateToStateAction toStateAction,
-        EpsilonGreedy acting) {
-      return createControl(acting, toStateAction, (Sarsa) predictor);
+    protected ControlLearner createControl(MountainCar mountainCar, Predictor predictor, Projector projector,
+        StateToStateAction toStateAction, Policy acting) {
+      return new SarsaControl(acting, toStateAction, (Sarsa) predictor);
     }
-
-    abstract protected Control createControl(EpsilonGreedy acting, StateToStateAction toStateAction, Sarsa predictor);
   }
 
   @Test
   public void testSarsaOnMountainCar() {
-    runTestOnOnMountainCar(new SarsaControlFactory() {
-      @Override
-      protected Control createControl(EpsilonGreedy acting, StateToStateAction toStateAction, Sarsa predictor) {
-        return new SarsaControl(acting, toStateAction, predictor);
-      }
-    });
+    runTestOnOnMountainCar(new SarsaControlFactory());
   }
 
   @Test
   public void testExpectedSarsaOnMountainCar() {
     runTestOnOnMountainCar(new SarsaControlFactory() {
       @Override
-      protected Control createControl(EpsilonGreedy acting, StateToStateAction toStateAction, Sarsa predictor) {
-        return new ExpectedSarsaControl(acting.actions(), acting, toStateAction, predictor);
-      }
-    });
-  }
-
-  @Test
-  public void testSarsaOnMountainCarAccumulatingTraces() {
-    runTestOnOnMountainCar(new SarsaControlFactory(new ATraces()) {
-      @Override
-      protected Control createControl(EpsilonGreedy acting, StateToStateAction toStateAction, Sarsa predictor) {
-        return new SarsaControl(acting, toStateAction, predictor);
-      }
-    });
-  }
-
-  @Test
-  public void testSarsaOnMountainCarAMaxTraces() {
-    runTestOnOnMountainCar(new SarsaControlFactory(new AMaxTraces()) {
-      @Override
-      protected Control createControl(EpsilonGreedy acting, StateToStateAction toStateAction, Sarsa predictor) {
-        return new SarsaControl(acting, toStateAction, predictor);
-      }
-    });
-  }
-
-  @Test
-  public void testSarsaOnMountainCarReplacingTraces() {
-    runTestOnOnMountainCar(new SarsaControlFactory(new RTraces()) {
-      @Override
-      protected Control createControl(EpsilonGreedy acting, StateToStateAction toStateAction, Sarsa predictor) {
-        return new SarsaControl(acting, toStateAction, predictor);
+      protected ControlLearner createControl(MountainCar mountainCar, Predictor predictor, Projector projector,
+          StateToStateAction toStateAction, Policy acting) {
+        return new ExpectedSarsaControl(mountainCar.actions(), acting, toStateAction, (Sarsa) predictor);
       }
     });
   }
 
   @Test
   public void testSarsaOnMountainCarHashingTileCodingWithRandom() {
-    runTestOnOnMountainCar(new TileCodersFactory() {
+    runTestOnOnMountainCar(MountainCarOnPolicyTest.hashingTileCodersFactory, new SarsaControlFactory());
+  }
+
+  StateActionCoders createStateToStateAction(MountainCar problem) {
+    Range[] ranges = problem.getObservationRanges();
+    TabularActionDiscretizer actionDiscretizer = new TabularActionDiscretizer(problem.actions());
+    Hashing hashing = new MurmurHashing(new Random(0), 50000);
+    StateActionCoders stateActionCoders = new StateActionCoders(actionDiscretizer, hashing,
+                                                                new PartitionFactory(false, ranges), ranges.length);
+    stateActionCoders.tileCoders().addFullTilings(9, 10);
+    return stateActionCoders;
+  }
+
+  @Test
+  public void testSarsaOnMountainCarHashingTileCodingWithActionTileCodedWithRandom() {
+    runTestOnOnMountainCar(new ProjectorFactory() {
       @Override
-      public TileCoders create(Range[] ranges) {
-        Random random = new Random(0);
-        PartitionFactory discretizerFactory = new PartitionFactory(true, ranges);
-        discretizerFactory.setRandom(random, 0.1);
-        TileCoders tileCoders = new TileCodersHashing(new UNH(random, 10000), discretizerFactory, ranges.length);
-        return tileCoders;
+      public Projector createProjector(long seed, RLProblem problem) {
+        return new IdentityProjector(((ProblemBounded) problem).getObservationRanges());
       }
-    }, new SarsaControlFactory(new AMaxTraces()) {
+    }, new SarsaControlFactory() {
       @Override
-      protected Control createControl(EpsilonGreedy acting, StateToStateAction toStateAction, Sarsa predictor) {
-        return new SarsaControl(acting, toStateAction, predictor);
+      public RLAgent createAgent(MountainCar problem, Projector projector) {
+        StateToStateAction stateActionCoders = new StateToStateActionBuffer(createStateToStateAction(problem));
+        Predictor predictor = createPredictor(problem.actions(), stateActionCoders,
+                                              (int) stateActionCoders.vectorNorm(), stateActionCoders.vectorSize());
+        Policy acting = createActing(problem, stateActionCoders, predictor);
+        return new LearnerAgent(createControl(problem, predictor, projector, stateActionCoders, acting));
       }
     });
   }

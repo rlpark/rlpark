@@ -1,4 +1,4 @@
-package rltoys.algorithms.representations;
+package rltoys.environments.envio.states;
 
 import java.io.Serializable;
 

@@ -1,41 +1,34 @@
-package rltoys.agents;
+package rltoys.environments.envio.agents;
 
-import rltoys.algorithms.learning.control.Control;
-import rltoys.algorithms.representations.Projector;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.RLAgent;
+import rltoys.environments.envio.control.ControlLearner;
 import rltoys.environments.envio.observations.TRStep;
 import rltoys.math.vector.RealVector;
+import rltoys.math.vector.implementations.PVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class AgentFA implements RLAgent {
+public class LearnerAgent implements RLAgent {
   private static final long serialVersionUID = -8694734303900854141L;
   @Monitor
-  protected final Control control;
-  @Monitor
-  protected final Projector projector;
+  protected final ControlLearner control;
   protected RealVector x_t;
 
-  public AgentFA(Control control, Projector projector) {
+  public LearnerAgent(ControlLearner control) {
     this.control = control;
-    this.projector = projector;
   }
 
   @Override
   public Action getAtp1(TRStep step) {
     if (step.isEpisodeStarting())
       x_t = null;
-    RealVector x_tp1 = projector.project(step.o_tp1);
+    PVector x_tp1 = new PVector(step.o_tp1);
     Action a_tp1 = control.step(x_t, step.a_t, x_tp1, step.r_tp1);
     x_t = x_tp1;
     return a_tp1;
   }
 
-  public Control control() {
+  public ControlLearner control() {
     return control;
-  }
-
-  public Projector projector() {
-    return projector;
   }
 }

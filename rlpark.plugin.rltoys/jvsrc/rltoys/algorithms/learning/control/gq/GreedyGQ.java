@@ -4,7 +4,7 @@ import rltoys.algorithms.learning.predictions.Predictor;
 import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.actions.StateToStateAction;
-import rltoys.environments.envio.OffPolicyLearner;
+import rltoys.environments.envio.offpolicy.OffPolicyLearner;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 import rltoys.math.vector.implementations.SVector;

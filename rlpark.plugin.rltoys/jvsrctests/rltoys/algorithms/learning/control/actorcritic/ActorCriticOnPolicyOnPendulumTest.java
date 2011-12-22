@@ -5,7 +5,6 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 
-import rltoys.algorithms.learning.control.Control;
 import rltoys.algorithms.learning.control.actorcritic.onpolicy.Actor;
 import rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorCritic;
 import rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorLambda;
@@ -17,12 +16,13 @@ import rltoys.algorithms.representations.tilescoding.TileCoders;
 import rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
 import rltoys.algorithms.representations.traces.AMaxTraces;
 import rltoys.algorithms.representations.traces.Traces;
+import rltoys.environments.envio.control.ControlLearner;
 import rltoys.environments.pendulum.SwingPendulum;
 import rltoys.experiments.continuousaction.SwingPendulumExperiment;
 
 public class ActorCriticOnPolicyOnPendulumTest {
   public interface ActorCriticFactory {
-    Control createActorCritic(int vectorSize, int nbActive, PolicyDistribution policyDistribution);
+    ControlLearner createActorCritic(int vectorSize, int nbActive, PolicyDistribution policyDistribution);
   }
 
   static private final double gamma = 0.9;
@@ -35,7 +35,7 @@ public class ActorCriticOnPolicyOnPendulumTest {
     int vectorSize = tileCoders.vectorSize();
     int nbActive = (int) tileCoders.vectorNorm();
     PolicyDistribution policyDistribution = new NormalDistributionSkewed(new Random(0), 0.0, 1.0, 0.1);
-    Control control = actorCriticFactory.createActorCritic(vectorSize, nbActive, policyDistribution);
+    ControlLearner control = actorCriticFactory.createActorCritic(vectorSize, nbActive, policyDistribution);
     return SwingPendulumExperiment.checkActorCritic(problem, control, tileCoders, 50);
   }
 

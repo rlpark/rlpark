@@ -15,7 +15,7 @@ public class TabularActionTest {
 
   @Test
   public void testTabularAction() {
-    TabularAction tabularAction = new TabularAction(new Action[] { a0, a1 }, 2);
+    TabularAction tabularAction = new TabularAction(new Action[] { a0, a1 }, 5.0, 2);
     PVector s = new PVector(2.0, 3.0);
     VectorsTestsUtils.assertEquals(new PVector(new double[] { 2.0, 3.0, 0.0, 0.0 }), tabularAction.stateAction(s, a0));
     VectorsTestsUtils.assertEquals(new PVector(new double[] { 0.0, 0.0, 2.0, 3.0 }), tabularAction.stateAction(s, a1));

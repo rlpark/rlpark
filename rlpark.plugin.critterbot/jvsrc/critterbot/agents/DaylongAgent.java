@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
-import rltoys.agents.RandomAgent;
 import rltoys.environments.envio.Agent;
+import rltoys.environments.envio.agents.RandomAgent;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.monitoring.fileloggers.TimedFileLogger;
 import zephyr.plugin.core.api.synchronization.Clock;

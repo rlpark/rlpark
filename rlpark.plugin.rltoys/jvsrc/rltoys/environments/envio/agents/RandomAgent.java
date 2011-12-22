@@ -1,4 +1,4 @@
-package rltoys.agents;
+package rltoys.environments.envio.agents;
 
 import java.util.Random;
 

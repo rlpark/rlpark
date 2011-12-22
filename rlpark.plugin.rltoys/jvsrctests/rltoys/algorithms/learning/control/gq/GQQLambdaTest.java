@@ -18,10 +18,10 @@ import rltoys.algorithms.representations.tilescoding.TileCoders;
 import rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
 import rltoys.algorithms.representations.traces.AMaxTraces;
 import rltoys.algorithms.representations.traces.RTraces;
-import rltoys.environments.envio.OffPolicyLearner;
 import rltoys.environments.envio.RLAgent;
 import rltoys.environments.envio.Runner;
 import rltoys.environments.envio.observations.TRStep;
+import rltoys.environments.envio.offpolicy.OffPolicyLearner;
 import rltoys.environments.mountaincar.MountainCar;
 import rltoys.math.vector.BinaryVector;
 
@@ -53,18 +53,18 @@ public class GQQLambdaTest {
       return representation;
     }
 
-    private QLearningControl createQLearning(TileCoders representation, Action[] actions) {
-      double alpha = Alpha / representation.vectorNorm();
-      TabularAction toStateAction = new TabularAction(actions, representation.vectorSize());
+    private QLearningControl createQLearning(TileCoders projector, Action[] actions) {
+      double alpha = Alpha / projector.vectorNorm();
+      TabularAction toStateAction = new TabularAction(actions, projector.vectorNorm(), projector.vectorSize());
       QLearning qlearning = new QLearning(actions, alpha, Gamma, Lambda, toStateAction, toStateAction.vectorSize(),
                                           new RTraces());
       Greedy acting = new Greedy(qlearning, actions, toStateAction);
       return new QLearningControl(acting, qlearning);
     }
 
-    private GreedyGQ createGreedyGQ(Policy behaviourPolicy, TileCoders representation, Action[] actions) {
-      TabularAction toStateAction = new TabularAction(actions, representation.vectorSize());
-      double alpha = Alpha / representation.vectorNorm();
+    private GreedyGQ createGreedyGQ(Policy behaviourPolicy, TileCoders projector, Action[] actions) {
+      TabularAction toStateAction = new TabularAction(actions, projector.vectorNorm(), projector.vectorSize());
+      double alpha = Alpha / projector.vectorNorm();
       GQ gq = new GQ(alpha, 0.0, 1 - Gamma, Lambda, toStateAction.vectorSize(), new AMaxTraces(1.0));
       Greedy acting = new Greedy(gq, actions, toStateAction);
       return new GreedyGQ(gq, actions, toStateAction, acting, behaviourPolicy);

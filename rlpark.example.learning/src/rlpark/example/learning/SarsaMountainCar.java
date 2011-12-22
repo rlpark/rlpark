@@ -18,11 +18,11 @@ import rltoys.math.vector.RealVector;
 public class SarsaMountainCar {
   public static void main(String[] args) {
     MountainCar problem = new MountainCar(null);
-    TileCodersNoHashing tileCoders = new TileCodersNoHashing(problem.getObservationRanges());
-    tileCoders.addFullTilings(10, 10);
-    tileCoders.includeActiveFeature();
-    TabularAction toStateAction = new TabularAction(problem.actions(), tileCoders.vectorSize());
-    double alpha = .2 / tileCoders.vectorNorm();
+    TileCodersNoHashing projector = new TileCodersNoHashing(problem.getObservationRanges());
+    projector.addFullTilings(10, 10);
+    projector.includeActiveFeature();
+    TabularAction toStateAction = new TabularAction(problem.actions(), projector.vectorNorm(), projector.vectorSize());
+    double alpha = .2 / projector.vectorNorm();
     double gamma = 0.99;
     double lambda = .3;
     Sarsa sarsa = new Sarsa(alpha, gamma, lambda, toStateAction.vectorSize(), new AMaxTraces());
@@ -33,7 +33,7 @@ public class SarsaMountainCar {
     int nbEpisode = 0;
     RealVector x_t = null;
     while (nbEpisode < 1000) {
-      BinaryVector x_tp1 = tileCoders.project(step.o_tp1);
+      BinaryVector x_tp1 = projector.project(step.o_tp1);
       Action action = control.step(x_t, step.a_t, x_tp1, step.r_tp1);
       x_t = x_tp1;
       if (step.isEpisodeEnding()) {

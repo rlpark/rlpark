@@ -31,7 +31,7 @@ public class SoftMaxTest {
   @Test
   public void testSoftMax() {
     Action[] actions = new Action[] { a1, a2 };
-    SoftMax softMax = new SoftMax(new Random(0), predictor, actions, new TabularAction(actions, 1));
+    SoftMax softMax = new SoftMax(new Random(0), predictor, actions, new TabularAction(actions, 1, 1));
     int nbA1 = 0;
     int nbA2 = 0;
     int nbPolls = 1000;
