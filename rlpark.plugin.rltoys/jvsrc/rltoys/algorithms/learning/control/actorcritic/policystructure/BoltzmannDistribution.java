@@ -93,7 +93,8 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
       monitor.add(a.toString(), 0, new Monitored() {
         @Override
         public double monitoredValue() {
-          return distribution.get(action);
+          Double actionValue = distribution.get(action);
+          return actionValue != null ? actionValue : 0.0;
         }
       });
     }

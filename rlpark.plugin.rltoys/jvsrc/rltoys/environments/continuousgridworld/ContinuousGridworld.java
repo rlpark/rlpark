@@ -102,13 +102,15 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
 
   @Override
   public TRStep step(Action action) {
+    if (isTerminated(step.o_tp1)) {
+      step = step.createEndingStep();
+      return step;
+    }
     double[] envAction = computeEnvironmentAction(action);
     double[] x_tp1 = new double[nbDimensions];
     for (int i = 0; i < x_tp1.length; i++)
       x_tp1[i] = observationRange.bound(step.o_tp1[i] + envAction[i]);
     step = new TRStep(step, action, x_tp1, reward(x_tp1));
-    if (isTerminated(x_tp1))
-      step = step.createEndingStep();
     return step;
   }
 

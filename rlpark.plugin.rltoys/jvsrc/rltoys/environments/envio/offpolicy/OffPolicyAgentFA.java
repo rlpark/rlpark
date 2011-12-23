@@ -7,7 +7,9 @@ import rltoys.environments.envio.agents.ControlAgentFA;
 import rltoys.environments.envio.observations.TRStep;
 import rltoys.environments.envio.states.Projector;
 import rltoys.math.vector.RealVector;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
+@Monitor
 public class OffPolicyAgentFA implements OffPolicyAgentEvaluable {
   private static final long serialVersionUID = 3773760092579439924L;
   private final Projector projector;

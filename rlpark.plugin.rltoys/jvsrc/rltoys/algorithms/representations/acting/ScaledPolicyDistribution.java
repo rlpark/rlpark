@@ -20,7 +20,7 @@ public class ScaledPolicyDistribution implements PolicyDistribution {
     scales = new double[actionRanges.length];
     for (int i = 0; i < actionRanges.length; i++) {
       means[i] = (actionRanges[i].max() + actionRanges[i].min()) / 2.0;
-      scales[i] = actionRanges[i].max() - actionRanges[i].min();
+      scales[i] = (actionRanges[i].max() - actionRanges[i].min()) / 2.0;
     }
   }
 
