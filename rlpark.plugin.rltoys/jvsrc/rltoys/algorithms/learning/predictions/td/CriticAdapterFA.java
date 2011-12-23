@@ -37,7 +37,7 @@ public class CriticAdapterFA implements OffPolicyTD {
     o_t = o_tp1;
     x_t = x_tp1;
     o_tp1 = (PVector) o;
-    x_tp1 = projector.project(o_tp1.data);
+    x_tp1 = projector.project(o_tp1 != null ? o_tp1.data : null);
     return x_tp1;
   }
 

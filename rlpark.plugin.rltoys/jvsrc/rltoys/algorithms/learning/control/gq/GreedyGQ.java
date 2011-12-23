@@ -8,6 +8,7 @@ import rltoys.environments.envio.offpolicy.OffPolicyLearner;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 import rltoys.math.vector.implementations.SVector;
+import rltoys.utils.Utils;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class GreedyGQ implements OffPolicyLearner {
@@ -37,6 +38,7 @@ public class GreedyGQ implements OffPolicyLearner {
     rho_t = 0.0;
     if (a_t != null)
       rho_t = target.pi(s_t, a_t) / behaviour.pi(s_t, a_t);
+    assert Utils.checkValue(rho_t);
     SVector sa_bar_tp1 = new SVector(gq.v.size);
     if (s_t != null && s_tp1 != null) {
       for (Action a : actions) {

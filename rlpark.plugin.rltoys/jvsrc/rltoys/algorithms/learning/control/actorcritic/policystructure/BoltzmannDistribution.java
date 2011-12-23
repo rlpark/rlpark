@@ -44,12 +44,14 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
       return;
     lastS = s;
     double normalizeSum = 0;
-    averagePhi = s.newInstance(u.size);
+    averagePhi = null;
     for (int a_i = 0; a_i < actions.length; a_i++) {
       RealVector phi_sa = toStateAction.stateAction(s, actions[a_i]);
       double probabilityNotNormalized = Math.exp(u.dotProduct(phi_sa));
       distribution.put(actions[a_i], probabilityNotNormalized);
       normalizeSum += probabilityNotNormalized;
+      if (averagePhi == null)
+        averagePhi = phi_sa.newInstance(u.size);
       averagePhi.addToSelf(phi_sa.mapMultiply(probabilityNotNormalized));
       actionToPhi_sa.put(actions[a_i], phi_sa);
     }

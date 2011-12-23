@@ -67,6 +67,7 @@ public class ATraces implements Traces {
       clearBelowThreshold();
       adjustThreshold(lambda);
     }
+    assert Vectors.checkValues(vector);
   }
 
   private void adjustThreshold(double lambda) {

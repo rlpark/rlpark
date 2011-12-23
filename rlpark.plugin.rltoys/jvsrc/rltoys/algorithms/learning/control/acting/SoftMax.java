@@ -9,6 +9,7 @@ import rltoys.algorithms.representations.acting.StochasticPolicy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.actions.StateToStateAction;
 import rltoys.math.vector.RealVector;
+import rltoys.utils.Utils;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
@@ -23,7 +24,8 @@ public class SoftMax extends StochasticPolicy implements MonitorContainer {
   private final Predictor predictor;
   private final Action[] availableActions;
 
-  public SoftMax(Random random, Predictor predictor, Action[] actions, StateToStateAction toStateAction, double temperature) {
+  public SoftMax(Random random, Predictor predictor, Action[] actions, StateToStateAction toStateAction,
+      double temperature) {
     super(random);
     this.toStateAction = toStateAction;
     this.temperature = temperature;
@@ -49,11 +51,24 @@ public class SoftMax extends StochasticPolicy implements MonitorContainer {
       RealVector phi_sa = toStateAction.stateAction(s, action);
       phis_sa.put(action, phi_sa);
       double value = Math.exp(predictor.predict(phi_sa) / temperature);
+      assert Utils.checkValue(value);
       sum += value;
       actionDistribution.put(action, value);
     }
+    if (sum == 0)
+      sum = correctDistribution(actionDistribution);
+    for (Map.Entry<Action, Double> entry : actionDistribution.entrySet()) {
+      double probability = entry.getValue() / sum;
+      assert Utils.checkValue(probability);
+      entry.setValue(probability);
+    }
+    assert Utils.checkDistribution(actionDistribution.values());
+  }
+
+  private double correctDistribution(Map<Action, Double> actionDistribution) {
     for (Map.Entry<Action, Double> entry : actionDistribution.entrySet())
-      actionDistribution.put(entry.getKey(), entry.getValue() / sum);
+      entry.setValue(1.0);
+    return actionDistribution.size();
   }
 
   @Override

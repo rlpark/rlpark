@@ -32,9 +32,19 @@ public class PartitionFactory implements DiscretizerFactory {
     Range range = ranges[inputIndex];
     double offset = range.length() / resolution / nbTilings;
     double shift = computeShift(offset, tilingIndex, inputIndex);
+    return wrapped ? wrappedPartition(resolution, range, shift) : boundedPartition(resolution, range, shift);
+  }
+
+  private Discretizer wrappedPartition(int resolution, Range range, double shift) {
     double min = range.min() + shift;
     double max = range.max() + shift;
-    return wrapped ? new WrappedPartition(min, max, resolution) : new BoundedPartition(min, max, resolution);
+    return new WrappedPartition(min, max, resolution);
+  }
+
+  private Discretizer boundedPartition(int resolution, Range range, double shift) {
+    double min = range.min() - shift;
+    double max = range.max() - shift + (range.length() / resolution);
+    return new BoundedPartition(min, max, resolution + 1);
   }
 
   public static Range[] getRanges(double min, double max, int stateSize) {
