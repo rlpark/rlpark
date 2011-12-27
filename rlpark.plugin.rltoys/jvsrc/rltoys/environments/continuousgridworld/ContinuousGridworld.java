@@ -87,8 +87,10 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
     double[] position = start;
     if (position == null) {
       position = new double[nbDimensions];
-      for (int i = 0; i < position.length; i++)
-        position[i] = observationRange.choose(random);
+      do {
+        for (int i = 0; i < position.length; i++)
+          position[i] = observationRange.choose(random);
+      } while (isTerminated(position));
     }
     step = new TRStep(position, reward(position));
     return step;

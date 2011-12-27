@@ -10,7 +10,7 @@ import rltoys.experiments.parametersweep.parameters.Parameters;
 import zephyr.plugin.core.api.labels.Labeled;
 
 public interface OffPolicyAgentFactory extends Serializable, Labeled {
-  Policy createBehaviourPolicy(RLProblem problem, long seed);
+  Policy createBehaviourPolicy(long seed, RLProblem problem);
 
   OffPolicyAgent createAgent(RLProblem problem, RepresentationFactory projectorFactory, Parameters parameters, Policy behaviourPolicy,
       long seed);

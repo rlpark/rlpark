@@ -11,6 +11,11 @@ public class RLParameters {
   public static final String ActorStepSize = "ActorStepSize";
   public static final String ValueFunctionStepSize = "ValueFunctionStepSize";
   public static final String ValueFunctionSecondStepSize = "ValueFunctionSecondStepSize";
+  public static final String Temperature = "Temperature";
+
+  final static public double[] getSoftmaxValues() {
+    return new double[] { 10.0, 1.0, .1, .01 };
+  }
 
   final static public double[] getTauValues() {
     return new double[] { 1, 2, 4, 8, 16, 32 };

@@ -90,7 +90,7 @@ public class OffPolicyComponentTest {
     }
 
     @Override
-    public Policy createBehaviourPolicy(RLProblem problem, long seed) {
+    public Policy createBehaviourPolicy(long seed, RLProblem problem) {
       final Random random = new Random(seed);
       return new Policy() {
         @Override
