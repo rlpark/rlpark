@@ -86,7 +86,8 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
     int multiplier = Integer.parseInt(testFolder.substring(testFolder.length() - 2));
     Assert.assertTrue(checkPoint < NbBehaviourRewardCheckpoint);
     if (label.contains("Start")) {
-      Assert.assertEquals(checkPoint * ((NbEpisode - 1) / NbBehaviourRewardCheckpoint), value, 1.0);
+      double binSize = (double) NbEpisode / (NbBehaviourRewardCheckpoint - 1);
+      Assert.assertEquals(checkPoint * binSize, value, 1.0);
     }
     if (label.contains("Slice"))
       Assert.assertEquals(NbTimeStepsPerEvaluation * multiplier, value, multiplier);

@@ -18,9 +18,10 @@ public class OffPolicyEpisodeRewardMonitor extends AbstractEpisodeRewardMonitor 
 
   static protected int[] createStartingPoints(int nbLearnerEvaluation, int nbTotalBehaviourEpisodes) {
     int[] starts = new int[nbLearnerEvaluation];
-    double binSize = (nbTotalBehaviourEpisodes - 1) / nbLearnerEvaluation;
+    double binSize = (double) nbTotalBehaviourEpisodes / (nbLearnerEvaluation - 1);
     for (int i = 0; i < starts.length; i++)
       starts[i] = (int) (i * binSize);
+    starts[starts.length - 1] = nbTotalBehaviourEpisodes - 1;
     return starts;
   }
 
