@@ -44,7 +44,7 @@ public class MountainCar implements ProblemBounded, ProblemDiscreteAction, Probl
   }
 
   protected void update(ActionArray action) {
-    double actionThrottle = ActionRange.bound(action.actions[0]);
+    double actionThrottle = ActionRange.bound(ActionArray.toDouble(action));
     double throttle = actionThrottle * throttleFactor;
     velocity = velocityRange.bound(velocity + 0.001 * throttle - 0.0025 * Math.cos(3 * position));
     position += velocity;

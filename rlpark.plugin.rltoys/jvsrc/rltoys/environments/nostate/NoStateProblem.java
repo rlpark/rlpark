@@ -55,7 +55,7 @@ public class NoStateProblem implements RLProblem {
     assert current != null;
     if (a_t == null)
       return new TRStep(current, null, null, -Double.MAX_VALUE);
-    double a = ((ActionArray) a_t).actions[0];
+    double a = ActionArray.toDouble(a_t);
     if (range != null)
       a = range.bound(a);
     double r = reward.reward(a);

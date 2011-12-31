@@ -16,7 +16,7 @@ public final class TestRLProblemForSweep implements RLProblem {
 
   @Override
   public TRStep step(Action action) {
-    double reward = defaultReward == null ? ((ActionArray) action).actions[0] : defaultReward;
+    double reward = defaultReward == null ? ActionArray.toDouble(action) : defaultReward;
     TRStep result = new TRStep(last, action, new double[] {}, reward);
     last = result;
     return result;

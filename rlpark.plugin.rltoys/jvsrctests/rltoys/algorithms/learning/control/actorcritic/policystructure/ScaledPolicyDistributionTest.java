@@ -1,0 +1,66 @@
+package rltoys.algorithms.learning.control.actorcritic.policystructure;
+
+import java.util.Random;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+
+import rltoys.algorithms.learning.control.actorcritic.policystructure.JointDistribution;
+import rltoys.algorithms.representations.acting.PolicyDistribution;
+import rltoys.algorithms.representations.acting.ScaledPolicyDistribution;
+import rltoys.algorithms.representations.actions.Action;
+import rltoys.environments.envio.actions.ActionArray;
+import rltoys.math.ranges.Range;
+import rltoys.math.vector.RealVector;
+import rltoys.math.vector.implementations.PVector;
+
+public class ScaledPolicyDistributionTest {
+  @SuppressWarnings("serial")
+  class PolicyDistributionTest implements PolicyDistribution {
+    private final Random random = new Random(0);
+    private final Range range = new Range(0, 1);
+
+    @Override
+    public double pi(RealVector s, Action a) {
+      ActionArray action = (ActionArray) a;
+      Assert.assertEquals(1, action.actions.length);
+      Assert.assertTrue(range.in(action.actions[0]));
+      return 1;
+    }
+
+    @Override
+    public Action decide(RealVector s) {
+      return new ActionArray(range.choose(random));
+    }
+
+    @Override
+    public PVector[] createParameters(int nbFeatures) {
+      return new PVector[] {};
+    }
+
+    @Override
+    public RealVector[] getGradLog(RealVector x_t, Action a_t) {
+      ActionArray action = (ActionArray) a_t;
+      Assert.assertEquals(1, action.actions.length);
+      Assert.assertTrue(range.in(action.actions[0]));
+      return new PVector[] {};
+    }
+  }
+
+  @Test
+  public void testScaledPolicy() {
+    PolicyDistribution pi01 = new PolicyDistributionTest();
+    PolicyDistribution pi02 = new PolicyDistributionTest();
+    JointDistribution jointDistribution = new JointDistribution(new PolicyDistribution[] { pi01, pi02 });
+    Range[] actionRanges = new Range[] { new Range(4, 5), new Range(-1000, -100) };
+    ScaledPolicyDistribution scaledPolicy = new ScaledPolicyDistribution(jointDistribution, actionRanges);
+    for (int n = 0; n < 10000; n++) {
+      ActionArray a = (ActionArray) scaledPolicy.decide(null);
+      for (int a_i = 0; a_i < actionRanges.length; a_i++)
+        Assert.assertTrue(actionRanges[a_i].in(a.actions[a_i]));
+      Assert.assertEquals(1.0, scaledPolicy.pi(null, a));
+      scaledPolicy.getGradLog(null, a);
+    }
+  }
+}

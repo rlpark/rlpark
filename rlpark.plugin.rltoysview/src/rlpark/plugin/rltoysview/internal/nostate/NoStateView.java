@@ -38,7 +38,7 @@ public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
     public void listen(Clock eventInfo) {
       @SuppressWarnings("synthetic-access")
       TRStep step = instance.current().step();
-      final double action = ((ActionArray) step.a_t).actions[0];
+      final double action = ActionArray.toDouble(step.a_t);
       actionHistory.append(action);
       rewardHistory.append(step.r_tp1);
     }

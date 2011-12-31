@@ -57,7 +57,7 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
   }
 
   protected void update(ActionArray action) {
-    double torque = ActionRange.bound(action.actions[0]);
+    double torque = ActionRange.bound(ActionArray.toDouble(action));
     assert Utils.checkValue(torque);
     double thetaAcceleration = -stepTime * velocity + mass * g * length * Math.sin(theta) + torque;
     assert Utils.checkValue(thetaAcceleration);

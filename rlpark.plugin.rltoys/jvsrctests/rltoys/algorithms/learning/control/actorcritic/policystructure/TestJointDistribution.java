@@ -6,16 +6,27 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import rltoys.algorithms.learning.control.actorcritic.policystructure.JointDistribution;
-import rltoys.algorithms.learning.control.actorcritic.policystructure.NormalDistribution;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
 import rltoys.environments.envio.actions.ActionArray;
 import rltoys.math.normalization.IncMeanVarNormalizer;
+import rltoys.math.ranges.Range;
 import rltoys.math.vector.implementations.PVector;
 
 public class TestJointDistribution {
   @Test
-  public void testJointDistribution() {
+  public void testJointDistributionWithUniform() {
+    Random random = new Random(0);
+    UniformDistribution pi01 = new UniformDistribution(random, new Range(0, 1));
+    UniformDistribution pi02 = new UniformDistribution(random, new Range(0, 1));
+    JointDistribution jointDistribution = new JointDistribution(new PolicyDistribution[] { pi01, pi02 });
+    Assert.assertEquals(1.0, jointDistribution.pi(null, new ActionArray(.5, .5)), 0);
+    Assert.assertEquals(0.0, jointDistribution.pi(null, new ActionArray(-.5, .5)), 0);
+    Assert.assertEquals(0.0, jointDistribution.pi(null, new ActionArray(.5, -.5)), 0);
+  }
+
+
+  @Test
+  public void testJointDistributionWithMeanAndNormal() {
     Random random = new Random(0);
     NormalDistribution pi01 = new NormalDistribution(random, 0.25, 1, 0);
     NormalDistribution pi02 = new NormalDistribution(random, 0.75, 1, 0);

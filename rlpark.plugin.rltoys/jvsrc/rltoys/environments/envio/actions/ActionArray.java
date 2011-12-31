@@ -72,4 +72,14 @@ public class ActionArray implements Action {
   public String toString() {
     return Arrays.toString(actions);
   }
+
+  static public double toDouble(Action a) {
+    final ActionArray action = (ActionArray) a;
+    assert action.actions.length == 1;
+    return action.actions[0];
+  }
+
+  static public ActionArray getDim(Action a, int i) {
+    return new ActionArray(((ActionArray) a).actions[i]);
+  }
 }

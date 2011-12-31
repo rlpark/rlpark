@@ -7,6 +7,7 @@ import java.util.Random;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.actions.ActionArray;
+import rltoys.environments.envio.actions.Actions;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 import rltoys.utils.Utils;
@@ -61,7 +62,7 @@ public class NormalDistribution implements PolicyDistribution, LabeledCollection
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
     updateDistributionIFN(x_t);
     double sigma2 = square(stddev);
-    double a = ((ActionArray) a_t).actions[0];
+    double a = ActionArray.toDouble(a_t);
     RealVector meanGradient = x_t.mapMultiply(1.0 / sigma2 * (a - mean));
     RealVector stddevGradient = x_t.mapMultiply(stddevGradientFactor * (square(a - mean) / sigma2 - 1));
     lastX = null;
@@ -105,8 +106,9 @@ public class NormalDistribution implements PolicyDistribution, LabeledCollection
 
   @Override
   public double pi(RealVector s, Action a) {
+    assert Actions.isOneDimension(a);
     updateDistributionIFN(s);
-    return pi_s(((ActionArray) a).actions[0]);
+    return pi_s(ActionArray.toDouble(a));
   }
 
   @Override

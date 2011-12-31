@@ -25,8 +25,8 @@ public class JointDistribution implements PolicyDistribution {
   @Override
   public double pi(RealVector s, Action a) {
     double product = 1.0;
-    for (PolicyDistribution distribution : distributions)
-      product *= distribution.pi(s, a);
+    for (int i = 0; i < distributions.length; i++)
+      product *= distributions[i].pi(s, ActionArray.getDim(a, i));
     return product;
   }
 
@@ -68,9 +68,12 @@ public class JointDistribution implements PolicyDistribution {
   @Override
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
     List<RealVector> gradLogs = new ArrayList<RealVector>();
-    for (PolicyDistribution distribution : distributions)
-      for (RealVector parameterVector : distribution.getGradLog(x_t, a_t))
+    for (int i = 0; i < distributions.length; i++) {
+      PolicyDistribution distribution = distributions[i];
+      RealVector[] gradLog = distribution.getGradLog(x_t, ActionArray.getDim(a_t, i));
+      for (RealVector parameterVector : gradLog)
         gradLogs.add(parameterVector);
+    }
     RealVector[] result = new RealVector[gradLogs.size()];
     gradLogs.toArray(result);
     return result;

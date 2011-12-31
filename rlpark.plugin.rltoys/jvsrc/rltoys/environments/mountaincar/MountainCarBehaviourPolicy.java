@@ -39,7 +39,7 @@ public class MountainCarBehaviourPolicy extends StochasticPolicy implements RLAg
     double defaultProbability = epsilon / MountainCar.Actions.length;
     for (Action action : MountainCar.Actions) {
       double probability = defaultProbability;
-      double throttle = ((ActionArray) action).actions[0];
+      double throttle = ActionArray.toDouble(action);
       if (throttle * adjustedVelocity > 0)
         probability += 1 - epsilon;
       actionDistribution.put(action, probability);

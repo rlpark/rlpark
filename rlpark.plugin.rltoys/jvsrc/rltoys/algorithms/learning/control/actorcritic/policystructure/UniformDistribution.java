@@ -5,6 +5,7 @@ import java.util.Random;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.actions.ActionArray;
+import rltoys.environments.envio.actions.Actions;
 import rltoys.math.ranges.Range;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
@@ -28,6 +29,7 @@ public class UniformDistribution implements PolicyDistribution {
 
   @Override
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
+    assert Actions.isOneDimension(a_t);
     return new PVector[] { new PVector(1) };
   }
 
@@ -38,7 +40,8 @@ public class UniformDistribution implements PolicyDistribution {
 
   @Override
   public double pi(RealVector s, Action action) {
-    double a = ((ActionArray) action).actions[0];
+    assert ((ActionArray) action).actions.length == 1;
+    double a = ActionArray.toDouble(action);
     return range.in(a) ? pdfValue : 0;
   }
 }

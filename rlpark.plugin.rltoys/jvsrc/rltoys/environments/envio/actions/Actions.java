@@ -55,4 +55,8 @@ public class Actions {
       ranges[i] = new Range(-actionValues[i], actionValues[i]);
     return createActions(ranges);
   }
+
+  static public boolean isOneDimension(Action action) {
+    return ((ActionArray) action).actions.length == 1;
+  }
 }
