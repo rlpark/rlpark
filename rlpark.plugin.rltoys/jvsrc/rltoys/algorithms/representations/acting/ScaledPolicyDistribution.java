@@ -14,6 +14,10 @@ public class ScaledPolicyDistribution implements PolicyDistribution {
   private final double[] means;
   private final double[] scales;
 
+  public ScaledPolicyDistribution(PolicyDistribution policy, Range actionRange) {
+    this(policy, new Range[] { actionRange });
+  }
+
   public ScaledPolicyDistribution(PolicyDistribution policy, Range[] actionRanges) {
     this.policy = policy;
     means = new double[actionRanges.length];
