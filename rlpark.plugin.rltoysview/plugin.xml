@@ -74,21 +74,18 @@
             class="rlpark.plugin.rltoysview.internal.policystructure.NormalDistributionView$Provider"
             icon="icons/policiesview.png"
             name="Policy View"
-            popup="false"
             viewid="zephyr.rlpark.plugin.rltoysview.policyview">
       </client>
       <client
             class="rlpark.plugin.rltoysview.internal.vectors.RealVectorMapView$Provider"
             icon="icons/vectormapview.gif"
             name="Vector Map View"
-            popup="false"
             viewid="zephyr.rlpark.plugin.rltoysview.vectormapview">
       </client>
       <client
             class="rlpark.plugin.rltoysview.internal.vectors.RealVectorBarView$Provider"
             icon="icons/vectorbarview.png"
             name="Vector Bar View"
-            popup="false"
             viewid="zephyr.rlpark.plugin.rltoysview.vectorbarview">
       </client>
       <client

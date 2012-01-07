@@ -101,7 +101,6 @@
             class="zephyr.plugin.critterview.views.ObservationView$Provider"
             icon="icons/view_observation.png"
             name="Critterbot View"
-            popup="true"
             viewid="zephyr.plugin.critterview.view.observation">
       </client>
    </extension>

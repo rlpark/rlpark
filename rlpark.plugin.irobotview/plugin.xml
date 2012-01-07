@@ -6,13 +6,11 @@
       <client
             class="rlpark.plugin.irobotview.views.RoombaView$Provider"
             name="Roomba View"
-            popup="true"
             viewid="zephyr.plugin.irobotview.view.roombaview">
       </client>
       <client
             class="rlpark.plugin.irobotview.views.CreateView$Provider"
             name="Create View"
-            popup="true"
             viewid="zephyr.plugin.irobotview.view.createview">
       </client>
    </extension>
