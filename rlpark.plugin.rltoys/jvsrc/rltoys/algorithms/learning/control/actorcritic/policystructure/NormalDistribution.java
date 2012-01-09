@@ -31,19 +31,13 @@ public class NormalDistribution implements PolicyDistribution, LabeledCollection
   protected RealVector lastX;
   @Monitor
   public double a_t;
-  protected final double stddevGradientFactor;
 
   public NormalDistribution(Random random, double mean, double sigma) {
-    this(random, mean, sigma, 1.0);
-  }
-
-  public NormalDistribution(Random random, double mean, double sigma, double stddevGradientFactor) {
     initialMean = mean;
     logInitialStddev = Math.log(sigma);
     this.mean = initialMean;
     this.stddev = sigma;
     this.random = random;
-    this.stddevGradientFactor = stddevGradientFactor;
   }
 
   @Override
@@ -64,7 +58,7 @@ public class NormalDistribution implements PolicyDistribution, LabeledCollection
     double sigma2 = square(stddev);
     double a = ActionArray.toDouble(a_t);
     RealVector meanGradient = x_t.mapMultiply(1.0 / sigma2 * (a - mean));
-    RealVector stddevGradient = x_t.mapMultiply(stddevGradientFactor * (square(a - mean) / sigma2 - 1));
+    RealVector stddevGradient = x_t.mapMultiply(square(a - mean) / sigma2 - 1);
     lastX = null;
     return new RealVector[] { meanGradient, stddevGradient };
   }
@@ -122,5 +116,10 @@ public class NormalDistribution implements PolicyDistribution, LabeledCollection
     for (int i = 0; i < distributions.length; i++)
       distributions[i] = new NormalDistribution(random, mean, sigma);
     return new JointDistribution(distributions);
+  }
+
+  @Override
+  public int nbParameterVectors() {
+    return 2;
   }
 }

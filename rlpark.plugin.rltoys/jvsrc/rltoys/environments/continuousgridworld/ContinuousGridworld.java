@@ -160,7 +160,7 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
 
   @Override
   public void addToMonitor(DataMonitor monitor) {
-    monitor.add("Reward", 0, new Monitored() {
+    monitor.add("Reward", new Monitored() {
       @Override
       public double monitoredValue() {
         return step != null ? step.r_tp1 : 0.0;
@@ -168,7 +168,7 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
     });
     for (int i = 0; i < legend.nbLabels(); i++) {
       final int index = i;
-      monitor.add(legend.label(i), 0, new Monitored() {
+      monitor.add(legend.label(i), new Monitored() {
         @Override
         public double monitoredValue() {
           return step != null && step.o_tp1 != null ? step.o_tp1[index] : 0.0;

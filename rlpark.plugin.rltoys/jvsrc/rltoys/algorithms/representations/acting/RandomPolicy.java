@@ -31,11 +31,16 @@ public class RandomPolicy implements PolicyDistribution {
 
   @Override
   public PVector[] createParameters(int nbFeatures) {
-    return new PVector[] { new PVector(1) };
+    return new PVector[] {};
   }
 
   @Override
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
-    return new PVector[] { new PVector(1) };
+    return new PVector[] {};
+  }
+
+  @Override
+  public int nbParameterVectors() {
+    return 0;
   }
 }

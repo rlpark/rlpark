@@ -8,4 +8,6 @@ public interface PolicyDistribution extends Policy {
   PVector[] createParameters(int nbFeatures);
 
   RealVector[] getGradLog(RealVector x_t, Action a_t);
+
+  int nbParameterVectors();
 }

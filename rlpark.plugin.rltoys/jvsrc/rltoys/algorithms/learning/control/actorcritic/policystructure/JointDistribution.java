@@ -86,4 +86,12 @@ public class JointDistribution implements PolicyDistribution {
   public PolicyDistribution policy(int actionIndex) {
     return distributions[actionIndex];
   }
+
+  @Override
+  public int nbParameterVectors() {
+    int result = 0;
+    for (PolicyDistribution distribution : distributions)
+      result += distribution.nbParameterVectors();
+    return result;
+  }
 }

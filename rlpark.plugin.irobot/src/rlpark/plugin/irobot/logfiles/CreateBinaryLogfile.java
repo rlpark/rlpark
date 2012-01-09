@@ -69,7 +69,7 @@ public class CreateBinaryLogfile implements MonitorContainer, RobotLog {
   static public void addToMonitor(DataMonitor monitor, final RobotLog problem) {
     for (String label : problem.legend().getLabels()) {
       final int obsIndex = problem.legend().indexOf(label);
-      monitor.add(label, 0, new Monitored() {
+      monitor.add(label, new Monitored() {
         @Override
         public double monitoredValue() {
           double[] obs = problem.nextStep().doubleValues();

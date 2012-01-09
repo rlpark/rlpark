@@ -90,7 +90,7 @@ public class Runner implements Serializable, MonitorContainer {
 
   @Override
   public void addToMonitor(DataMonitor monitor) {
-    monitor.add("Reward", 0, new Monitored() {
+    monitor.add("Reward", new Monitored() {
       @Override
       public double monitoredValue() {
         if (runnerEvent.step == null)

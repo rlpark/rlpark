@@ -81,7 +81,7 @@ public class SoftMax extends StochasticPolicy implements MonitorContainer {
   public void addToMonitor(DataMonitor monitor) {
     for (Action a : availableActions) {
       final Action current = a;
-      monitor.add(Labels.label(a), 0, new Monitored() {
+      monitor.add(Labels.label(a), new Monitored() {
         @Override
         public double monitoredValue() {
           Double value = actionDistribution.get(current);

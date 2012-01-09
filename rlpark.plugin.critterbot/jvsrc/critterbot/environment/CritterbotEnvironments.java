@@ -14,7 +14,7 @@ public class CritterbotEnvironments {
     List<String> labelsToLog = filter.legend().getLabels();
     for (String label : labelsToLog) {
       final int obsIndex = problem.legend().indexOf(label);
-      loggedManager.add(label, 0, new Monitored() {
+      loggedManager.add(label, new Monitored() {
         @Override
         public double monitoredValue() {
           double[] o_t = problem.lastReceivedObs();
@@ -30,7 +30,7 @@ public class CritterbotEnvironments {
     for (int i = 0; i < 3; i++) {
       String label = String.format("a[%d]", i);
       final int actionIndex = i;
-      loggedManager.add(label, 0, new Monitored() {
+      loggedManager.add(label, new Monitored() {
         @Override
         public double monitoredValue() {
           CritterbotAction a_t = environment.lastAction();
@@ -40,7 +40,7 @@ public class CritterbotEnvironments {
         }
       });
     }
-    loggedManager.add("ActionMode", 0, new Monitored() {
+    loggedManager.add("ActionMode", new Monitored() {
       @Override
       public double monitoredValue() {
         CritterbotAction a_t = environment.lastAction();

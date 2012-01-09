@@ -82,13 +82,13 @@ abstract public class IRobotEnvironment extends RobotEnvironment implements Moni
 
   @Override
   public void addToMonitor(DataMonitor monitor) {
-    monitor.add("ActionWheelLeft", 0, new Monitored() {
+    monitor.add("ActionWheelLeft", new Monitored() {
       @Override
       public double monitoredValue() {
         return lastSent.left();
       }
     });
-    monitor.add("ActionWheelRight", 0, new Monitored() {
+    monitor.add("ActionWheelRight", new Monitored() {
       @Override
       public double monitoredValue() {
         return lastSent.right();

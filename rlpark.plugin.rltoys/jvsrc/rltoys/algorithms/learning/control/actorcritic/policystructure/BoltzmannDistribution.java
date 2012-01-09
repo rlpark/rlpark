@@ -90,7 +90,7 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   public void addToMonitor(DataMonitor monitor) {
     for (Action a : actions) {
       final Action action = a;
-      monitor.add(a.toString(), 0, new Monitored() {
+      monitor.add(a.toString(), new Monitored() {
         @Override
         public double monitoredValue() {
           Double actionValue = distribution.get(action);
@@ -98,5 +98,10 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
         }
       });
     }
+  }
+
+  @Override
+  public int nbParameterVectors() {
+    return 1;
   }
 }

@@ -24,13 +24,13 @@ public class UniformDistribution implements PolicyDistribution {
 
   @Override
   public PVector[] createParameters(int nbFeatures) {
-    return new PVector[] { new PVector(1) };
+    return new PVector[] {};
   }
 
   @Override
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
     assert Actions.isOneDimension(a_t);
-    return new PVector[] { new PVector(1) };
+    return new PVector[] {};
   }
 
   @Override
@@ -43,5 +43,10 @@ public class UniformDistribution implements PolicyDistribution {
     assert ((ActionArray) action).actions.length == 1;
     double a = ActionArray.toDouble(action);
     return range.in(a) ? pdfValue : 0;
+  }
+
+  @Override
+  public int nbParameterVectors() {
+    return 0;
   }
 }

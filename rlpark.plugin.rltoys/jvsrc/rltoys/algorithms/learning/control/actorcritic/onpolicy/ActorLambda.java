@@ -5,6 +5,7 @@ import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.traces.ATraces;
 import rltoys.algorithms.representations.traces.Traces;
 import rltoys.math.vector.RealVector;
+import rltoys.utils.Utils;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.parsing.LabelProvider;
 
@@ -20,11 +21,17 @@ public class ActorLambda extends Actor {
 
   public ActorLambda(double lambda, PolicyDistribution policyDistribution, double alpha_u, int nbFeatures,
       Traces prototype) {
+    this(lambda, policyDistribution, Utils.newFilledArray(policyDistribution.nbParameterVectors(), alpha_u),
+         nbFeatures, new ATraces());
+  }
+
+  public ActorLambda(double lambda, PolicyDistribution policyDistribution, double[] alpha_u, int nbFeatures,
+      Traces prototype) {
     super(policyDistribution, alpha_u, nbFeatures);
     this.lambda = lambda;
-    e_u = new Traces[u.length];
+    e_u = new Traces[policyDistribution.nbParameterVectors()];
     for (int i = 0; i < e_u.length; i++)
-      e_u[i] = prototype.newTraces(u[0].size);
+      e_u[i] = prototype.newTraces(u[i].size);
   }
 
   @Override
@@ -41,7 +48,7 @@ public class ActorLambda extends Actor {
 
   protected void updatePolicyParameters(RealVector[] gradLog, double delta) {
     for (int i = 0; i < u.length; i++)
-      u[i].addToSelf(alpha_u * delta, e_u[i].vect());
+      u[i].addToSelf(alpha_u[i] * delta, e_u[i].vect());
   }
 
   private void initEpisode() {

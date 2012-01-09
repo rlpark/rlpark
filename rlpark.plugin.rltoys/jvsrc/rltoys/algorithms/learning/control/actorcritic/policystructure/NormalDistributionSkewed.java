@@ -13,11 +13,7 @@ public class NormalDistributionSkewed extends NormalDistribution {
   private static final long serialVersionUID = -8287545926699668326L;
 
   public NormalDistributionSkewed(Random random, double mean, double sigma) {
-    this(random, mean, sigma, 1.0);
-  }
-
-  public NormalDistributionSkewed(Random random, double mean, double sigma, double stddevGradientFactor) {
-    super(random, mean, sigma, stddevGradientFactor);
+    super(random, mean, sigma);
   }
 
   @Override
@@ -26,7 +22,7 @@ public class NormalDistributionSkewed extends NormalDistribution {
     updateDistributionIFN(x_t);
     double a = ActionArray.toDouble(a_t);
     RealVector meanGradient = x_t.mapMultiply(a - mean);
-    RealVector stddevGradient = x_t.mapMultiply(stddevGradientFactor * (square(a - mean) / square(stddev) - 1));
+    RealVector stddevGradient = x_t.mapMultiply(square(a - mean) / square(stddev) - 1);
     lastX = null;
     return new RealVector[] { meanGradient, stddevGradient };
   }

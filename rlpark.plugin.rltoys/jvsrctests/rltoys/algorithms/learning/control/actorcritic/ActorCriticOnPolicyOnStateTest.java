@@ -38,19 +38,19 @@ public class ActorCriticOnPolicyOnStateTest {
 
   @Test
   public void testNormalDistribution() {
-    checkDistribution(new NormalDistribution(new Random(0), 0.5, 1.0, 0.1));
+    checkDistribution(new NormalDistribution(new Random(0), 0.5, 1.0));
   }
 
   @Test
   public void testNormalDistributionMeanAdjusted() {
-    checkDistribution(new NormalDistributionSkewed(new Random(0), 0.5, 1.0, 0.1));
+    checkDistribution(new NormalDistributionSkewed(new Random(0), 0.5, 1.0));
   }
 
   @Test
   public void testNormalDistributionWithEligibility() {
     double lambda = 0.2;
     TD critic = new TDLambda(lambda, gamma, 0.5 / 1, 1);
-    Actor actor = new ActorLambda(lambda, new NormalDistribution(new Random(0), 0.5, 1.0, 0.1), 0.1, 1);
+    Actor actor = new ActorLambda(lambda, new NormalDistribution(new Random(0), 0.5, 1.0), 0.1, 1);
     ActorCritic actorCritic = new ActorCritic(critic, actor);
     RLProblem environment = new NoStateProblem(rewardFunction);
     double discReward = NoStateExperiment.evaluateActorCritic(1000, environment, actorCritic);

@@ -34,7 +34,7 @@ public class ActorCriticOnPolicyOnPendulumTest {
     tileCoders.includeActiveFeature();
     int vectorSize = tileCoders.vectorSize();
     int nbActive = (int) tileCoders.vectorNorm();
-    PolicyDistribution policyDistribution = new NormalDistributionSkewed(new Random(0), 0.0, 1.0, 0.1);
+    PolicyDistribution policyDistribution = new NormalDistributionSkewed(new Random(0), 0.0, 1.0);
     ControlLearner control = actorCriticFactory.createActorCritic(vectorSize, nbActive, policyDistribution);
     return SwingPendulumExperiment.checkActorCritic(problem, control, tileCoders, 50);
   }

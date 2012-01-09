@@ -61,4 +61,9 @@ public class ScaledPolicyDistribution implements PolicyDistribution {
       scaled[i] = (problemAction.actions[i] - means[i]) / scales[i];
     return new ActionArray(scaled);
   }
+
+  @Override
+  public int nbParameterVectors() {
+    return policy.nbParameterVectors();
+  }
 }

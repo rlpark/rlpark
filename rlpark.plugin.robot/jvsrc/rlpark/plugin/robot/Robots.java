@@ -20,7 +20,7 @@ public class Robots {
   static public void addToMonitor(DataMonitor monitor, final RobotLive problem) {
     for (String label : problem.legend().getLabels()) {
       final int obsIndex = problem.legend().indexOf(label);
-      monitor.add(label, 0, new Monitored() {
+      monitor.add(label, new Monitored() {
         @Override
         public double monitoredValue() {
           double[] obs = Robots.toDoubles(problem.lastReceivedRawObs());

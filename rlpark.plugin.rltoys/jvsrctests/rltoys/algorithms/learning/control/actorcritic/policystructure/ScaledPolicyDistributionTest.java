@@ -6,7 +6,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import rltoys.algorithms.learning.control.actorcritic.policystructure.JointDistribution;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
 import rltoys.algorithms.representations.acting.ScaledPolicyDistribution;
 import rltoys.algorithms.representations.actions.Action;
@@ -45,6 +44,11 @@ public class ScaledPolicyDistributionTest {
       Assert.assertEquals(1, action.actions.length);
       Assert.assertTrue(range.in(action.actions[0]));
       return new PVector[] {};
+    }
+
+    @Override
+    public int nbParameterVectors() {
+      return 0;
     }
   }
 
