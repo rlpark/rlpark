@@ -14,7 +14,7 @@ public class RLParameters {
   public static final String Temperature = "Temperature";
 
   final static public double[] getSoftmaxValues() {
-    return new double[] { 10.0, 1.0, .1, .01 };
+    return new double[] { 1000.0, 500.0, 100.0, 50.0, 10.0, 5.0, 1.0, .5, .1 };
   }
 
   final static public double[] getTauValues() {

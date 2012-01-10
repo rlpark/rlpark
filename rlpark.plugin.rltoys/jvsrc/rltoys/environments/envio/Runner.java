@@ -61,7 +61,7 @@ public class Runner implements Serializable, MonitorContainer {
 
   public void step() {
     // This code guarantee that o_tp1 and x_tp1 are non null
-    assert runnerEvent.episode < nbEpisode;
+    assert nbEpisode < 0 || runnerEvent.episode < nbEpisode;
     if (runnerEvent.step == null || runnerEvent.step.isEpisodeEnding()) {
       runnerEvent.step = environment.initialize();
       assert runnerEvent.step.isEpisodeStarting();
