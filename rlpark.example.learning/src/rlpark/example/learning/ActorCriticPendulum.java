@@ -7,6 +7,7 @@ import rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorCritic;
 import rltoys.algorithms.learning.control.actorcritic.policystructure.NormalDistributionSkewed;
 import rltoys.algorithms.learning.predictions.td.OnPolicyTD;
 import rltoys.algorithms.learning.predictions.td.TDLambda;
+import rltoys.algorithms.representations.ValueFunction2D;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
@@ -20,6 +21,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 
 @Monitor
 public class ActorCriticPendulum implements Runnable {
+  final ValueFunction2D valueFunction;
   private final SwingPendulum problem;
   private final ActorCritic actorCritic;
   private final TileCodersNoHashing tileCoders;
@@ -37,6 +39,7 @@ public class ActorCriticPendulum implements Runnable {
     PolicyDistribution policyDistribution = new NormalDistributionSkewed(new Random(0), 0.0, 1.0);
     Actor actor = new Actor(policyDistribution, 0.01 / vectorNorm, vectorSize);
     actorCritic = new ActorCritic(critic, actor);
+    valueFunction = new ValueFunction2D(tileCoders, problem.getObservationRanges(), critic);
     Zephyr.advertise(clock, this);
   }
 

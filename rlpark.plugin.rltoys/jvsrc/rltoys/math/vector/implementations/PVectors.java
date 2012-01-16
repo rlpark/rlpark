@@ -23,4 +23,14 @@ public class PVectors {
       max = Math.max(value, max);
     return max;
   }
+
+  public static SVector toSVector(PVector v) {
+    SVector result = new SVector(v.getDimension());
+    for (int i = 0; i < v.size; i++) {
+      final double value = v.data[i];
+      if (value != 0)
+        result.setEntry(i, value);
+    }
+    return result;
+  }
 }
