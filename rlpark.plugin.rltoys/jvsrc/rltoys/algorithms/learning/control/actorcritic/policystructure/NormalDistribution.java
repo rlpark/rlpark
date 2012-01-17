@@ -11,30 +11,31 @@ import rltoys.environments.envio.actions.Actions;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 import rltoys.utils.Utils;
+import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.monitoring.wrappers.Squared;
 import zephyr.plugin.core.api.parsing.LabeledCollection;
 
+@Monitor
 public class NormalDistribution implements PolicyDistribution, LabeledCollection {
   private static final long serialVersionUID = -4074721193363280217L;
   private final double initialMean;
-  private final double logInitialStddev;
+  private final double initialStddev;
   @Monitor(level = 4)
   private PVector u_mean;
   @Monitor(level = 4)
   private PVector u_stddev;
-  @Monitor(wrappers = { Squared.ID })
   protected double mean;
-  @Monitor
   protected double stddev;
   private final Random random;
+  @IgnoreMonitor
   protected RealVector lastX;
-  @Monitor
   public double a_t;
+  private double meanStep;
+  private double stddevStep;
 
   public NormalDistribution(Random random, double mean, double sigma) {
     initialMean = mean;
-    logInitialStddev = Math.log(sigma);
+    initialStddev = sigma;
     this.mean = initialMean;
     this.stddev = sigma;
     this.random = random;
@@ -57,8 +58,10 @@ public class NormalDistribution implements PolicyDistribution, LabeledCollection
     updateDistributionIFN(x_t);
     double sigma2 = square(stddev);
     double a = ActionArray.toDouble(a_t);
-    RealVector meanGradient = x_t.mapMultiply(1.0 / sigma2 * (a - mean));
-    RealVector stddevGradient = x_t.mapMultiply(square(a - mean) / sigma2 - 1);
+    meanStep = 1.0 / sigma2 * (a - mean);
+    RealVector meanGradient = x_t.mapMultiply(meanStep);
+    stddevStep = square(a - mean) / sigma2 - 1;
+    RealVector stddevGradient = x_t.mapMultiply(stddevStep);
     lastX = null;
     return new RealVector[] { meanGradient, stddevGradient };
   }
@@ -81,7 +84,7 @@ public class NormalDistribution implements PolicyDistribution, LabeledCollection
     if (lastX == null)
       return;
     mean = u_mean.dotProduct(x) + initialMean;
-    stddev = Math.exp(u_stddev.dotProduct(x) + logInitialStddev);
+    stddev = Math.exp(u_stddev.dotProduct(x)) * initialStddev;
   }
 
   public double stddev() {

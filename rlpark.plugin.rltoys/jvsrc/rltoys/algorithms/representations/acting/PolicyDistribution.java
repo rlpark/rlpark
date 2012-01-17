@@ -5,7 +5,7 @@ import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 
 public interface PolicyDistribution extends Policy {
-  PVector[] createParameters(int nbFeatures);
+  PVector[] createParameters(int vectorSize);
 
   RealVector[] getGradLog(RealVector x_t, Action a_t);
 
