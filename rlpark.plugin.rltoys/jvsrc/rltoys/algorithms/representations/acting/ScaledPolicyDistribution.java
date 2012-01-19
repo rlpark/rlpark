@@ -11,26 +11,23 @@ public class ScaledPolicyDistribution implements PolicyDistribution {
   private static final long serialVersionUID = -7521424991872961399L;
   @Monitor
   private final PolicyDistribution policy;
-  private final double[] means;
-  private final double[] scales;
+  private final Range policyRange;
+  private final Range problemRange;
 
-  public ScaledPolicyDistribution(PolicyDistribution policy, Range actionRange) {
-    this(policy, new Range[] { actionRange });
+  public ScaledPolicyDistribution(BoundedPolicy policy, Range problemRange) {
+    this((PolicyDistribution) policy, policy.range(), problemRange);
   }
 
-  public ScaledPolicyDistribution(PolicyDistribution policy, Range[] actionRanges) {
+
+  public ScaledPolicyDistribution(PolicyDistribution policy, Range policyRange, Range problemRange) {
     this.policy = policy;
-    means = new double[actionRanges.length];
-    scales = new double[actionRanges.length];
-    for (int i = 0; i < actionRanges.length; i++) {
-      means[i] = (actionRanges[i].max() + actionRanges[i].min()) / 2.0;
-      scales[i] = (actionRanges[i].max() - actionRanges[i].min()) / 2.0;
-    }
+    this.policyRange = policyRange;
+    this.problemRange = problemRange;
   }
 
   @Override
   public double pi(RealVector s, Action a) {
-    return policy.pi(s, problemToAgent((ActionArray) a));
+    return policy.pi(s, problemToPolicy(ActionArray.toDouble(a)));
   }
 
   @Override
@@ -40,26 +37,30 @@ public class ScaledPolicyDistribution implements PolicyDistribution {
 
   @Override
   public Action decide(RealVector s) {
-    return agentToProblem((ActionArray) policy.decide(s));
+    return policyToProblem(ActionArray.toDouble(policy.decide(s)));
   }
 
   @Override
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
-    return policy.getGradLog(x_t, problemToAgent((ActionArray) a_t));
+    return policy.getGradLog(x_t, problemToPolicy(ActionArray.toDouble(a_t)));
   }
 
-  private ActionArray agentToProblem(ActionArray agentAction) {
-    double[] scaled = new double[agentAction.actions.length];
-    for (int i = 0; i < scaled.length; i++)
-      scaled[i] = (agentAction.actions[i] * scales[i]) + means[i];
-    return new ActionArray(scaled);
+  private ActionArray policyToProblem(double policyAction) {
+    double normalizedAction = normalize(policyRange, policyAction);
+    return new ActionArray(scale(problemRange, normalizedAction));
   }
 
-  private ActionArray problemToAgent(ActionArray problemAction) {
-    double[] scaled = new double[problemAction.actions.length];
-    for (int i = 0; i < scaled.length; i++)
-      scaled[i] = (problemAction.actions[i] - means[i]) / scales[i];
-    return new ActionArray(scaled);
+  private ActionArray problemToPolicy(double problemAction) {
+    double normalizedAction = normalize(problemRange, problemAction);
+    return new ActionArray(scale(policyRange, normalizedAction));
+  }
+
+  private double normalize(Range range, double a) {
+    return (a - range.center()) / (range.length() / 2.0);
+  }
+
+  private double scale(Range range, double a) {
+    return (a * (range.length() / 2.0)) + range.center();
   }
 
   @Override

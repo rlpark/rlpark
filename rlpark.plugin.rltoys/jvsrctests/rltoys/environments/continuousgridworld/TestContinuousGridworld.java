@@ -30,7 +30,7 @@ public class TestContinuousGridworld {
     ContinuousGridworld world = new ContinuousGridworld(random, 2, observationRange, actionRange, noise);
     world.setStart(new double[] { -49, -49 });
     world.setRewardFunction(new TestRewardFunction());
-    world.setTermination(new TargetReachedTermination(new double[] { 49, 49 }, actionRange.max() + 2 * noise));
+    world.setTermination(new TargetReachedL2NormTermination(new double[] { 49, 49 }, actionRange.max() + 2 * noise));
     return world;
   }
 

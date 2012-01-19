@@ -11,7 +11,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
 import rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorCritic;
-import rltoys.algorithms.learning.control.actorcritic.policystructure.NormalDistribution;
+import rltoys.algorithms.learning.control.actorcritic.policystructure.AbstractNormalDistribution;
 import rltoys.algorithms.learning.predictions.LinearLearner;
 import rltoys.math.History;
 import rltoys.math.normalization.MinMaxNormalizer;
@@ -28,17 +28,19 @@ import zephyr.plugin.plotting.data.Data2D;
 import zephyr.plugin.plotting.plot2d.Plot2DView;
 import zephyr.plugin.plotting.plot2d.drawer2d.Drawers;
 
-public class NormalDistributionView extends Plot2DView<NormalDistribution> {
+public class NormalDistributionView extends Plot2DView<AbstractNormalDistribution> {
+  static final Class<AbstractNormalDistribution> SupportedClass = AbstractNormalDistribution.class;
+
   public static class Provider extends ClassViewProvider {
+
     public Provider() {
-      super(NormalDistribution.class);
+      super(SupportedClass);
     }
   }
 
   public static final int HistoryLength = 1000;
   private final static String ActionFlagKey = "ActionFlagKey";
 
-  private NormalDistributionDrawer initialNormalDistributionDrawer = null;
   private NormalDistributionDrawer normalDistributionDrawer = null;
   private MinMaxNormalizer tdErrorNormalized = null;
   private ActorCritic actorCritic = null;
@@ -54,7 +56,7 @@ public class NormalDistributionView extends Plot2DView<NormalDistribution> {
   private final Data2D data = new Data2D(HistoryLength);
 
   synchronized protected void updateData() {
-    NormalDistribution distribution = instance.current();
+    AbstractNormalDistribution distribution = instance.current();
     if (distribution == null)
       return;
     actionHistory.append(distribution.a_t);
@@ -87,10 +89,6 @@ public class NormalDistributionView extends Plot2DView<NormalDistribution> {
 
   @Override
   synchronized public boolean synchronize() {
-    if (initialNormalDistributionDrawer == null) {
-      initialNormalDistributionDrawer = new NormalDistributionDrawer(plot, instance.current());
-      initialNormalDistributionDrawer.synchronize();
-    }
     if (plot.axes().y.transformationValid) {
       actionHistory.toArray(data.xdata);
       tdErrorHistory.toArray(data.ydata);
@@ -108,8 +106,6 @@ public class NormalDistributionView extends Plot2DView<NormalDistribution> {
     gc.setAntialias(ZephyrPlotting.preferredAntiAliasing() ? SWT.ON : SWT.OFF);
     gc.setLineWidth(ZephyrPlotting.preferredLineSize());
     gc.setForeground(plot.colors.color(gc, Colors.COLOR_GRAY));
-    if (initialNormalDistributionDrawer != null)
-      initialNormalDistributionDrawer.draw(gc);
     gc.setForeground(plot.colors.color(gc, Colors.COLOR_BLACK));
     normalDistributionDrawer.draw(gc);
     if (displayActionFlag && plot.axes().y.transformationValid) {
@@ -157,13 +153,12 @@ public class NormalDistributionView extends Plot2DView<NormalDistribution> {
     actorCritic = null;
     actionHistory.reset();
     tdErrorHistory.reset();
-    initialNormalDistributionDrawer = null;
     normalDistributionDrawer = null;
     super.onInstanceUnset();
   }
 
   @Override
   protected boolean isInstanceSupported(Object instance) {
-    return NormalDistribution.class.isInstance(instance);
+    return SupportedClass.isInstance(instance);
   }
 }

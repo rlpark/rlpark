@@ -22,7 +22,8 @@ public class MinMaxNormalizer implements Normalizer {
   public double normalize(double x) {
     if (valueRange.length() == 0 || nbUpdate == 0)
       return 0;
-    return valueRange.scale(x) * targetRange.length() + targetRange.min();
+    double scaled = Math.max(0.0, Math.min(1.0, (x - valueRange.min()) / valueRange.length()));
+    return scaled * targetRange.length() + targetRange.min();
   }
 
   public float normalize(float x) {

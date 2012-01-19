@@ -2,6 +2,7 @@ package rltoys.algorithms.learning.control.actorcritic.policystructure;
 
 import java.util.Random;
 
+import rltoys.algorithms.representations.acting.BoundedPolicy;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.actions.ActionArray;
@@ -10,7 +11,7 @@ import rltoys.math.ranges.Range;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 
-public class UniformDistribution implements PolicyDistribution {
+public class UniformDistribution implements PolicyDistribution, BoundedPolicy {
   private static final long serialVersionUID = 7284864369595009279L;
   private final Random random;
   private final Range range;
@@ -48,5 +49,10 @@ public class UniformDistribution implements PolicyDistribution {
   @Override
   public int nbParameterVectors() {
     return 0;
+  }
+
+  @Override
+  public Range range() {
+    return range;
   }
 }

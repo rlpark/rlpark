@@ -62,8 +62,8 @@ public class Range implements Serializable {
     return values;
   }
 
-  public double scale(double value) {
-    return Math.max(0.0, Math.min(1.0, (value - min) / length()));
+  public double center() {
+    return min + (length() / 2);
   }
 
   @Override

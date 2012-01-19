@@ -3,9 +3,9 @@ package rltoys.environments.continuousgridworld;
 import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 public class RewardWhenTerminated implements ContinuousFunction {
-  private final TargetReachedTermination terminationFunction;
+  private final TerminationFunction terminationFunction;
 
-  public RewardWhenTerminated(TargetReachedTermination terminationFunction) {
+  public RewardWhenTerminated(TerminationFunction terminationFunction) {
     this.terminationFunction = terminationFunction;
   }
 
