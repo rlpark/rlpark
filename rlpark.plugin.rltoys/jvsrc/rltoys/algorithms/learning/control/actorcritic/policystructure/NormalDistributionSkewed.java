@@ -6,7 +6,6 @@ import java.util.Random;
 
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.actions.ActionArray;
-import rltoys.environments.envio.actions.Actions;
 import rltoys.math.vector.RealVector;
 
 public class NormalDistributionSkewed extends NormalDistribution {
@@ -18,12 +17,11 @@ public class NormalDistributionSkewed extends NormalDistribution {
 
   @Override
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
-    assert Actions.isOneDimension(a_t);
     updateDistributionIFN(x_t);
+    double sigma2 = square(stddev);
     double a = ActionArray.toDouble(a_t);
-    RealVector meanGradient = x_t.mapMultiply(a - mean);
-    RealVector stddevGradient = x_t.mapMultiply(square(a - mean) / square(stddev) - 1);
-    lastX = null;
-    return new RealVector[] { meanGradient, stddevGradient };
+    meanStep = a - mean;
+    stddevStep = square(a - mean) / sigma2 - 1;
+    return new RealVector[] { x_t.mapMultiply(meanStep), x_t.mapMultiply(stddevStep) };
   }
 }

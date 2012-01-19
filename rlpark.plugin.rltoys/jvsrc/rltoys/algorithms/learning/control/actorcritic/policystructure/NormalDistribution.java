@@ -25,11 +25,8 @@ public class NormalDistribution extends AbstractNormalDistribution {
     double sigma2 = square(stddev);
     double a = ActionArray.toDouble(a_t);
     meanStep = 1.0 / sigma2 * (a - mean);
-    RealVector meanGradient = x_t.mapMultiply(meanStep);
     stddevStep = square(a - mean) / sigma2 - 1;
-    RealVector stddevGradient = x_t.mapMultiply(stddevStep);
-    lastX = null;
-    return new RealVector[] { meanGradient, stddevGradient };
+    return new RealVector[] { x_t.mapMultiply(meanStep), x_t.mapMultiply(stddevStep) };
   }
 
   @Override
