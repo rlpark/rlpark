@@ -3,6 +3,7 @@ package rltoys.algorithms.learning.control.actorcritic.policystructure;
 import java.util.ArrayList;
 import java.util.List;
 
+import rltoys.algorithms.representations.acting.BoundedPdf;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.actions.ActionArray;
@@ -12,7 +13,7 @@ import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
-public class JointDistribution implements PolicyDistribution {
+public class JointDistribution implements PolicyDistribution, BoundedPdf {
   private static final long serialVersionUID = -7545331400083047916L;
   private final PolicyDistribution[] distributions;
   @IgnoreMonitor
@@ -92,6 +93,14 @@ public class JointDistribution implements PolicyDistribution {
     int result = 0;
     for (PolicyDistribution distribution : distributions)
       result += distribution.nbParameterVectors();
+    return result;
+  }
+
+  @Override
+  public double piMax(RealVector s) {
+    double result = 1;
+    for (PolicyDistribution distribution : distributions)
+      result *= ((BoundedPdf) distribution).piMax(s);
     return result;
   }
 }

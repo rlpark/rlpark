@@ -71,14 +71,13 @@ public class JobPoolTest {
     poolResults.waitPools();
     Assert.assertEquals(NbPool, poolListener.poolDone);
     Assert.assertEquals(NbJobs * NbPool, jobListener.nbJobDone());
-    SchedulerTestsUtils.assertAreDone(jobListener.jobDone(), true);
+    Assert.assertTrue(SchedulerTestsUtils.assertAreDone(jobListener.jobDone()));
     scheduler.dispose();
   }
 
   private JobPool preparePool(PoolFactory poolFactory, JobPoolListenerTest poolListener,
       Listener<JobDoneEvent> jobListener) {
     List<Job> jobs = SchedulerTestsUtils.createJobs(NbJobs);
-    SchedulerTestsUtils.assertAreDone(jobs, false);
     JobPool pool = poolFactory.createPool(poolListener, jobListener);
     for (Job job : jobs)
       pool.add(job);

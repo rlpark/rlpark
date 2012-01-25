@@ -24,7 +24,7 @@ public class NormalDistribution extends AbstractNormalDistribution {
     updateDistributionIFN(x_t);
     double sigma2 = square(stddev);
     double a = ActionArray.toDouble(a_t);
-    meanStep = 1.0 / sigma2 * (a - mean);
+    meanStep = (a - mean) / sigma2;
     stddevStep = square(a - mean) / sigma2 - 1;
     return new RealVector[] { x_t.mapMultiply(meanStep), x_t.mapMultiply(stddevStep) };
   }
@@ -43,7 +43,7 @@ public class NormalDistribution extends AbstractNormalDistribution {
   @Override
   protected void updateDistribution(RealVector x) {
     mean = u_mean.dotProduct(x) + initialMean;
-    stddev = Math.exp(u_stddev.dotProduct(x)) * initialStddev;
+    stddev = Math.exp(u_stddev.dotProduct(x)) * initialStddev + Utils.EPSILON;
   }
 
   @Override
@@ -59,5 +59,10 @@ public class NormalDistribution extends AbstractNormalDistribution {
     for (int i = 0; i < distributions.length; i++)
       distributions[i] = new NormalDistribution(random, mean, sigma);
     return new JointDistribution(distributions);
+  }
+
+  @Override
+  public double piMax(RealVector s) {
+    return Math.max(pi(s, new ActionArray(mean)), Utils.EPSILON);
   }
 }

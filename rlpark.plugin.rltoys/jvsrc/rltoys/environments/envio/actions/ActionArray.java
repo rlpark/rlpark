@@ -82,4 +82,8 @@ public class ActionArray implements Action {
   static public ActionArray getDim(Action a, int i) {
     return new ActionArray(((ActionArray) a).actions[i]);
   }
+
+  public static boolean checkAction(Action a) {
+    return ((ActionArray) a).actions != null;
+  }
 }

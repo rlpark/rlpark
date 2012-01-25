@@ -22,6 +22,48 @@ import zephyr.plugin.core.api.synchronization.Chrono;
 public class ServerScheduler implements Scheduler {
   static final public double StatPeriod = 3600;
 
+  public final class AcceptClientsRunnable implements Runnable {
+    private ServerSocket serverSocket = null;
+    private boolean terminate = false;
+
+    AcceptClientsRunnable(ServerSocket serverSocket) {
+      this.serverSocket = serverSocket;
+    }
+
+    @Override
+    public void run() {
+      if (serverSocket == null)
+        return;
+      Messages.println("Listening on port " + serverSocket.getLocalPort() + "...");
+      while (!terminate) {
+        try {
+          Socket clientSocket = serverSocket.accept();
+          SocketClient socketClient = new SocketClient(localQueue, clientSocket);
+          if (!socketClient.readName()) {
+            socketClient.close();
+            continue;
+          }
+          addClient(socketClient);
+          socketClient.start();
+        } catch (IOException e) {
+        }
+      }
+      terminate();
+    }
+
+    void terminate() {
+      terminate = true;
+      if (serverSocket == null)
+        return;
+      Messages.println("Closing port " + serverSocket.getLocalPort());
+      try {
+        serverSocket.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
   class JobStatListener implements Listener<JobDoneEvent> {
     private final Chrono chrono = new Chrono();
     private double lastChronoValue = 0.0;
@@ -48,29 +90,11 @@ public class ServerScheduler implements Scheduler {
       onClientDisconnected.fire(ServerScheduler.this);
     }
   };
-  private final Runnable acceptClientsRunnable = new Runnable() {
-    @Override
-    public void run() {
-      Messages.println("Listening on port " + serverSocket.getLocalPort() + "...");
-      while (!serverSocket.isClosed()) {
-        try {
-          Socket clientSocket = serverSocket.accept();
-          SocketClient socketClient = new SocketClient(localQueue, clientSocket);
-          if (!socketClient.readName()) {
-            socketClient.close();
-            continue;
-          }
-          addClient(socketClient);
-          socketClient.start();
-        } catch (IOException e) {
-        }
-      }
-    }
-  };
+  private final AcceptClientsRunnable acceptClientsRunnable;
   protected final LocalQueue localQueue = new LocalQueue();
-  final ServerSocket serverSocket;
+
   private final LocalScheduler localScheduler;
-  private final Thread serverThread = new Thread(acceptClientsRunnable, "AcceptThread");
+  private final Thread serverThread;
   private final Set<SocketClient> clients = Collections.synchronizedSet(new HashSet<SocketClient>());
 
   public ServerScheduler() throws IOException {
@@ -78,8 +102,11 @@ public class ServerScheduler implements Scheduler {
   }
 
   public ServerScheduler(int port, int nbLocalThread) throws IOException {
-    serverSocket = new ServerSocket(port);
+    ServerSocket serverSocket = new ServerSocket(port);
+    acceptClientsRunnable = new AcceptClientsRunnable(serverSocket);
+    serverThread = new Thread(acceptClientsRunnable, "AcceptThread");
     serverThread.setDaemon(true);
+    serverThread.start();
     localScheduler = nbLocalThread > 0 ? new LocalScheduler(nbLocalThread, localQueue) : null;
   }
 
@@ -109,12 +136,8 @@ public class ServerScheduler implements Scheduler {
   }
 
   synchronized public void start() {
-    if (!serverThread.isAlive())
-      serverThread.start();
     if (localScheduler != null)
       localScheduler.start();
-    for (SocketClient clientScheduler : new ArrayList<SocketClient>(clients))
-      clientScheduler.wakeUp();
   }
 
   synchronized void removeClient(SocketClient client) {
@@ -134,11 +157,7 @@ public class ServerScheduler implements Scheduler {
   synchronized public void dispose() {
     for (SocketClient client : new ArrayList<SocketClient>(clients))
       removeClient(client);
-    try {
-      serverSocket.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    acceptClientsRunnable.terminate();
     if (localScheduler != null)
       localScheduler.dispose();
     localQueue.dispose();
@@ -151,5 +170,14 @@ public class ServerScheduler implements Scheduler {
   @Override
   public LocalQueue queue() {
     return localQueue;
+  }
+
+  synchronized public void waitClients() {
+    System.out.println("All jobs done. Answering to new clients only.");
+    try {
+      wait();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 }

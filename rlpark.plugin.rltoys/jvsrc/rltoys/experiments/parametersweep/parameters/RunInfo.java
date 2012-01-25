@@ -72,6 +72,10 @@ public class RunInfo implements Serializable {
     return infos.get(name);
   }
 
+  public boolean hasKey(String key) {
+    return infos.containsKey(key);
+  }
+
   @Override
   public String toString() {
     return infos.toString();

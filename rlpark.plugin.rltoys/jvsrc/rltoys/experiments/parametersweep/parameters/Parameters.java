@@ -47,6 +47,8 @@ public class Parameters extends AbstractParameters {
     for (Parameters parameter : parameters) {
       boolean satisfy = true;
       for (Map.Entry<String, Double> entry : filterMap.entrySet()) {
+        if (!parameter.hasKey(entry.getKey()))
+          continue;
         double parameterValue = parameter.get(entry.getKey());
         if (parameterValue != entry.getValue()) {
           satisfy = false;

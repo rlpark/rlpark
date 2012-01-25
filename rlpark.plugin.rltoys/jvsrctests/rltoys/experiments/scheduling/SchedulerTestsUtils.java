@@ -36,6 +36,7 @@ public class SchedulerTestsUtils {
 
     @Override
     public void run() {
+      Assert.assertFalse(done);
       done = true;
     }
   }
@@ -55,6 +56,12 @@ public class SchedulerTestsUtils {
     public List<Runnable> jobDone() {
       return done;
     }
+
+    public boolean checkJobs(int nbJobs) {
+      if (nbJobs != nbJobDone())
+        return false;
+      return assertAreDone(done);
+    }
   }
 
   static List<Job> createJobs(int nbJobs) {
@@ -64,31 +71,26 @@ public class SchedulerTestsUtils {
     return jobs;
   }
 
-  static void assertAreDone(List<? extends Runnable> jobs, boolean isDone) {
-    for (Runnable job : jobs)
-      Assert.assertEquals(isDone, ((Job) job).done);
-  }
-
-  static public void testServerScheduler(ServerScheduler scheduler, int nbJobs) {
+  static public void testServerScheduler(ServerScheduler scheduler, int nbJobs, Runnable startClients) {
     if (scheduler.isLocalSchedulingEnabled()) {
-      testScheduler(scheduler, nbJobs);
+      testScheduler(scheduler, nbJobs, startClients);
       return;
     }
     ClassResolutionListener listener = new ClassResolutionListener();
     SocketClient.onClassRequested.connect(listener);
-    testScheduler(scheduler, nbJobs);
+    testScheduler(scheduler, nbJobs, startClients);
     SocketClient.onClassRequested.disconnect(listener);
     Assert.assertTrue(listener.names.contains(Job.class.getName()));
   }
 
-  static public void testScheduler(Scheduler scheduler, int nbJobs) {
+  static public void testScheduler(Scheduler scheduler, int nbJobs, Runnable startClients) {
     List<Job> jobs = SchedulerTestsUtils.createJobs(nbJobs);
-    SchedulerTestsUtils.assertAreDone(jobs, false);
     JobDoneListener listener = createListener();
     Schedulers.addAll(scheduler, jobs, listener);
+    if (startClients != null)
+      startClients.run();
     scheduler.runAll();
-    Assert.assertEquals(nbJobs, listener.nbJobDone());
-    SchedulerTestsUtils.assertAreDone(listener.jobDone(), true);
+    Assert.assertTrue(listener.checkJobs(nbJobs));
   }
 
   static public JobDoneListener createListener() {
@@ -112,5 +114,12 @@ public class SchedulerTestsUtils {
     for (JobPool pool : pools)
       poolResults.add(pool.submitTo(scheduler));
     return poolResults;
+  }
+
+  public static boolean assertAreDone(List<? extends Runnable> jobs) {
+    for (Runnable job : jobs)
+      if (!((Job) job).done)
+        return false;
+    return true;
   }
 }

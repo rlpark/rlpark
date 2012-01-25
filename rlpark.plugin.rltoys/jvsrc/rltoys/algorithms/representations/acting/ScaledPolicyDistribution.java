@@ -7,7 +7,7 @@ import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class ScaledPolicyDistribution implements PolicyDistribution {
+public class ScaledPolicyDistribution implements PolicyDistribution, BoundedPdf {
   private static final long serialVersionUID = -7521424991872961399L;
   @Monitor
   private final PolicyDistribution policy;
@@ -66,5 +66,11 @@ public class ScaledPolicyDistribution implements PolicyDistribution {
   @Override
   public int nbParameterVectors() {
     return policy.nbParameterVectors();
+  }
+
+
+  @Override
+  public double piMax(RealVector s) {
+    return ((BoundedPdf) policy).piMax(s);
   }
 }

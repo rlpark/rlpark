@@ -2,6 +2,7 @@ package rltoys.algorithms.learning.control.actorcritic.policystructure;
 
 import java.util.Random;
 
+import rltoys.algorithms.representations.acting.BoundedPdf;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.actions.ActionArray;
@@ -13,7 +14,7 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.parsing.LabeledCollection;
 
 @Monitor
-public abstract class AbstractNormalDistribution implements PolicyDistribution, LabeledCollection {
+public abstract class AbstractNormalDistribution implements PolicyDistribution, LabeledCollection, BoundedPdf {
   private static final long serialVersionUID = -6707070542157254303L;
   public final double initialMean;
   public final double initialStddev;
@@ -50,7 +51,7 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
     return null;
   }
 
-  protected void updateDistributionIFN(RealVector x) {
+  public void updateDistributionIFN(RealVector x) {
     if (lastX == x)
       return;
     lastX = x;

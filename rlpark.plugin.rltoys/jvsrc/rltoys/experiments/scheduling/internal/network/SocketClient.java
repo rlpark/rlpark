@@ -12,7 +12,6 @@ import rltoys.experiments.scheduling.internal.messages.Message;
 import rltoys.experiments.scheduling.internal.messages.MessageClassData;
 import rltoys.experiments.scheduling.internal.messages.MessageJob;
 import rltoys.experiments.scheduling.internal.messages.MessageRequestClass;
-import rltoys.experiments.scheduling.internal.messages.MessageRequestJob;
 import rltoys.experiments.scheduling.internal.messages.MessageSendClientName;
 import rltoys.experiments.scheduling.internal.messages.Messages.MessageType;
 import zephyr.plugin.core.api.signals.Signal;
@@ -30,7 +29,6 @@ public class SocketClient {
   private final SyncSocket clientSocket;
   private final Thread clientThread = new Thread(clientRunnable, "ServerScheduler-ClientThread");
   private final Map<Integer, Runnable> idtoJob = new HashMap<Integer, Runnable>();
-  private boolean waitingForJob = false;
   private int id;
   private String clientName;
   private final JobQueue jobQueue;
@@ -65,7 +63,7 @@ public class SocketClient {
         break;
       switch (message.type()) {
       case RequestJob:
-        sendJob(((MessageRequestJob) message).blocking());
+        sendJob();
         break;
       case Job:
         jobDone((MessageJob) message);
@@ -94,7 +92,7 @@ public class SocketClient {
     }
   }
 
-  synchronized private void sendJob(boolean blocking) {
+  synchronized private void sendJob() {
     List<Runnable> jobs = new ArrayList<Runnable>();
     List<Integer> jobIds = new ArrayList<Integer>();
     for (int i = 0; i < nbJobSendPerRequest; i++) {
@@ -106,11 +104,7 @@ public class SocketClient {
       jobs.add(todo);
       jobIds.add(jobId);
     }
-    MessageJob messageJob = new MessageJob(jobs, jobIds);
-    waitingForJob = messageJob.nbJobs() == 0;
-    if (messageJob.nbJobs() == 0 && blocking)
-      return;
-    clientSocket.write(messageJob);
+    clientSocket.write(new MessageJob(jobs, jobIds));
   }
 
   private int newId() {
@@ -118,12 +112,6 @@ public class SocketClient {
     if (id < 0)
       id = 0;
     return id;
-  }
-
-  synchronized public void wakeUp() {
-    if (!waitingForJob)
-      return;
-    sendJob(true);
   }
 
   public void close() {

@@ -22,8 +22,8 @@ public class SyncSocket {
 
   public SyncSocket(Socket socket) {
     this.socket = socket;
-    in = inputStream();
     out = outputStream();
+    in = inputStream();
   }
 
   private InputStream inputStream() {
@@ -96,8 +96,8 @@ public class SyncSocket {
     return messageClassData;
   }
 
-  public MessageJob jobTransaction(ClassLoader classLoader, boolean blocking) {
-    MessageBinary message = transaction(new MessageRequestJob(blocking));
+  public MessageJob jobTransaction(ClassLoader classLoader) {
+    MessageBinary message = transaction(new MessageRequestJob());
     MessageJob messageJobTodo = (MessageJob) Messages.cast(message, classLoader);
     return messageJobTodo;
   }

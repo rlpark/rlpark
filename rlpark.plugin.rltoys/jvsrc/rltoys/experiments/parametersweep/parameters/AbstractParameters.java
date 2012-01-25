@@ -28,6 +28,10 @@ public abstract class AbstractParameters implements Comparable<AbstractParameter
     results.put(parameterName, parameterValue);
   }
 
+  public boolean hasKey(String key) {
+    return parameters.containsKey(key) || infos.hasKey(key);
+  }
+
   public double get(String name) {
     Double parameterValue = parameters.get(name);
     if (parameterValue != null)

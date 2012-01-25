@@ -36,13 +36,12 @@ public class UnreliableNetworkClientWithPoolTest {
 
   private void testServerSchedulerWithPool(ServerScheduler scheduler, int nbJobs, int nbPools) {
     List<Job> jobs = SchedulerTestsUtils.createJobs(nbJobs);
-    SchedulerTestsUtils.assertAreDone(jobs, false);
     JobDoneListener jobListener = SchedulerTestsUtils.createListener();
     JobPoolListenerTest poolListener = new JobPoolTest.JobPoolListenerTest();
     PoolResults poolResults = SchedulerTestsUtils.submitJobsInPool(scheduler, jobs, jobListener, poolListener, nbPools);
     scheduler.start();
     poolResults.waitPools();
-    SchedulerTestsUtils.assertAreDone(jobListener.jobDone(), true);
+    Assert.assertTrue(SchedulerTestsUtils.assertAreDone(jobListener.jobDone()));
     Assert.assertEquals(nbJobs, jobListener.nbJobDone());
     Assert.assertEquals(nbPools, poolListener.nbPoolDone());
   }

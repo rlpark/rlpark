@@ -28,7 +28,6 @@ public class NoStateProblem implements RLProblem {
     }
   }
 
-  private final double[] state = { 1.0 };
   private TRStep current = null;
   private final NoStateRewardFunction reward;
   public final Range range;
@@ -46,9 +45,14 @@ public class NoStateProblem implements RLProblem {
 
   @Override
   public TRStep initialize() {
-    current = new TRStep(state, Double.NaN);
+    current = new TRStep(state(), Double.NaN);
     return current;
   }
+
+  private double[] state() {
+    return new double[] { 1.0 };
+  }
+
 
   @Override
   public TRStep step(Action a_t) {
@@ -59,7 +63,7 @@ public class NoStateProblem implements RLProblem {
     if (range != null)
       a = range.bound(a);
     double r = reward.reward(a);
-    current = new TRStep(current, a_t, state, r);
+    current = new TRStep(current, a_t, state(), r);
     return current;
   }
 

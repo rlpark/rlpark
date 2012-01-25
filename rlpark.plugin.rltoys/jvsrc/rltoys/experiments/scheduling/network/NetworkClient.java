@@ -1,7 +1,6 @@
 package rltoys.experiments.scheduling.network;
 
 import rltoys.experiments.scheduling.interfaces.JobDoneEvent;
-import rltoys.experiments.scheduling.interfaces.JobQueue;
 import rltoys.experiments.scheduling.internal.queue.NetworkJobQueue;
 import rltoys.experiments.scheduling.schedulers.LocalScheduler;
 import zephyr.plugin.core.api.signals.Listener;
@@ -27,14 +26,6 @@ public class NetworkClient {
   public NetworkClient(final LocalScheduler localScheduler) {
     this.localScheduler = localScheduler;
     networkJobQueue = (NetworkJobQueue) localScheduler.queue();
-    networkJobQueue.onJobReceived.connect(new Listener<JobQueue>() {
-      @Override
-      public void listen(JobQueue eventInfo) {
-        if (localScheduler.isShutdown())
-          return;
-        localScheduler.start();
-      }
-    });
   }
 
   private static NetworkJobQueue createJobQueue(String serverHost, int port) {
@@ -58,9 +49,7 @@ public class NetworkClient {
   }
 
   public void run() {
-    while (networkJobQueue.canAnswerJobRequest()) {
-      localScheduler.runAll();
-    }
+    localScheduler.runAll();
   }
 
   public void dispose() {

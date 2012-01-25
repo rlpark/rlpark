@@ -12,7 +12,7 @@ public class NoStateExperiment {
   @Monitor
   public final ControlLearner control;
   private TRStep step;
-  private final PVector x;
+  private PVector x_t = null;
   @Monitor
   protected double reward;
   @Monitor
@@ -24,15 +24,15 @@ public class NoStateExperiment {
     averageReward = new IncMeanVarNormalizer(1);
     this.environment = environnment;
     step = environnment.initialize();
-    x = new PVector(1.0);
   }
 
   public TRStep step() {
-    PVector x_t = step.isEpisodeStarting() ? null : x;
     reward = step.r_tp1;
-    Action a_tp1 = control.step(x_t, step.a_t, x, step.r_tp1);
+    PVector x_tp1 = new PVector(step.o_tp1);
+    Action a_tp1 = control.step(x_t, step.a_t, x_tp1, step.r_tp1);
     step = environment.step(a_tp1);
     averageReward.update(step.r_tp1);
+    x_t = x_tp1;
     return step;
   }
 

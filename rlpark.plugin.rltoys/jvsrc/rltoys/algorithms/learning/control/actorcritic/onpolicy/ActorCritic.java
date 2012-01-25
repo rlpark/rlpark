@@ -25,7 +25,7 @@ public class ActorCritic implements ControlLearner {
     return critic.update(x_t, x_tp1, r_tp1);
   }
 
-  protected void updateActors(RealVector x_t, double delta) {
+  protected void updateActor(RealVector x_t, double delta) {
     if (lastAction != null)
       actor.update(x_t, lastAction, delta);
   }
@@ -39,7 +39,7 @@ public class ActorCritic implements ControlLearner {
   public Action step(RealVector x_t, Action a_t, RealVector x_tp1, double r_tp1) {
     reward = r_tp1;
     double delta = updateCritic(x_t, x_tp1, r_tp1);
-    updateActors(x_t, delta);
+    updateActor(x_t, delta);
     return computeAction(x_tp1);
   }
 

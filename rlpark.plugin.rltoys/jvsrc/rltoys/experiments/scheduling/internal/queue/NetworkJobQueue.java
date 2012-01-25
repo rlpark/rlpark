@@ -18,7 +18,6 @@ import zephyr.plugin.core.api.synchronization.Chrono;
 
 public class NetworkJobQueue implements JobQueue {
   private static final double MessagePeriod = 1800;
-  public Signal<JobQueue> onJobReceived = new Signal<JobQueue>();
   private final SyncSocket syncSocket;
   private final Map<Runnable, Integer> jobToId = new HashMap<Runnable, Integer>();
   private final NetworkClassLoader classLoader;
@@ -35,8 +34,8 @@ public class NetworkJobQueue implements JobQueue {
   }
 
   private void requestJobsToServer() {
-    MessageJob messageJobTodo = syncSocket.jobTransaction(classLoader, jobToId.isEmpty());
-    if (messageJobTodo == null)
+    MessageJob messageJobTodo = syncSocket.jobTransaction(classLoader);
+    if (messageJobTodo == null || messageJobTodo.nbJobs() == 0)
       return;
     Runnable[] jobs = messageJobTodo.jobs();
     int[] ids = messageJobTodo.jobIds();
@@ -46,8 +45,6 @@ public class NetworkJobQueue implements JobQueue {
       newJobs.add(jobs[i]);
     }
     localQueue.add(newJobs.iterator(), null);
-    if (messageJobTodo.nbJobs() > 0)
-      onJobReceived.fire(this);
   }
 
   @Override

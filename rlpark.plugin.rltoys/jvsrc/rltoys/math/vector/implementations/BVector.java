@@ -84,8 +84,8 @@ public class BVector extends AbstractVector implements BinaryVector {
   }
 
   public BVector(BVector v) {
-    this(v.size, v.nbActive);
-    System.arraycopy(v.indexes, 0, indexes, 0, v.nbActive);
+    this(v.size);
+    indexes = Arrays.copyOf(v.indexes, v.indexes.length);
     nbActive = v.nbActive;
   }
 

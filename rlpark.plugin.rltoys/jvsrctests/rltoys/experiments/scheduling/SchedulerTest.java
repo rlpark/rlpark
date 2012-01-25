@@ -34,7 +34,7 @@ public class SchedulerTest {
   @Test(timeout = Timeout)
   public void testJobScheduler() {
     LocalScheduler scheduler = new LocalScheduler(10);
-    SchedulerTestsUtils.testScheduler(scheduler, 100000);
+    SchedulerTestsUtils.testScheduler(scheduler, 100000, null);
     scheduler.dispose();
   }
 
@@ -44,7 +44,6 @@ public class SchedulerTest {
     final int NbJobs = 100;
     for (int i = 0; i < 2; i++) {
       List<Job> jobs = SchedulerTestsUtils.createJobs(NbJobs);
-      SchedulerTestsUtils.assertAreDone(jobs, false);
       JobDoneListener listener = SchedulerTestsUtils.createListener();
       for (Job job : jobs) {
         List<Runnable> oneElement = new ArrayList<Runnable>();
@@ -53,7 +52,7 @@ public class SchedulerTest {
       }
       scheduler.runAll();
       Assert.assertEquals(NbJobs, listener.nbJobDone());
-      SchedulerTestsUtils.assertAreDone(listener.jobDone(), true);
+      Assert.assertTrue(SchedulerTestsUtils.assertAreDone(listener.jobDone()));
     }
     scheduler.dispose();
   }
@@ -61,48 +60,71 @@ public class SchedulerTest {
   @Test(timeout = Timeout)
   public void testServerScheduler() throws IOException {
     ServerScheduler scheduler = new ServerScheduler(Port, 10);
-    SchedulerTestsUtils.testServerScheduler(scheduler, 10000);
+    SchedulerTestsUtils.testServerScheduler(scheduler, 10000, null);
     scheduler.dispose();
   }
 
   @Test(timeout = Timeout)
   public void testServerSchedulerWithUniqueClient() throws IOException {
     ServerScheduler scheduler = new ServerScheduler(Port, 0);
-    NetworkClient client01 = new NetworkClient(1, Localhost, Port);
-    client01.start();
-    SchedulerTestsUtils.testServerScheduler(scheduler, 1000);
-    client01.dispose();
+    SchedulerTestsUtils.testServerScheduler(scheduler, 1000, new Runnable() {
+
+      @Override
+      public void run() {
+        NetworkClient client01 = new NetworkClient(1, Localhost, Port);
+        client01.start();
+      }
+
+    });
     scheduler.dispose();
   }
 
   @Test(timeout = Timeout)
   public void testServerSchedulerWithUniqueClientMultipleThreads() throws IOException {
     ServerScheduler scheduler = new ServerScheduler(Port, 0);
-    NetworkClient client01 = new NetworkClient(2, Localhost, Port);
-    client01.start();
-    SchedulerTestsUtils.testServerScheduler(scheduler, 10000);
+    SchedulerTestsUtils.testServerScheduler(scheduler, 10000, new Runnable() {
+
+      @Override
+      public void run() {
+        NetworkClient client01 = new NetworkClient(2, Localhost, Port);
+        client01.start();
+
+      }
+
+    });
     scheduler.dispose();
-    client01.dispose();
   }
 
   @Test(timeout = Timeout)
   public void testServerSchedulerWithMultipleClients() throws IOException {
     ServerScheduler scheduler = new ServerScheduler(Port, 0);
-    NetworkClient client01 = new NetworkClient(10, Localhost, Port);
-    NetworkClient client02 = new NetworkClient(10, Localhost, Port);
-    client01.start();
-    client02.start();
-    SchedulerTestsUtils.testServerScheduler(scheduler, 50000);
+    SchedulerTestsUtils.testServerScheduler(scheduler, 50000, new Runnable() {
+
+      @Override
+      public void run() {
+        NetworkClient client01 = new NetworkClient(10, Localhost, Port);
+        NetworkClient client02 = new NetworkClient(10, Localhost, Port);
+        client01.start();
+        client02.start();
+      }
+
+    });
     scheduler.dispose();
-    client01.dispose();
-    client02.dispose();
   }
 
   public static void main(String[] args) throws IOException {
     ServerScheduler scheduler = new ServerScheduler(Port, 0);
-    Command command = new Command("jar client", "/usr/bin/java", "-jar", "rltoys-client.jar", "localhost");
-    command.start();
-    SchedulerTestsUtils.testServerScheduler(scheduler, 1000);
+    final Command command = new Command("jar client", "/usr/bin/java", "-jar", "rltoys-client.jar", "localhost");
+    SchedulerTestsUtils.testServerScheduler(scheduler, 1000, new Runnable() {
+      @Override
+      public void run() {
+        try {
+          command.start();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    });
     scheduler.dispose();
     command.kill();
   }
