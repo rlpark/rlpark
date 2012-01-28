@@ -15,7 +15,7 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 @Monitor
 public class JointDistribution implements PolicyDistribution, BoundedPdf {
   private static final long serialVersionUID = -7545331400083047916L;
-  private final PolicyDistribution[] distributions;
+  protected final PolicyDistribution[] distributions;
   @IgnoreMonitor
   private int[] weightsToAction;
 

@@ -10,9 +10,9 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 public class ScaledPolicyDistribution implements PolicyDistribution, BoundedPdf {
   private static final long serialVersionUID = -7521424991872961399L;
   @Monitor
-  private final PolicyDistribution policy;
-  private final Range policyRange;
-  private final Range problemRange;
+  protected final PolicyDistribution policy;
+  protected final Range policyRange;
+  protected final Range problemRange;
 
   public ScaledPolicyDistribution(BoundedPolicy policy, Range problemRange) {
     this((PolicyDistribution) policy, policy.range(), problemRange);
