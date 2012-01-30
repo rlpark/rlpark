@@ -13,35 +13,66 @@ import rltoys.math.vector.implementations.PVector;
 
 @SuppressWarnings("serial")
 public class SoftMaxTest {
-  static final private Action a1 = new Action() {
-  };
-  static final private Action a2 = new Action() {
-  };
-  static final private double qa1 = 0.1;
-  static final private double qa2 = 0.2;
-  static final private Predictor predictor = new Predictor() {
-    PVector theta = new PVector(qa1, qa2);
+  class ActionInteger implements Action {
+    final int a;
+
+    ActionInteger(int i) {
+      this.a = i;
+    }
+  }
+
+  class ActionPredictor implements Predictor {
+    private final RealVector theta;
+
+    ActionPredictor(RealVector theta) {
+      this.theta = theta;
+    }
 
     @Override
     public double predict(RealVector x) {
       return theta.dotProduct(x);
     }
-  };
+  }
+
+  @Test
+  public void testSoftMaxUniform() {
+    ActionInteger[] actions = createActions(10);
+    SoftMax softMax = new SoftMax(new Random(0), new ActionPredictor(new PVector(actions.length)), actions,
+                                  new TabularAction(actions, 1, 1));
+    double[] dist = pollActions(softMax, 100000);
+    double expected = 1.0 / actions.length;
+    for (int i = 0; i < dist.length; i++)
+      Assert.assertEquals(expected, dist[i], 0.01);
+  }
 
   @Test
   public void testSoftMax() {
-    Action[] actions = new Action[] { a1, a2 };
-    SoftMax softMax = new SoftMax(new Random(0), predictor, actions, new TabularAction(actions, 1, 1));
-    int nbA1 = 0;
-    int nbA2 = 0;
-    int nbPolls = 1000;
-    for (int i = 0; i < nbPolls; i++)
-      if (softMax.decide(new PVector(1.0)) == a1)
-        nbA1++;
-      else
-        nbA2++;
-    Assert.assertEquals(nbA1 + nbA2, nbPolls);
-    Assert.assertEquals(Math.exp(qa1) / (Math.exp(qa1) + Math.exp(qa2)), (double) nbA1 / nbPolls, 0.1);
-    Assert.assertEquals(Math.exp(qa2) / (Math.exp(qa1) + Math.exp(qa2)), (double) nbA2 / nbPolls, 0.1);
+    Action[] actions = createActions(2);
+    final double qa1 = 0.1;
+    final double qa2 = 0.2;
+    SoftMax softMax = new SoftMax(new Random(0), new ActionPredictor(new PVector(qa1, qa2)), actions,
+                                  new TabularAction(actions, 1, 1));
+    double[] actionDistribution = pollActions(softMax, 1000);
+    Assert.assertEquals(Math.exp(qa1) / (Math.exp(qa1) + Math.exp(qa2)), actionDistribution[0], 0.1);
+    Assert.assertEquals(Math.exp(qa2) / (Math.exp(qa1) + Math.exp(qa2)), actionDistribution[1], 0.1);
+  }
+
+  private double[] pollActions(SoftMax softMax, int nbPolls) {
+    int[] dist = new int[softMax.actions().length];
+    for (int i = 0; i < nbPolls; i++) {
+      ActionInteger a = (ActionInteger) softMax.decide(new PVector(1.0));
+      dist[a.a]++;
+    }
+    double[] result = new double[dist.length];
+    for (int i = 0; i < dist.length; i++)
+      result[i] = (double) dist[i] / nbPolls;
+    return result;
+  }
+
+  private ActionInteger[] createActions(int nbAction) {
+    ActionInteger[] actions = new ActionInteger[nbAction];
+    for (int i = 0; i < actions.length; i++)
+      actions[i] = new ActionInteger(i);
+    return actions;
   }
 }

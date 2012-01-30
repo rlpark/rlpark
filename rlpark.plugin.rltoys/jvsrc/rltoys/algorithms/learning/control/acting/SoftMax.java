@@ -90,4 +90,8 @@ public class SoftMax extends StochasticPolicy implements MonitorContainer {
       });
     }
   }
+
+  public Action[] actions() {
+    return availableActions;
+  }
 }
