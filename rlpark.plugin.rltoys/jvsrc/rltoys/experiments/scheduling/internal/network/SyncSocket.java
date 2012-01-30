@@ -49,7 +49,7 @@ public class SyncSocket {
   }
 
   private MessageBinary transaction(Message message) {
-    MessageBinary messageBinary;
+    MessageBinary messageBinary = null;
     synchronized (out) {
       synchronized (in) {
         write(message);
@@ -60,15 +60,16 @@ public class SyncSocket {
   }
 
   public MessageBinary read() {
-    MessageBinary messageBinary = new MessageBinary();
     if (isClosed())
-      return messageBinary;
+      return null;
+    MessageBinary messageBinary = new MessageBinary();
     synchronized (in) {
       try {
         messageBinary.read(in);
       } catch (IOException e) {
         Messages.displayError(e);
         close();
+        return null;
       }
     }
     Messages.debug(this.toString() + " reads " + messageBinary.type().toString());
@@ -91,14 +92,28 @@ public class SyncSocket {
 
   public MessageClassData classTransaction(String className) {
     Messages.println("Downloading code for " + className);
-    MessageBinary message = transaction(new MessageRequestClass(className));
-    MessageClassData messageClassData = (MessageClassData) Messages.cast(message, null);
+    MessageClassData messageClassData = null;
+    try {
+      MessageBinary message = transaction(new MessageRequestClass(className));
+      messageClassData = (MessageClassData) Messages.cast(message, null);
+    } catch (Throwable e) {
+      Messages.displayError(e);
+      close();
+    }
     return messageClassData;
   }
 
   public MessageJob jobTransaction(ClassLoader classLoader) {
-    MessageBinary message = transaction(new MessageRequestJob());
-    MessageJob messageJobTodo = (MessageJob) Messages.cast(message, classLoader);
+    MessageJob messageJobTodo = null;
+    try {
+      MessageBinary message = transaction(new MessageRequestJob());
+      if (message == null)
+        return null;
+      messageJobTodo = (MessageJob) Messages.cast(message, classLoader);
+    } catch (Throwable e) {
+      Messages.displayError(e);
+      close();
+    }
     return messageJobTodo;
   }
 
@@ -107,6 +122,9 @@ public class SyncSocket {
     try {
       localhostName = java.net.InetAddress.getLocalHost().getHostName();
     } catch (UnknownHostException e) {
+      Messages.displayError(e);
+      close();
+      return;
     }
     write(new MessageSendClientName(localhostName));
   }
@@ -128,6 +146,17 @@ public class SyncSocket {
   }
 
   public static Message readNextMessage(SyncSocket clientSocket, ClassLoader classLoader) {
-    return Messages.cast(clientSocket.read(), classLoader);
+    Message message = null;
+    try {
+      MessageBinary nextClientMessage = clientSocket.read();
+      if (nextClientMessage == null)
+        return null;
+      message = Messages.cast(nextClientMessage, classLoader);
+    } catch (Throwable e) {
+      Messages.displayError(e);
+      clientSocket.close();
+      return null;
+    }
+    return message;
   }
 }
