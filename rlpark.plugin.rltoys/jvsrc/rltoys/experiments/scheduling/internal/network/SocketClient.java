@@ -23,7 +23,11 @@ public class SocketClient {
   private final Runnable clientRunnable = new Runnable() {
     @Override
     public void run() {
-      clientReadMainLoop();
+      try {
+        clientReadMainLoop();
+      } catch (Throwable t) {
+        t.printStackTrace();
+      }
     }
   };
   private final SyncSocket clientSocket;
@@ -87,6 +91,8 @@ public class SocketClient {
   synchronized private void jobDone(MessageJob message) {
     for (int i = 0; i < message.nbJobs(); i++) {
       Runnable todo = idtoJob.remove(message.jobIds()[i]);
+      if (todo == null)
+        continue;
       jobQueue.done(todo, message.jobs()[i]);
       nbJobDone++;
     }

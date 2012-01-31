@@ -108,6 +108,7 @@ public class ServerScheduler implements Scheduler {
     serverThread.setDaemon(true);
     serverThread.start();
     localScheduler = nbLocalThread > 0 ? new LocalScheduler(nbLocalThread, localQueue) : null;
+    localQueue.enablePoolFromPending();
   }
 
   synchronized protected void addClient(SocketClient client) {

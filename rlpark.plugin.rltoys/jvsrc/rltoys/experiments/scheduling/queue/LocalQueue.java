@@ -5,11 +5,13 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 import rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rltoys.experiments.scheduling.interfaces.JobQueue;
 import rltoys.experiments.scheduling.internal.JobDoneEventQueue;
+import rltoys.utils.Utils;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 
@@ -30,11 +32,14 @@ public class LocalQueue implements JobQueue {
   private final Map<Runnable, Listener<JobDoneEvent>> pending = new LinkedHashMap<Runnable, Listener<JobDoneEvent>>();
   private final LinkedList<JobInfo> canceled = new LinkedList<JobInfo>();
   private final JobDoneEventQueue jobDoneEventQueue = new JobDoneEventQueue();
+  private final Random random = new Random(0);
   private Iterator<? extends Runnable> currentJobIterator = null;
   private int nbJobsDone = 0;
+  private boolean poolFromPending = false;
 
   synchronized public void requestCancel(Runnable pendingJob) {
-    assert pending.containsKey(pendingJob);
+    if (!pending.containsKey(pendingJob))
+      return;
     Listener<JobDoneEvent> listener = pending.remove(pendingJob);
     canceled.addFirst(new JobInfo(pendingJob, listener));
   }
@@ -58,13 +63,25 @@ public class LocalQueue implements JobQueue {
     return jobInfo;
   }
 
+  public void enablePoolFromPending() {
+    poolFromPending = true;
+  }
+
   @Override
   synchronized public Runnable request() {
     JobInfo jobInfo = findJob();
     if (jobInfo == null)
-      return null;
+      return findPendingJob();
     pending.put(jobInfo.job, jobInfo.listener);
     return jobInfo.job;
+  }
+
+  private Runnable findPendingJob() {
+    if (!poolFromPending || pending.isEmpty())
+      return null;
+    Runnable[] jobs = new Runnable[pending.size()];
+    pending.keySet().toArray(jobs);
+    return Utils.choose(random, jobs);
   }
 
   @Override

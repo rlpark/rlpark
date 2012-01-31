@@ -36,7 +36,6 @@ public class SchedulerTestsUtils {
 
     @Override
     public void run() {
-      Assert.assertFalse(done);
       done = true;
     }
   }

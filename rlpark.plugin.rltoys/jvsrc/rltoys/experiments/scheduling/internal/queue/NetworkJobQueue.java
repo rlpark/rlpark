@@ -61,6 +61,14 @@ public class NetworkJobQueue implements JobQueue {
   @Override
   synchronized public void done(Runnable todo, Runnable done) {
     Integer jobId = jobToId.remove(todo);
+    if (jobId != null)
+      jobDone(done, jobId);
+    if (localQueue.areAllDone())
+      requestJobsToServer();
+    onJobDone.fire(new JobDoneEvent(todo, done));
+  }
+
+  private void jobDone(Runnable done, int jobId) {
     syncSocket.write(new MessageJob(jobId, done));
     nbJobsSinceLastMessage += 1;
     if (chrono.getCurrentChrono() > MessagePeriod) {
@@ -68,9 +76,6 @@ public class NetworkJobQueue implements JobQueue {
       chrono.start();
       nbJobsSinceLastMessage = 0;
     }
-    if (localQueue.areAllDone())
-      requestJobsToServer();
-    onJobDone.fire(new JobDoneEvent(todo, done));
   }
 
   public void close() {
