@@ -1,7 +1,11 @@
 package rlpark.plugin.rltoysview.internal.continuousgridworld;
 
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 
 import rltoys.environments.continuousgridworld.ContinuousGridworld;
 import rltoys.environments.continuousgridworld.NormalizedFunction;
@@ -14,6 +18,7 @@ import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.plotting.axes.Axes;
+import zephyr.plugin.plotting.heatmap.ColorMapAction;
 import zephyr.plugin.plotting.heatmap.Function2DDrawer;
 import zephyr.plugin.plotting.heatmap.Interval;
 
@@ -44,6 +49,7 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   final Trajectory trajectory = new Trajectory();
   private final Listener<Clock> listener = new TickListener();
   private final Function2DDrawer rewardDrawer = new Function2DDrawer(colors);
+  private final ColorMapAction colorMapAction = new ColorMapAction(rewardDrawer);
 
   @Override
   protected void paint(GC gc) {
@@ -52,6 +58,11 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     ContinuousGridworld current = instance.current();
     drawStartPosition(gc, current);
     drawTrajectory(gc);
+  }
+
+  @Override
+  protected void setToolbar(IToolBarManager toolbarManager) {
+    toolbarManager.add(colorMapAction);
   }
 
   private void drawStartPosition(GC gc, ContinuousGridworld current) {
@@ -113,6 +124,18 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
       rewardDrawer.set(xRange, yRange, rewardFunction, 200);
     }
     updateAxes();
+  }
+
+  @Override
+  public void init(IViewSite site, IMemento memento) throws PartInitException {
+    super.init(site, memento);
+    colorMapAction.init(memento);
+  }
+
+  @Override
+  public void saveState(IMemento memento) {
+    super.saveState(memento);
+    colorMapAction.saveState(memento);
   }
 
   private void updateAxes() {
