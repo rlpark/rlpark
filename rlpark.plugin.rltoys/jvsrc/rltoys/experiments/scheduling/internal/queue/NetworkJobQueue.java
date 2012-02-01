@@ -3,8 +3,10 @@ package rltoys.experiments.scheduling.internal.queue;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rltoys.experiments.scheduling.interfaces.JobQueue;
@@ -39,8 +41,11 @@ public class NetworkJobQueue implements JobQueue {
       return;
     Runnable[] jobs = messageJobTodo.jobs();
     int[] ids = messageJobTodo.jobIds();
+    Set<Integer> addedIds = new HashSet<Integer>();
     ArrayList<Runnable> newJobs = new ArrayList<Runnable>();
     for (int i = 0; i < jobs.length; i++) {
+      if (addedIds.contains(ids[i]))
+        continue;
       jobToId.put(jobs[i], ids[i]);
       newJobs.add(jobs[i]);
     }
