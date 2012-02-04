@@ -1,7 +1,5 @@
 package rltoys.algorithms.representations.policy;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Random;
 
 import org.junit.Assert;
@@ -21,11 +19,7 @@ public class ConstantPolicyTest {
     Action c = new Action() {
     };
     double pa = 0.3, pb = 0.6, pc = 0.1;
-    Map<Action, Double> distribution = new LinkedHashMap<Action, Double>();
-    distribution.put(a, pa);
-    distribution.put(b, pb);
-    distribution.put(c, pc);
-    ConstantPolicy policy = new ConstantPolicy(new Random(0), distribution);
+    ConstantPolicy policy = new ConstantPolicy(new Random(0), new Action[] { a, b, c }, new double[] { pa, pb, pc });
     int nbSample = 1000;
     double na = 0, nb = 0, nc = 0;
     for (int i = 0; i < nbSample; i++) {

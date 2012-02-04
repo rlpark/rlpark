@@ -1,7 +1,5 @@
 package rltoys.environments.stategraph;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Random;
 
 import rltoys.algorithms.representations.acting.ConstantPolicy;
@@ -63,10 +61,8 @@ public class RandomWalk extends FiniteStateGraph {
   }
 
   public static ConstantPolicy newPolicy(Random random, double leftProbability) {
-    Map<Action, Double> distribution = new LinkedHashMap<Action, Double>();
-    distribution.put(left, leftProbability);
-    distribution.put(right, 1 - leftProbability);
-    return new ConstantPolicy(random, distribution);
+    return new ConstantPolicy(random, new Action[] { left, right },
+                              new double[] { leftProbability, 1 - leftProbability });
   }
 
   @Override

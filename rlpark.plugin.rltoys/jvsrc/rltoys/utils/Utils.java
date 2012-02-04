@@ -92,13 +92,6 @@ public class Utils {
     return choose(random, new ArrayList<T>(set));
   }
 
-  public static boolean checkDistribution(Collection<Double> distribution) {
-    double sum = 0.0;
-    for (Double value : distribution)
-      sum += value;
-    return Math.abs(1.0 - sum) < EPSILON;
-  }
-
   public static double trunc(double value, double threshold) {
     return Math.max(Math.min(value, threshold), -threshold);
   }
