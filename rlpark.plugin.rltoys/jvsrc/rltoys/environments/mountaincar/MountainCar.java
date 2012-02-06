@@ -10,20 +10,23 @@ import rltoys.environments.envio.problems.ProblemBounded;
 import rltoys.environments.envio.problems.ProblemContinuousAction;
 import rltoys.environments.envio.problems.ProblemDiscreteAction;
 import rltoys.math.ranges.Range;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class MountainCar implements ProblemBounded, ProblemDiscreteAction, ProblemContinuousAction {
   static private final double MaxActionValue = 1.0;
   public static final ActionArray LEFT = new ActionArray(-MaxActionValue);
   public static final ActionArray RIGHT = new ActionArray(MaxActionValue);
   public static final ActionArray STOP = new ActionArray(0.0);
-  protected static final Action[] Actions = { STOP, RIGHT, LEFT };
+  protected static final Action[] Actions = { LEFT, STOP, RIGHT };
   static public final Range ActionRange = new Range(-MaxActionValue, MaxActionValue);
 
   protected static final String VELOCITY = "velocity";
   protected static final String POSITION = "position";
   protected static final Legend legend = new Legend(POSITION, VELOCITY);
 
-  protected Double position = null;
+  @Monitor
+  protected double position;
+  @Monitor
   protected double velocity = 0.0;
   protected static final Range positionRange = new Range(-1.2, 0.6);
   protected static final Range velocityRange = new Range(-0.07, 0.07);
@@ -31,7 +34,7 @@ public class MountainCar implements ProblemBounded, ProblemDiscreteAction, Probl
   private static final double target = positionRange.max();
   private double throttleFactor = 1.0;
   private final Random random;
-  private TRStep lastTStep;
+  private TRStep lastStep;
   private final int episodeLengthMax;
 
   public MountainCar(Random random) {
@@ -55,20 +58,18 @@ public class MountainCar implements ProblemBounded, ProblemDiscreteAction, Probl
 
   @Override
   public TRStep step(Action action) {
-    assert position != null;
     update((ActionArray) action);
     TRStep tstep;
     if (endOfEpisode()) {
-      position = null;
-      tstep = new TRStep(lastTStep, action, null, 0.0);
+      tstep = new TRStep(lastStep, action, null, 0.0);
     } else
-      tstep = new TRStep(lastTStep, action, new double[] { position, velocity }, -1.0);
-    lastTStep = tstep;
+      tstep = new TRStep(lastStep, action, new double[] { position, velocity }, -1.0);
+    lastStep = tstep;
     return tstep;
   }
 
   private boolean endOfEpisode() {
-    return position >= target || (episodeLengthMax > 0 && lastTStep != null && lastTStep.time > episodeLengthMax);
+    return position >= target || (episodeLengthMax > 0 && lastStep != null && lastStep.time > episodeLengthMax);
   }
 
   @Override
@@ -80,8 +81,8 @@ public class MountainCar implements ProblemBounded, ProblemDiscreteAction, Probl
       position = positionRange.choose(random);
       velocity = velocityRange.choose(random);
     }
-    lastTStep = new TRStep(new double[] { position, velocity }, -1);
-    return lastTStep;
+    lastStep = new TRStep(new double[] { position, velocity }, -1);
+    return lastStep;
   }
 
   @Override
@@ -106,5 +107,13 @@ public class MountainCar implements ProblemBounded, ProblemDiscreteAction, Probl
   @Override
   public Range[] actionRanges() {
     return new Range[] { ActionRange };
+  }
+
+  public TRStep lastStep() {
+    return lastStep;
+  }
+
+  static public double height(double position) {
+    return Math.sin(3.0 * position);
   }
 }

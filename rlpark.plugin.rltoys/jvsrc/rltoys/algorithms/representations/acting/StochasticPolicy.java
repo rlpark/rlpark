@@ -11,7 +11,7 @@ import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 
-public abstract class StochasticPolicy implements Policy, MonitorContainer {
+public abstract class StochasticPolicy implements DiscreteActionPolicy, MonitorContainer {
   private static final long serialVersionUID = 6747532059495537542L;
   protected final Random random;
   protected final Action[] actions;
@@ -47,11 +47,17 @@ public abstract class StochasticPolicy implements Policy, MonitorContainer {
     return Math.abs(1.0 - sum) < Utils.EPSILON;
   }
 
+  @Override
   public Action[] actions() {
     return actions;
   }
 
   public abstract double[] distribution();
+
+  @Override
+  public double[] values() {
+    return distribution();
+  }
 
   @Override
   public void addToMonitor(DataMonitor monitor) {

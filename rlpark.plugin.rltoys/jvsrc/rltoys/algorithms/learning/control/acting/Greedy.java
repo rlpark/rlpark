@@ -1,18 +1,21 @@
 package rltoys.algorithms.learning.control.acting;
 
 import rltoys.algorithms.learning.predictions.Predictor;
-import rltoys.algorithms.representations.acting.Policy;
+import rltoys.algorithms.representations.acting.DiscreteActionPolicy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.actions.StateToStateAction;
 import rltoys.math.vector.RealVector;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class Greedy implements Policy {
+public class Greedy implements DiscreteActionPolicy {
   private static final long serialVersionUID = 1675962692054005355L;
   protected final StateToStateAction toStateAction;
   protected final Predictor predictor;
   protected final Action[] actions;
+  @Monitor
   protected final double[] actionValues;
   protected Action bestAction;
+  @Monitor
   private double bestValue;
   private RealVector lastUpdate = null;
 
@@ -68,7 +71,21 @@ public class Greedy implements Policy {
     return toStateAction;
   }
 
+  public Action bestAction() {
+    return bestAction;
+  }
+
   public double bestActionValue() {
     return bestValue;
+  }
+
+  @Override
+  public double[] values() {
+    return actionValues;
+  }
+
+  @Override
+  public Action[] actions() {
+    return actions;
   }
 }

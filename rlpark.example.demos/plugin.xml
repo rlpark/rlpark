@@ -20,6 +20,15 @@
             </command>
             <command
                   commandId="zephyr.plugin.core.command.startrunnable"
+                  label="Sarsa on Mountain Car"
+                  style="push">
+               <parameter
+                     name="zephyr.plugin.core.command.parameter.runnableid"
+                     value="rlpark.example.learning.sarsamountaincar">
+               </parameter>
+            </command>
+            <command
+                  commandId="zephyr.plugin.core.command.startrunnable"
                   label="iRobot Create Surprise"
                   style="push">
                <parameter

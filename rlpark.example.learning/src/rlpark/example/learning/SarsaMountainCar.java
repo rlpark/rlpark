@@ -14,11 +14,20 @@ import rltoys.environments.envio.observations.TRStep;
 import rltoys.environments.mountaincar.MountainCar;
 import rltoys.math.vector.BinaryVector;
 import rltoys.math.vector.RealVector;
+import zephyr.plugin.core.api.Zephyr;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.synchronization.Clock;
 
-public class SarsaMountainCar {
-  public static void main(String[] args) {
-    MountainCar problem = new MountainCar(null);
-    TileCodersNoHashing projector = new TileCodersNoHashing(problem.getObservationRanges());
+@Monitor
+public class SarsaMountainCar implements Runnable {
+  private final MountainCar problem;
+  private final SarsaControl control;
+  private final TileCodersNoHashing projector;
+  private final Clock clock = new Clock("SarsaMountainCar");
+
+  public SarsaMountainCar() {
+    problem = new MountainCar(null);
+    projector = new TileCodersNoHashing(problem.getObservationRanges());
     projector.addFullTilings(10, 10);
     projector.includeActiveFeature();
     TabularAction toStateAction = new TabularAction(problem.actions(), projector.vectorNorm(), projector.vectorSize());
@@ -28,11 +37,16 @@ public class SarsaMountainCar {
     Sarsa sarsa = new Sarsa(alpha, gamma, lambda, toStateAction.vectorSize(), new AMaxTraces());
     double epsilon = 0.01;
     Policy acting = new EpsilonGreedy(new Random(0), problem.actions(), toStateAction, sarsa, epsilon);
-    SarsaControl control = new SarsaControl(acting, toStateAction, sarsa);
+    control = new SarsaControl(acting, toStateAction, sarsa);
+    Zephyr.advertise(clock, this);
+  }
+
+  @Override
+  public void run() {
     TRStep step = problem.initialize();
     int nbEpisode = 0;
     RealVector x_t = null;
-    while (nbEpisode < 1000) {
+    while (clock.tick()) {
       BinaryVector x_tp1 = projector.project(step.o_tp1);
       Action action = control.step(x_t, step.a_t, x_tp1, step.r_tp1);
       x_t = x_tp1;
@@ -44,5 +58,9 @@ public class SarsaMountainCar {
       } else
         step = problem.step(action);
     }
+  }
+
+  public static void main(String[] args) {
+    new SarsaMountainCar().run();
   }
 }

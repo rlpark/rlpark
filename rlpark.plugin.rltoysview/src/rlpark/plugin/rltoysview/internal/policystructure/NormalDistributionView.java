@@ -104,7 +104,7 @@ public class NormalDistributionView extends Plot2DView<AbstractNormalDistributio
   public void paint(PainterMonitor painterListener, GC gc) {
     plot.clear(gc);
     gc.setAntialias(ZephyrPlotting.preferredAntiAliasing() ? SWT.ON : SWT.OFF);
-    gc.setLineWidth(ZephyrPlotting.preferredLineSize());
+    gc.setLineWidth(ZephyrPlotting.preferredLineWidth());
     gc.setForeground(plot.colors.color(gc, Colors.COLOR_GRAY));
     gc.setForeground(plot.colors.color(gc, Colors.COLOR_BLACK));
     normalDistributionDrawer.draw(gc);

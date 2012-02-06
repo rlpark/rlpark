@@ -1,0 +1,97 @@
+package rlpark.plugin.rltoysview.internal.mountaincar;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Rectangle;
+
+import rltoys.environments.envio.observations.TRStep;
+import rltoys.environments.mountaincar.MountainCar;
+import rltoys.math.ranges.Range;
+import zephyr.ZephyrPlotting;
+import zephyr.plugin.core.canvas.BackgroundImage;
+import zephyr.plugin.core.helpers.ClassViewProvider;
+import zephyr.plugin.core.utils.Colors;
+import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.plotting.axes.Axes;
+
+public class MountainCarView extends ForegroundCanvasView<MountainCar> {
+  public static class Provider extends ClassViewProvider {
+    public Provider() {
+      super(MountainCar.class);
+    }
+  }
+
+  private static final int CarSize = 10;
+
+  private final Colors colors = new Colors();
+  private final Axes axes = new Axes();
+  private final BackgroundImage backgroundImage = new BackgroundImage();
+  private int backgroundLineSize = -1;
+  private double position;
+
+  @Override
+  public boolean synchronize() {
+    TRStep step = instance.current().lastStep();
+    if (step == null || step.o_tp1 == null)
+      return false;
+    position = step.o_tp1[0];
+    return true;
+  }
+
+  @Override
+  protected void paint(GC gc) {
+    Rectangle clipping = gc.getClipping();
+    axes.updateScaling(clipping);
+    updateBackground(gc.getDevice(), clipping);
+    gc.drawImage(backgroundImage.image(), 0, 0);
+    gc.setAntialias(ZephyrPlotting.preferredAntiAliasing() ? SWT.ON : SWT.OFF);
+    int lineWidth = ZephyrPlotting.preferredLineWidth();
+    int carSize = CarSize * lineWidth;
+    gc.setBackground(colors.color(gc, Colors.COLOR_BLACK));
+    gc.fillOval(axes.toGX(position) - (carSize / 2), axes.toGY(MountainCar.height(position)) - (carSize / 2), carSize,
+                carSize);
+  }
+
+  private void updateBackground(Device device, Rectangle region) {
+    if (!backgroundImage.needUpdate(region) && backgroundLineSize == ZephyrPlotting.preferredLineWidth())
+      return;
+    backgroundLineSize = ZephyrPlotting.preferredLineWidth();
+    GC gc = backgroundImage.acquireGC(device, region);
+    gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
+    gc.fillRectangle(region);
+    final int nbPoint = 100;
+    double resolution = (double) region.width / 100;
+    for (int i = 0; i < nbPoint - 1; i++) {
+      int x1 = (int) (i * resolution);
+      double position01 = axes.toDX(x1);
+      int x2 = (int) ((i + 1) * resolution);
+      double position02 = axes.toDX(x2);
+      gc.drawLine(x1, axes.toGY(MountainCar.height(position01)), x2, axes.toGY(MountainCar.height(position02)));
+    }
+    backgroundImage.releaseGC();
+  }
+
+  @Override
+  public void onInstanceSet() {
+    super.onInstanceSet();
+    MountainCar problem = instance.current();
+    Range[] obsRanges = problem.getObservationRanges();
+    axes.x.update(obsRanges[0].min());
+    axes.x.update(obsRanges[0].max());
+    axes.y.update(-1);
+    axes.y.update(1);
+  }
+
+  @Override
+  public void onInstanceUnset() {
+    super.onInstanceUnset();
+    axes.x.reset();
+    axes.y.reset();
+  }
+
+  @Override
+  protected boolean isInstanceSupported(Object instance) {
+    return MountainCar.class.isInstance(instance);
+  }
+}

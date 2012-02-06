@@ -82,7 +82,7 @@ public class NetworkClient {
     int portSeparator = arg.lastIndexOf(":");
     serverHost = portSeparator >= 0 ? arg.substring(0, portSeparator) : arg;
     if (portSeparator >= 0)
-      serverPort = Integer.parseInt(arg.substring(portSeparator));
+      serverPort = Integer.parseInt(arg.substring(portSeparator + 1));
   }
 
   public static void runClient() {

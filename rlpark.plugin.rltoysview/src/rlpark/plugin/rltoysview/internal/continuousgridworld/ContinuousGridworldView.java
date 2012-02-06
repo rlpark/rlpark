@@ -69,14 +69,14 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     double[] start = current.start();
     if (start == null)
       return;
-    int lineSize = ZephyrPlotting.preferredLineSize();
+    int lineSize = ZephyrPlotting.preferredLineWidth();
     gc.setBackground(colors.color(gc, Colors.COLOR_BLACK));
     int size = lineSize * 6;
     gc.fillOval(axes.toGX(start[0]) - (size / 2), axes.toGY(start[1]) - (size / 2), size, size);
   }
 
   private void drawTrajectory(GC gc) {
-    int lineSize = ZephyrPlotting.preferredLineSize();
+    int lineSize = ZephyrPlotting.preferredLineWidth();
     int extremities = lineSize * 6;
     gc.setForeground(colors.color(gc, Colors.COLOR_BLACK));
     gc.setBackground(colors.color(gc, Colors.COLOR_BLACK));

@@ -34,8 +34,4 @@ public class EpsilonGreedy extends Greedy {
     double probability = a == bestAction ? 1.0 - epsilon : 0.0;
     return probability + epsilon / actions.length;
   }
-
-  public Action[] actions() {
-    return actions;
-  }
 }

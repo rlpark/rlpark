@@ -85,11 +85,11 @@ public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
     plot.clear(gc);
     gc.setAntialias(ZephyrPlotting.preferredAntiAliasing() ? SWT.ON : SWT.OFF);
     gc.setForeground(colors.color(gc, Colors.COLOR_DARK_RED));
-    radius = ZephyrPlotting.preferredLineSize();
-    gc.setLineWidth(ZephyrPlotting.preferredLineSize());
+    radius = ZephyrPlotting.preferredLineWidth();
+    gc.setLineWidth(ZephyrPlotting.preferredLineWidth());
     plot.draw(gc, rewardDrawer, data);
     gc.setForeground(colors.color(gc, Colors.COLOR_BLACK));
-    gc.setLineWidth(ZephyrPlotting.preferredLineSize());
+    gc.setLineWidth(ZephyrPlotting.preferredLineWidth());
     normalDistributionDrawer.draw(gc);
   }
 
