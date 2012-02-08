@@ -1,0 +1,59 @@
+---
+title: Code Snippet Using Scheduling for Running Jobs in Parallel in Java
+layout: documentation 
+---
+
+<h1>Code Snippet: Using Scheduling for Running Jobs in Parallel in Java</h1>
+
+RLPark includes a few classes to be able to run experiments on clusters or computers with multiple cores. 
+The main idea is to start a server that contains a list of jobs to run. Then, the generic java client 
+<a href="https://github.com/ThomasDegris/rlpark/raw/master/rlpark.plugin.rltoys/rltoys-client.jar">rltoys-client.jar</a> is 
+run on nodes on the cluster. The client connects to the server, requests a list of jobs and if necessary, 
+downloads the code required to run the job. As soon as the client is done with a job, it sends the result
+to the server. When the client has its list of jobs empty, it requests a new list of jobs to the server.
+<br/>
+<br/>
+RLPark also has a framework for evaluating learning control algorithm for both on-policy and off-policy.
+<br/>
+<br/>
+The following code snippets provide examples to run the client/server in different configuration:
+<ul>
+	<li><a href="https://github.com/ThomasDegris/rlpark/blob/master/rlpark.example.demos/src/rlpark/example/demos/scheduling/Job.java">Job.java</a>
+	    is an example of runnable job. A job is defined in Java by implementing the <span class="code">Runnable</span> interface. For jobs to 
+		be send over the network, the job need to implement the <span class="code">Serializable</span> interface. 
+		As shown in this example, a job can store the results after running (e.g. a measure of performance), such that,
+		when the client sends the job done back the server, the server can store the result in a file.   
+		</li>
+	<li><a href="https://github.com/ThomasDegris/rlpark/blob/master/rlpark.example.demos/src/rlpark/example/demos/scheduling/LocalScheduling.java">LocalScheduling.java</a>
+	creates a local scheduler to run a list of jobs. The method <span class="code">createJobList()</span> creates the list of all the jobs to run. The method
+	<span class="code">createJobDoneListener()</span> creates the listener to be called every time a job is done. This listener would be responsible to store the result
+	of the job into a file. The method <span class="code">main()</span> creates a local scheduler, creates the list of job, add them to the scheduler, and then
+	ask the scheduler to run everything. Jobs will be dispatched on all the cores available on the machine.  
+	</li>
+	<li><a href="https://github.com/ThomasDegris/rlpark/blob/master/rlpark.example.demos/src/rlpark/example/demos/scheduling/ServeurWithLocalScheduling.java">ServeurWithLocalScheduling.java</a>
+	creates a server with an embedded local scheduler. Using the methods from the class above, it 
+	creates a list of jobs and a listener and submit them to the scheduler. The server also open a socket 
+	to which clients can connect to request jobs to run.<br/>Let's say the server is compiled in 
+	<span class="file">server.jar</span>, then the server can be started by the command:<br/>
+	<span class="command">java -jar server.jar</span><br/>
+	The client can be started by running:<br/>
+	<span class="command">java -jar rltoys-client.jar -t&lt;max computation time in minutes&gt; -c&lt;number of core to use&gt; &lt;hostname:port&gt;</span><br/>
+	For instance:<br/>
+	<span class="command">java -jar rltoys-client.jar -t420 -c4 localhost:4000</span><br/>
+	for 420 minutes of computation, using 4 cores and connecting to localhost on port 4000. The options 
+	<span class="command">-t</span> and <span class="command">-c</span> are optional but useful on clusters.
+	In this example, jobs will be dispatched on 2 cores on the machine running the server and on 
+	clients connecting to the server. 
+	</li>
+	<li><a href="https://github.com/ThomasDegris/rlpark/blob/master/rlpark.example.demos/src/rlpark/example/demos/scheduling/ServeurWaitingClients.java">ServeurWaitingClients.java</a>
+	is the same as above but it does not run the cores on the machine running the server to dispatch job. 
+	Thus, jobs will run only on clients. This is useful when many clients connect to the server.</li> 
+</ul>
+  
+A jar of the client is available within RLPark:
+<a href="https://github.com/ThomasDegris/rlpark/raw/master/rlpark.plugin.rltoys/rltoys-client.jar">rltoys-client.jar</a> 
+
+
+<h4>Dependencies</h4> 
+<span class='file'>zephyr.plugin.core.api</span>, <span class='file'>rlpark.plugin.rltoys</span>
+
