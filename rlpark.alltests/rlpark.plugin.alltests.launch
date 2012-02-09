@@ -11,7 +11,7 @@
 <booleanAttribute key="clearwslog" value="false"/>
 <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/pde-junit"/>
 <booleanAttribute key="default" value="false"/>
-<stringAttribute key="deselected_workspace_plugins" value="Curious_Pendulum,MarioAI,actorcritic.offpolicy,actorcritic.parametersweeping,flagship.plugin.components,flagship.plugin.experiments,rlpark.example.demos,rlpark.example.javacv,rlpark.example.learning,rlpark.example.robots,rlpark.example.surprise,rlpark.plugin.eclipse,rlpark.plugin.opencv,rlpark.plugin.xuggler,zephyr.example.simpleplugin,zephyr.example.simpleview,zephyr.plugin.opengl,zephyr.plugin.opengl.examples,zephyr.plugin.tests"/>
+<stringAttribute key="deselected_workspace_plugins" value="Curious_Pendulum,actorcritic.offpolicy,actorcritic.parametersweeping,flagship.plugin.components,flagship.plugin.experiments,rlpark.example.demos,rlpark.example.javacv,rlpark.example.learning,rlpark.example.robots,rlpark.example.surprise,rlpark.plugin.eclipse,rlpark.plugin.opencv,rlpark.plugin.xuggler,zephyr.example.simpleplugin,zephyr.example.simpleview,zephyr.plugin.opengl,zephyr.plugin.opengl.examples,zephyr.plugin.tests"/>
 <booleanAttribute key="includeOptional" value="true"/>
 <stringAttribute key="location" value="${workspace_loc:rlpark.alltests}/workspace"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">

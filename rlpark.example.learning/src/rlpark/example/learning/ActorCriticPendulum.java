@@ -39,7 +39,7 @@ public class ActorCriticPendulum implements Runnable {
     PolicyDistribution policyDistribution = new NormalDistributionSkewed(new Random(0), 0.0, 1.0);
     Actor actor = new Actor(policyDistribution, 0.01 / vectorNorm, vectorSize);
     actorCritic = new ActorCritic(critic, actor);
-    valueFunction = new ValueFunction2D(tileCoders, problem.getObservationRanges(), critic);
+    valueFunction = new ValueFunction2D(tileCoders, problem, critic);
     Zephyr.advertise(clock, this);
   }
 

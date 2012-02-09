@@ -9,5 +9,7 @@ public interface RLProblem {
 
   TRStep step(Action action);
 
+  TRStep lastStep();
+
   Legend legend();
 }

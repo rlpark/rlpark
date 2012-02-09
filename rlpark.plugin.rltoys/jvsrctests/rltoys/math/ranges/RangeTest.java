@@ -19,9 +19,9 @@ public class RangeTest {
   @Test
   public void testRangeBound() {
     Range range = new Range(-2.0, -1.0);
-    Assert.assertEquals(-1.5, range.bound(-1.5));
-    Assert.assertEquals(-1.0, range.bound(-0.5));
-    Assert.assertEquals(-2.0, range.bound(-2.5));
+    Assert.assertTrue(range.in(range.bound(-1.5)));
+    Assert.assertTrue(range.in(range.bound(-3.0)));
+    Assert.assertTrue(range.in(range.bound(0.0)));
   }
 
   @Test

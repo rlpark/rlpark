@@ -28,15 +28,25 @@ public class ValueFunction2DView extends ForegroundCanvasView<ValueFunction2D> {
     }
   }
 
+  static private final int PositionSize = 4;
   private final Colors colors = new Colors();
   private final Function2DDrawer valueFunctionDrawer = new Function2DDrawer(colors);
   private final Axes axes = new Axes();
   private final ColorMapAction colorMapAction = new ColorMapAction(valueFunctionDrawer);
+  private double[] position;
 
   @Override
   protected void paint(GC gc) {
     axes.updateScaling(gc.getClipping());
     valueFunctionDrawer.paint(gc, canvas);
+    if (position != null)
+      drawPosition(gc);
+  }
+
+  private void drawPosition(GC gc) {
+    gc.setBackground(colors.color(gc, valueFunctionDrawer.spriteColor()));
+    gc.fillOval(axes.toGX(position[0]) - (PositionSize / 2), axes.toGY(position[1]) - (PositionSize / 2), PositionSize,
+                PositionSize);
   }
 
   @Override
@@ -51,6 +61,7 @@ public class ValueFunction2DView extends ForegroundCanvasView<ValueFunction2D> {
   @Override
   protected boolean synchronize() {
     valueFunctionDrawer.synchronize();
+    position = instance.current().position();
     return true;
   }
 

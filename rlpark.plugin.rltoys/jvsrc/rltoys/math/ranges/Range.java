@@ -34,7 +34,7 @@ public class Range implements Serializable {
   }
 
   public boolean in(double value) {
-    return value >= min && value < max;
+    return value >= min && value <= max;
   }
 
   @Override

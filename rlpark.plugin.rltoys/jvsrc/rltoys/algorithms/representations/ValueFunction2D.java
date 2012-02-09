@@ -1,19 +1,21 @@
 package rltoys.algorithms.representations;
 
 import rltoys.algorithms.learning.predictions.Predictor;
+import rltoys.environments.envio.observations.TRStep;
+import rltoys.environments.envio.problems.ProblemBounded;
 import rltoys.environments.envio.states.Projector;
 import rltoys.math.ranges.Range;
 import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 public class ValueFunction2D implements ContinuousFunction {
-  private final Range[] ranges;
   private final Projector projector;
   private final Predictor predictor;
+  private final ProblemBounded problem;
 
-  public ValueFunction2D(Projector projector, Range[] ranges, Predictor predictor) {
-    assert ranges.length == 2;
+  public ValueFunction2D(Projector projector, ProblemBounded problem, Predictor predictor) {
     this.projector = projector;
-    this.ranges = ranges;
+    this.problem = problem;
+    assert problem.getObservationRanges().length == 2;
     this.predictor = predictor;
   }
 
@@ -25,6 +27,13 @@ public class ValueFunction2D implements ContinuousFunction {
   }
 
   public Range[] ranges() {
-    return ranges;
+    return problem.getObservationRanges();
+  }
+
+  public double[] position() {
+    TRStep step = problem.lastStep();
+    if (step == null)
+      return null;
+    return step.o_tp1;
   }
 }

@@ -71,4 +71,10 @@ public class NoStateProblem implements RLProblem {
   public Legend legend() {
     return legend;
   }
+
+
+  @Override
+  public TRStep lastStep() {
+    return current;
+  }
 }

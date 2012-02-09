@@ -32,7 +32,7 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
   protected static final double episodeTime = 20.0; // seconds
   protected static final double requiredUpTime = 10.0; // seconds
   protected static final double isUpRange = Math.PI / 4.0; // seconds
-  protected static final double maxVelocity = (uMax + 1) / stepTime;
+  protected static final double maxVelocity = (Math.PI / 4.0) / stepTime;
   protected static final Range velocityRange = new Range(-maxVelocity, maxVelocity);
   protected static final Range initialThetaRange = new Range(-Math.PI, Math.PI);
   protected static final double initialVelocity = 0.0;
@@ -61,7 +61,7 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
     assert Utils.checkValue(torque);
     double thetaAcceleration = -stepTime * velocity + mass * g * length * Math.sin(theta) + torque;
     assert Utils.checkValue(thetaAcceleration);
-    velocity += thetaAcceleration;
+    velocity = velocityRange.bound(velocity + thetaAcceleration);
     theta += velocity * stepTime;
     adjustTheta();
     upTime = Math.abs(theta) > isUpRange ? 0 : upTime + 1;
@@ -144,5 +144,10 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
   @Override
   public Range[] actionRanges() {
     return new Range[] { ActionRange };
+  }
+
+  @Override
+  public TRStep lastStep() {
+    return lastTStep;
   }
 }

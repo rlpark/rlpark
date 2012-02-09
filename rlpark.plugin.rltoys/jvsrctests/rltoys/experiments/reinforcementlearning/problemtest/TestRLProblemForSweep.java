@@ -32,4 +32,9 @@ public final class TestRLProblemForSweep implements RLProblem {
     last = new TRStep(new double[] {}, 1);
     return last;
   }
+
+  @Override
+  public TRStep lastStep() {
+    return last;
+  }
 }

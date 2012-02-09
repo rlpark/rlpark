@@ -5,6 +5,7 @@ import java.util.Random;
 import rltoys.algorithms.learning.control.acting.EpsilonGreedy;
 import rltoys.algorithms.learning.control.sarsa.Sarsa;
 import rltoys.algorithms.learning.control.sarsa.SarsaControl;
+import rltoys.algorithms.representations.ValueFunction2D;
 import rltoys.algorithms.representations.acting.Policy;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.actions.TabularAction;
@@ -20,6 +21,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 
 @Monitor
 public class SarsaMountainCar implements Runnable {
+  final ValueFunction2D valueFunctionDisplay;
   private final MountainCar problem;
   private final SarsaControl control;
   private final TileCodersNoHashing projector;
@@ -38,6 +40,7 @@ public class SarsaMountainCar implements Runnable {
     double epsilon = 0.01;
     Policy acting = new EpsilonGreedy(new Random(0), problem.actions(), toStateAction, sarsa, epsilon);
     control = new SarsaControl(acting, toStateAction, sarsa);
+    valueFunctionDisplay = new ValueFunction2D(projector, problem, sarsa);
     Zephyr.advertise(clock, this);
   }
 

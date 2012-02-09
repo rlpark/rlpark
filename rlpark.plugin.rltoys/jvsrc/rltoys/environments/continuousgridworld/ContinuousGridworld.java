@@ -193,4 +193,9 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
   public Action[] actions() {
     return actions;
   }
+
+  @Override
+  public TRStep lastStep() {
+    return step;
+  }
 }
