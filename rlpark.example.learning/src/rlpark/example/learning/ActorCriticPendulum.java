@@ -2,6 +2,8 @@ package rlpark.example.learning;
 
 import java.util.Random;
 
+import rltoys.algorithms.learning.control.AverageReward;
+import rltoys.algorithms.learning.control.ControlAverageReward;
 import rltoys.algorithms.learning.control.actorcritic.onpolicy.Actor;
 import rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorCritic;
 import rltoys.algorithms.learning.control.actorcritic.policystructure.NormalDistributionSkewed;
@@ -9,10 +11,13 @@ import rltoys.algorithms.learning.predictions.td.OnPolicyTD;
 import rltoys.algorithms.learning.predictions.td.TDLambda;
 import rltoys.algorithms.representations.ValueFunction2D;
 import rltoys.algorithms.representations.acting.PolicyDistribution;
+import rltoys.algorithms.representations.acting.ScaledPolicyDistribution;
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
+import rltoys.environments.envio.control.ControlLearner;
 import rltoys.environments.envio.observations.TRStep;
 import rltoys.environments.pendulum.SwingPendulum;
+import rltoys.math.ranges.Range;
 import rltoys.math.vector.BinaryVector;
 import rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.Zephyr;
@@ -23,7 +28,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 public class ActorCriticPendulum implements Runnable {
   final ValueFunction2D valueFunction;
   private final SwingPendulum problem;
-  private final ActorCritic actorCritic;
+  private final ControlLearner actorCritic;
   private final TileCodersNoHashing tileCoders;
   private final Clock clock = new Clock("ActorCriticPendulum");
 
@@ -32,13 +37,15 @@ public class ActorCriticPendulum implements Runnable {
     tileCoders = new TileCodersNoHashing(problem.getObservationRanges());
     tileCoders.addFullTilings(10, 10);
     double gamma = 0.99;
-    double lambda = .3;
+    double lambda = .5;
     double vectorNorm = tileCoders.vectorNorm();
     int vectorSize = tileCoders.vectorSize();
-    OnPolicyTD critic = new TDLambda(lambda, gamma, .1 / vectorNorm, vectorSize);
+    OnPolicyTD critic = new TDLambda(lambda, gamma, .5 / vectorNorm, vectorSize);
     PolicyDistribution policyDistribution = new NormalDistributionSkewed(new Random(0), 0.0, 1.0);
-    Actor actor = new Actor(policyDistribution, 0.01 / vectorNorm, vectorSize);
-    actorCritic = new ActorCritic(critic, actor);
+    policyDistribution = new ScaledPolicyDistribution(policyDistribution, new Range(-2, 2), problem.actionRanges()[0]);
+    Actor actor = new Actor(policyDistribution, 0.005 / vectorNorm, vectorSize);
+    AverageReward averageReward = new AverageReward(0.01);
+    actorCritic = new ControlAverageReward(averageReward, new ActorCritic(critic, actor));
     valueFunction = new ValueFunction2D(tileCoders, problem, critic);
     Zephyr.advertise(clock, this);
   }

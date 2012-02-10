@@ -14,6 +14,7 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 @Monitor
 public class NormalDistribution extends AbstractNormalDistribution {
   private static final long serialVersionUID = -4074721193363280217L;
+  protected double sigma2;
 
   public NormalDistribution(Random random, double mean, double sigma) {
     super(random, mean, sigma);
@@ -22,11 +23,13 @@ public class NormalDistribution extends AbstractNormalDistribution {
   @Override
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
     updateDistributionIFN(x_t);
-    double sigma2 = square(stddev);
-    double a = ActionArray.toDouble(a_t);
+    updateSteps(ActionArray.toDouble(a_t));
+    return new RealVector[] { x_t.mapMultiply(meanStep), x_t.mapMultiply(stddevStep) };
+  }
+
+  protected void updateSteps(double a) {
     meanStep = (a - mean) / sigma2;
     stddevStep = square(a - mean) / sigma2 - 1;
-    return new RealVector[] { x_t.mapMultiply(meanStep), x_t.mapMultiply(stddevStep) };
   }
 
   @Override
@@ -44,11 +47,11 @@ public class NormalDistribution extends AbstractNormalDistribution {
   protected void updateDistribution(RealVector x) {
     mean = u_mean.dotProduct(x) + initialMean;
     stddev = Math.exp(u_stddev.dotProduct(x)) * initialStddev + Utils.EPSILON;
+    sigma2 = square(stddev);
   }
 
   @Override
   public double pi_s(double a) {
-    double sigma2 = stddev * stddev;
     double ammu2 = (a - mean) * (a - mean);
     return Math.exp(-ammu2 / (2 * sigma2)) / Math.sqrt(2 * Math.PI * sigma2);
   }
