@@ -31,6 +31,8 @@ public class SwingPendulumExperiment implements Labeled {
   }
 
   public TRStep step() {
+    if (step.time == 2000)
+      step = environment.endEpisode();
     if (step.isEpisodeEnding()) {
       nbEpisode++;
       x_t = null;

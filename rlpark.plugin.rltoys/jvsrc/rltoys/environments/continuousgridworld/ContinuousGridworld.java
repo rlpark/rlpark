@@ -96,12 +96,6 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
     return step;
   }
 
-  public double[] currentPosition() {
-    if (step == null || step.isEpisodeEnding())
-      return null;
-    return step.o_tp1;
-  }
-
   @Override
   public TRStep step(Action action) {
     if (isTerminated(step.o_tp1)) {
@@ -196,6 +190,12 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
 
   @Override
   public TRStep lastStep() {
+    return step;
+  }
+
+  @Override
+  public TRStep endEpisode() {
+    step = step.createEndingStep();
     return step;
   }
 }

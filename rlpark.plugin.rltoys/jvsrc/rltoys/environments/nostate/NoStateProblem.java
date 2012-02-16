@@ -28,7 +28,7 @@ public class NoStateProblem implements RLProblem {
     }
   }
 
-  private TRStep current = null;
+  private TRStep step = null;
   private final NoStateRewardFunction reward;
   public final Range range;
   private static final Legend legend = new Legend("State");
@@ -45,8 +45,8 @@ public class NoStateProblem implements RLProblem {
 
   @Override
   public TRStep initialize() {
-    current = new TRStep(state(), Double.NaN);
-    return current;
+    step = new TRStep(state(), Double.NaN);
+    return step;
   }
 
   private double[] state() {
@@ -56,15 +56,15 @@ public class NoStateProblem implements RLProblem {
 
   @Override
   public TRStep step(Action a_t) {
-    assert current != null;
+    assert step != null;
     if (a_t == null)
-      return new TRStep(current, null, null, -Double.MAX_VALUE);
+      return new TRStep(step, null, null, -Double.MAX_VALUE);
     double a = ActionArray.toDouble(a_t);
     if (range != null)
       a = range.bound(a);
     double r = reward.reward(a);
-    current = new TRStep(current, a_t, state(), r);
-    return current;
+    step = new TRStep(step, a_t, state(), r);
+    return step;
   }
 
   @Override
@@ -75,6 +75,12 @@ public class NoStateProblem implements RLProblem {
 
   @Override
   public TRStep lastStep() {
-    return current;
+    return step;
+  }
+
+  @Override
+  public TRStep endEpisode() {
+    step = step.createEndingStep();
+    return step;
   }
 }

@@ -34,7 +34,7 @@ public class MountainCar implements ProblemBounded, ProblemDiscreteAction, Probl
   private static final double target = positionRange.max();
   private double throttleFactor = 1.0;
   private final Random random;
-  private TRStep lastStep;
+  private TRStep step;
   private final int episodeLengthMax;
 
   public MountainCar(Random random) {
@@ -59,17 +59,20 @@ public class MountainCar implements ProblemBounded, ProblemDiscreteAction, Probl
   @Override
   public TRStep step(Action action) {
     update((ActionArray) action);
-    TRStep tstep;
-    if (endOfEpisode()) {
-      tstep = new TRStep(lastStep, action, null, 0.0);
-    } else
-      tstep = new TRStep(lastStep, action, new double[] { position, velocity }, -1.0);
-    lastStep = tstep;
-    return tstep;
+    step = new TRStep(step, action, new double[] { position, velocity }, -1.0);
+    if (isGoalReached())
+      endEpisode();
+    return step;
   }
 
-  private boolean endOfEpisode() {
-    return position >= target || (episodeLengthMax > 0 && lastStep != null && lastStep.time > episodeLengthMax);
+  @Override
+  public TRStep endEpisode() {
+    step = step.createEndingStep();
+    return step;
+  }
+
+  private boolean isGoalReached() {
+    return position >= target || (episodeLengthMax > 0 && step != null && step.time > episodeLengthMax);
   }
 
   @Override
@@ -81,8 +84,8 @@ public class MountainCar implements ProblemBounded, ProblemDiscreteAction, Probl
       position = positionRange.choose(random);
       velocity = velocityRange.choose(random);
     }
-    lastStep = new TRStep(new double[] { position, velocity }, -1);
-    return lastStep;
+    step = new TRStep(new double[] { position, velocity }, -1);
+    return step;
   }
 
   @Override
@@ -111,7 +114,7 @@ public class MountainCar implements ProblemBounded, ProblemDiscreteAction, Probl
 
   @Override
   public TRStep lastStep() {
-    return lastStep;
+    return step;
   }
 
   static public double height(double position) {

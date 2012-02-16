@@ -47,9 +47,17 @@ public class Runner implements Serializable, MonitorContainer {
   public RunnerEvent run() {
     assert runnerEvent.nbTotalTimeSteps == 0;
     assert runnerEvent.episode == -1;
-    while (runnerEvent.episode < nbEpisode - 1)
-      runEpisode();
+    while (hasNext())
+      step();
     return runnerEvent;
+  }
+
+  public boolean hasNext() {
+    if (runnerEvent.step == null && nbEpisode > 0)
+      return true;
+    if (!runnerEvent.step.isEpisodeEnding())
+      return true;
+    return runnerEvent.episode < nbEpisode - 1;
   }
 
   public void runEpisode() {
@@ -72,7 +80,7 @@ public class Runner implements Serializable, MonitorContainer {
     Action action = agent.getAtp1(runnerEvent.step);
     runnerEvent.step = environment.step(action);
     if (runnerEvent.step.time == maxEpisodeTimeSteps)
-      runnerEvent.step = runnerEvent.step.createEndingStep();
+      runnerEvent.step = environment.endEpisode();
     if (!runnerEvent.step.isEpisodeEnding()) {
       runnerEvent.episodeReward += runnerEvent.step.r_tp1;
       runnerEvent.nbTotalTimeSteps++;

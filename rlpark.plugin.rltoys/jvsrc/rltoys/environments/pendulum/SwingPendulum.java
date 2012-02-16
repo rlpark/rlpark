@@ -29,7 +29,6 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
   protected static final double length = 1.0;
   protected static final double g = 9.8;
   protected static final double stepTime = 0.01; // seconds
-  protected static final double episodeTime = 20.0; // seconds
   protected static final double requiredUpTime = 10.0; // seconds
   protected static final double isUpRange = Math.PI / 4.0; // seconds
   protected static final double maxVelocity = (Math.PI / 4.0) / stepTime;
@@ -43,7 +42,7 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
   @Monitor
   protected double velocity = 0.0;
   protected final Random random;
-  protected TRStep lastTStep;
+  protected TRStep step;
   protected int upTime = 0;
 
   public SwingPendulum(Random random) {
@@ -78,29 +77,30 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
 
   @Override
   public TRStep step(Action action) {
-    assert !lastTStep.isEpisodeEnding();
+    assert !step.isEpisodeEnding();
     update((ActionArray) action);
-    TRStep tstep;
-    if (endOfEpisode())
-      tstep = new TRStep(lastTStep, action, null, reward());
-    else
-      tstep = new TRStep(lastTStep, action, new double[] { theta, velocity }, reward());
-    lastTStep = tstep;
-    return tstep;
+    step = new TRStep(step, action, new double[] { theta, velocity }, reward());
+    if (isGoalReached())
+      endEpisode();
+    return step;
   }
 
   protected double reward() {
     return Math.cos(theta);
   }
 
-  private boolean endOfEpisode() {
+  private boolean isGoalReached() {
     if (!endOfEpisode)
       return false;
-    if (lastTStep.time + 1 >= episodeTime / stepTime)
-      return true;
     if (constantEpisodeTime)
       return false;
     return upTime + 1 >= requiredUpTime / stepTime;
+  }
+
+  @Override
+  public TRStep endEpisode() {
+    step = step.createEndingStep();
+    return step;
   }
 
   @Override
@@ -114,8 +114,8 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
       velocity = initialVelocity;
     }
     adjustTheta();
-    lastTStep = new TRStep(new double[] { theta, velocity }, -1);
-    return lastTStep;
+    step = new TRStep(new double[] { theta, velocity }, -1);
+    return step;
   }
 
   @Override
@@ -148,6 +148,7 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
 
   @Override
   public TRStep lastStep() {
-    return lastTStep;
+    return step;
   }
+
 }

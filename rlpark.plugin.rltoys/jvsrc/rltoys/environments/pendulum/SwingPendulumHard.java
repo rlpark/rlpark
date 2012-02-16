@@ -28,7 +28,7 @@ public class SwingPendulumHard extends SwingPendulum {
     theta = initialThetaRange.choose(random);
     velocity = 0;
     adjustTheta();
-    lastTStep = new TRStep(new double[] { theta, velocity }, -1);
-    return lastTStep;
+    step = new TRStep(new double[] { theta, velocity }, -1);
+    return step;
   }
 }

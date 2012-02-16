@@ -7,7 +7,7 @@ import rltoys.environments.envio.observations.TRStep;
 import rltoys.environments.envio.problems.RLProblem;
 
 public final class TestRLProblemForSweep implements RLProblem {
-  TRStep last = null;
+  TRStep step = null;
   private final Double defaultReward;
 
   public TestRLProblemForSweep(Double defaultReward) {
@@ -17,8 +17,8 @@ public final class TestRLProblemForSweep implements RLProblem {
   @Override
   public TRStep step(Action action) {
     double reward = defaultReward == null ? ActionArray.toDouble(action) : defaultReward;
-    TRStep result = new TRStep(last, action, new double[] {}, reward);
-    last = result;
+    TRStep result = new TRStep(step, action, new double[] {}, reward);
+    step = result;
     return result;
   }
 
@@ -29,12 +29,18 @@ public final class TestRLProblemForSweep implements RLProblem {
 
   @Override
   public TRStep initialize() {
-    last = new TRStep(new double[] {}, 1);
-    return last;
+    step = new TRStep(new double[] {}, 1);
+    return step;
   }
 
   @Override
   public TRStep lastStep() {
-    return last;
+    return step;
+  }
+
+  @Override
+  public TRStep endEpisode() {
+    step = step.createEndingStep();
+    return step;
   }
 }

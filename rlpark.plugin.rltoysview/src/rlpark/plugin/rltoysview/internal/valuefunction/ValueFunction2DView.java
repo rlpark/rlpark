@@ -14,7 +14,9 @@ import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.plotting.axes.Axes;
 import zephyr.plugin.plotting.heatmap.ColorMapAction;
 import zephyr.plugin.plotting.heatmap.Function2DDrawer;
+import zephyr.plugin.plotting.heatmap.FunctionSampler;
 import zephyr.plugin.plotting.heatmap.Interval;
+import zephyr.plugin.plotting.heatmap.MapData;
 
 public class ValueFunction2DView extends ForegroundCanvasView<ValueFunction2D> {
   public static class Provider extends ClassViewProvider {
@@ -32,13 +34,15 @@ public class ValueFunction2DView extends ForegroundCanvasView<ValueFunction2D> {
   private final Colors colors = new Colors();
   private final Function2DDrawer valueFunctionDrawer = new Function2DDrawer(colors);
   private final Axes axes = new Axes();
-  private final ColorMapAction colorMapAction = new ColorMapAction(valueFunctionDrawer);
+  private final ColorMapAction colorMapAction = new ColorMapAction(this, valueFunctionDrawer);
   private double[] position;
+  private MapData valueFunctionData;
+  private FunctionSampler valueFunctionSampler;
 
   @Override
   protected void paint(GC gc) {
     axes.updateScaling(gc.getClipping());
-    valueFunctionDrawer.paint(gc, canvas);
+    valueFunctionDrawer.paint(gc, canvas, valueFunctionData, true);
     if (position != null)
       drawPosition(gc);
   }
@@ -60,7 +64,7 @@ public class ValueFunction2DView extends ForegroundCanvasView<ValueFunction2D> {
 
   @Override
   protected boolean synchronize() {
-    valueFunctionDrawer.synchronize();
+    valueFunctionSampler.updateData(valueFunctionData);
     position = instance.current().position();
     return true;
   }
@@ -69,10 +73,11 @@ public class ValueFunction2DView extends ForegroundCanvasView<ValueFunction2D> {
   public void onInstanceSet() {
     super.onInstanceSet();
     ValueFunction2D valueFunction = instance.current();
+    valueFunctionData = new MapData(200);
     Range[] ranges = valueFunction.ranges();
     Interval xRange = new Interval(ranges[0].min(), ranges[0].max());
     Interval yRange = new Interval(ranges[1].min(), ranges[1].max());
-    valueFunctionDrawer.set(xRange, yRange, valueFunction, 200);
+    valueFunctionSampler = new FunctionSampler(xRange, yRange, valueFunction);
     updateAxes();
   }
 

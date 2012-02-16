@@ -1,17 +1,26 @@
 package rlpark.plugin.rltoysview.internal.continuousgridworld;
 
 public class Trajectory {
-  private float[][] history = null;
+  final private float[][] history;
   private int shift;
   private int nbPosition;
+  private boolean done = false;
 
-  synchronized public void setLength(int length) {
-    history = new float[length][];
+  public Trajectory(int maximumLength) {
+    history = new float[maximumLength][];
     shift = 0;
     nbPosition = 0;
   }
 
-  synchronized public void append(double[] position) {
+  public void append(double[] o_t, double[] o_tp1) {
+    if (o_tp1 == null)
+      return;
+    if (nbPosition == 0)
+      appendPosition(o_t);
+    appendPosition(o_tp1);
+  }
+
+  private void appendPosition(double[] position) {
     int index = index(shift);
     history[index] = position != null ? new float[] { (float) position[0], (float) position[1] } : null;
     shift += 1;
@@ -23,7 +32,7 @@ public class Trajectory {
     return (index + 2 * length) % length;
   }
 
-  synchronized public float[][] getData() {
+  public float[][] getData() {
     final int length = history.length;
     float[][] result = new float[Math.min(nbPosition, length)][];
     if (nbPosition > length) {
@@ -33,5 +42,13 @@ public class Trajectory {
     } else
       System.arraycopy(history, 0, result, 0, shift);
     return result;
+  }
+
+  public void endTrajectory() {
+    done = true;
+  }
+
+  public boolean hasEnded() {
+    return done;
   }
 }

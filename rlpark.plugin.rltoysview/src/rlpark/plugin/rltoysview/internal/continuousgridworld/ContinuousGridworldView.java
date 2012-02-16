@@ -11,16 +11,17 @@ import rltoys.environments.continuousgridworld.ContinuousGridworld;
 import rltoys.environments.continuousgridworld.NormalizedFunction;
 import rltoys.math.ranges.Range;
 import zephyr.ZephyrPlotting;
-import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.viewable.ContinuousFunction;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.core.views.helpers.ScreenShotAction;
 import zephyr.plugin.plotting.axes.Axes;
 import zephyr.plugin.plotting.heatmap.ColorMapAction;
 import zephyr.plugin.plotting.heatmap.Function2DDrawer;
+import zephyr.plugin.plotting.heatmap.FunctionSampler;
 import zephyr.plugin.plotting.heatmap.Interval;
+import zephyr.plugin.plotting.heatmap.MapData;
 
 public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGridworld> {
   public static class Provider extends ClassViewProvider {
@@ -34,27 +35,18 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     }
   }
 
-  public class TickListener implements Listener<Clock> {
-    @SuppressWarnings("synthetic-access")
-    @Override
-    public void listen(Clock eventInfo) {
-      ContinuousGridworld current = instance.current();
-      if (current != null)
-        trajectory.append(current.currentPosition());
-    }
-  }
-
   private final Colors colors = new Colors();
   private final Axes axes = new Axes();
-  final Trajectory trajectory = new Trajectory();
-  private final Listener<Clock> listener = new TickListener();
+  private final EpisodeTrajectories episodeTrajectories = new EpisodeTrajectories();
   private final Function2DDrawer rewardDrawer = new Function2DDrawer(colors);
-  private final ColorMapAction colorMapAction = new ColorMapAction(rewardDrawer);
+  private final ColorMapAction colorMapAction = new ColorMapAction(this, rewardDrawer);
+  private float[][][] trajectories = null;
+  private MapData rewardData;
 
   @Override
   protected void paint(GC gc) {
     axes.updateScaling(gc.getClipping());
-    rewardDrawer.paint(gc, canvas);
+    rewardDrawer.paint(gc, canvas, rewardData, false);
     ContinuousGridworld current = instance.current();
     drawStartPosition(gc, current);
     drawTrajectory(gc);
@@ -62,6 +54,7 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
 
   @Override
   protected void setToolbar(IToolBarManager toolbarManager) {
+    toolbarManager.add(new ScreenShotAction(this));
     toolbarManager.add(colorMapAction);
   }
 
@@ -70,25 +63,32 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     if (start == null)
       return;
     int lineSize = ZephyrPlotting.preferredLineWidth();
-    gc.setBackground(colors.color(gc, Colors.COLOR_BLACK));
+    gc.setBackground(colors.color(gc, rewardDrawer.spriteColor()));
     int size = lineSize * 6;
     gc.fillOval(axes.toGX(start[0]) - (size / 2), axes.toGY(start[1]) - (size / 2), size, size);
   }
 
   private void drawTrajectory(GC gc) {
+    if (trajectories == null)
+      return;
     int lineSize = ZephyrPlotting.preferredLineWidth();
     int extremities = lineSize * 6;
-    gc.setForeground(colors.color(gc, Colors.COLOR_BLACK));
-    gc.setBackground(colors.color(gc, Colors.COLOR_BLACK));
+    gc.setForeground(colors.color(gc, rewardDrawer.spriteColor()));
+    gc.setBackground(colors.color(gc, rewardDrawer.spriteColor()));
     gc.setLineWidth(lineSize);
-    Point lastPoint = null;
-    for (float[] position : trajectory.getData()) {
-      Point point = position != null ? axes.toG(position[0], position[1]) : null;
-      if (lastPoint != null && point == null)
-        gc.fillRectangle(lastPoint.x - (extremities / 2), lastPoint.y - (extremities / 2), extremities, extremities);
-      if (lastPoint != null && point != null)
-        gc.drawLine(lastPoint.x, lastPoint.y, point.x, point.y);
-      lastPoint = point;
+    for (float[][] trajectory : trajectories) {
+      if (trajectory.length == 0)
+        continue;
+      Point lastPoint = null;
+      for (float[] position : trajectory) {
+        if (position == null)
+          break;
+        Point point = axes.toG(position[0], position[1]);
+        if (lastPoint != null)
+          gc.drawLine(lastPoint.x, lastPoint.y, point.x, point.y);
+        lastPoint = point;
+      }
+      gc.fillRectangle(lastPoint.x - (extremities / 2), lastPoint.y - (extremities / 2), extremities, extremities);
     }
   }
 
@@ -105,25 +105,34 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
 
   @Override
   protected boolean synchronize() {
+    if (rewardData == null)
+      synchronizeRewardFunction();
+    trajectories = episodeTrajectories.copyTrajectories();
     return true;
   }
 
-  @Override
-  public void onInstanceSet() {
-    super.onInstanceSet();
-    trajectory.setLength(1000);
-    instance.clock().onTick.connect(listener);
+  private void synchronizeRewardFunction() {
     final ContinuousGridworld problem = instance.current();
     ContinuousFunction rewardFunction = problem.rewardFunction();
+    rewardData = new MapData(200);
     if (rewardFunction != null) {
       if (rewardFunction instanceof NormalizedFunction)
         rewardFunction = ((NormalizedFunction) rewardFunction).function();
       Range[] ranges = problem.getObservationRanges();
       Interval xRange = new Interval(ranges[0].min(), ranges[0].max());
       Interval yRange = new Interval(ranges[1].min(), ranges[1].max());
-      rewardDrawer.set(xRange, yRange, rewardFunction, 200);
+      FunctionSampler sampler = new FunctionSampler(xRange, yRange, rewardFunction);
+      sampler.updateData(rewardData);
     }
     updateAxes();
+  }
+
+  @Override
+  public void onInstanceSet() {
+    super.onInstanceSet();
+    episodeTrajectories.connect(instance.current(), instance.clock());
+    trajectories = null;
+    rewardData = null;
   }
 
   @Override
@@ -151,7 +160,9 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   @Override
   public void onInstanceUnset() {
     super.onInstanceUnset();
-    instance.clock().onTick.disconnect(listener);
+    episodeTrajectories.disconnect();
     rewardDrawer.unset();
+    trajectories = null;
+    rewardData = null;
   }
 }

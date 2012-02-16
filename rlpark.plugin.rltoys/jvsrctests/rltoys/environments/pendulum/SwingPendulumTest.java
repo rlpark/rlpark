@@ -17,6 +17,8 @@ public class SwingPendulumTest {
     TRStep step = problem.initialize();
     while (!step.isEpisodeEnding()) {
       step = problem.step(agent.getAtp1(step));
+      if (step.time == 2000)
+        step = problem.endEpisode();
       if (!step.isEpisodeEnding()) {
         Assert.assertTrue(SwingPendulum.thetaRange.in(step.o_tp1[0]));
         Assert.assertTrue(SwingPendulum.velocityRange.in(step.o_tp1[1]));
