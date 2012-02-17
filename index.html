@@ -14,7 +14,8 @@ for visualization and real-time display. It is also compatible with the Eclipse 
 <br/>
 <b>Demos</b> of RLPark are available in Zephyr. To install them, download 
 <a href="http://thomasdegris.github.com/zephyr/download.html">Zephyr standalone application</a>, then 
-<a href="http://thomasdegris.github.com/rlpark/download.html"> install RLPark features</a> in Zephyr.  
+<a href="http://thomasdegris.github.com/rlpark/download.html"> install all the RLPark features</a> in Zephyr.
+After the installation, a new <span class='menu'>Demos</span> menu will appear from which you can start the demos.  
 
 <div align="center">
 	<iframe width="420" height="315"
@@ -24,22 +25,23 @@ for visualization and real-time display. It is also compatible with the Eclipse 
 
 <h4>RLPark features and algorithms:</h4>
 <ul>
-	<li>Sarsa, Expected Sarsa, Q-Learning</li>
-	<li>Actor-Critic with normal distribution (continuous actions) and Boltzmann distribution (discrete action),
-		average reward actor-critic<br>
-	</li>
-	<li>TD, TD(λ), GTD(λ), GQ(λ), TDC</li>
-	<li>Acting: softmax, greedy, ε-greedy<br>
-	</li>
+	<li>On-policy control: Sarsa(λ), Expected Sarsa(λ), Actor-Critic with 
+	normal distribution (continuous actions) and Boltzmann distribution (discrete action),
+	average reward actor-critic</li>
+	<li>Off-policy control: Q-Learning, Q(λ), Greedy-GQ, Softmax-GQ</li>
+	<li>On-policy prediction: TD, TD(λ)</li>
+	<li>Off-policy prediction: GTD(λ), GQ(λ), TDC</li>
+	<li>Acting: softmax, greedy, ε-greedy</li>
 	<li>Representations: tile coding (with no hashing, hashing with UNH CMAC or mumur2), Linear Threshold Unit,
-		observation history, feature normalization<br>
-	</li>
+		observation history, feature normalization</li>
 	<li>Robots: the <a href="https://sites.google.com/a/rl-community.org/critterbot/hardware/the-critterbot-robot">Critterbot</a>,
 		<a href="https://sites.google.com/a/rl-community.org/critterbot/hardware/the-irobot-create">iRobot Create</a></li>
 	<li>Compatible with <a href="http://thomasdegris.github.com/Zephyr">Zephyr</a></li>
-	<li>Problems: mountain car, swing-up pendulum, random walk</li>
+	<li>Problems: mountain car, swing-up pendulum, random walk, continuous grid world</li>
 	<li>Eligibility traces: accumulating traces, accumulating traces with a max, replacing traces</li>
+	<li>The Horde architecture</li>
 	<li>A framework for running parallel code on clusters</li>
+	<li>A framework for on-policy control experiments and off-policy control experiments</li>
 </ul>
 <ul>
 </ul>
