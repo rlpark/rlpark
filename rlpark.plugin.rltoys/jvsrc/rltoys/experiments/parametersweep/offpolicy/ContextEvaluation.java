@@ -8,7 +8,8 @@ import rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluatio
 import rltoys.experiments.parametersweep.offpolicy.internal.OffPolicyEvaluationContext;
 import rltoys.experiments.parametersweep.offpolicy.internal.SweepJob;
 import rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyRewardMonitor;
-import rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitors;
+import rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorAverage;
+import rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorEpisode;
 import rltoys.experiments.parametersweep.parameters.Parameters;
 import rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
@@ -27,9 +28,17 @@ public class ContextEvaluation extends AbstractContextOffPolicy implements OffPo
     return new SweepJob(this, parameters, counter);
   }
 
+  private OnPolicyRewardMonitor createRewardMonitor(String prefix, int nbBins, Parameters parameters) {
+    int nbEpisode = parameters.nbEpisode();
+    int maxEpisodeTimeSteps = parameters.maxEpisodeTimeSteps();
+    if (nbEpisode == 1)
+      return new RewardMonitorAverage(prefix, nbBins, maxEpisodeTimeSteps);
+    return new RewardMonitorEpisode(prefix, nbBins, nbEpisode);
+  }
+
   @Override
   public AgentEvaluator connectBehaviourRewardMonitor(Runner runner, Parameters parameters) {
-    OnPolicyRewardMonitor monitor = RewardMonitors.create("Behaviour", evaluation.nbRewardCheckpoint(), parameters);
+    OnPolicyRewardMonitor monitor = createRewardMonitor("Behaviour", evaluation.nbRewardCheckpoint(), parameters);
     monitor.connect(runner);
     return monitor;
   }

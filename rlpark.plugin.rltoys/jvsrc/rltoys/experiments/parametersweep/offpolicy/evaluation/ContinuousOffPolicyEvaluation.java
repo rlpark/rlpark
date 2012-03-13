@@ -7,7 +7,8 @@ import rltoys.environments.envio.Runner.RunnerEvent;
 import rltoys.environments.envio.offpolicy.OffPolicyAgentEvaluable;
 import rltoys.environments.envio.problems.RLProblem;
 import rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyRewardMonitor;
-import rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitors;
+import rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorAverage;
+import rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorEpisode;
 import rltoys.experiments.parametersweep.parameters.Parameters;
 import rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 import rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
@@ -26,6 +27,12 @@ public class ContinuousOffPolicyEvaluation extends AbstractOffPolicyEvaluation {
     this.resetPeriod = resetPeriod;
   }
 
+  private OnPolicyRewardMonitor createRewardMonitor(String prefix, int nbBins, int nbTimeSteps, int nbEpisode) {
+    if (nbEpisode == 1)
+      return new RewardMonitorAverage(prefix, nbBins, nbTimeSteps);
+    return new RewardMonitorEpisode(prefix, nbBins, nbEpisode);
+  }
+
   @Override
   public AgentEvaluator connectEvaluator(int counter, Runner behaviourRunner, OffPolicyProblemFactory problemFactory,
       RepresentationFactory projectorFactory, OffPolicyAgentEvaluable learningAgent, Parameters parameters) {
@@ -36,7 +43,7 @@ public class ContinuousOffPolicyEvaluation extends AbstractOffPolicyEvaluation {
     int nbEpisode = resetPeriod > 0 ? parameters.maxEpisodeTimeSteps() / nbRewardCheckpoint : 1;
     int nbTimeSteps = resetPeriod > 0 ? resetPeriod : parameters.maxEpisodeTimeSteps();
     final Runner runner = new Runner(problem, evaluatedAgent, nbEpisode, resetPeriod);
-    OnPolicyRewardMonitor monitor = RewardMonitors.create("Target", nbRewardCheckpoint, nbTimeSteps, nbEpisode);
+    OnPolicyRewardMonitor monitor = createRewardMonitor("Target", nbRewardCheckpoint, nbTimeSteps, nbEpisode);
     monitor.connect(runner);
     behaviourRunner.onTimeStep.connect(new Listener<Runner.RunnerEvent>() {
       @Override

@@ -6,10 +6,6 @@ import rltoys.experiments.parametersweep.reinforcementlearning.internal.Abstract
 import zephyr.plugin.core.api.signals.Listener;
 
 public class RewardMonitorAverage extends AbstractRewardMonitor implements OnPolicyRewardMonitor {
-  public RewardMonitorAverage(int nbRewardBins, int nbTimeSteps) {
-    this("", nbRewardBins, nbTimeSteps);
-  }
-
   public RewardMonitorAverage(String prefix, int nbRewardBins, int nbTimeSteps) {
     super(prefix, createStartingPoints(nbRewardBins, nbTimeSteps));
   }

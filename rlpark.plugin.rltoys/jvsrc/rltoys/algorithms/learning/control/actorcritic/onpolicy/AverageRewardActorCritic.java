@@ -8,17 +8,18 @@ import rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
-public class ActorCritic implements ControlLearner {
+public class AverageRewardActorCritic implements ControlLearner {
   private static final long serialVersionUID = 3772938582043052714L;
   public final OnPolicyTD critic;
   public final Actor actor;
-  protected Action lastAction;
-  protected double reward = 0.0;
+  protected Action lastAction = null;
+  protected double averageReward = 0.0;
+  private final double alpha_r;
 
-  public ActorCritic(OnPolicyTD critic, Actor actor) {
+  public AverageRewardActorCritic(double alpha_r, OnPolicyTD critic, Actor actor) {
     this.critic = critic;
     this.actor = actor;
-    lastAction = null;
+    this.alpha_r = alpha_r;
   }
 
   protected double updateCritic(RealVector x_t, RealVector x_tp1, double r_tp1) {
@@ -36,8 +37,8 @@ public class ActorCritic implements ControlLearner {
 
   @Override
   public Action step(RealVector x_t, Action a_t, RealVector x_tp1, double r_tp1) {
-    reward = r_tp1;
-    double delta = updateCritic(x_t, x_tp1, r_tp1);
+    double delta = updateCritic(x_t, x_tp1, r_tp1 - averageReward);
+    averageReward += alpha_r * delta;
     updateActor(x_t, delta);
     return computeAction(x_tp1);
   }

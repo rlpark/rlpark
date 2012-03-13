@@ -14,21 +14,23 @@ public class ActorLambda extends Actor {
   private static final long serialVersionUID = -1601184295976574511L;
   public final Traces[] e_u;
   private final double lambda;
+  private final double gamma;
 
-  public ActorLambda(double lambda, PolicyDistribution policyDistribution, double alpha_u, int nbFeatures) {
-    this(lambda, policyDistribution, alpha_u, nbFeatures, new ATraces());
+  public ActorLambda(double lambda, double gamma, PolicyDistribution policyDistribution, double alpha_u, int nbFeatures) {
+    this(lambda, gamma, policyDistribution, alpha_u, nbFeatures, new ATraces());
   }
 
-  public ActorLambda(double lambda, PolicyDistribution policyDistribution, double alpha_u, int nbFeatures,
-      Traces prototype) {
-    this(lambda, policyDistribution, Utils.newFilledArray(policyDistribution.nbParameterVectors(), alpha_u),
+  public ActorLambda(double lambda, double gamma, PolicyDistribution policyDistribution, double alpha_u,
+      int nbFeatures, Traces prototype) {
+    this(lambda, gamma, policyDistribution, Utils.newFilledArray(policyDistribution.nbParameterVectors(), alpha_u),
          nbFeatures, new ATraces());
   }
 
-  public ActorLambda(double lambda, PolicyDistribution policyDistribution, double[] alpha_u, int nbFeatures,
-      Traces prototype) {
+  public ActorLambda(double lambda, double gamma, PolicyDistribution policyDistribution, double[] alpha_u,
+      int nbFeatures, Traces prototype) {
     super(policyDistribution, alpha_u, nbFeatures);
     this.lambda = lambda;
+    this.gamma = gamma;
     e_u = new Traces[policyDistribution.nbParameterVectors()];
     for (int i = 0; i < e_u.length; i++)
       e_u[i] = prototype.newTraces(u[i].size);
@@ -42,7 +44,7 @@ public class ActorLambda extends Actor {
     }
     RealVector[] gradLog = policyDistribution.getGradLog(x_t, a_t);
     for (int i = 0; i < u.length; i++)
-      e_u[i].update(lambda, gradLog[i]);
+      e_u[i].update(gamma * lambda, gradLog[i]);
     updatePolicyParameters(gradLog, delta);
   }
 

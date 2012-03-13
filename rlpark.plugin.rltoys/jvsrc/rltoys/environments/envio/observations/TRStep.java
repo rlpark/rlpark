@@ -35,7 +35,7 @@ public class TRStep implements ObsAsDoubles {
   }
 
   public TRStep createEndingStep() {
-    return new TRStep(time, o_t, a_t, null, Double.NaN);
+    return new TRStep(time, o_t, a_t, null, 0);
   }
 
   @Override

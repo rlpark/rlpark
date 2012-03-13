@@ -1,6 +1,5 @@
 package rltoys.experiments.reinforcementlearning;
 
-import java.util.Random;
 
 import rltoys.algorithms.representations.actions.Action;
 import rltoys.environments.envio.RLAgent;
@@ -26,7 +25,7 @@ class RLAgentFactoryTest implements AgentFactory {
   }
 
   @Override
-  public RLAgent createAgent(RLProblem problem, Parameters parameters, Random random) {
+  public RLAgent createAgent(RLProblem problem, Parameters parameters, long seed) {
     return new RLAgent() {
       @Override
       public Action getAtp1(TRStep step) {

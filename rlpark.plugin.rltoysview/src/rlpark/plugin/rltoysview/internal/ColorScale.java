@@ -31,8 +31,7 @@ public class ColorScale {
   public RGB color(double value) {
     if (min - max == 0)
       return color;
-    double scaledValue = Math.abs(value) / maxAbs;
-    assert scaledValue <= 1.0;
+    double scaledValue = Math.max(Math.abs(value) / maxAbs, 1.0);
     if (min < 0) {
       color.green = 20;
       color.blue = (int) (value < 0 ? scaledValue * 255 : 0);

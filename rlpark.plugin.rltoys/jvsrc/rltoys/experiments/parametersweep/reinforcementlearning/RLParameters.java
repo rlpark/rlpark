@@ -1,6 +1,7 @@
 package rltoys.experiments.parametersweep.reinforcementlearning;
 
 public class RLParameters {
+  public static final String OnPolicyTimeStepsEvaluationFlag = "onPolicyTimeStepsEvaluationFlag";
   public static final String MaxEpisodeTimeSteps = "maxEpisodeTimeSteps";
   public static final String NbEpisode = "nbEpisode";
   public static final String Gamma = "gamma";

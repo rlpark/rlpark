@@ -32,7 +32,7 @@ public class ActorCriticMountainCarTest extends MountainCarOnPolicyTest {
       StateToStateAction toStateAction = new TabularAction(mountainCar.actions(), projector.vectorNorm(),
                                                            projector.vectorSize());
       PolicyDistribution distribution = new BoltzmannDistribution(new Random(0), mountainCar.actions(), toStateAction);
-      ActorLambda actor = new ActorLambda(lambda, distribution, .01 / projector.vectorNorm(), projector.vectorSize());
+      ActorLambda actor = new ActorLambda(lambda, gamma, distribution, .01 / projector.vectorNorm(), projector.vectorSize());
       return new LearnerAgentFA(new ActorCritic(critic, actor), projector);
     }
 

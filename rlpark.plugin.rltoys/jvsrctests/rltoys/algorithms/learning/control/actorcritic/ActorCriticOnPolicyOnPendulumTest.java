@@ -71,7 +71,7 @@ public class ActorCriticOnPolicyOnPendulumTest {
         double lambda = 0.7;
         Traces traces = new AMaxTraces();
         TD critic = new TDLambda(lambda, gamma, 0.1 / nbActive, vectorSize, traces);
-        Actor actor = new ActorLambda(lambda, policyDistribution, 0.01 / nbActive, vectorSize, traces);
+        Actor actor = new ActorLambda(lambda, gamma, policyDistribution, 0.01 / nbActive, vectorSize, traces);
         return new ActorCritic(critic, actor);
       }
     }));

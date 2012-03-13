@@ -11,6 +11,7 @@ import rltoys.math.ranges.Range;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.core.views.helpers.ScreenShotAction;
 import zephyr.plugin.plotting.axes.Axes;
 import zephyr.plugin.plotting.heatmap.ColorMapAction;
 import zephyr.plugin.plotting.heatmap.Function2DDrawer;
@@ -93,6 +94,7 @@ public class ValueFunction2DView extends ForegroundCanvasView<ValueFunction2D> {
 
   @Override
   protected void setToolbar(IToolBarManager toolbarManager) {
+    toolbarManager.add(new ScreenShotAction(this));
     toolbarManager.add(colorMapAction);
   }
 
