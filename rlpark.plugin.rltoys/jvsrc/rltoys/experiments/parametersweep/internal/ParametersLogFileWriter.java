@@ -11,9 +11,10 @@ import java.util.List;
 import rltoys.experiments.parametersweep.parameters.FrozenParameters;
 import rltoys.experiments.parametersweep.parameters.Parameters;
 import rltoys.experiments.parametersweep.parameters.RunInfo;
-import zephyr.plugin.core.api.monitoring.fileloggers.LoggerRow;
-import zephyr.plugin.core.api.monitoring.helpers.Loggers;
+import zephyr.plugin.core.api.internal.monitoring.fileloggers.LoggerRow;
+import zephyr.plugin.core.api.internal.monitoring.helpers.Loggers;
 
+@SuppressWarnings("restriction")
 public class ParametersLogFileWriter {
   public final String filepath;
   private RunInfo referenceInfos;

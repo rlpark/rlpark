@@ -110,7 +110,7 @@ class DemonExperiment(LabeledCollection):
         for monitored in monitoredList:
             zepy.advertise(monitored, self.clock)
             self.logfile.add(monitored, 0)
-        monitor = ZephyrPlotting.createMonitor(self.clock)
+        ZephyrPlotting.createMonitor(self.clock)
         for rewardFunction in self.rewards:
             zepy.monattr(rewardFunction, 'rewardValue', clock = self.clock, label = rewardFunction.label())
                 

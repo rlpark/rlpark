@@ -9,9 +9,9 @@ import rltoys.environments.envio.actions.ActionArray;
 import rltoys.environments.envio.actions.Actions;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
+import zephyr.plugin.core.api.monitoring.abstracts.LabeledCollection;
 import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.parsing.LabeledCollection;
 
 @Monitor
 public abstract class AbstractNormalDistribution implements PolicyDistribution, LabeledCollection, BoundedPdf {

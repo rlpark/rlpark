@@ -15,13 +15,14 @@ import rltoys.math.ranges.Range;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
-import zephyr.plugin.plotting.data.Data2D;
-import zephyr.plugin.plotting.plot2d.Plot2D;
-import zephyr.plugin.plotting.plot2d.drawer2d.Drawer2D;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.utils.Colors;
+import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.plotting.internal.data.Data2D;
+import zephyr.plugin.plotting.internal.plot2d.Plot2D;
+import zephyr.plugin.plotting.internal.plot2d.drawer2d.Drawer2D;
 
+@SuppressWarnings("restriction")
 public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
   public static class Provider extends ClassViewProvider {
     public Provider() {

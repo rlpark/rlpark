@@ -9,14 +9,15 @@ import rlpark.plugin.robot.sync.ObservationVersatile;
 import rlpark.plugin.robot.sync.ObservationVersatileArray;
 import rltoys.environments.envio.observations.Legend;
 import rltoys.utils.Utils;
-import zephyr.plugin.core.api.logfiles.LogFile;
+import zephyr.plugin.core.api.internal.logfiles.LogFile;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
-import zephyr.plugin.core.api.parsing.LabelProvider;
+import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import critterbot.CritterbotProblem;
 import critterbot.actions.CritterbotAction;
 import critterbot.environment.CritterbotEnvironments;
 
+@SuppressWarnings("restriction")
 public class CrtrLogFile implements CritterbotProblem, RobotLog, MonitorContainer {
   public final String filepath;
   private final LogFile logfile;

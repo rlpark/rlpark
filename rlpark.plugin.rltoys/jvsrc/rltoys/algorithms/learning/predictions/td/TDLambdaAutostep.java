@@ -8,11 +8,12 @@ import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 import rltoys.math.vector.implementations.SVector;
 import rltoys.math.vector.implementations.Vectors;
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Abs;
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Squared;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.monitoring.wrappers.Abs;
-import zephyr.plugin.core.api.monitoring.wrappers.Squared;
 
 @Monitor
+@SuppressWarnings("restriction")
 public class TDLambdaAutostep implements OnPolicyTD {
   private static final long serialVersionUID = 1567652945995637498L;
   protected double mu = 0.01;

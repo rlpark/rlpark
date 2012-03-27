@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import rltoys.utils.Utils;
+import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.parsing.LabelProvider;
 
 public class ObsFilter implements Serializable {
   private static final long serialVersionUID = -3006545157709546374L;

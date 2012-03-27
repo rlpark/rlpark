@@ -7,11 +7,11 @@ import rltoys.algorithms.learning.predictions.td.TD;
 import rltoys.algorithms.learning.predictions.td.TDLambdaAutostep;
 import rltoys.horde.functions.RewardFunction;
 import rltoys.utils.NotImplemented;
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Abs;
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Squared;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.monitoring.wrappers.Abs;
-import zephyr.plugin.core.api.monitoring.wrappers.Squared;
 
-
+@SuppressWarnings("restriction")
 public class PredictionDemonVerifier implements Serializable {
   private static final long serialVersionUID = 6127406364376542150L;
   private final PredictionDemon predictionDemon;

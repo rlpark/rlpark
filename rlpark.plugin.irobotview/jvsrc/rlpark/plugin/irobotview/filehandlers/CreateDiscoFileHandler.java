@@ -6,16 +6,16 @@ import java.io.IOException;
 import java.util.List;
 
 import rlpark.plugin.irobot.logfiles.CreateBinaryLogfile;
-import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.utils.Misc;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class CreateDiscoFileHandler implements IFileHandler {
 
   @Override
   public List<String> extensions() {
-    return Utils.asList(Extension + ".gz", Extension);
+    return Misc.asList(Extension + ".gz", Extension);
   }
 
   @Override

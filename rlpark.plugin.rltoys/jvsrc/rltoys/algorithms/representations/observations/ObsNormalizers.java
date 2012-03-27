@@ -3,8 +3,8 @@ package rltoys.algorithms.representations.observations;
 import rltoys.environments.envio.observations.Legend;
 import rltoys.math.normalization.MinMaxNormalizer;
 import rltoys.math.ranges.Range;
+import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.parsing.LabelProvider;
 
 public class ObsNormalizers {
   private final MinMaxNormalizer[] normalizers;

@@ -112,4 +112,8 @@ public abstract class TileCoders implements Projector {
     for (int i : indexes)
       vector.setOn(i);
   }
+
+  public DiscretizerFactory discretizerFactory() {
+    return discretizerFactory;
+  }
 }

@@ -6,16 +6,16 @@ import java.io.IOException;
 import java.util.List;
 
 import rlpark.plugin.irobot.logfiles.IRobotLogFile;
-import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.utils.Misc;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class IRobotLogFileHandler implements IFileHandler {
 
   @Override
   public List<String> extensions() {
-    return Utils.asList(Extension + ".bz2", Extension + ".zip", Extension + ".gz", Extension);
+    return Misc.asList(Extension + ".bz2", Extension + ".zip", Extension + ".gz", Extension);
   }
 
   @Override

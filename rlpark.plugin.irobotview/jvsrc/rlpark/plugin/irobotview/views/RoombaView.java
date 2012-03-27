@@ -39,16 +39,17 @@ import rlpark.plugin.irobot.data.IRobotDrops;
 import rlpark.plugin.irobot.robots.RoombaRobot;
 import rlpark.plugin.robot.RobotLive;
 import rltoys.math.ranges.Range;
-import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
-import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.observations.ObsLayout;
-import zephyr.plugin.core.observations.ObsWidget;
-import zephyr.plugin.core.observations.SensorCollection;
-import zephyr.plugin.core.observations.SensorTextGroup;
-import zephyr.plugin.core.observations.SensorTextGroup.TextClient;
+import zephyr.plugin.core.internal.observations.ObsLayout;
+import zephyr.plugin.core.internal.observations.ObsWidget;
+import zephyr.plugin.core.internal.observations.SensorCollection;
+import zephyr.plugin.core.internal.observations.SensorTextGroup;
+import zephyr.plugin.core.internal.observations.SensorTextGroup.TextClient;
 
+@SuppressWarnings("restriction")
 public class RoombaView extends IRobotView {
   static public class Provider extends IRobotViewProvider {
     static public final Provider instance = new Provider();

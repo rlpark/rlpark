@@ -3,7 +3,7 @@ package rlpark.alltests.rlparkview;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.ZephyrCore;
+import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.junittesting.RunnableFilesTests;
 import zephyr.plugin.junittesting.support.RunnableTests;
 import zephyr.plugin.junittesting.support.checklisteners.ControlChecks;

@@ -14,8 +14,9 @@ import java.util.Set;
 import rltoys.experiments.parametersweep.parameters.FrozenParameters;
 import rltoys.experiments.parametersweep.parameters.RunInfo;
 import rltoys.utils.Utils;
-import zephyr.plugin.core.api.logfiles.LogFile;
+import zephyr.plugin.core.api.internal.logfiles.LogFile;
 
+@SuppressWarnings("restriction")
 public class ParametersLogFileReader {
   public final String filepath;
   private final RunInfo infos;

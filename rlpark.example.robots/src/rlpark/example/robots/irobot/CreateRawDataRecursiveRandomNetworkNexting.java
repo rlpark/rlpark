@@ -31,8 +31,8 @@ import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.BVector;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.labels.Labels;
+import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.parsing.LabelProvider;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 @Monitor

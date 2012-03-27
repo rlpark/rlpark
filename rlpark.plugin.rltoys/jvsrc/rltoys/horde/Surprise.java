@@ -6,8 +6,8 @@ import rltoys.horde.demons.Demon;
 import rltoys.math.normalization.MovingMeanVarNormalizer;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
+import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.parsing.LabelProvider;
 
 @Monitor
 public class Surprise {

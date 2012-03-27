@@ -12,17 +12,18 @@ import rltoys.environments.continuousgridworld.NormalizedFunction;
 import rltoys.math.ranges.Range;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.viewable.ContinuousFunction;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
-import zephyr.plugin.core.views.helpers.ScreenShotAction;
-import zephyr.plugin.plotting.axes.Axes;
-import zephyr.plugin.plotting.heatmap.ColorMapAction;
-import zephyr.plugin.plotting.heatmap.Function2DDrawer;
-import zephyr.plugin.plotting.heatmap.FunctionSampler;
-import zephyr.plugin.plotting.heatmap.Interval;
-import zephyr.plugin.plotting.heatmap.MapData;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.utils.Colors;
+import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.core.internal.views.helpers.ScreenShotAction;
+import zephyr.plugin.plotting.internal.axes.Axes;
+import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
+import zephyr.plugin.plotting.internal.heatmap.Function2DDrawer;
+import zephyr.plugin.plotting.internal.heatmap.FunctionSampler;
+import zephyr.plugin.plotting.internal.heatmap.Interval;
+import zephyr.plugin.plotting.internal.heatmap.MapData;
 
+@SuppressWarnings("restriction")
 public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGridworld> {
   public static class Provider extends ClassViewProvider {
     public Provider() {

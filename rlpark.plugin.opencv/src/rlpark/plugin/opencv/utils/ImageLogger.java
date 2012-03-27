@@ -3,9 +3,9 @@ package rlpark.plugin.opencv.utils;
 import java.io.File;
 import java.io.IOException;
 
+import zephyr.plugin.core.api.internal.monitoring.fileloggers.TimedFileLogger;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.monitoring.fileloggers.TimedFileLogger;
 import zephyr.plugin.core.api.synchronization.Chrono;
 
 import com.googlecode.javacv.cpp.opencv_core;
@@ -14,6 +14,7 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import com.googlecode.javacv.cpp.opencv_highgui;
 import com.googlecode.javacv.cpp.opencv_imgproc;
 
+@SuppressWarnings("restriction")
 public class ImageLogger {
   private final File folder;
   @Monitor

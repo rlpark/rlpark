@@ -8,13 +8,14 @@ import rltoys.algorithms.learning.control.acting.Greedy;
 import rltoys.algorithms.representations.acting.DiscreteActionPolicy;
 import rltoys.algorithms.representations.actions.Action;
 import zephyr.plugin.core.api.labels.Labels;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
-import zephyr.plugin.plotting.bar2d.Bar2D;
-import zephyr.plugin.plotting.bar2d.BarColorMap;
-import zephyr.plugin.plotting.mousesearch.MouseSearch;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.utils.Colors;
+import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.plotting.internal.bar2d.Bar2D;
+import zephyr.plugin.plotting.internal.bar2d.BarColorMap;
+import zephyr.plugin.plotting.internal.mousesearch.MouseSearch;
 
+@SuppressWarnings("restriction")
 public class PolicyDiscreteActionView extends ForegroundCanvasView<DiscreteActionPolicy> {
   public static class Provider extends ClassViewProvider {
     public Provider() {

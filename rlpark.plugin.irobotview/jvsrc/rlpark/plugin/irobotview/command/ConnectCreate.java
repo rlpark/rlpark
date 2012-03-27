@@ -2,8 +2,8 @@ package rlpark.plugin.irobotview.command;
 
 import rlpark.plugin.irobot.robots.CreateRobot;
 import rlpark.plugin.irobotview.runnable.CreateRunnable;
-import zephyr.ZephyrCore;
 import zephyr.plugin.core.RunnableFactory;
+import zephyr.plugin.core.ZephyrCore;
 
 public class ConnectCreate extends EnvironmentSerialPortCommand {
   @Override

@@ -9,10 +9,11 @@ import rlpark.plugin.rltoysview.internal.ColorScale;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.SparseVector;
 import rltoys.math.vector.VectorEntry;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.core.views.helpers.BackgroundCanvasView;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.utils.Colors;
+import zephyr.plugin.core.internal.views.helpers.BackgroundCanvasView;
 
+@SuppressWarnings("restriction")
 public class RealVectorMapView extends BackgroundCanvasView<RealVector> {
   public static class Provider extends ClassViewProvider {
     public Provider() {

@@ -8,9 +8,10 @@ import rlpark.plugin.robot.sync.ObservationVersatile;
 import rlpark.plugin.robot.sync.ObservationVersatileArray;
 import rltoys.environments.envio.observations.Legend;
 import rltoys.utils.Utils;
-import zephyr.plugin.core.api.logfiles.LogFile;
+import zephyr.plugin.core.api.internal.logfiles.LogFile;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
+@SuppressWarnings("restriction")
 public class IRobotLogFile implements RobotLog {
   public static final String Extension = "irobotlog";
   private ObservationVersatile lastReceived = null;

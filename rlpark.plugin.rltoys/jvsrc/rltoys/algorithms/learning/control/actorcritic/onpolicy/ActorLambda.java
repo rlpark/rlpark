@@ -6,8 +6,8 @@ import rltoys.algorithms.representations.traces.ATraces;
 import rltoys.algorithms.representations.traces.Traces;
 import rltoys.math.vector.RealVector;
 import rltoys.utils.Utils;
+import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.parsing.LabelProvider;
 
 @Monitor
 public class ActorLambda extends Actor {

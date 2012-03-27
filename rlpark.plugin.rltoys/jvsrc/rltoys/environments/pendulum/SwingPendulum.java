@@ -113,7 +113,7 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
   protected void initializeProblemData() {
     upTime = 0;
     if (random == null) {
-      theta = 0.0;
+      theta = Math.PI / 2;
       velocity = 0.0;
     } else {
       theta = initialThetaRange.choose(random);

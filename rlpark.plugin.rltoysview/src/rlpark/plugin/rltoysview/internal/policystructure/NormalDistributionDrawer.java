@@ -7,9 +7,10 @@ import rltoys.algorithms.representations.acting.BoundedPolicy;
 import rltoys.math.normalization.MinMaxNormalizer;
 import rltoys.math.ranges.Range;
 import rltoys.utils.Utils;
-import zephyr.plugin.plotting.data.Data2D;
-import zephyr.plugin.plotting.plot2d.Plot2D;
+import zephyr.plugin.plotting.internal.data.Data2D;
+import zephyr.plugin.plotting.internal.plot2d.Plot2D;
 
+@SuppressWarnings("restriction")
 public class NormalDistributionDrawer {
   static private final int NbDrawnPoints = 100;
   static private final double Width = 10;

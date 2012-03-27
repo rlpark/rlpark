@@ -24,27 +24,27 @@ import org.eclipse.jface.action.IToolBarManager;
 
 import rltoys.environments.envio.observations.Legend;
 import rltoys.utils.Utils;
-import zephyr.ZephyrCore;
-import zephyr.plugin.core.actions.RestartAction;
-import zephyr.plugin.core.actions.TerminateAction;
+import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Closeable;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.observations.EnvironmentView;
-import zephyr.plugin.core.observations.ObsLayout;
-import zephyr.plugin.core.observations.ObsWidget;
-import zephyr.plugin.core.observations.SensorCollection;
-import zephyr.plugin.core.observations.SensorGroup;
-import zephyr.plugin.core.observations.SensorTextGroup;
-import zephyr.plugin.core.observations.SensorTextGroup.TextClient;
-import zephyr.plugin.core.views.Restartable;
+import zephyr.plugin.core.internal.actions.RestartAction;
+import zephyr.plugin.core.internal.actions.TerminateAction;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.observations.EnvironmentView;
+import zephyr.plugin.core.internal.observations.ObsLayout;
+import zephyr.plugin.core.internal.observations.ObsWidget;
+import zephyr.plugin.core.internal.observations.SensorCollection;
+import zephyr.plugin.core.internal.observations.SensorGroup;
+import zephyr.plugin.core.internal.observations.SensorTextGroup;
+import zephyr.plugin.core.internal.observations.SensorTextGroup.TextClient;
+import zephyr.plugin.core.internal.views.Restartable;
 import zephyr.plugin.critterview.FileHandler;
 import critterbot.CritterbotProblem;
 import critterbot.crtrlog.CrtrLogFile;
 import critterbot.environment.CritterbotDrops;
 
-@SuppressWarnings("synthetic-access")
+@SuppressWarnings({ "synthetic-access", "restriction" })
 public class ObservationView extends EnvironmentView<CritterbotProblem> implements Closeable, Restartable {
   static public class Provider extends ClassViewProvider {
     public Provider() {

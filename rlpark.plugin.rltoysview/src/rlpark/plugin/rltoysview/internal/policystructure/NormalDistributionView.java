@@ -17,17 +17,18 @@ import rltoys.math.History;
 import rltoys.math.normalization.MinMaxNormalizer;
 import rltoys.math.ranges.Range;
 import zephyr.ZephyrPlotting;
-import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
-import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
-import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.plotting.data.Data2D;
-import zephyr.plugin.plotting.plot2d.Plot2DView;
-import zephyr.plugin.plotting.plot2d.drawer2d.Drawers;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.utils.Colors;
+import zephyr.plugin.plotting.internal.data.Data2D;
+import zephyr.plugin.plotting.internal.plot2d.Plot2DView;
+import zephyr.plugin.plotting.internal.plot2d.drawer2d.Drawers;
 
+@SuppressWarnings("restriction")
 public class NormalDistributionView extends Plot2DView<AbstractNormalDistribution> {
   static final Class<AbstractNormalDistribution> SupportedClass = AbstractNormalDistribution.class;
 

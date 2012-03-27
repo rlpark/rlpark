@@ -7,8 +7,8 @@ import java.util.Random;
 
 import rltoys.environments.envio.Agent;
 import rltoys.environments.envio.agents.RandomAgent;
+import zephyr.plugin.core.api.internal.monitoring.fileloggers.TimedFileLogger;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.monitoring.fileloggers.TimedFileLogger;
 import zephyr.plugin.core.api.synchronization.Clock;
 import critterbot.CritterbotObservation;
 import critterbot.actions.CritterbotAction;
@@ -16,6 +16,7 @@ import critterbot.actions.XYThetaAction;
 import critterbot.environment.CritterbotEnvironment;
 import critterbot.environment.CritterbotRobot;
 
+@SuppressWarnings("restriction")
 public class DaylongAgent {
   public static interface DaylongSlaveAgent {
     void setInControl(boolean inControl);

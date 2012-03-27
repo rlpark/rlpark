@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import rlpark.plugin.xuggler.VideoPlayer;
-import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.Zephyr;
+import zephyr.plugin.core.utils.Misc;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class VideoFileHandler implements IFileHandler {
@@ -21,6 +21,6 @@ public class VideoFileHandler implements IFileHandler {
 
   @Override
   public List<String> extensions() {
-    return Utils.asList("mov", "mpg", "avi", "mp4", "m4v", "flv");
+    return Misc.asList("mov", "mpg", "avi", "mp4", "m4v", "flv");
   }
 }

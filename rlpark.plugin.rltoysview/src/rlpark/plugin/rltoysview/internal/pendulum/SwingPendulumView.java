@@ -6,11 +6,12 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
 import rltoys.environments.pendulum.SwingPendulum;
-import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.utils.Colors;
+import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
 
+@SuppressWarnings("restriction")
 public class SwingPendulumView extends ForegroundCanvasView<SwingPendulum> {
   public static class Provider extends ClassViewProvider {
     public Provider() {

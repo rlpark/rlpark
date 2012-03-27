@@ -15,16 +15,17 @@ import rlpark.plugin.robot.Robots;
 import rltoys.environments.envio.observations.Legend;
 import rltoys.math.ranges.Range;
 import rltoys.utils.Utils;
-import zephyr.ZephyrCore;
-import zephyr.plugin.core.actions.RestartAction;
-import zephyr.plugin.core.actions.TerminateAction;
+import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Closeable;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.observations.EnvironmentView;
-import zephyr.plugin.core.observations.SensorGroup;
-import zephyr.plugin.core.observations.SensorTextGroup.TextClient;
-import zephyr.plugin.core.views.Restartable;
+import zephyr.plugin.core.internal.actions.RestartAction;
+import zephyr.plugin.core.internal.actions.TerminateAction;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.observations.EnvironmentView;
+import zephyr.plugin.core.internal.observations.SensorGroup;
+import zephyr.plugin.core.internal.observations.SensorTextGroup.TextClient;
+import zephyr.plugin.core.internal.views.Restartable;
 
+@SuppressWarnings("restriction")
 public abstract class IRobotView extends EnvironmentView<RobotLive> implements Closeable, Restartable {
   static abstract public class IRobotViewProvider extends ClassViewProvider {
     public IRobotViewProvider() {

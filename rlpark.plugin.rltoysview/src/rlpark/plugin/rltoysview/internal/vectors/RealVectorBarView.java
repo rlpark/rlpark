@@ -6,13 +6,14 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 
 import rltoys.math.vector.RealVector;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.views.helpers.BackgroundCanvasView;
-import zephyr.plugin.plotting.actions.CenterPlotAction;
-import zephyr.plugin.plotting.actions.CenterPlotAction.ViewCenterable;
-import zephyr.plugin.plotting.bar2d.Bar2D;
-import zephyr.plugin.plotting.mousesearch.MouseSearch;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.views.helpers.BackgroundCanvasView;
+import zephyr.plugin.plotting.internal.actions.CenterPlotAction;
+import zephyr.plugin.plotting.internal.actions.CenterPlotAction.ViewCenterable;
+import zephyr.plugin.plotting.internal.bar2d.Bar2D;
+import zephyr.plugin.plotting.internal.mousesearch.MouseSearch;
 
+@SuppressWarnings("restriction")
 public class RealVectorBarView extends BackgroundCanvasView<RealVector> implements ViewCenterable {
   public static class Provider extends ClassViewProvider {
     public Provider() {

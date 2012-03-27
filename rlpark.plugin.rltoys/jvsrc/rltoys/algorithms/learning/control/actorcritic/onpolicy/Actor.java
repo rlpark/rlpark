@@ -7,9 +7,9 @@ import rltoys.algorithms.representations.actions.Action;
 import rltoys.math.vector.RealVector;
 import rltoys.math.vector.implementations.PVector;
 import rltoys.utils.Utils;
+import zephyr.plugin.core.api.monitoring.abstracts.LabeledCollection;
+import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.parsing.LabelProvider;
-import zephyr.plugin.core.api.parsing.LabeledCollection;
 
 public class Actor implements Serializable {
   private static final long serialVersionUID = 3063342634037779182L;

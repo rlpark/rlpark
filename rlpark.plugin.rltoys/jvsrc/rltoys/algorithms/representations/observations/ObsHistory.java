@@ -6,8 +6,8 @@ import java.util.List;
 
 import rltoys.environments.envio.observations.Legend;
 import rltoys.math.ranges.Range;
+import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.parsing.LabelProvider;
 
 public class ObsHistory implements Serializable {
   private static final long serialVersionUID = 7843542344680953444L;

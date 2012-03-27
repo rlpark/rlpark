@@ -13,8 +13,8 @@ import rltoys.horde.functions.OutcomeFunction;
 import rltoys.horde.functions.RewardFunction;
 import rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.labels.Labels;
+import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.parsing.LabelProvider;
 
 @Monitor
 public class Horde {

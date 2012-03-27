@@ -9,12 +9,13 @@ import rltoys.environments.envio.observations.TRStep;
 import rltoys.environments.mountaincar.MountainCar;
 import rltoys.math.ranges.Range;
 import zephyr.ZephyrPlotting;
-import zephyr.plugin.core.canvas.BackgroundImage;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
-import zephyr.plugin.plotting.axes.Axes;
+import zephyr.plugin.core.internal.canvas.BackgroundImage;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.utils.Colors;
+import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.plotting.internal.axes.Axes;
 
+@SuppressWarnings("restriction")
 public class MountainCarView extends ForegroundCanvasView<MountainCar> {
   public static class Provider extends ClassViewProvider {
     public Provider() {

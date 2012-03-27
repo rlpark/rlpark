@@ -8,17 +8,18 @@ import org.eclipse.ui.PartInitException;
 
 import rltoys.algorithms.representations.ValueFunction2D;
 import rltoys.math.ranges.Range;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
-import zephyr.plugin.core.views.helpers.ScreenShotAction;
-import zephyr.plugin.plotting.axes.Axes;
-import zephyr.plugin.plotting.heatmap.ColorMapAction;
-import zephyr.plugin.plotting.heatmap.Function2DDrawer;
-import zephyr.plugin.plotting.heatmap.FunctionSampler;
-import zephyr.plugin.plotting.heatmap.Interval;
-import zephyr.plugin.plotting.heatmap.MapData;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.utils.Colors;
+import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.core.internal.views.helpers.ScreenShotAction;
+import zephyr.plugin.plotting.internal.axes.Axes;
+import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
+import zephyr.plugin.plotting.internal.heatmap.Function2DDrawer;
+import zephyr.plugin.plotting.internal.heatmap.FunctionSampler;
+import zephyr.plugin.plotting.internal.heatmap.Interval;
+import zephyr.plugin.plotting.internal.heatmap.MapData;
 
+@SuppressWarnings("restriction")
 public class ValueFunction2DView extends ForegroundCanvasView<ValueFunction2D> {
   public static class Provider extends ClassViewProvider {
     public Provider() {
