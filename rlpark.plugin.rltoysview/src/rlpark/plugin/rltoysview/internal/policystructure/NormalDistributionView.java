@@ -10,12 +10,12 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
-import rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorCritic;
-import rltoys.algorithms.learning.control.actorcritic.policystructure.AbstractNormalDistribution;
-import rltoys.algorithms.learning.predictions.LinearLearner;
-import rltoys.math.History;
-import rltoys.math.normalization.MinMaxNormalizer;
-import rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorCritic;
+import rlpark.plugin.rltoys.algorithms.learning.control.actorcritic.policystructure.AbstractNormalDistribution;
+import rlpark.plugin.rltoys.algorithms.learning.predictions.LinearLearner;
+import rlpark.plugin.rltoys.math.History;
+import rlpark.plugin.rltoys.math.normalization.MinMaxNormalizer;
+import rlpark.plugin.rltoys.math.ranges.Range;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;

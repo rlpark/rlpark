@@ -2,12 +2,12 @@ package critterbot.environment;
 
 import java.awt.Color;
 
+import rlpark.plugin.rltoys.agents.Agent;
+import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.observations.Legend;
+import rlpark.plugin.rltoys.envio.observations.ObsFilter;
 import rlpark.plugin.robot.RobotEnvironment;
 import rlpark.plugin.robot.sync.ObservationReceiver;
-import rltoys.algorithms.representations.actions.Action;
-import rltoys.environments.envio.Agent;
-import rltoys.environments.envio.observations.Legend;
-import rltoys.environments.envio.observations.ObsFilter;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -37,7 +37,7 @@ public class CritterbotEnvironment extends RobotEnvironment implements Critterbo
    * setLed() waitNewObs() and lastReceivedObs()
    * 
    * @see rlpark.plugin.robot.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
-   *      .Clock, rltoys.environments.envio.Agent)
+   *      .Clock, rlpark.plugin.rltoys.agents.Agent)
    */
   @Deprecated
   public void run(Agent agent) {
@@ -49,7 +49,7 @@ public class CritterbotEnvironment extends RobotEnvironment implements Critterbo
    * setLed() waitNewObs() and lastReceivedObs()
    * 
    * @see rlpark.plugin.robot.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
-   *      .Clock, rltoys.environments.envio.Agent)
+   *      .Clock, rlpark.plugin.rltoys.agents.Agent)
    */
   @Deprecated
   @Override

@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.rlcommunity.critterbot.simulator.SimulatorMain;
 
-import rltoys.environments.envio.observations.ObsFilter;
-import rltoys.utils.Command;
+import rlpark.plugin.rltoys.envio.observations.ObsFilter;
+import rlpark.plugin.rltoys.utils.Command;
 
 public class CritterbotSimulator extends CritterbotEnvironment {
   static public class SimulatorCommand {

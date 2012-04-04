@@ -1,7 +1,7 @@
 package rlpark.plugin.rltoysview.internal.continuousgridworld;
 
-import rltoys.environments.continuousgridworld.ContinuousGridworld;
-import rltoys.environments.envio.observations.TRStep;
+import rlpark.plugin.rltoys.envio.observations.TRStep;
+import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 

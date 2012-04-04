@@ -1,6 +1,6 @@
 package critterbot.examples;
 
-import rltoys.environments.envio.observations.Legend;
+import rlpark.plugin.rltoys.envio.observations.Legend;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import critterbot.actions.CritterbotAction;
 import critterbot.actions.VoltageSpaceAction;

@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import rltoys.environments.envio.observations.TRStep;
+import rlpark.plugin.rltoys.envio.observations.TRStep;
 
 
 public class StateMachineTest {

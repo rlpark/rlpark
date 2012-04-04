@@ -4,9 +4,9 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 
-import rltoys.algorithms.learning.control.acting.Greedy;
-import rltoys.algorithms.representations.acting.DiscreteActionPolicy;
-import rltoys.algorithms.representations.actions.Action;
+import rlpark.plugin.rltoys.algorithms.learning.control.acting.Greedy;
+import rlpark.plugin.rltoys.algorithms.representations.acting.DiscreteActionPolicy;
+import rlpark.plugin.rltoys.envio.actions.Action;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;

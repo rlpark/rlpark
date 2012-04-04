@@ -6,8 +6,8 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
-import rltoys.algorithms.representations.ValueFunction2D;
-import rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.algorithms.learning.predictions.ValueFunction2D;
+import rlpark.plugin.rltoys.math.ranges.Range;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;

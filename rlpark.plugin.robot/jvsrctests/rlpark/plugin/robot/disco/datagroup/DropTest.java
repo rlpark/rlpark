@@ -4,13 +4,13 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.robot.disco.drops.Drop;
 import rlpark.plugin.robot.disco.drops.DropArray;
 import rlpark.plugin.robot.disco.drops.DropColor;
 import rlpark.plugin.robot.disco.drops.DropData;
 import rlpark.plugin.robot.disco.drops.DropInteger;
 import rlpark.plugin.robot.disco.drops.DropTime;
-import rltoys.environments.envio.observations.Legend;
 
 
 public class DropTest {

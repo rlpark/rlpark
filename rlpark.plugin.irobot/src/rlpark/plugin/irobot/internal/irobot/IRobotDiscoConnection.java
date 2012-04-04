@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import rlpark.plugin.irobot.data.IRobotDrops;
 import rlpark.plugin.irobot.data.IRobotObservationReceiver;
+import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.robot.DiscoConnection;
 import rlpark.plugin.robot.disco.drops.Drop;
 import rlpark.plugin.robot.disco.drops.DropByteArray;
-import rltoys.math.ranges.Range;
 
 public class IRobotDiscoConnection extends DiscoConnection implements IRobotObservationReceiver {
   private final Drop commandDrop = IRobotDrops.newCommandSerialDrop();

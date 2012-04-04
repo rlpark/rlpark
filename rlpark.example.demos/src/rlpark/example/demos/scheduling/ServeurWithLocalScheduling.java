@@ -3,8 +3,8 @@ package rlpark.example.demos.scheduling;
 import java.io.IOException;
 import java.util.Iterator;
 
-import rltoys.experiments.scheduling.interfaces.JobDoneEvent;
-import rltoys.experiments.scheduling.network.ServerScheduler;
+import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobDoneEvent;
+import rlpark.plugin.rltoys.experiments.scheduling.network.ServerScheduler;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class ServeurWithLocalScheduling {

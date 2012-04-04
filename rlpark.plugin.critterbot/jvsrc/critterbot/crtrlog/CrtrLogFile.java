@@ -3,12 +3,12 @@ package critterbot.crtrlog;
 import java.util.ArrayList;
 import java.util.List;
 
+import rlpark.plugin.rltoys.envio.observations.Legend;
+import rlpark.plugin.rltoys.utils.Utils;
 import rlpark.plugin.robot.RobotLog;
 import rlpark.plugin.robot.Robots;
 import rlpark.plugin.robot.sync.ObservationVersatile;
 import rlpark.plugin.robot.sync.ObservationVersatileArray;
-import rltoys.environments.envio.observations.Legend;
-import rltoys.utils.Utils;
 import zephyr.plugin.core.api.internal.logfiles.LogFile;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;

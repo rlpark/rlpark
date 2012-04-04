@@ -3,11 +3,11 @@ package rlpark.plugin.robot.ranges;
 import java.util.HashMap;
 import java.util.Map;
 
+import rlpark.plugin.rltoys.envio.observations.Legend;
+import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.robot.disco.datagroup.DropScalarGroup;
 import rlpark.plugin.robot.disco.datatype.Ranged;
 import rlpark.plugin.robot.disco.drops.DropData;
-import rltoys.environments.envio.observations.Legend;
-import rltoys.math.ranges.Range;
 
 public class RangeProvider {
   private final Map<String, Range> labelToRanges = new HashMap<String, Range>();

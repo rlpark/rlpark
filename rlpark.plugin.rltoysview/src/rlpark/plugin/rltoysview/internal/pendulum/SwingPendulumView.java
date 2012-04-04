@@ -5,7 +5,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
-import rltoys.environments.pendulum.SwingPendulum;
+import rlpark.plugin.rltoys.problems.pendulum.SwingPendulum;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;

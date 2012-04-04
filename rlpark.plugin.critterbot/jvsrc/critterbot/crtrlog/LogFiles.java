@@ -2,9 +2,9 @@ package critterbot.crtrlog;
 
 import java.io.File;
 
-import rltoys.environments.envio.observations.Legend;
-import rltoys.math.ranges.Range;
-import rltoys.utils.Utils;
+import rlpark.plugin.rltoys.envio.observations.Legend;
+import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.utils.Utils;
 import critterbot.environment.CritterbotDrops;
 
 public class LogFiles {

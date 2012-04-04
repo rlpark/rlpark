@@ -2,6 +2,7 @@ package critterbot.environment;
 
 import java.io.IOException;
 
+import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.robot.Robots;
 import rlpark.plugin.robot.disco.datagroup.DropScalarGroup;
 import rlpark.plugin.robot.disco.drops.Drop;
@@ -11,7 +12,6 @@ import rlpark.plugin.robot.disco.io.DiscoPacket;
 import rlpark.plugin.robot.disco.io.DiscoSocket;
 import rlpark.plugin.robot.sync.ObservationReceiver;
 import rlpark.plugin.robot.sync.ObservationVersatile;
-import rltoys.environments.envio.observations.Legend;
 
 public class CritterbotSound implements ObservationReceiver {
   private final String hostname;

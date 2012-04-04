@@ -2,7 +2,7 @@ package critterbot.environment;
 
 import java.util.List;
 
-import rltoys.environments.envio.observations.ObsFilter;
+import rlpark.plugin.rltoys.envio.observations.ObsFilter;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import critterbot.CritterbotProblem;

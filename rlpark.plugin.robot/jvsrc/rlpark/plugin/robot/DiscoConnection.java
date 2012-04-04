@@ -6,13 +6,13 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
+import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.robot.disco.datagroup.DropScalarGroup;
 import rlpark.plugin.robot.disco.drops.Drop;
 import rlpark.plugin.robot.disco.io.DiscoPacket;
 import rlpark.plugin.robot.disco.io.DiscoSocket;
 import rlpark.plugin.robot.sync.ObservationReceiver;
 import rlpark.plugin.robot.sync.ObservationVersatile;
-import rltoys.environments.envio.observations.Legend;
 import zephyr.plugin.core.api.signals.Listener;
 
 

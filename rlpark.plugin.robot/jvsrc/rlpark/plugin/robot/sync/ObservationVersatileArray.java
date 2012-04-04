@@ -2,10 +2,10 @@ package rlpark.plugin.robot.sync;
 
 import java.util.List;
 
-import rltoys.environments.envio.observations.ObsAsDoubles;
-import rltoys.math.GrayCode;
-import rltoys.math.vector.BinaryVector;
-import rltoys.math.vector.implementations.BVector;
+import rlpark.plugin.rltoys.envio.observations.ObsAsDoubles;
+import rlpark.plugin.rltoys.math.GrayCode;
+import rlpark.plugin.rltoys.math.vector.BinaryVector;
+import rlpark.plugin.rltoys.math.vector.implementations.BVector;
 
 
 public class ObservationVersatileArray implements ObsAsDoubles {

@@ -1,10 +1,10 @@
 package rlpark.plugin.robot.disco.drops;
 
 
+import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.robot.disco.datatype.LiteByteBuffer;
 import rlpark.plugin.robot.disco.datatype.ScalarReader;
 import rlpark.plugin.robot.disco.datatype.ScalarWriter;
-import rltoys.math.ranges.Range;
 
 public class DropFloat extends DropData implements ScalarReader, ScalarWriter {
   protected float value;

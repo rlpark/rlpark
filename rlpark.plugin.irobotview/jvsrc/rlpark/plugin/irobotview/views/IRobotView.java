@@ -10,11 +10,11 @@ import org.eclipse.jface.action.IToolBarManager;
 
 import rlpark.plugin.irobot.logfiles.IRobotLogFile;
 import rlpark.plugin.irobotview.filehandlers.IRobotLogFileHandler;
+import rlpark.plugin.rltoys.envio.observations.Legend;
+import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.utils.Utils;
 import rlpark.plugin.robot.RobotLive;
 import rlpark.plugin.robot.Robots;
-import rltoys.environments.envio.observations.Legend;
-import rltoys.math.ranges.Range;
-import rltoys.utils.Utils;
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Closeable;
 import zephyr.plugin.core.internal.actions.RestartAction;

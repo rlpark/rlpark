@@ -6,9 +6,9 @@ import rlpark.plugin.irobot.internal.descriptors.RoombaSerialDescriptor;
 import rlpark.plugin.irobot.internal.irobot.IRobotDiscoConnection;
 import rlpark.plugin.irobot.internal.irobot.IRobotSerialConnection;
 import rlpark.plugin.irobot.internal.server.IRobotDiscoServer;
+import rlpark.plugin.rltoys.envio.observations.Legend;
+import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.robot.sync.ObservationReceiver;
-import rltoys.environments.envio.observations.Legend;
-import rltoys.math.ranges.Range;
 
 public class RoombaRobot extends IRobotEnvironment {
   static public final double MaxAction = 200;

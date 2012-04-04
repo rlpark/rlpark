@@ -1,9 +1,9 @@
 package rlpark.plugin.robot.disco.drops;
 
 
+import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.robot.disco.datatype.LiteByteBuffer;
 import rlpark.plugin.robot.disco.datatype.ScalarReader;
-import rltoys.math.ranges.Range;
 
 public class DropBit extends DropData implements ScalarReader {
   private final byte bitIndex;

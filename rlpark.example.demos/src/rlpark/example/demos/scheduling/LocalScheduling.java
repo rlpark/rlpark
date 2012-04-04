@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import rltoys.experiments.scheduling.interfaces.JobDoneEvent;
-import rltoys.experiments.scheduling.queue.LocalQueue;
-import rltoys.experiments.scheduling.schedulers.LocalScheduler;
+import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobDoneEvent;
+import rlpark.plugin.rltoys.experiments.scheduling.queue.LocalQueue;
+import rlpark.plugin.rltoys.experiments.scheduling.schedulers.LocalScheduler;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class LocalScheduling {

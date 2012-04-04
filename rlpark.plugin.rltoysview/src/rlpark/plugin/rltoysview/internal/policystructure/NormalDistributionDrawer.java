@@ -2,11 +2,11 @@ package rlpark.plugin.rltoysview.internal.policystructure;
 
 import org.eclipse.swt.graphics.GC;
 
-import rltoys.algorithms.learning.control.actorcritic.policystructure.AbstractNormalDistribution;
-import rltoys.algorithms.representations.acting.BoundedPolicy;
-import rltoys.math.normalization.MinMaxNormalizer;
-import rltoys.math.ranges.Range;
-import rltoys.utils.Utils;
+import rlpark.plugin.rltoys.algorithms.learning.control.actorcritic.policystructure.AbstractNormalDistribution;
+import rlpark.plugin.rltoys.algorithms.representations.acting.BoundedPolicy;
+import rlpark.plugin.rltoys.math.normalization.MinMaxNormalizer;
+import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.plotting.internal.data.Data2D;
 import zephyr.plugin.plotting.internal.plot2d.Plot2D;
 

@@ -2,11 +2,11 @@ package rlpark.plugin.robot;
 
 import java.util.Arrays;
 
+import rlpark.plugin.rltoys.envio.observations.Observation;
 import rlpark.plugin.robot.disco.datatype.LiteByteBuffer;
 import rlpark.plugin.robot.sync.ObservationVersatile;
 import rlpark.plugin.robot.sync.ObservationVersatileArray;
 import rlpark.plugin.robot.sync.ScalarInterpreter;
-import rltoys.environments.envio.observations.Observation;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 

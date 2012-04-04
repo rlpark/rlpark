@@ -1,6 +1,6 @@
 package rlpark.plugin.robot;
 
-import rltoys.environments.envio.observations.Legend;
+import rlpark.plugin.rltoys.envio.observations.Legend;
 
 public interface RobotProblem {
   Legend legend();

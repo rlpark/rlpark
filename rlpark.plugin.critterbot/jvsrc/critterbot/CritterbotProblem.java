@@ -1,6 +1,6 @@
 package critterbot;
 
-import rltoys.environments.envio.observations.Legend;
+import rlpark.plugin.rltoys.envio.observations.Legend;
 import zephyr.plugin.core.api.labels.Labeled;
 import zephyr.plugin.core.api.synchronization.Closeable;
 import critterbot.actions.CritterbotAction;

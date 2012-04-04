@@ -1,6 +1,6 @@
 package rlpark.example.robots.critterbot;
 
-import rltoys.environments.envio.observations.Legend;
+import rlpark.plugin.rltoys.envio.observations.Legend;
 import critterbot.actions.CritterbotAction;
 import critterbot.actions.VoltageSpaceAction;
 import critterbot.actions.XYThetaAction;

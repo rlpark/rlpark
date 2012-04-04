@@ -2,7 +2,7 @@ package critterbot;
 
 import java.io.Serializable;
 
-import rltoys.environments.envio.observations.Legend;
+import rlpark.plugin.rltoys.envio.observations.Legend;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import critterbot.environment.CritterbotDrops;
 

@@ -3,6 +3,8 @@ package rlpark.plugin.irobot.logfiles;
 import java.io.IOException;
 
 import rlpark.plugin.irobot.data.IRobotDrops;
+import rlpark.plugin.rltoys.envio.observations.Legend;
+import rlpark.plugin.rltoys.utils.Utils;
 import rlpark.plugin.robot.RobotLog;
 import rlpark.plugin.robot.Robots;
 import rlpark.plugin.robot.disco.datagroup.DropScalarGroup;
@@ -11,8 +13,6 @@ import rlpark.plugin.robot.disco.io.DiscoLogfile;
 import rlpark.plugin.robot.disco.io.DiscoPacket;
 import rlpark.plugin.robot.sync.ObservationVersatile;
 import rlpark.plugin.robot.sync.ObservationVersatileArray;
-import rltoys.environments.envio.observations.Legend;
-import rltoys.utils.Utils;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;

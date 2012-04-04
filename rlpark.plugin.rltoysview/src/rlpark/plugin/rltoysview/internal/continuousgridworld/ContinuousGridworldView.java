@@ -7,9 +7,9 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
-import rltoys.environments.continuousgridworld.ContinuousGridworld;
-import rltoys.environments.continuousgridworld.NormalizedFunction;
-import rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
+import rlpark.plugin.rltoys.problems.continuousgridworld.NormalizedFunction;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.viewable.ContinuousFunction;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;

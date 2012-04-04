@@ -1,12 +1,12 @@
 package rlpark.plugin.robot;
 
 
+import rlpark.plugin.rltoys.agents.Agent;
+import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.robot.sync.ObservationReceiver;
 import rlpark.plugin.robot.sync.ObservationSynchronizer;
 import rlpark.plugin.robot.sync.ObservationVersatile;
 import rlpark.plugin.robot.sync.ObservationVersatileArray;
-import rltoys.algorithms.representations.actions.Action;
-import rltoys.environments.envio.Agent;
 import zephyr.plugin.core.api.labels.Labeled;
 import zephyr.plugin.core.api.synchronization.Clock;
 
@@ -87,7 +87,7 @@ public abstract class RobotEnvironment implements RobotLive, Labeled {
    * setLed() waitNewObs() and lastReceivedObs()
    * 
    * @see rlpark.plugin.robot.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
-   *      .Clock, rltoys.environments.envio.Agent)
+   *      .Clock, rlpark.plugin.rltoys.agents.Agent)
    */
   @Deprecated
   public abstract void run(Clock clock, Agent agent);

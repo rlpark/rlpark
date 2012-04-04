@@ -3,7 +3,7 @@
  */
 package critterbot;
 
-import rltoys.environments.envio.Agent;
+import rlpark.plugin.rltoys.agents.Agent;
 import critterbot.actions.CritterbotAction;
 
 /**

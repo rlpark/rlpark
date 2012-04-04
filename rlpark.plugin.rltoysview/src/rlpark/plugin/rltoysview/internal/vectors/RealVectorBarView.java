@@ -5,7 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 
-import rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.RealVector;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.views.helpers.BackgroundCanvasView;
 import zephyr.plugin.plotting.internal.actions.CenterPlotAction;

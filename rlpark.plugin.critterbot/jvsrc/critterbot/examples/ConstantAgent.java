@@ -1,7 +1,7 @@
 package critterbot.examples;
 
-import rltoys.algorithms.representations.actions.Action;
-import rltoys.environments.envio.Agent;
+import rlpark.plugin.rltoys.agents.Agent;
+import rlpark.plugin.rltoys.envio.actions.Action;
 import zephyr.plugin.core.api.synchronization.Clock;
 import critterbot.actions.CritterbotAction;
 import critterbot.environment.CritterbotEnvironment;

@@ -3,14 +3,14 @@ package critterbot.environment;
 import org.rlcommunity.critterbot.javadrops.drops.CritterControlDrop;
 import org.rlcommunity.critterbot.javadrops.drops.CritterStateDrop;
 
+import rlpark.plugin.rltoys.envio.observations.Legend;
+import rlpark.plugin.rltoys.envio.observations.ObsFilter;
 import rlpark.plugin.robot.disco.drops.Drop;
 import rlpark.plugin.robot.disco.drops.DropArray;
 import rlpark.plugin.robot.disco.drops.DropColor;
 import rlpark.plugin.robot.disco.drops.DropData;
 import rlpark.plugin.robot.disco.drops.DropInteger;
 import rlpark.plugin.robot.disco.drops.DropTime;
-import rltoys.environments.envio.observations.Legend;
-import rltoys.environments.envio.observations.ObsFilter;
 
 public class CritterbotDrops {
   public static final int NbMotors = 3;

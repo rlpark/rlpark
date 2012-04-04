@@ -2,7 +2,7 @@ package critterbot.agents;
 
 import java.util.Random;
 
-import rltoys.environments.envio.Agent;
+import rlpark.plugin.rltoys.agents.Agent;
 import zephyr.plugin.core.api.synchronization.Clock;
 import critterbot.CritterbotObservation;
 import critterbot.actions.CritterbotAction;

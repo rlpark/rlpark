@@ -5,10 +5,10 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
+import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.SparseVector;
+import rlpark.plugin.rltoys.math.vector.VectorEntry;
 import rlpark.plugin.rltoysview.internal.ColorScale;
-import rltoys.math.vector.RealVector;
-import rltoys.math.vector.SparseVector;
-import rltoys.math.vector.VectorEntry;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.BackgroundCanvasView;

@@ -1,10 +1,10 @@
 package rlpark.example.surprise;
 
-import rltoys.algorithms.representations.actions.Action;
-import rltoys.environments.envio.observations.Observation;
-import rltoys.environments.envio.states.AgentState;
-import rltoys.math.vector.RealVector;
-import rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.observations.Observation;
+import rlpark.plugin.rltoys.envio.states.AgentState;
+import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 
 public class RobotState implements AgentState {
   private static final long serialVersionUID = 6644415896368916415L;

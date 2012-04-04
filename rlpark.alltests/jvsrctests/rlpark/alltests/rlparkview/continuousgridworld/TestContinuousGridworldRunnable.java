@@ -2,10 +2,10 @@ package rlpark.alltests.rlparkview.continuousgridworld;
 
 import java.util.Random;
 
-import rltoys.environments.continuousgridworld.ContinuousGridworld;
-import rltoys.environments.envio.actions.ActionArray;
-import rltoys.environments.envio.observations.TRStep;
-import rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.envio.actions.ActionArray;
+import rlpark.plugin.rltoys.envio.observations.TRStep;
+import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;

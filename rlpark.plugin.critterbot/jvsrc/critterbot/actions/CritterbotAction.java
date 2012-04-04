@@ -1,6 +1,6 @@
 package critterbot.actions;
 
-import rltoys.environments.envio.actions.ActionArray;
+import rlpark.plugin.rltoys.envio.actions.ActionArray;
 
 public class CritterbotAction extends ActionArray {
   private static final long serialVersionUID = -1190160741892375081L;

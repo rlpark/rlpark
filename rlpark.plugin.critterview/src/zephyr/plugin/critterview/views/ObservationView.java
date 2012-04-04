@@ -22,8 +22,8 @@ import java.util.Map;
 
 import org.eclipse.jface.action.IToolBarManager;
 
-import rltoys.environments.envio.observations.Legend;
-import rltoys.utils.Utils;
+import rlpark.plugin.rltoys.envio.observations.Legend;
+import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;

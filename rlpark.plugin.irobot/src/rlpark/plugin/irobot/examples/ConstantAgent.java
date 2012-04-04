@@ -2,7 +2,7 @@ package rlpark.plugin.irobot.examples;
 
 import rlpark.plugin.irobot.data.CreateAction;
 import rlpark.plugin.irobot.robots.CreateRobot;
-import rltoys.environments.envio.Agent;
+import rlpark.plugin.rltoys.agents.Agent;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class ConstantAgent implements Agent {

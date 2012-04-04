@@ -11,8 +11,8 @@ import rlpark.plugin.irobot.internal.statemachine.ChecksumNode;
 import rlpark.plugin.irobot.internal.statemachine.DataNode;
 import rlpark.plugin.irobot.internal.statemachine.HeaderNode;
 import rlpark.plugin.irobot.internal.statemachine.SerialLinkStateMachine;
+import rlpark.plugin.rltoys.utils.Utils;
 import rlpark.plugin.robot.disco.drops.Drop;
-import rltoys.utils.Utils;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class CreateSerialDescriptor implements IRobotSerialDescriptor {

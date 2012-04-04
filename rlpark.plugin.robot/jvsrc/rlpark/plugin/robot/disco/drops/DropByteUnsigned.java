@@ -1,11 +1,11 @@
 package rlpark.plugin.robot.disco.drops;
 
 
+import rlpark.plugin.rltoys.math.GrayCode;
+import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.robot.disco.datatype.GrayCodeConverter;
 import rlpark.plugin.robot.disco.datatype.LiteByteBuffer;
 import rlpark.plugin.robot.disco.datatype.ScalarReader;
-import rltoys.math.GrayCode;
-import rltoys.math.ranges.Range;
 
 public class DropByteUnsigned extends DropData implements ScalarReader, GrayCodeConverter {
   private int value;

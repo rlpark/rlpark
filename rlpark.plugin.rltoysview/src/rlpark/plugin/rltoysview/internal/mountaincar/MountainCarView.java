@@ -5,9 +5,9 @@ import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 
-import rltoys.environments.envio.observations.TRStep;
-import rltoys.environments.mountaincar.MountainCar;
-import rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.envio.observations.TRStep;
+import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.internal.canvas.BackgroundImage;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;

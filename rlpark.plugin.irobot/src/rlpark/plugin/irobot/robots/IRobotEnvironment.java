@@ -4,15 +4,15 @@ import rlpark.plugin.irobot.data.CreateAction;
 import rlpark.plugin.irobot.data.CreateLeds;
 import rlpark.plugin.irobot.data.IRobotDrops;
 import rlpark.plugin.irobot.data.IRobotObservationReceiver;
+import rlpark.plugin.rltoys.agents.Agent;
+import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.observations.Legend;
+import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.robot.RobotEnvironment;
 import rlpark.plugin.robot.Robots;
 import rlpark.plugin.robot.disco.datagroup.DropScalarGroup;
 import rlpark.plugin.robot.disco.drops.Drop;
 import rlpark.plugin.robot.sync.ObservationReceiver;
-import rltoys.algorithms.representations.actions.Action;
-import rltoys.environments.envio.Agent;
-import rltoys.environments.envio.observations.Legend;
-import rltoys.math.ranges.Range;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
@@ -118,7 +118,7 @@ abstract public class IRobotEnvironment extends RobotEnvironment implements Moni
    * setLed() waitNewObs() and lastReceivedObs()
    * 
    * @see rlpark.plugin.robot.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
-   *      .Clock, rltoys.environments.envio.Agent)
+   *      .Clock, rlpark.plugin.rltoys.agents.Agent)
    */
   @Deprecated
   public void run(Agent agent) {
@@ -131,7 +131,7 @@ abstract public class IRobotEnvironment extends RobotEnvironment implements Moni
    * setLed() waitNewObs() and lastReceivedObs()
    * 
    * @see rlpark.plugin.robot.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
-   *      .Clock, rltoys.environments.envio.Agent)
+   *      .Clock, rlpark.plugin.rltoys.agents.Agent)
    */
   @Deprecated
   @Override

@@ -3,7 +3,7 @@ package rlpark.plugin.robot.statemachine;
 import java.util.ArrayList;
 import java.util.List;
 
-import rltoys.utils.Utils;
+import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.core.api.signals.Signal;
 
 public class StateMachine<T> {

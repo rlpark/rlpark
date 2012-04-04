@@ -4,10 +4,10 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import rltoys.math.ranges.Range;
-import rltoys.math.vector.implementations.PVector;
-import rltoys.math.vector.testing.VectorsTestsUtils;
-import rltoys.utils.Paths;
+import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.math.vector.testing.VectorsTestsUtils;
+import rlpark.plugin.rltoys.utils.Paths;
 
 public class CrtrLogFileTest {
 

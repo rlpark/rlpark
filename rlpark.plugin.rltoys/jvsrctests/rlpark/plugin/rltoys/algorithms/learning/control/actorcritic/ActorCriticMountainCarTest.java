@@ -1,0 +1,59 @@
+package rlpark.plugin.rltoys.algorithms.learning.control.actorcritic;
+
+
+import java.util.Random;
+
+import org.junit.Test;
+
+import rlpark.plugin.rltoys.agents.LearnerAgentFA;
+import rlpark.plugin.rltoys.agents.RLAgent;
+import rlpark.plugin.rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorCritic;
+import rlpark.plugin.rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorLambda;
+import rlpark.plugin.rltoys.algorithms.learning.control.actorcritic.policystructure.BoltzmannDistribution;
+import rlpark.plugin.rltoys.algorithms.learning.control.mountaincar.MountainCarOnPolicyTest;
+import rlpark.plugin.rltoys.algorithms.learning.predictions.td.OnPolicyTD;
+import rlpark.plugin.rltoys.algorithms.learning.predictions.td.TDLambda;
+import rlpark.plugin.rltoys.algorithms.learning.predictions.td.TDLambdaAutostep;
+import rlpark.plugin.rltoys.algorithms.representations.acting.PolicyDistribution;
+import rlpark.plugin.rltoys.algorithms.representations.actions.StateToStateAction;
+import rlpark.plugin.rltoys.algorithms.representations.actions.TabularAction;
+import rlpark.plugin.rltoys.algorithms.representations.traces.ATraces;
+import rlpark.plugin.rltoys.envio.states.Projector;
+import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;
+
+
+public class ActorCriticMountainCarTest extends MountainCarOnPolicyTest {
+  static class MountainCarActorCriticControlFactory implements MountainCarAgentFactory {
+    @Override
+    public RLAgent createAgent(MountainCar mountainCar, Projector projector) {
+      final double lambda = .3;
+      final double gamma = .99;
+      OnPolicyTD critic = createCritic(projector, lambda, gamma);
+      StateToStateAction toStateAction = new TabularAction(mountainCar.actions(), projector.vectorNorm(),
+                                                           projector.vectorSize());
+      PolicyDistribution distribution = new BoltzmannDistribution(new Random(0), mountainCar.actions(), toStateAction);
+      ActorLambda actor = new ActorLambda(lambda, gamma, distribution, .01 / projector.vectorNorm(), projector.vectorSize());
+      return new LearnerAgentFA(new ActorCritic(critic, actor), projector);
+    }
+
+    protected OnPolicyTD createCritic(Projector projector, final double lambda, final double gamma) {
+      return new TDLambda(lambda, gamma, .1 / projector.vectorNorm(), projector.vectorSize(),
+                          new ATraces((int) (projector.vectorNorm() * 100), 0.05));
+    }
+  }
+
+  @Test
+  public void testDiscreteActorCriticOnMountainCar() {
+    runTestOnOnMountainCar(new MountainCarActorCriticControlFactory());
+  }
+
+  @Test
+  public void testDiscreteAutostepActorCriticOnMountainCar() {
+    runTestOnOnMountainCar(new MountainCarActorCriticControlFactory() {
+      @Override
+      protected OnPolicyTD createCritic(Projector projector, final double lambda, final double gamma) {
+        return new TDLambdaAutostep(lambda, gamma, projector.vectorSize());
+      }
+    });
+  }
+}

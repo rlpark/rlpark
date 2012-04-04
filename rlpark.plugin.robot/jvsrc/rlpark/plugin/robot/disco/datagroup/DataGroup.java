@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.robot.disco.drops.Drop;
 import rlpark.plugin.robot.disco.drops.DropArray;
 import rlpark.plugin.robot.disco.drops.DropData;
-import rltoys.environments.envio.observations.Legend;
 
 public abstract class DataGroup {
   protected final DropData[] dropDatas;
