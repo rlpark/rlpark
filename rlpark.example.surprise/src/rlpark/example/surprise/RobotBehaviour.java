@@ -2,8 +2,8 @@ package rlpark.example.surprise;
 
 import java.util.Random;
 
-import rlpark.plugin.rltoys.algorithms.representations.acting.Policy;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.core.api.synchronization.Chrono;

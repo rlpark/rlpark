@@ -1,7 +1,7 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal;
 
-import rlpark.plugin.rltoys.experiments.ExperimentCounter;
-import rlpark.plugin.rltoys.experiments.Runner;
+import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
+import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.JobWithParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;

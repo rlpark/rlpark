@@ -1,11 +1,11 @@
 package rlpark.plugin.rltoys.horde.demons;
 
-import rlpark.plugin.rltoys.algorithms.learning.predictions.LinearLearner;
-import rlpark.plugin.rltoys.algorithms.learning.predictions.Predictor;
-import rlpark.plugin.rltoys.algorithms.learning.predictions.td.GTDLambda;
-import rlpark.plugin.rltoys.algorithms.learning.predictions.td.GVF;
-import rlpark.plugin.rltoys.algorithms.representations.acting.Policy;
+import rlpark.plugin.rltoys.algorithms.LinearLearner;
+import rlpark.plugin.rltoys.algorithms.functions.Predictor;
+import rlpark.plugin.rltoys.algorithms.predictions.td.GTDLambda;
+import rlpark.plugin.rltoys.algorithms.predictions.td.GVF;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.horde.functions.ConstantGamma;
 import rlpark.plugin.rltoys.horde.functions.ConstantOutcomeFunction;
 import rlpark.plugin.rltoys.horde.functions.GammaFunction;

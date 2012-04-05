@@ -1,14 +1,14 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.onpolicy;
 
-import rlpark.plugin.rltoys.agents.RLAgent;
-import rlpark.plugin.rltoys.envio.problems.RLProblem;
-import rlpark.plugin.rltoys.experiments.ExperimentCounter;
-import rlpark.plugin.rltoys.experiments.Runner;
+import rlpark.plugin.rltoys.envio.rl.RLAgent;
+import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
+import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.RunInfo;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ReinforcementLearningContext;
+import rlpark.plugin.rltoys.problems.RLProblem;
 
 public abstract class AbstractContextOnPolicy implements ReinforcementLearningContext {
   private static final long serialVersionUID = -6212106048889219995L;

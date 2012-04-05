@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import rlpark.plugin.rltoys.experiments.ExperimentCounter;
+import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.Context;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.SweepDescriptor;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.AbstractContextOnPolicy;

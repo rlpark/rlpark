@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
-import rlpark.plugin.rltoys.math.MovingAverage;
+import rlpark.plugin.rltoys.math.averages.MovingAverage;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.utils.Scheduling;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;

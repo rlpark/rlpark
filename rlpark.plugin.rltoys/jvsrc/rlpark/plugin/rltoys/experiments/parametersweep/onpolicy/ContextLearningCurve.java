@@ -1,6 +1,6 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.onpolicy;
 
-import rlpark.plugin.rltoys.experiments.ExperimentCounter;
+import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.LearningCurveJob;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentFactory;

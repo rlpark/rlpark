@@ -1,6 +1,6 @@
 package rlpark.plugin.robot.statemachine;
 
-import rlpark.plugin.rltoys.envio.observations.TRStep;
+import rlpark.plugin.rltoys.envio.rl.TRStep;
 
 public abstract class TimedState implements StateNode<TRStep> {
   final private int nbTimeSteps;

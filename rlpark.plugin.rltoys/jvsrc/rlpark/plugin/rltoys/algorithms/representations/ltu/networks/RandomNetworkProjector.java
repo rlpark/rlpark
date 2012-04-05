@@ -1,6 +1,6 @@
 package rlpark.plugin.rltoys.algorithms.representations.ltu.networks;
 
-import rlpark.plugin.rltoys.envio.states.Projector;
+import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;

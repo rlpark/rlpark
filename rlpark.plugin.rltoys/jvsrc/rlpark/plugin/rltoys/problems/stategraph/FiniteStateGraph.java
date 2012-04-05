@@ -2,8 +2,8 @@ package rlpark.plugin.rltoys.problems.stategraph;
 
 import java.io.Serializable;
 
-import rlpark.plugin.rltoys.algorithms.representations.acting.Policy;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;
 

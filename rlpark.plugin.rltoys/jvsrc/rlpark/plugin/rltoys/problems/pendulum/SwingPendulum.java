@@ -5,11 +5,11 @@ import java.util.Random;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.observations.Legend;
-import rlpark.plugin.rltoys.envio.observations.TRStep;
-import rlpark.plugin.rltoys.envio.problems.ProblemBounded;
-import rlpark.plugin.rltoys.envio.problems.ProblemContinuousAction;
-import rlpark.plugin.rltoys.envio.problems.ProblemDiscreteAction;
+import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.problems.ProblemBounded;
+import rlpark.plugin.rltoys.problems.ProblemContinuousAction;
+import rlpark.plugin.rltoys.problems.ProblemDiscreteAction;
 import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
@@ -23,17 +23,17 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
   public static final Range ActionRange = new Range(-uMax, uMax);
   protected static final String VELOCITY = "velocity";
   protected static final String THETA = "theta";
-  protected static final Legend legend = new Legend(THETA, VELOCITY);
-  protected static final Range thetaRange = new Range(-Math.PI, Math.PI);
-  protected static final double mass = 1.0;
-  protected static final double length = 1.0;
-  protected static final double g = 9.8;
-  protected static final double stepTime = 0.01; // seconds
-  protected static final double requiredUpTime = 10.0; // seconds
-  protected static final double isUpRange = Math.PI / 4.0; // seconds
-  protected static final double maxVelocity = (Math.PI / 4.0) / stepTime;
-  protected static final Range velocityRange = new Range(-maxVelocity, maxVelocity);
-  protected static final Range initialThetaRange = new Range(-Math.PI, Math.PI);
+  protected static final Legend Legend = new Legend(THETA, VELOCITY);
+  public static final Range ThetaRange = new Range(-Math.PI, Math.PI);
+  protected static final double Mass = 1.0;
+  protected static final double Length = 1.0;
+  protected static final double G = 9.8;
+  protected static final double StepTime = 0.01; // seconds
+  protected static final double RequiredUpTime = 10.0; // seconds
+  protected static final double UpRange = Math.PI / 4.0; // seconds
+  protected static final double MaxVelocity = (Math.PI / 4.0) / StepTime;
+  public static final Range VelocityRange = new Range(-MaxVelocity, MaxVelocity);
+  public static final Range InitialThetaRange = new Range(-Math.PI, Math.PI);
   protected static final double initialVelocity = 0.0;
 
   final private boolean endOfEpisode;
@@ -50,7 +50,7 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
   }
 
   public SwingPendulum(Random random, boolean endOfEpisode) {
-    assert mass * length * g > uMax;
+    assert Mass * Length * G > uMax;
     this.random = random;
     this.endOfEpisode = endOfEpisode;
   }
@@ -58,12 +58,12 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
   protected void update(ActionArray action) {
     double torque = ActionRange.bound(ActionArray.toDouble(action));
     assert Utils.checkValue(torque);
-    double thetaAcceleration = -stepTime * velocity + mass * g * length * Math.sin(theta) + torque;
+    double thetaAcceleration = -StepTime * velocity + Mass * G * Length * Math.sin(theta) + torque;
     assert Utils.checkValue(thetaAcceleration);
-    velocity = velocityRange.bound(velocity + thetaAcceleration);
-    theta += velocity * stepTime;
+    velocity = VelocityRange.bound(velocity + thetaAcceleration);
+    theta += velocity * StepTime;
     adjustTheta();
-    upTime = Math.abs(theta) > isUpRange ? 0 : upTime + 1;
+    upTime = Math.abs(theta) > UpRange ? 0 : upTime + 1;
     assert Utils.checkValue(theta);
     assert Utils.checkValue(velocity);
   }
@@ -94,7 +94,7 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
       return false;
     if (constantEpisodeTime)
       return false;
-    return upTime + 1 >= requiredUpTime / stepTime;
+    return upTime + 1 >= RequiredUpTime / StepTime;
   }
 
   @Override
@@ -116,7 +116,7 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
       theta = Math.PI / 2;
       velocity = 0.0;
     } else {
-      theta = initialThetaRange.choose(random);
+      theta = InitialThetaRange.choose(random);
       velocity = initialVelocity;
     }
     adjustTheta();
@@ -124,12 +124,12 @@ public class SwingPendulum implements ProblemBounded, ProblemDiscreteAction, Pro
 
   @Override
   public Legend legend() {
-    return legend;
+    return Legend;
   }
 
   @Override
   public Range[] getObservationRanges() {
-    return new Range[] { thetaRange, velocityRange };
+    return new Range[] { ThetaRange, VelocityRange };
   }
 
   public double theta() {

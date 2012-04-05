@@ -3,8 +3,8 @@
  */
 package rlpark.plugin.rltoys.problems.stategraph;
 
-import rlpark.plugin.rltoys.algorithms.representations.acting.Policy;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 
 public class LineProblem extends FiniteStateGraph {
@@ -14,7 +14,7 @@ public class LineProblem extends FiniteStateGraph {
   static public final GraphState C = new GraphState("C", 0.0);
   static public final GraphState D = new GraphState("D", 1.0);
   static private final GraphState[] states = { A, B, C, D };
-  static Action a = new Action() {
+  static public Action a = new Action() {
     private static final long serialVersionUID = 5767853896667312578L;
   };
   static private final Policy acting = new Policy() {

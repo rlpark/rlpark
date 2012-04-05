@@ -1,9 +1,9 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy;
 
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
-import rlpark.plugin.rltoys.algorithms.representations.projectors.RepresentationFactory;
-import rlpark.plugin.rltoys.experiments.ExperimentCounter;
-import rlpark.plugin.rltoys.experiments.Runner;
+import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
+import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
+import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluation;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal.OffPolicyEvaluationContext;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal.SweepJob;

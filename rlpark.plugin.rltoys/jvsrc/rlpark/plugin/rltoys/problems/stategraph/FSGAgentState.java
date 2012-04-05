@@ -10,9 +10,9 @@ import org.apache.commons.math.linear.ArrayRealVector;
 import org.apache.commons.math.linear.LUDecompositionImpl;
 import org.apache.commons.math.linear.RealMatrix;
 
-import rlpark.plugin.rltoys.algorithms.representations.acting.Policy;
-import rlpark.plugin.rltoys.algorithms.representations.actions.StateToStateAction;
+import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.problems.stategraph.FiniteStateGraph.StepData;

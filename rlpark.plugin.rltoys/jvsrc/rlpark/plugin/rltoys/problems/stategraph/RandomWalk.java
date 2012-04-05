@@ -2,9 +2,9 @@ package rlpark.plugin.rltoys.problems.stategraph;
 
 import java.util.Random;
 
-import rlpark.plugin.rltoys.algorithms.representations.acting.ConstantPolicy;
-import rlpark.plugin.rltoys.algorithms.representations.acting.Policy;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.ConstantPolicy;
+import rlpark.plugin.rltoys.envio.policy.Policy;
 
 @SuppressWarnings("serial")
 public class RandomWalk extends FiniteStateGraph {

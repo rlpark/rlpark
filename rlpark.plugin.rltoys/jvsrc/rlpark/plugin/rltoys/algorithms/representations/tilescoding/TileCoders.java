@@ -3,10 +3,10 @@ package rlpark.plugin.rltoys.algorithms.representations.tilescoding;
 import java.util.ArrayList;
 import java.util.List;
 
+import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.Discretizer;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.DiscretizerFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.Tiling;
-import rlpark.plugin.rltoys.envio.states.Projector;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;

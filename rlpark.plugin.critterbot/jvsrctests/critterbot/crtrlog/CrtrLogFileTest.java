@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
-import rlpark.plugin.rltoys.math.vector.testing.VectorsTestsUtils;
+import rlpark.plugin.rltoys.testing.math.vector.testing.VectorsTestsUtils;
 import rlpark.plugin.rltoys.utils.Paths;
 
 public class CrtrLogFileTest {

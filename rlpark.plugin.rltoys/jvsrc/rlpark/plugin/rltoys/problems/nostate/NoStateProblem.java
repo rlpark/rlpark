@@ -4,9 +4,9 @@ import static rlpark.plugin.rltoys.utils.Utils.square;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.observations.Legend;
-import rlpark.plugin.rltoys.envio.observations.TRStep;
-import rlpark.plugin.rltoys.envio.problems.RLProblem;
+import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.problems.RLProblem;
 
 public class NoStateProblem implements RLProblem {
   public interface NoStateRewardFunction {

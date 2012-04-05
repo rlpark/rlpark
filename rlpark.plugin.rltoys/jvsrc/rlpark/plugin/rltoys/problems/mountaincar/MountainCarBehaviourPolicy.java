@@ -2,11 +2,11 @@ package rlpark.plugin.rltoys.problems.mountaincar;
 
 import java.util.Random;
 
-import rlpark.plugin.rltoys.agents.RLAgent;
-import rlpark.plugin.rltoys.algorithms.representations.acting.StochasticPolicy;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
-import rlpark.plugin.rltoys.envio.observations.TRStep;
+import rlpark.plugin.rltoys.envio.policy.StochasticPolicy;
+import rlpark.plugin.rltoys.envio.rl.RLAgent;
+import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 

@@ -1,0 +1,60 @@
+package rlpark.plugin.rltoys.envio.rl;
+
+import java.util.Arrays;
+
+import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.observations.ObsAsDoubles;
+
+public class TRStep implements ObsAsDoubles {
+  // Time of o_tp1
+  final public long time;
+  final public double[] o_t;
+  final public Action a_t;
+  final public double[] o_tp1;
+  final public double r_tp1;
+
+  public TRStep(double[] o_tp1, double reward) {
+    this(0, null, null, o_tp1, reward);
+  }
+
+  public TRStep(long time, double[] o_t, Action a_t, double r_tp1) {
+    this(time, o_t, a_t, null, r_tp1);
+  }
+
+  public TRStep(TRStep step_t, Action a_t, double[] o_tp1, double r_tp1) {
+    this(step_t == null ? 0 : step_t.time + 1, step_t == null ? null : step_t.o_tp1, a_t, o_tp1, r_tp1);
+  }
+
+  public TRStep(long time, double[] o_t, Action a_t, double[] o_tp1, double r_tp1) {
+    this.time = time;
+    this.o_t = o_t == null ? null : o_t.clone();
+    this.a_t = a_t;
+    this.o_tp1 = o_tp1 == null ? null : o_tp1.clone();
+    assert a_t != null || o_t == null;
+    assert o_t != null || o_tp1 != null;
+    this.r_tp1 = r_tp1;
+  }
+
+  public TRStep createEndingStep() {
+    return new TRStep(time, o_t, a_t, null, 0);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("T=%d: %s,%s->%s,r=%f", time, Arrays.toString(o_t), a_t, Arrays.toString(o_tp1), r_tp1);
+  }
+
+  public boolean isEpisodeStarting() {
+    return o_t == null && o_tp1 != null;
+  }
+
+
+  public boolean isEpisodeEnding() {
+    return o_t != null && o_tp1 == null;
+  }
+
+  @Override
+  public double[] doubleValues() {
+    return o_tp1;
+  }
+}

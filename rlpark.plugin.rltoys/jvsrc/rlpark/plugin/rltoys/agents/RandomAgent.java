@@ -2,7 +2,7 @@ package rlpark.plugin.rltoys.agents;
 
 import java.util.Random;
 
-import rlpark.plugin.rltoys.algorithms.representations.acting.RandomPolicy;
+import rlpark.plugin.rltoys.algorithms.functions.policydistributions.helpers.RandomPolicy;
 import rlpark.plugin.rltoys.envio.actions.Action;
 
 public class RandomAgent implements Agent {

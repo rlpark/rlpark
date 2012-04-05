@@ -1,11 +1,11 @@
 package rlpark.plugin.rltoys.agents.offpolicy;
 
-import rlpark.plugin.rltoys.agents.ControlAgent;
-import rlpark.plugin.rltoys.agents.RLAgent;
-import rlpark.plugin.rltoys.algorithms.learning.control.offpolicy.OffPolicyLearner;
-import rlpark.plugin.rltoys.algorithms.representations.acting.Policy;
+import rlpark.plugin.rltoys.agents.rl.ControlAgent;
+import rlpark.plugin.rltoys.algorithms.control.OffPolicyLearner;
 import rlpark.plugin.rltoys.envio.actions.Action;
-import rlpark.plugin.rltoys.envio.observations.TRStep;
+import rlpark.plugin.rltoys.envio.policy.Policy;
+import rlpark.plugin.rltoys.envio.rl.RLAgent;
+import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 

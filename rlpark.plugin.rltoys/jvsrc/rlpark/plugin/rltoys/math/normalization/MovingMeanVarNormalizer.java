@@ -1,5 +1,6 @@
 package rlpark.plugin.rltoys.math.normalization;
 
+import rlpark.plugin.rltoys.math.averages.MeanVar;
 import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 

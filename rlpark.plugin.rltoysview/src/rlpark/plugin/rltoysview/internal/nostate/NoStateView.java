@@ -3,15 +3,12 @@ package rlpark.plugin.rltoysview.internal.nostate;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 
-import rlpark.plugin.rltoys.algorithms.learning.control.actorcritic.onpolicy.ActorCritic;
-import rlpark.plugin.rltoys.algorithms.learning.control.actorcritic.policystructure.NormalDistribution;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
-import rlpark.plugin.rltoys.envio.observations.TRStep;
-import rlpark.plugin.rltoys.experiments.continuousaction.NoStateExperiment;
+import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.History;
 import rlpark.plugin.rltoys.math.normalization.MinMaxNormalizer;
 import rlpark.plugin.rltoys.math.ranges.Range;
-import rlpark.plugin.rltoysview.internal.policystructure.NormalDistributionDrawer;
+import rlpark.plugin.rltoys.problems.nostate.NoStateProblem;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -23,10 +20,10 @@ import zephyr.plugin.plotting.internal.plot2d.Plot2D;
 import zephyr.plugin.plotting.internal.plot2d.drawer2d.Drawer2D;
 
 @SuppressWarnings("restriction")
-public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
+public class NoStateView extends ForegroundCanvasView<NoStateProblem> {
   public static class Provider extends ClassViewProvider {
     public Provider() {
-      super(NoStateExperiment.class);
+      super(NoStateProblem.class);
     }
   }
 
@@ -38,7 +35,7 @@ public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
     @Override
     public void listen(Clock eventInfo) {
       @SuppressWarnings("synthetic-access")
-      TRStep step = instance.current().step();
+      TRStep step = instance.current().lastStep();
       final double action = ActionArray.toDouble(step.a_t);
       actionHistory.append(action);
       rewardHistory.append(step.r_tp1);
@@ -63,7 +60,6 @@ public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
         gc.drawOval(gx[gx.length - i] - radius, gy[gy.length - i] - radius, radius, radius);
     }
   };
-  private NormalDistributionDrawer normalDistributionDrawer;
   private Data2D data;
   private final Colors colors = new Colors();
   private final MinMaxNormalizer rewardNormalizer = new MinMaxNormalizer(new Range(0, 1));
@@ -77,7 +73,6 @@ public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
       rewardNormalizer.update(reward);
     for (int i = 0; i < data.ydata.length; i++)
       data.ydata[i] = rewardNormalizer.normalize(data.ydata[i]);
-    normalDistributionDrawer.synchronize();
     return true;
   }
 
@@ -91,7 +86,6 @@ public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
     plot.draw(gc, rewardDrawer, data);
     gc.setForeground(colors.color(gc, Colors.COLOR_BLACK));
     gc.setLineWidth(ZephyrPlotting.preferredLineWidth());
-    normalDistributionDrawer.draw(gc);
   }
 
   @Override
@@ -110,14 +104,11 @@ public class NoStateView extends ForegroundCanvasView<NoStateExperiment> {
 
   @Override
   protected void setLayout() {
-    NormalDistribution policy = (NormalDistribution) ((ActorCritic) instance.current().control).actor().policy();
     data = new Data2D("Reward", experimentData.actionHistory.length);
-    normalDistributionDrawer = new NormalDistributionDrawer(plot, policy, rewardNormalizer.newInstance());
-    setViewName(policy.getClass().getSimpleName(), "");
   }
 
   @Override
   protected boolean isInstanceSupported(Object instance) {
-    return NoStateExperiment.class.isInstance(instance);
+    return NoStateProblem.class.isInstance(instance);
   }
 }

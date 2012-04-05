@@ -1,6 +1,6 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.onpolicy;
 
-import rlpark.plugin.rltoys.experiments.ExperimentCounter;
+import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyEvaluationContext;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyRewardMonitor;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorAverage;

@@ -1,8 +1,8 @@
 package rlpark.example.surprise;
 
+import rlpark.plugin.rltoys.algorithms.functions.states.AgentState;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.observations.Observation;
-import rlpark.plugin.rltoys.envio.states.AgentState;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 

@@ -1,17 +1,17 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation;
 
-import rlpark.plugin.rltoys.agents.RLAgent;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
-import rlpark.plugin.rltoys.algorithms.representations.projectors.RepresentationFactory;
-import rlpark.plugin.rltoys.envio.problems.RLProblem;
-import rlpark.plugin.rltoys.experiments.Runner;
-import rlpark.plugin.rltoys.experiments.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
+import rlpark.plugin.rltoys.envio.rl.RLAgent;
+import rlpark.plugin.rltoys.experiments.helpers.Runner;
+import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyRewardMonitor;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorAverage;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorEpisode;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
+import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class ContinuousOffPolicyEvaluation extends AbstractOffPolicyEvaluation {

@@ -5,11 +5,11 @@ import java.util.Random;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.observations.Legend;
-import rlpark.plugin.rltoys.envio.observations.TRStep;
-import rlpark.plugin.rltoys.envio.problems.ProblemBounded;
-import rlpark.plugin.rltoys.envio.problems.ProblemContinuousAction;
-import rlpark.plugin.rltoys.envio.problems.ProblemDiscreteAction;
+import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.problems.ProblemBounded;
+import rlpark.plugin.rltoys.problems.ProblemContinuousAction;
+import rlpark.plugin.rltoys.problems.ProblemDiscreteAction;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class MountainCar implements ProblemBounded, ProblemDiscreteAction, ProblemContinuousAction {
@@ -20,9 +20,9 @@ public class MountainCar implements ProblemBounded, ProblemDiscreteAction, Probl
   protected static final Action[] Actions = { LEFT, STOP, RIGHT };
   static public final Range ActionRange = new Range(-MaxActionValue, MaxActionValue);
 
-  protected static final String VELOCITY = "velocity";
-  protected static final String POSITION = "position";
-  protected static final Legend legend = new Legend(POSITION, VELOCITY);
+  public static final String VELOCITY = "velocity";
+  public static final String POSITION = "position";
+  public static final Legend legend = new Legend(POSITION, VELOCITY);
 
   @Monitor
   protected double position;

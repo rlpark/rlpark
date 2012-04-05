@@ -1,11 +1,10 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy;
 
-import rlpark.plugin.rltoys.agents.RLAgent;
-import rlpark.plugin.rltoys.algorithms.representations.acting.Policy;
-import rlpark.plugin.rltoys.algorithms.representations.projectors.RepresentationFactory;
-import rlpark.plugin.rltoys.envio.problems.RLProblem;
-import rlpark.plugin.rltoys.experiments.ExperimentCounter;
-import rlpark.plugin.rltoys.experiments.Runner;
+import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
+import rlpark.plugin.rltoys.envio.policy.Policy;
+import rlpark.plugin.rltoys.envio.rl.RLAgent;
+import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
+import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluation;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.RunInfo;
@@ -13,6 +12,7 @@ import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.Off
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ReinforcementLearningContext;
+import rlpark.plugin.rltoys.problems.RLProblem;
 
 public abstract class AbstractContextOffPolicy implements ReinforcementLearningContext {
   private static final long serialVersionUID = -6212106048889219995L;

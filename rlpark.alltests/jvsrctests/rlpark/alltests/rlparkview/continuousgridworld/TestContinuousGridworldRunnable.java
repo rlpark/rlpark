@@ -3,7 +3,7 @@ package rlpark.alltests.rlparkview.continuousgridworld;
 import java.util.Random;
 
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
-import rlpark.plugin.rltoys.envio.observations.TRStep;
+import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
 import zephyr.plugin.core.api.Zephyr;

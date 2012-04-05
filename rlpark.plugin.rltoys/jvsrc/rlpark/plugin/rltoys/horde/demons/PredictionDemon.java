@@ -1,7 +1,7 @@
 package rlpark.plugin.rltoys.horde.demons;
 
-import rlpark.plugin.rltoys.algorithms.learning.predictions.LinearLearner;
-import rlpark.plugin.rltoys.algorithms.learning.predictions.td.OnPolicyTD;
+import rlpark.plugin.rltoys.algorithms.LinearLearner;
+import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.horde.functions.RewardFunction;
 import rlpark.plugin.rltoys.math.vector.RealVector;

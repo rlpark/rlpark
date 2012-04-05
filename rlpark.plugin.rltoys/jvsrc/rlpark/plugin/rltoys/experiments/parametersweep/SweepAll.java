@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import rlpark.plugin.rltoys.experiments.ExperimentCounter;
+import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.Context;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.JobWithParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.SweepDescriptor;

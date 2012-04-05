@@ -1,7 +1,7 @@
 package rlpark.plugin.rltoys.algorithms.representations.discretizer.avebins;
 
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.Discretizer;
-import rlpark.plugin.rltoys.math.normalization.MeanVar;
+import rlpark.plugin.rltoys.math.averages.MeanVar;
 
 public class AveBins implements Discretizer {
   private static final long serialVersionUID = -782566775380769598L;

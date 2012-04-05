@@ -1,12 +1,12 @@
 package rlpark.plugin.rltoys.agents.offpolicy;
 
-import rlpark.plugin.rltoys.agents.ControlAgentFA;
-import rlpark.plugin.rltoys.agents.RLAgent;
-import rlpark.plugin.rltoys.algorithms.learning.control.offpolicy.OffPolicyLearner;
-import rlpark.plugin.rltoys.algorithms.representations.acting.Policy;
+import rlpark.plugin.rltoys.agents.rl.ControlAgentFA;
+import rlpark.plugin.rltoys.algorithms.control.OffPolicyLearner;
+import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.envio.actions.Action;
-import rlpark.plugin.rltoys.envio.observations.TRStep;
-import rlpark.plugin.rltoys.envio.states.Projector;
+import rlpark.plugin.rltoys.envio.policy.Policy;
+import rlpark.plugin.rltoys.envio.rl.RLAgent;
+import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 

@@ -2,8 +2,8 @@ package rlpark.plugin.rltoysview.internal.policystructure;
 
 import org.eclipse.swt.graphics.GC;
 
-import rlpark.plugin.rltoys.algorithms.learning.control.actorcritic.policystructure.AbstractNormalDistribution;
-import rlpark.plugin.rltoys.algorithms.representations.acting.BoundedPolicy;
+import rlpark.plugin.rltoys.algorithms.functions.policydistributions.structures.AbstractNormalDistribution;
+import rlpark.plugin.rltoys.envio.policy.BoundedPolicy;
 import rlpark.plugin.rltoys.math.normalization.MinMaxNormalizer;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.utils.Utils;

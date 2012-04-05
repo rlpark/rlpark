@@ -2,7 +2,7 @@ package rlpark.plugin.rltoys.algorithms.representations.discretizer.avebins;
 
 import java.io.Serializable;
 
-import rlpark.plugin.rltoys.math.normalization.MeanVar;
+import rlpark.plugin.rltoys.math.averages.MeanVar;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;
 

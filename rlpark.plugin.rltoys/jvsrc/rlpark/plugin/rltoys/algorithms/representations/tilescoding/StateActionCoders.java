@@ -2,7 +2,7 @@ package rlpark.plugin.rltoys.algorithms.representations.tilescoding;
 
 import java.util.Arrays;
 
-import rlpark.plugin.rltoys.algorithms.representations.actions.StateToStateAction;
+import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.ActionDiscretizer;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.Discretizer;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.DiscretizerFactory;

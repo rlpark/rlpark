@@ -4,7 +4,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-import rlpark.plugin.rltoys.algorithms.learning.predictions.LinearLearner;
+import rlpark.plugin.rltoys.algorithms.LinearLearner;
+import rlpark.plugin.rltoys.algorithms.discovery.sorting.WeightSorter;
 import rlpark.plugin.rltoys.algorithms.representations.ltu.networks.RandomNetwork;
 import rlpark.plugin.rltoys.algorithms.representations.ltu.units.LTU;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Random;
 
+import rlpark.plugin.rltoys.algorithms.discovery.sorting.WeightSorter;
 import rlpark.plugin.rltoys.algorithms.representations.ltu.networks.RandomNetwork;
 import rlpark.plugin.rltoys.algorithms.representations.ltu.networks.RandomNetworks;
 import rlpark.plugin.rltoys.algorithms.representations.ltu.units.LTU;
