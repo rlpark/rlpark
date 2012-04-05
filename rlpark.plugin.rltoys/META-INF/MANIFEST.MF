@@ -73,6 +73,7 @@ Export-Package: rlpark.plugin.rltoys.agents,
  rlpark.plugin.rltoys.problems.mountaincar,
  rlpark.plugin.rltoys.problems.nostate,
  rlpark.plugin.rltoys.problems.pendulum,
+ rlpark.plugin.rltoys.testing,
  rlpark.plugin.rltoys.testing.algorithms.control.actorcritic,
  rlpark.plugin.rltoys.testing.math.vector.testing,
  rlpark.plugin.rltoys.utils
