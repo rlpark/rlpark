@@ -3,6 +3,7 @@ package rlpark.plugin.rltoys.problems.continuousgridworld;
 import java.util.Arrays;
 import java.util.Random;
 
+import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.observations.Legend;
@@ -16,7 +17,6 @@ import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteAction, ProblemContinuousAction,
     MonitorContainer {

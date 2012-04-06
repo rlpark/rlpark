@@ -30,6 +30,7 @@ import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
 
+@SuppressWarnings("restriction")
 @Monitor
 public class CreateSurprise implements Runnable {
   static final private int SurpriseTrackingSpeed = 100;

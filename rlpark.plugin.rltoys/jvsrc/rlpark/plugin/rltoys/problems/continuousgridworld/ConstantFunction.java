@@ -1,7 +1,7 @@
 package rlpark.plugin.rltoys.problems.continuousgridworld;
 
+import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 import zephyr.plugin.core.api.labels.Labeled;
-import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 public class ConstantFunction implements ContinuousFunction, Labeled {
   private final double value;
@@ -11,7 +11,7 @@ public class ConstantFunction implements ContinuousFunction, Labeled {
   }
 
   @Override
-  public double value(double[] position) {
+  public double value(double[] input) {
     return value;
   }
 

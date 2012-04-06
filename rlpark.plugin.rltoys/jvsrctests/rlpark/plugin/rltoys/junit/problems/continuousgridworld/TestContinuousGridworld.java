@@ -5,6 +5,7 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 
+import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
@@ -12,7 +13,6 @@ import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
 import rlpark.plugin.rltoys.problems.continuousgridworld.TargetReachedL2NormTermination;
 import rlpark.plugin.rltoys.utils.Utils;
-import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 public class TestContinuousGridworld {
   class TestRewardFunction implements ContinuousFunction {

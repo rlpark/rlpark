@@ -1,6 +1,6 @@
 package rlpark.plugin.rltoys.algorithms.representations.rbf;
 
-import zephyr.plugin.core.api.viewable.ContinuousFunction;
+import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 
 
 public class RBF implements ContinuousFunction {

@@ -2,6 +2,7 @@ package rlpark.alltests.rlparkview.continuousgridworld;
 
 import java.util.Random;
 
+import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.ranges.Range;
@@ -9,8 +10,8 @@ import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
+@SuppressWarnings("restriction")
 @Monitor
 public class TestContinuousGridworldRunnable implements Runnable {
   static final Range ObservationRange = new Range(-10, 10);
@@ -22,8 +23,8 @@ public class TestContinuousGridworldRunnable implements Runnable {
     continuousGridworld = new ContinuousGridworld(random, 2, ObservationRange, new Range(-1, 1), .1);
     continuousGridworld.setRewardFunction(new ContinuousFunction() {
       @Override
-      public double value(double[] position) {
-        return position[0] + position[1];
+      public double value(double[] input) {
+        return input[0] + input[1];
       }
     });
     Zephyr.advertise(clock, this);

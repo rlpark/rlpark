@@ -7,11 +7,11 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
+import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
 import rlpark.plugin.rltoys.problems.continuousgridworld.NormalizedFunction;
 import zephyr.ZephyrPlotting;
-import zephyr.plugin.core.api.viewable.ContinuousFunction;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
@@ -122,7 +122,9 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
       Range[] ranges = problem.getObservationRanges();
       Interval xRange = new Interval(ranges[0].min(), ranges[0].max());
       Interval yRange = new Interval(ranges[1].min(), ranges[1].max());
-      FunctionSampler sampler = new FunctionSampler(xRange, yRange, rewardFunction);
+      ContinuousFunction2DAdapter rewardFunctionAdapter = new ContinuousFunction2DAdapter(rewardFunction, xRange,
+                                                                                          yRange);
+      FunctionSampler sampler = new FunctionSampler(rewardFunctionAdapter);
       sampler.updateData(rewardData);
     }
     updateAxes();

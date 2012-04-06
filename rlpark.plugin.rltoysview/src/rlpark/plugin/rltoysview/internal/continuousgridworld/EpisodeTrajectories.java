@@ -5,6 +5,7 @@ import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 
+@SuppressWarnings("restriction")
 public class EpisodeTrajectories implements Listener<Clock> {
   static final private int NbEpisode = 2;
   private static final int MaximumTrajectoryLength = 10000;

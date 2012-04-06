@@ -1,6 +1,6 @@
 package rlpark.plugin.rltoys.problems.continuousgridworld;
 
-import zephyr.plugin.core.api.viewable.ContinuousFunction;
+import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 
 public class LocalFeatureSumFunction implements ContinuousFunction {
   private final ContinuousFunction[] features;

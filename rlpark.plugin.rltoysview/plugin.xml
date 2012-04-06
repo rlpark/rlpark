@@ -44,14 +44,6 @@
             restorable="true">
       </view>
       <view
-            allowMultiple="true"
-            class="rlpark.plugin.rltoysview.internal.valuefunction.ValueFunction2DView"
-            icon="icons/continuousfunctionview.png"
-            id="zephyr.rlpark.plugin.rltoysview.valuefunctionview"
-            name="Value Function"
-            restorable="true">
-      </view>
-      <view
             class="rlpark.plugin.rltoysview.internal.mountaincar.MountainCarView"
             icon="icons/environmentview.png"
             id="zephyr.rlpark.plugin.rltoysview.mountaincarview"
@@ -111,12 +103,6 @@
             icon="icons/continuousfunctionview.png"
             name="Continuous Gridworld"
             viewid="zephyr.rlpark.plugin.rltoysview.continuousgridworldview">
-      </client>
-      <client
-            class="rlpark.plugin.rltoysview.internal.valuefunction.ValueFunction2DView$Provider"
-            icon="icons/continuousfunctionview.png"
-            name="Value Function"
-            viewid="zephyr.rlpark.plugin.rltoysview.valuefunctionview">
       </client>
       <client
             class="rlpark.plugin.rltoysview.internal.mountaincar.MountainCarView$Provider"

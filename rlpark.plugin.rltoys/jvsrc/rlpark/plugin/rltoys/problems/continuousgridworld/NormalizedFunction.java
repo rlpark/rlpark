@@ -1,8 +1,8 @@
 package rlpark.plugin.rltoys.problems.continuousgridworld;
 
+import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 import rlpark.plugin.rltoys.math.normalization.MinMaxNormalizer;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.viewable.ContinuousFunction;
 
 @Monitor
 public class NormalizedFunction implements ContinuousFunction {

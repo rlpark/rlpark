@@ -35,6 +35,7 @@ import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
 
+@SuppressWarnings("restriction")
 @Monitor
 public class CreateRawDataRecursiveRandomNetworkNexting implements Runnable {
   public final static double[] Gammas = new double[] { .9, .99 };
