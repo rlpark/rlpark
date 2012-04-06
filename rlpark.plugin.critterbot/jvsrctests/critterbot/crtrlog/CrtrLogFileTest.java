@@ -1,12 +1,12 @@
 package critterbot.crtrlog;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
-import rlpark.plugin.rltoys.testing.math.vector.testing.VectorsTestsUtils;
+import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.utils.Paths;
 
 public class CrtrLogFileTest {
@@ -36,9 +36,14 @@ public class CrtrLogFileTest {
     int timeIndex = 0;
     while (logFile.hasNextStep()) {
       double[] step = logFile.step();
-      VectorsTestsUtils.assertEquals(new PVector(expected[timeIndex]), new PVector(step));
+      assertEquals(new PVector(expected[timeIndex]), new PVector(step));
       timeIndex += 1;
     }
     Assert.assertEquals(timeIndex, expected.length);
+  }
+
+  public static void assertEquals(RealVector a, RealVector b) {
+    Assert.assertTrue(Vectors.equals(a, b));
+    Assert.assertArrayEquals(a.accessData(), b.accessData(), Float.MIN_VALUE);
   }
 }
