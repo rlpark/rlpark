@@ -1,6 +1,5 @@
 package rlpark.plugin.irobot.internal.serial;
 
-import static rlpark.plugin.robot.disco.drops.DropByteArray.toBytes;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
@@ -19,7 +18,7 @@ import rlpark.plugin.irobot.internal.serial.SerialListeners.AlwaysWakeUpThread;
 import rlpark.plugin.irobot.internal.serial.SerialListeners.ReadWhenArriveAndWakeUp;
 import rlpark.plugin.irobot.internal.serial.SerialListeners.SerialInputCondition;
 import rlpark.plugin.irobot.internal.serial.SerialListeners.WakeUpThread;
-import rlpark.plugin.irobot.serial.SerialPorts;
+import rlpark.plugin.robot.internal.disco.drops.DropByteArray;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 
@@ -57,8 +56,7 @@ public class SerialPortToRobot implements SerialPortEventListener {
   private boolean isClosed;
 
   public SerialPortToRobot(String fileName, SerialPortInfo portInfo) throws PortInUseException,
-      UnsupportedCommOperationException,
-      TooManyListenersException, IOException {
+      UnsupportedCommOperationException, TooManyListenersException, IOException {
     serialPortFileName = fileName;
     identifier = SerialPorts.getPortIdentifier(serialPortFileName);
     if (identifier == null)
@@ -168,7 +166,7 @@ public class SerialPortToRobot implements SerialPortEventListener {
   }
 
   public void send(char[] chars) throws IOException {
-    send(toBytes(chars));
+    send(DropByteArray.toBytes(chars));
   }
 
   synchronized public void send(byte[] bytes) throws IOException {
@@ -187,8 +185,8 @@ public class SerialPortToRobot implements SerialPortEventListener {
     waitForSignal();
     unregister(SerialPortEvent.DATA_AVAILABLE, listener);
     if (!ExpectedIgnored && !returnExpected.equals(listener.message()))
-      throw new IOException(String.format("Return incorrect: expected <%s> was <%s>",
-                                          returnExpected, listener.message()));
+      throw new IOException(String.format("Return incorrect: expected <%s> was <%s>", returnExpected,
+                                          listener.message()));
   }
 
   private void updateAvailable() {
@@ -211,7 +209,7 @@ public class SerialPortToRobot implements SerialPortEventListener {
   }
 
   public void sendAndWait(char[] chars) throws IOException {
-    sendAndWait(toBytes(chars));
+    sendAndWait(DropByteArray.toBytes(chars));
   }
 
   synchronized public void sendAndWait(byte[] chars) throws IOException {
@@ -231,7 +229,7 @@ public class SerialPortToRobot implements SerialPortEventListener {
   }
 
   public int sendAndWaitForData(char[] chars, final int dataSizeToWaitFor) throws IOException {
-    return sendAndWaitForData(toBytes(chars), dataSizeToWaitFor);
+    return sendAndWaitForData(DropByteArray.toBytes(chars), dataSizeToWaitFor);
   }
 
   synchronized public int sendAndWaitForData(byte[] bytes, final int dataSizeToWaitFor) throws IOException {

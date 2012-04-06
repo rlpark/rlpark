@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.SelectionDialog;
 
-import rlpark.plugin.irobot.serial.SerialPorts;
+import rlpark.plugin.irobot.internal.serial.SerialPorts;
 
 public class SelectSerialPortDialog extends SelectionDialog {
   static final private String CuPrefix = "/dev/cu.";

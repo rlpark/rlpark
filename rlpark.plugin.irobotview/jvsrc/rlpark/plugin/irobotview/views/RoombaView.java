@@ -1,44 +1,42 @@
 package rlpark.plugin.irobotview.views;
 
-import static rlpark.plugin.irobot.data.IRobotDrops.BatteryCapacity;
-import static rlpark.plugin.irobot.data.IRobotDrops.BatteryCharge;
-import static rlpark.plugin.irobot.data.IRobotDrops.BatteryCurrent;
-import static rlpark.plugin.irobot.data.IRobotDrops.BatteryTemperature;
-import static rlpark.plugin.irobot.data.IRobotDrops.BatteryVoltage;
-import static rlpark.plugin.irobot.data.IRobotDrops.Bump;
-import static rlpark.plugin.irobot.data.IRobotDrops.Button;
-import static rlpark.plugin.irobot.data.IRobotDrops.ChargingState;
-import static rlpark.plugin.irobot.data.IRobotDrops.CliffSensor;
-import static rlpark.plugin.irobot.data.IRobotDrops.CliffSignal;
-import static rlpark.plugin.irobot.data.IRobotDrops.ConnectedHomeBase;
-import static rlpark.plugin.irobot.data.IRobotDrops.ConnectedInternalCharger;
-import static rlpark.plugin.irobot.data.IRobotDrops.DirtDetect;
-import static rlpark.plugin.irobot.data.IRobotDrops.DriveAngle;
-import static rlpark.plugin.irobot.data.IRobotDrops.DriveDistance;
-import static rlpark.plugin.irobot.data.IRobotDrops.DriveRequested;
-import static rlpark.plugin.irobot.data.IRobotDrops.ICLeft;
-import static rlpark.plugin.irobot.data.IRobotDrops.ICOmni;
-import static rlpark.plugin.irobot.data.IRobotDrops.ICRight;
-import static rlpark.plugin.irobot.data.IRobotDrops.LightBumpSensor;
-import static rlpark.plugin.irobot.data.IRobotDrops.LightBumpSignal;
-import static rlpark.plugin.irobot.data.IRobotDrops.MotorCurrentMainBrush;
-import static rlpark.plugin.irobot.data.IRobotDrops.MotorCurrentSideBrush;
-import static rlpark.plugin.irobot.data.IRobotDrops.NumberStreamPackets;
-import static rlpark.plugin.irobot.data.IRobotDrops.OIMode;
-import static rlpark.plugin.irobot.data.IRobotDrops.SongNumber;
-import static rlpark.plugin.irobot.data.IRobotDrops.SongPlaying;
-import static rlpark.plugin.irobot.data.IRobotDrops.Stasis;
-import static rlpark.plugin.irobot.data.IRobotDrops.WallSensor;
-import static rlpark.plugin.irobot.data.IRobotDrops.WallSignal;
-import static rlpark.plugin.irobot.data.IRobotDrops.WallVirtual;
-import static rlpark.plugin.irobot.data.IRobotDrops.WheelDrop;
-import static rlpark.plugin.irobot.data.IRobotDrops.WheelEncoder;
-import static rlpark.plugin.irobot.data.IRobotDrops.WheelMotorCurrent;
-import static rlpark.plugin.irobot.data.IRobotDrops.WheelRequested;
-import rlpark.plugin.irobot.data.IRobotDrops;
-import rlpark.plugin.irobot.robots.RoombaRobot;
-import rlpark.plugin.rltoys.math.ranges.Range;
-import rlpark.plugin.robot.RobotLive;
+import static rlpark.plugin.irobot.data.IRobots.BatteryCapacity;
+import static rlpark.plugin.irobot.data.IRobots.BatteryCharge;
+import static rlpark.plugin.irobot.data.IRobots.BatteryCurrent;
+import static rlpark.plugin.irobot.data.IRobots.BatteryTemperature;
+import static rlpark.plugin.irobot.data.IRobots.BatteryVoltage;
+import static rlpark.plugin.irobot.data.IRobots.Bump;
+import static rlpark.plugin.irobot.data.IRobots.Button;
+import static rlpark.plugin.irobot.data.IRobots.ChargingState;
+import static rlpark.plugin.irobot.data.IRobots.CliffSensor;
+import static rlpark.plugin.irobot.data.IRobots.CliffSignal;
+import static rlpark.plugin.irobot.data.IRobots.ConnectedHomeBase;
+import static rlpark.plugin.irobot.data.IRobots.ConnectedInternalCharger;
+import static rlpark.plugin.irobot.data.IRobots.DirtDetect;
+import static rlpark.plugin.irobot.data.IRobots.DriveAngle;
+import static rlpark.plugin.irobot.data.IRobots.DriveDistance;
+import static rlpark.plugin.irobot.data.IRobots.DriveRequested;
+import static rlpark.plugin.irobot.data.IRobots.ICLeft;
+import static rlpark.plugin.irobot.data.IRobots.ICOmni;
+import static rlpark.plugin.irobot.data.IRobots.ICRight;
+import static rlpark.plugin.irobot.data.IRobots.LightBumpSensor;
+import static rlpark.plugin.irobot.data.IRobots.LightBumpSignal;
+import static rlpark.plugin.irobot.data.IRobots.MotorCurrentMainBrush;
+import static rlpark.plugin.irobot.data.IRobots.MotorCurrentSideBrush;
+import static rlpark.plugin.irobot.data.IRobots.NumberStreamPackets;
+import static rlpark.plugin.irobot.data.IRobots.OIMode;
+import static rlpark.plugin.irobot.data.IRobots.SongNumber;
+import static rlpark.plugin.irobot.data.IRobots.SongPlaying;
+import static rlpark.plugin.irobot.data.IRobots.Stasis;
+import static rlpark.plugin.irobot.data.IRobots.WallSensor;
+import static rlpark.plugin.irobot.data.IRobots.WallSignal;
+import static rlpark.plugin.irobot.data.IRobots.WallVirtual;
+import static rlpark.plugin.irobot.data.IRobots.WheelDrop;
+import static rlpark.plugin.irobot.data.IRobots.WheelEncoder;
+import static rlpark.plugin.irobot.data.IRobots.WheelMotorCurrent;
+import static rlpark.plugin.irobot.data.IRobots.WheelRequested;
+import rlpark.plugin.irobot.data.IRobots;
+import rlpark.plugin.robot.interfaces.RobotLive;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Chrono;
@@ -66,7 +64,7 @@ public class RoombaView extends IRobotView {
     if (!RobotLive.class.isInstance(instance))
       return false;
     RobotLive problem = (RobotLive) instance;
-    return problem.legend().hasLabel(IRobotDrops.LightBumpSensorCenterLeft);
+    return problem.legend().hasLabel(IRobots.LightBumpSensorCenterLeft);
   }
 
   @Override
@@ -122,11 +120,6 @@ public class RoombaView extends IRobotView {
                                new IntegerTextClient(OIMode, "OI Mode: "), new IntegerTextClient(SongNumber, "Song: "),
                                new IntegerTextClient(SongPlaying, "Playing: "),
                                new IntegerTextClient(NumberStreamPackets, "Packets: "));
-  }
-
-  @Override
-  protected Range[] ranges() {
-    return RoombaRobot.getRanges();
   }
 
   @Override

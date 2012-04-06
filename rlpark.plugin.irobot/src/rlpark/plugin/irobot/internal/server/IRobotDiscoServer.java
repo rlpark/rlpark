@@ -5,11 +5,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import rlpark.plugin.irobot.data.IRobotDrops;
+import rlpark.plugin.irobot.data.IRobots;
 import rlpark.plugin.irobot.internal.descriptors.IRobotSerialDescriptor;
 import rlpark.plugin.irobot.internal.irobot.IRobotSerialConnection;
-import rlpark.plugin.robot.disco.Server;
-import rlpark.plugin.robot.disco.io.DiscoSocket;
+import rlpark.plugin.robot.internal.disco.Server;
+import rlpark.plugin.robot.internal.disco.io.DiscoSocket;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class IRobotDiscoServer {
@@ -70,7 +70,7 @@ public class IRobotDiscoServer {
   }
 
   public static void runServer(String path, IRobotSerialDescriptor descriptor) {
-    boolean result = runServer(IRobotDrops.DiscoDefaultPort, path, descriptor);
+    boolean result = runServer(IRobots.DiscoDefaultPort, path, descriptor);
     System.exit(result ? 0 : 1);
   }
 

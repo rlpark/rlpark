@@ -3,18 +3,16 @@ package rlpark.plugin.irobot.internal.irobot;
 
 import java.io.IOException;
 
-import rlpark.plugin.irobot.data.IRobotDrops;
 import rlpark.plugin.irobot.data.IRobotObservationReceiver;
 import rlpark.plugin.irobot.internal.descriptors.IRobotSerialDescriptor;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot;
 import rlpark.plugin.irobot.internal.statemachine.SerialLinkStateMachine;
 import rlpark.plugin.rltoys.envio.observations.Legend;
-import rlpark.plugin.rltoys.math.ranges.Range;
-import rlpark.plugin.robot.Robots;
-import rlpark.plugin.robot.disco.datagroup.DropScalarGroup;
-import rlpark.plugin.robot.disco.datatype.LiteByteBuffer;
-import rlpark.plugin.robot.disco.drops.Drop;
-import rlpark.plugin.robot.sync.ObservationVersatile;
+import rlpark.plugin.robot.internal.disco.datagroup.DropScalarGroup;
+import rlpark.plugin.robot.internal.disco.drops.Drop;
+import rlpark.plugin.robot.internal.sync.LiteByteBuffer;
+import rlpark.plugin.robot.internal.sync.Syncs;
+import rlpark.plugin.robot.observations.ObservationVersatile;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Chrono;
@@ -23,7 +21,6 @@ public class IRobotSerialConnection implements IRobotObservationReceiver {
   public Signal<IRobotSerialConnection> onClosed = new Signal<IRobotSerialConnection>();
   private final Drop sensorDrop;
   protected final DropScalarGroup sensors;
-  protected final Range[] ranges;
   protected SerialPortToRobot serialPort;
   protected final String fileName;
   private SerialLinkStateMachine stateMachine;
@@ -41,7 +38,6 @@ public class IRobotSerialConnection implements IRobotObservationReceiver {
     this.fileName = fileName;
     sensorDrop = serialDescriptor.createSensorDrop();
     sensors = new DropScalarGroup(sensorDrop);
-    ranges = IRobotDrops.rangeProvider(sensors).ranges(legend());
     this.serialDescriptor = serialDescriptor;
     byteBuffer = new LiteByteBuffer(sensorDrop.dataSize());
   }
@@ -90,11 +86,6 @@ public class IRobotSerialConnection implements IRobotObservationReceiver {
   }
 
   @Override
-  public Range[] ranges() {
-    return ranges;
-  }
-
-  @Override
   public void initialize() {
     serialPort = SerialPortToRobot.openPort(fileName, serialDescriptor.portInfo());
     if (serialPort == null)
@@ -130,7 +121,7 @@ public class IRobotSerialConnection implements IRobotObservationReceiver {
   @Override
   public synchronized ObservationVersatile waitForData() {
     waitForRawData();
-    return Robots.createObservation(System.currentTimeMillis(), byteBuffer, sensors);
+    return Syncs.createObservation(System.currentTimeMillis(), byteBuffer, sensors);
   }
 
   @Override

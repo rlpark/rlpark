@@ -7,7 +7,7 @@ import java.util.List;
 
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot;
 import rlpark.plugin.rltoys.utils.Utils;
-import rlpark.plugin.robot.statemachine.StateMachine;
+import rlpark.plugin.robot.internal.statemachine.StateMachine;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 

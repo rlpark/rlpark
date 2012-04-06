@@ -1,7 +1,7 @@
 package rlpark.plugin.irobotview.command;
 
-import rlpark.plugin.irobot.server.CreateServer;
-import rlpark.plugin.irobot.server.IRobotServer;
+import rlpark.plugin.irobot.internal.server.CreateServer;
+import rlpark.plugin.irobot.internal.server.IRobotServer;
 
 
 public class ServerCreate extends StartServerCommand {

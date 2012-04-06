@@ -3,6 +3,8 @@ package rlpark.plugin.robot;
 import org.junit.Assert;
 import org.junit.Test;
 
+import rlpark.plugin.robot.helpers.Robots;
+
 public class RobotsTest {
   @Test
   public void testDoubleArrayToByteArray() {

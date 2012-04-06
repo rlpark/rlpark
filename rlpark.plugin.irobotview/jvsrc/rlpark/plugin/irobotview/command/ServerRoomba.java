@@ -1,7 +1,7 @@
 package rlpark.plugin.irobotview.command;
 
-import rlpark.plugin.irobot.server.IRobotServer;
-import rlpark.plugin.irobot.server.RoombaServer;
+import rlpark.plugin.irobot.internal.server.IRobotServer;
+import rlpark.plugin.irobot.internal.server.RoombaServer;
 
 
 public class ServerRoomba extends StartServerCommand {

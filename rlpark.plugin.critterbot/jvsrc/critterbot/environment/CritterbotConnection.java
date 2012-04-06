@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.io.IOException;
 import java.nio.ByteOrder;
 
-import rlpark.plugin.robot.DiscoConnection;
-import rlpark.plugin.robot.disco.datagroup.DropColorGroup;
-import rlpark.plugin.robot.disco.datagroup.DropScalarGroup;
-import rlpark.plugin.robot.disco.drops.Drop;
-import rlpark.plugin.robot.disco.drops.DropInteger;
+import rlpark.plugin.robot.internal.disco.DiscoConnection;
+import rlpark.plugin.robot.internal.disco.datagroup.DropColorGroup;
+import rlpark.plugin.robot.internal.disco.datagroup.DropScalarGroup;
+import rlpark.plugin.robot.internal.disco.drops.Drop;
+import rlpark.plugin.robot.internal.disco.drops.DropInteger;
 import critterbot.actions.CritterbotAction;
 import critterbot.environment.CritterbotDrops.LedMode;
 

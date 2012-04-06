@@ -2,12 +2,12 @@ package rlpark.plugin.irobot.internal.server;
 
 import java.io.IOException;
 
-import rlpark.plugin.irobot.data.IRobotDrops;
+import rlpark.plugin.irobot.internal.descriptors.DropDescriptors;
 import rlpark.plugin.irobot.internal.irobot.IRobotSerialConnection;
-import rlpark.plugin.robot.disco.drops.Drop;
-import rlpark.plugin.robot.disco.drops.DropByteArray;
-import rlpark.plugin.robot.disco.io.DiscoPacket;
-import rlpark.plugin.robot.disco.io.DiscoSocket;
+import rlpark.plugin.robot.internal.disco.drops.Drop;
+import rlpark.plugin.robot.internal.disco.drops.DropByteArray;
+import rlpark.plugin.robot.internal.disco.io.DiscoPacket;
+import rlpark.plugin.robot.internal.disco.io.DiscoSocket;
 import zephyr.plugin.core.api.signals.Signal;
 
 public class ClientSocket implements Runnable {
@@ -22,7 +22,7 @@ public class ClientSocket implements Runnable {
     this.socket = socket;
     this.serialConnection = serialConnection;
     Drop robotSensorDrop = serialConnection.descriptor().createSensorDrop();
-    sensorDrop = IRobotDrops.newSensorSerialDrop(robotSensorDrop.name(), robotSensorDrop.dataSize());
+    sensorDrop = DropDescriptors.newSensorSerialDrop(robotSensorDrop.name(), robotSensorDrop.dataSize());
     sensorData = (DropByteArray) sensorDrop.dropDatas()[0];
   }
 

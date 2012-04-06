@@ -1,33 +1,31 @@
 package rlpark.plugin.irobotview.views;
 
-import static rlpark.plugin.irobot.data.IRobotDrops.BatteryCapacity;
-import static rlpark.plugin.irobot.data.IRobotDrops.BatteryCharge;
-import static rlpark.plugin.irobot.data.IRobotDrops.BatteryCurrent;
-import static rlpark.plugin.irobot.data.IRobotDrops.BatteryTemperature;
-import static rlpark.plugin.irobot.data.IRobotDrops.Bump;
-import static rlpark.plugin.irobot.data.IRobotDrops.Button;
-import static rlpark.plugin.irobot.data.IRobotDrops.ChargingState;
-import static rlpark.plugin.irobot.data.IRobotDrops.CliffSensor;
-import static rlpark.plugin.irobot.data.IRobotDrops.CliffSignal;
-import static rlpark.plugin.irobot.data.IRobotDrops.ConnectedHomeBase;
-import static rlpark.plugin.irobot.data.IRobotDrops.ConnectedInternalCharger;
-import static rlpark.plugin.irobot.data.IRobotDrops.DriveAngle;
-import static rlpark.plugin.irobot.data.IRobotDrops.DriveDistance;
-import static rlpark.plugin.irobot.data.IRobotDrops.ICOmni;
-import static rlpark.plugin.irobot.data.IRobotDrops.NumberStreamPackets;
-import static rlpark.plugin.irobot.data.IRobotDrops.OIMode;
-import static rlpark.plugin.irobot.data.IRobotDrops.SongNumber;
-import static rlpark.plugin.irobot.data.IRobotDrops.SongPlaying;
-import static rlpark.plugin.irobot.data.IRobotDrops.WallSensor;
-import static rlpark.plugin.irobot.data.IRobotDrops.WallSignal;
-import static rlpark.plugin.irobot.data.IRobotDrops.WallVirtual;
-import static rlpark.plugin.irobot.data.IRobotDrops.WheelDrop;
-import static rlpark.plugin.irobot.data.IRobotDrops.WheelOverCurrent;
-import static rlpark.plugin.irobot.data.IRobotDrops.WheelRequested;
-import rlpark.plugin.irobot.data.IRobotDrops;
-import rlpark.plugin.irobot.robots.CreateRobot;
-import rlpark.plugin.rltoys.math.ranges.Range;
-import rlpark.plugin.robot.RobotLive;
+import static rlpark.plugin.irobot.data.IRobots.BatteryCapacity;
+import static rlpark.plugin.irobot.data.IRobots.BatteryCharge;
+import static rlpark.plugin.irobot.data.IRobots.BatteryCurrent;
+import static rlpark.plugin.irobot.data.IRobots.BatteryTemperature;
+import static rlpark.plugin.irobot.data.IRobots.Bump;
+import static rlpark.plugin.irobot.data.IRobots.Button;
+import static rlpark.plugin.irobot.data.IRobots.ChargingState;
+import static rlpark.plugin.irobot.data.IRobots.CliffSensor;
+import static rlpark.plugin.irobot.data.IRobots.CliffSignal;
+import static rlpark.plugin.irobot.data.IRobots.ConnectedHomeBase;
+import static rlpark.plugin.irobot.data.IRobots.ConnectedInternalCharger;
+import static rlpark.plugin.irobot.data.IRobots.DriveAngle;
+import static rlpark.plugin.irobot.data.IRobots.DriveDistance;
+import static rlpark.plugin.irobot.data.IRobots.ICOmni;
+import static rlpark.plugin.irobot.data.IRobots.NumberStreamPackets;
+import static rlpark.plugin.irobot.data.IRobots.OIMode;
+import static rlpark.plugin.irobot.data.IRobots.SongNumber;
+import static rlpark.plugin.irobot.data.IRobots.SongPlaying;
+import static rlpark.plugin.irobot.data.IRobots.WallSensor;
+import static rlpark.plugin.irobot.data.IRobots.WallSignal;
+import static rlpark.plugin.irobot.data.IRobots.WallVirtual;
+import static rlpark.plugin.irobot.data.IRobots.WheelDrop;
+import static rlpark.plugin.irobot.data.IRobots.WheelOverCurrent;
+import static rlpark.plugin.irobot.data.IRobots.WheelRequested;
+import rlpark.plugin.irobot.data.IRobots;
+import rlpark.plugin.robot.interfaces.RobotLive;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Chrono;
@@ -55,7 +53,7 @@ public class CreateView extends IRobotView {
     if (!RobotLive.class.isInstance(instance))
       return false;
     RobotLive problem = (RobotLive) instance;
-    return problem.legend().hasLabel(IRobotDrops.CargoBayAnalogSignal);
+    return problem.legend().hasLabel(IRobots.CargoBayAnalogSignal);
   }
 
   @Override
@@ -99,11 +97,6 @@ public class CreateView extends IRobotView {
                                new IntegerTextClient(SongNumber, "Song: "), new IntegerTextClient(SongPlaying,
                                                                                                   "Playing: "),
                                new IntegerTextClient(NumberStreamPackets, "Packets: "));
-  }
-
-  @Override
-  protected Range[] ranges() {
-    return CreateRobot.getRanges();
   }
 
   @Override

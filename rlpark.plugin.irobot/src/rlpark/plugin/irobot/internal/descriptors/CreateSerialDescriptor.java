@@ -4,7 +4,7 @@ import gnu.io.SerialPort;
 
 import java.io.IOException;
 
-import rlpark.plugin.irobot.data.IRobotDrops;
+import rlpark.plugin.irobot.data.IRobots;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot.SerialPortInfo;
 import rlpark.plugin.irobot.internal.statemachine.ChecksumNode;
@@ -12,7 +12,7 @@ import rlpark.plugin.irobot.internal.statemachine.DataNode;
 import rlpark.plugin.irobot.internal.statemachine.HeaderNode;
 import rlpark.plugin.irobot.internal.statemachine.SerialLinkStateMachine;
 import rlpark.plugin.rltoys.utils.Utils;
-import rlpark.plugin.robot.disco.drops.Drop;
+import rlpark.plugin.robot.internal.disco.drops.Drop;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class CreateSerialDescriptor implements IRobotSerialDescriptor {
@@ -60,14 +60,14 @@ public class CreateSerialDescriptor implements IRobotSerialDescriptor {
         }
       }
     });
-    DataNode dataNode = new DataNode(IRobotDrops.CreateSensorsPacketSize);
+    DataNode dataNode = new DataNode(IRobots.CreateSensorsPacketSize);
     ChecksumNode checksumNode = new ChecksumNode(Utils.asList(dataNode, headerNode));
     return new SerialLinkStateMachine(serialPort, checksumNode, headerNode, dataNode);
   }
 
   @Override
   public Drop createSensorDrop() {
-    return IRobotDrops.newCreateSensorDrop();
+    return DropDescriptors.newCreateSensorDrop();
   }
 
   @Override

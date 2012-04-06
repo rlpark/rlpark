@@ -9,15 +9,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import rlpark.plugin.robot.DiscoLogger;
-import rlpark.plugin.robot.disco.Server;
-import rlpark.plugin.robot.disco.drops.Drop;
-import rlpark.plugin.robot.disco.drops.DropByteArray;
-import rlpark.plugin.robot.disco.drops.DropData;
-import rlpark.plugin.robot.disco.io.DiscoLogfile;
-import rlpark.plugin.robot.disco.io.DiscoPacket;
-import rlpark.plugin.robot.disco.io.DiscoPacket.Direction;
-import rlpark.plugin.robot.disco.io.DiscoSocket;
+import rlpark.plugin.robot.internal.disco.DiscoLogger;
+import rlpark.plugin.robot.internal.disco.Server;
+import rlpark.plugin.robot.internal.disco.drops.Drop;
+import rlpark.plugin.robot.internal.disco.drops.DropByteArray;
+import rlpark.plugin.robot.internal.disco.drops.DropData;
+import rlpark.plugin.robot.internal.disco.io.DiscoLogfile;
+import rlpark.plugin.robot.internal.disco.io.DiscoPacket;
+import rlpark.plugin.robot.internal.disco.io.DiscoSocket;
+import rlpark.plugin.robot.internal.disco.io.DiscoPacket.Direction;
 
 public class DiscoLogfileTest {
   private static final String DropName = "ThisAName";

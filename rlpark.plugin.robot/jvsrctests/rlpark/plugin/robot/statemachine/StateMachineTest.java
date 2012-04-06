@@ -5,6 +5,8 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.envio.rl.TRStep;
+import rlpark.plugin.robot.internal.statemachine.StateMachine;
+import rlpark.plugin.robot.internal.statemachine.TimedState;
 
 
 public class StateMachineTest {

@@ -2,24 +2,24 @@ package rlpark.plugin.irobot.logfiles;
 
 import java.io.IOException;
 
-import rlpark.plugin.irobot.data.IRobotDrops;
+import rlpark.plugin.irobot.internal.descriptors.DropDescriptors;
 import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.rltoys.utils.Utils;
-import rlpark.plugin.robot.RobotLog;
-import rlpark.plugin.robot.Robots;
-import rlpark.plugin.robot.disco.datagroup.DropScalarGroup;
-import rlpark.plugin.robot.disco.drops.Drop;
-import rlpark.plugin.robot.disco.io.DiscoLogfile;
-import rlpark.plugin.robot.disco.io.DiscoPacket;
-import rlpark.plugin.robot.sync.ObservationVersatile;
-import rlpark.plugin.robot.sync.ObservationVersatileArray;
+import rlpark.plugin.robot.interfaces.RobotLog;
+import rlpark.plugin.robot.internal.disco.datagroup.DropScalarGroup;
+import rlpark.plugin.robot.internal.disco.drops.Drop;
+import rlpark.plugin.robot.internal.disco.io.DiscoLogfile;
+import rlpark.plugin.robot.internal.disco.io.DiscoPacket;
+import rlpark.plugin.robot.internal.sync.Syncs;
+import rlpark.plugin.robot.observations.ObservationVersatile;
+import rlpark.plugin.robot.observations.ObservationVersatileArray;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 
 public class CreateBinaryLogfile implements MonitorContainer, RobotLog {
   public static final String Extension = "crtbin";
-  private final static Drop sensorDrop = IRobotDrops.newCreateSensorDrop();
+  private final static Drop sensorDrop = DropDescriptors.newCreateSensorDrop();
   private final static DropScalarGroup sensorGroup = new DropScalarGroup(sensorDrop);
   private final DiscoLogfile discoLogFile;
   private ObservationVersatile nextObservation;
@@ -34,7 +34,7 @@ public class CreateBinaryLogfile implements MonitorContainer, RobotLog {
     while (discoLogFile.hasNext()) {
       DiscoPacket packet = discoLogFile.next();
       if (sensorDrop.name().equals(packet.name))
-        return Robots.createObservation(packet.time, packet.byteBuffer(), sensorGroup);
+        return Syncs.createObservation(packet.time, packet.byteBuffer(), sensorGroup);
     }
     return null;
   }

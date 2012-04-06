@@ -6,8 +6,8 @@ import rlpark.plugin.rltoys.agents.Agent;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.rltoys.envio.observations.ObsFilter;
-import rlpark.plugin.robot.RobotEnvironment;
-import rlpark.plugin.robot.sync.ObservationReceiver;
+import rlpark.plugin.robot.helpers.RobotEnvironment;
+import rlpark.plugin.robot.observations.ObservationReceiver;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -36,7 +36,7 @@ public class CritterbotEnvironment extends RobotEnvironment implements Critterbo
    * Do not use this method, use your own main loop instead using sendAction(),
    * setLed() waitNewObs() and lastReceivedObs()
    * 
-   * @see rlpark.plugin.robot.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
+   * @see rlpark.plugin.robot.helpers.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
    *      .Clock, rlpark.plugin.rltoys.agents.Agent)
    */
   @Deprecated
@@ -48,7 +48,7 @@ public class CritterbotEnvironment extends RobotEnvironment implements Critterbo
    * Do not use this method, use your own main loop instead using sendAction(),
    * setLed() waitNewObs() and lastReceivedObs()
    * 
-   * @see rlpark.plugin.robot.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
+   * @see rlpark.plugin.robot.helpers.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
    *      .Clock, rlpark.plugin.rltoys.agents.Agent)
    */
   @Deprecated
@@ -107,5 +107,20 @@ public class CritterbotEnvironment extends RobotEnvironment implements Critterbo
   @Override
   public CritterbotAction lastAction() {
     return agentAction;
+  }
+
+  @Override
+  public double[] waitNewObs() {
+    return super.waitNewObs();
+  }
+
+  @Override
+  public void close() {
+    super.close();
+  }
+
+  @Override
+  public boolean isClosed() {
+    return super.isClosed();
   }
 }

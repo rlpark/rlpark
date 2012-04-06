@@ -14,10 +14,11 @@ Require-Bundle: rlpark.plugin.robot;bundle-version="1.0.0",
 Export-Package: gnu.io,
  rlpark.plugin.irobot.data,
  rlpark.plugin.irobot.examples,
+ rlpark.plugin.irobot.internal.descriptors;x-friends:="rlpark.plugin.irobotview",
+ rlpark.plugin.irobot.internal.serial;x-friends:="rlpark.plugin.irobotview",
+ rlpark.plugin.irobot.internal.server;x-friends:="rlpark.plugin.irobotview",
  rlpark.plugin.irobot.logfiles,
- rlpark.plugin.irobot.robots,
- rlpark.plugin.irobot.serial,
- rlpark.plugin.irobot.server
+ rlpark.plugin.irobot.robots
 Bundle-NativeCode: 
  nativelib/i686-pc-linux-gnu/librxtxParallel.so;
  nativelib/i686-pc-linux-gnu/librxtxSerial.so;

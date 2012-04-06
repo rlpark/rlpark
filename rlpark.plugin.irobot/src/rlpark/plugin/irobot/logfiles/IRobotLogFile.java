@@ -5,9 +5,9 @@ import java.util.List;
 
 import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.rltoys.utils.Utils;
-import rlpark.plugin.robot.RobotLog;
-import rlpark.plugin.robot.sync.ObservationVersatile;
-import rlpark.plugin.robot.sync.ObservationVersatileArray;
+import rlpark.plugin.robot.interfaces.RobotLog;
+import rlpark.plugin.robot.observations.ObservationVersatile;
+import rlpark.plugin.robot.observations.ObservationVersatileArray;
 import zephyr.plugin.core.api.internal.logfiles.LogFile;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 

@@ -5,12 +5,13 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.envio.observations.Legend;
-import rlpark.plugin.robot.disco.drops.Drop;
-import rlpark.plugin.robot.disco.drops.DropArray;
-import rlpark.plugin.robot.disco.drops.DropColor;
-import rlpark.plugin.robot.disco.drops.DropData;
-import rlpark.plugin.robot.disco.drops.DropInteger;
-import rlpark.plugin.robot.disco.drops.DropTime;
+import rlpark.plugin.robot.internal.disco.datagroup.DropScalarGroup;
+import rlpark.plugin.robot.internal.disco.drops.Drop;
+import rlpark.plugin.robot.internal.disco.drops.DropArray;
+import rlpark.plugin.robot.internal.disco.drops.DropColor;
+import rlpark.plugin.robot.internal.disco.drops.DropData;
+import rlpark.plugin.robot.internal.disco.drops.DropInteger;
+import rlpark.plugin.robot.internal.disco.drops.DropTime;
 
 
 public class DropTest {

@@ -3,15 +3,15 @@ package critterbot.environment;
 import java.io.IOException;
 
 import rlpark.plugin.rltoys.envio.observations.Legend;
-import rlpark.plugin.robot.Robots;
-import rlpark.plugin.robot.disco.datagroup.DropScalarGroup;
-import rlpark.plugin.robot.disco.drops.Drop;
-import rlpark.plugin.robot.disco.drops.DropArray;
-import rlpark.plugin.robot.disco.drops.DropData;
-import rlpark.plugin.robot.disco.io.DiscoPacket;
-import rlpark.plugin.robot.disco.io.DiscoSocket;
-import rlpark.plugin.robot.sync.ObservationReceiver;
-import rlpark.plugin.robot.sync.ObservationVersatile;
+import rlpark.plugin.robot.internal.disco.datagroup.DropScalarGroup;
+import rlpark.plugin.robot.internal.disco.drops.Drop;
+import rlpark.plugin.robot.internal.disco.drops.DropArray;
+import rlpark.plugin.robot.internal.disco.drops.DropData;
+import rlpark.plugin.robot.internal.disco.io.DiscoPacket;
+import rlpark.plugin.robot.internal.disco.io.DiscoSocket;
+import rlpark.plugin.robot.internal.sync.Syncs;
+import rlpark.plugin.robot.observations.ObservationReceiver;
+import rlpark.plugin.robot.observations.ObservationVersatile;
 
 public class CritterbotSound implements ObservationReceiver {
   private final String hostname;
@@ -46,7 +46,7 @@ public class CritterbotSound implements ObservationReceiver {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    return packet != null ? Robots.createObservation(System.currentTimeMillis(), packet.byteBuffer(), soundData) : null;
+    return packet != null ? Syncs.createObservation(System.currentTimeMillis(), packet.byteBuffer(), soundData) : null;
   }
 
   @Override

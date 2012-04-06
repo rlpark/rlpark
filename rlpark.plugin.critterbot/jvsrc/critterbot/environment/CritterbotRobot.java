@@ -1,9 +1,9 @@
 package critterbot.environment;
 
 import rlpark.plugin.rltoys.envio.observations.Legend;
-import rlpark.plugin.robot.sync.ObservationReceiver;
-import rlpark.plugin.robot.sync.ObservationSynchronizer;
-import rlpark.plugin.robot.sync.ObservationVersatile;
+import rlpark.plugin.robot.internal.sync.ObservationSynchronizer;
+import rlpark.plugin.robot.observations.ObservationReceiver;
+import rlpark.plugin.robot.observations.ObservationVersatile;
 
 public class CritterbotRobot extends CritterbotEnvironment {
   public enum SoundMode {

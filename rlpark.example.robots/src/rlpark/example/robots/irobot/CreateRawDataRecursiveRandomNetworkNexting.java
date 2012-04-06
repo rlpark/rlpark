@@ -28,7 +28,7 @@ import rlpark.plugin.rltoys.horde.functions.RewardObservationFunction;
 import rlpark.plugin.rltoys.math.GrayCode;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;
-import rlpark.plugin.robot.sync.ObservationVersatile;
+import rlpark.plugin.robot.observations.ObservationVersatile;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;

@@ -1,6 +1,6 @@
 package rlpark.plugin.irobot.internal.statemachine;
 
-import rlpark.plugin.robot.disco.drops.DropByteArray;
+import rlpark.plugin.robot.internal.disco.drops.DropByteArray;
 
 public class AlignmentNode implements SerialLinkNode {
   private final byte[] alignment;

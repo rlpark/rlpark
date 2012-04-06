@@ -11,10 +11,9 @@ import org.eclipse.jface.action.IToolBarManager;
 import rlpark.plugin.irobot.logfiles.IRobotLogFile;
 import rlpark.plugin.irobotview.filehandlers.IRobotLogFileHandler;
 import rlpark.plugin.rltoys.envio.observations.Legend;
-import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.utils.Utils;
-import rlpark.plugin.robot.RobotLive;
-import rlpark.plugin.robot.Robots;
+import rlpark.plugin.robot.helpers.Robots;
+import rlpark.plugin.robot.interfaces.RobotLive;
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Closeable;
 import zephyr.plugin.core.internal.actions.RestartAction;
@@ -83,8 +82,6 @@ public abstract class IRobotView extends EnvironmentView<RobotLive> implements C
   protected SensorGroup createSensorGroup(String title, String prefix) {
     return new SensorGroup(title, startsWith(prefix));
   }
-
-  abstract protected Range[] ranges();
 
   private int[] startsWith(String prefix) {
     List<Integer> result = new ArrayList<Integer>();

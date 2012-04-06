@@ -1,12 +1,12 @@
 package rlpark.plugin.irobot.robots;
 
-import rlpark.plugin.irobot.data.IRobotDrops;
+import rlpark.plugin.irobot.data.IRobots;
 import rlpark.plugin.irobot.internal.descriptors.CreateSerialDescriptor;
+import rlpark.plugin.irobot.internal.descriptors.DropDescriptors;
 import rlpark.plugin.irobot.internal.irobot.IRobotDiscoConnection;
 import rlpark.plugin.irobot.internal.irobot.IRobotSerialConnection;
 import rlpark.plugin.irobot.internal.server.IRobotDiscoServer;
-import rlpark.plugin.rltoys.math.ranges.Range;
-import rlpark.plugin.robot.sync.ObservationReceiver;
+import rlpark.plugin.robot.observations.ObservationReceiver;
 
 public class CreateRobot extends IRobotEnvironment {
   static public final double MaxAction = 500;
@@ -17,7 +17,7 @@ public class CreateRobot extends IRobotEnvironment {
   }
 
   public CreateRobot(boolean persistent) {
-    this("localhost", IRobotDrops.DiscoDefaultPort, persistent);
+    this("localhost", IRobots.DiscoDefaultPort, persistent);
   }
 
   public CreateRobot(String serialPortPath) {
@@ -25,7 +25,7 @@ public class CreateRobot extends IRobotEnvironment {
   }
 
   public CreateRobot(String localhost, int port, boolean persitent) {
-    this(new IRobotDiscoConnection(localhost, port, IRobotDrops.newCreateSensorDrop()), persitent);
+    this(new IRobotDiscoConnection(localhost, port, DropDescriptors.newCreateSensorDrop()), persitent);
   }
 
   private CreateRobot(ObservationReceiver receiver, boolean persistent) {
@@ -46,12 +46,8 @@ public class CreateRobot extends IRobotEnvironment {
   protected void sendActionToRobot(double left, double right) {
     short shortLeft = toActionValue(MaxAction, left);
     short shortRight = toActionValue(MaxAction, right);
-    sendMessage(new byte[] { (byte) 145, (byte) (shortRight >> 8), (byte) shortRight,
-        (byte) (shortLeft >> 8), (byte) shortLeft });
-  }
-
-  public static Range[] getRanges() {
-    return getRanges(IRobotDrops.newCreateSensorDrop());
+    sendMessage(new byte[] { (byte) 145, (byte) (shortRight >> 8), (byte) shortRight, (byte) (shortLeft >> 8),
+        (byte) shortLeft });
   }
 
   @Override

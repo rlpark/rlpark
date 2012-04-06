@@ -1,14 +1,14 @@
 package rlpark.plugin.irobot.robots;
 
-import rlpark.plugin.irobot.data.IRobotDrops;
+import rlpark.plugin.irobot.data.IRobots;
 import rlpark.plugin.irobot.data.RoombaLeds;
+import rlpark.plugin.irobot.internal.descriptors.DropDescriptors;
 import rlpark.plugin.irobot.internal.descriptors.RoombaSerialDescriptor;
 import rlpark.plugin.irobot.internal.irobot.IRobotDiscoConnection;
 import rlpark.plugin.irobot.internal.irobot.IRobotSerialConnection;
 import rlpark.plugin.irobot.internal.server.IRobotDiscoServer;
 import rlpark.plugin.rltoys.envio.observations.Legend;
-import rlpark.plugin.rltoys.math.ranges.Range;
-import rlpark.plugin.robot.sync.ObservationReceiver;
+import rlpark.plugin.robot.observations.ObservationReceiver;
 
 public class RoombaRobot extends IRobotEnvironment {
   static public final double MaxAction = 200;
@@ -18,11 +18,11 @@ public class RoombaRobot extends IRobotEnvironment {
   }
 
   public RoombaRobot(String localhost, int port) {
-    this(new IRobotDiscoConnection(localhost, port, IRobotDrops.newRoombaSensorDrop()));
+    this(new IRobotDiscoConnection(localhost, port, DropDescriptors.newRoombaSensorDrop()));
   }
 
   public RoombaRobot() {
-    this("localhost", IRobotDrops.DiscoDefaultPort);
+    this("localhost", IRobots.DiscoDefaultPort);
   }
 
   private RoombaRobot(ObservationReceiver receiver) {
@@ -50,10 +50,6 @@ public class RoombaRobot extends IRobotEnvironment {
         (byte) shortLeft });
   }
 
-  public static Range[] getRanges() {
-    return getRanges(IRobotDrops.newRoombaSensorDrop());
-  }
-
   public static void main(String[] args) {
     IRobotDiscoServer.runServer("/dev/cu.FireFly-155A-SPP", new RoombaSerialDescriptor());
   }
@@ -63,10 +59,10 @@ public class RoombaRobot extends IRobotEnvironment {
       return;
     Legend legend = legend();
     final double[] lastObs = lastReceivedObsBuffer.doubleValues();
-    double icRight = lastObs[legend.indexOf(IRobotDrops.ICRight)];
-    lastObs[legend.indexOf(IRobotDrops.ICOmni)] = icRight;
+    double icRight = lastObs[legend.indexOf(IRobots.ICRight)];
+    lastObs[legend.indexOf(IRobots.ICOmni)] = icRight;
     if (icRight == 88 || icRight == 89)
-      lastObs[legend.indexOf(IRobotDrops.WallVirtual)] = 1.0;
+      lastObs[legend.indexOf(IRobots.WallVirtual)] = 1.0;
   }
 
   @Override

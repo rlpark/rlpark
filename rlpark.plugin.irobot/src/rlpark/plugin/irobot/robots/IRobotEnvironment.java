@@ -2,17 +2,13 @@ package rlpark.plugin.irobot.robots;
 
 import rlpark.plugin.irobot.data.CreateAction;
 import rlpark.plugin.irobot.data.CreateLeds;
-import rlpark.plugin.irobot.data.IRobotDrops;
 import rlpark.plugin.irobot.data.IRobotObservationReceiver;
 import rlpark.plugin.rltoys.agents.Agent;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.observations.Legend;
-import rlpark.plugin.rltoys.math.ranges.Range;
-import rlpark.plugin.robot.RobotEnvironment;
-import rlpark.plugin.robot.Robots;
-import rlpark.plugin.robot.disco.datagroup.DropScalarGroup;
-import rlpark.plugin.robot.disco.drops.Drop;
-import rlpark.plugin.robot.sync.ObservationReceiver;
+import rlpark.plugin.robot.helpers.RobotEnvironment;
+import rlpark.plugin.robot.helpers.Robots;
+import rlpark.plugin.robot.observations.ObservationReceiver;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
@@ -30,10 +26,6 @@ abstract public class IRobotEnvironment extends RobotEnvironment implements Moni
   @Override
   public Legend legend() {
     return connection.legend();
-  }
-
-  public Range[] ranges() {
-    return connection.ranges();
   }
 
   public void sendMessage(byte[] bs) {
@@ -117,7 +109,7 @@ abstract public class IRobotEnvironment extends RobotEnvironment implements Moni
    * Do not use this method, use your own main loop instead using sendAction(),
    * setLed() waitNewObs() and lastReceivedObs()
    * 
-   * @see rlpark.plugin.robot.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
+   * @see rlpark.plugin.robot.helpers.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
    *      .Clock, rlpark.plugin.rltoys.agents.Agent)
    */
   @Deprecated
@@ -130,7 +122,7 @@ abstract public class IRobotEnvironment extends RobotEnvironment implements Moni
    * Do not use this method, use your own main loop instead using sendAction(),
    * setLed() waitNewObs() and lastReceivedObs()
    * 
-   * @see rlpark.plugin.robot.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
+   * @see rlpark.plugin.robot.helpers.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
    *      .Clock, rlpark.plugin.rltoys.agents.Agent)
    */
   @Deprecated
@@ -148,11 +140,6 @@ abstract public class IRobotEnvironment extends RobotEnvironment implements Moni
   @Override
   public void sendAction(Action a) {
     sendAction((CreateAction) a);
-  }
-
-  protected static Range[] getRanges(Drop drop) {
-    DropScalarGroup sensors = new DropScalarGroup(drop);
-    return IRobotDrops.rangeProvider(sensors).ranges(sensors.legend());
   }
 
   public void sendLeds(CreateLeds leds) {

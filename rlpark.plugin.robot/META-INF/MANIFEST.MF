@@ -6,14 +6,17 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Thomas
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: rlpark.plugin.robot,
- rlpark.plugin.robot.disco,
- rlpark.plugin.robot.disco.datagroup,
- rlpark.plugin.robot.disco.datatype,
- rlpark.plugin.robot.disco.drops,
- rlpark.plugin.robot.disco.io,
- rlpark.plugin.robot.ranges,
- rlpark.plugin.robot.statemachine,
- rlpark.plugin.robot.sync
+ rlpark.plugin.robot.helpers,
+ rlpark.plugin.robot.interfaces,
+ rlpark.plugin.robot.internal.disco;x-friends:="rlpark.plugin.irobot,rlpark.plugin.critterbot",
+ rlpark.plugin.robot.internal.disco.datagroup;x-friends:="rlpark.plugin.irobot,rlpark.plugin.critterbot",
+ rlpark.plugin.robot.internal.disco.datatype;x-friends:="rlpark.plugin.irobot,rlpark.plugin.critterbot",
+ rlpark.plugin.robot.internal.disco.drops;x-friends:="rlpark.plugin.irobot,rlpark.plugin.critterbot",
+ rlpark.plugin.robot.internal.disco.io;x-friends:="rlpark.plugin.irobot,rlpark.plugin.critterbot",
+ rlpark.plugin.robot.internal.ranges;x-friends:="rlpark.plugin.irobot,rlpark.plugin.critterbot",
+ rlpark.plugin.robot.internal.statemachine;x-friends:="rlpark.plugin.irobot,rlpark.plugin.critterbot",
+ rlpark.plugin.robot.internal.sync;x-friends:="rlpark.plugin.irobot,rlpark.plugin.critterbot",
+ rlpark.plugin.robot.observations
 Require-Bundle: rlpark.plugin.rltoys;bundle-version="1.0.0",
  zephyr.plugin.core.api;bundle-version="1.0.0",
  zephyr.plugin.core;bundle-version="1.0.0",

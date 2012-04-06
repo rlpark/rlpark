@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rlpark.plugin.irobot.data.IRobotDrops;
+import rlpark.plugin.irobot.data.IRobots;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot.SerialPortInfo;
 import rlpark.plugin.irobot.internal.statemachine.DataNode;
 import rlpark.plugin.irobot.internal.statemachine.SerialLinkNode;
 import rlpark.plugin.irobot.internal.statemachine.SerialLinkStateMachine;
-import rlpark.plugin.robot.disco.drops.Drop;
+import rlpark.plugin.robot.internal.disco.drops.Drop;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Chrono;
 
@@ -100,7 +100,7 @@ public class RoombaSerialDescriptor implements IRobotSerialDescriptor {
   @Override
   public SerialLinkStateMachine createStateMachine(SerialPortToRobot serialPort) {
     List<SerialLinkNode> serialLinkNodes = new ArrayList<SerialLinkNode>();
-    serialLinkNodes.add(new DataNode(IRobotDrops.RoombaSensorsPacketSize));
+    serialLinkNodes.add(new DataNode(IRobots.RoombaSensorsPacketSize));
     SerialLinkStateMachine serialLinkStateMachine = new SerialLinkStateMachine(serialPort, serialLinkNodes);
     serialLinkStateMachine.onDataPacket.connect(packetRequester);
     return serialLinkStateMachine;
@@ -108,7 +108,7 @@ public class RoombaSerialDescriptor implements IRobotSerialDescriptor {
 
   @Override
   public Drop createSensorDrop() {
-    return IRobotDrops.newRoombaSensorDrop();
+    return DropDescriptors.newRoombaSensorDrop();
   }
 
   @Override

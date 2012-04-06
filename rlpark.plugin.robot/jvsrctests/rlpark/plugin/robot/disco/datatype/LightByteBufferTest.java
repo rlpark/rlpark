@@ -6,7 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import rlpark.plugin.robot.disco.datatype.LiteByteBuffer;
+import rlpark.plugin.robot.internal.sync.LiteByteBuffer;
 
 public class LightByteBufferTest {
   @Test
