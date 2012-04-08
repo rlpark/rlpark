@@ -58,6 +58,8 @@ public class Runner implements Serializable, MonitorContainer {
       return true;
     if (!runnerEvent.step.isEpisodeEnding())
       return true;
+    if (nbEpisode <= 0)
+      return true;
     return runnerEvent.episode < nbEpisode - 1;
   }
 
