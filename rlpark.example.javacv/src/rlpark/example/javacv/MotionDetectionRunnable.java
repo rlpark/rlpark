@@ -10,6 +10,7 @@ import com.googlecode.javacv.cpp.opencv_core;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 @Monitor
+@SuppressWarnings("restriction")
 public class MotionDetectionRunnable implements Runnable {
   private static final int DEPTH = opencv_core.IPL_DEPTH_32F;
   private final Clock clock = new Clock();

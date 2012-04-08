@@ -19,6 +19,6 @@ Export-Package: com.googlecode.javacpp,
  com.googlecode.javacpp.annotation,
  com.googlecode.javacv,
  com.googlecode.javacv.cpp,
- rlpark.plugin.opencv,
- rlpark.plugin.opencv.utils,
- rlpark.plugin.opencv.zephyr
+ rlpark.plugin.opencv;x-internal:=true,
+ rlpark.plugin.opencv.utils;x-internal:=true,
+ rlpark.plugin.opencv.zephyr;x-internal:=true
