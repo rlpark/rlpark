@@ -4,11 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import rlpark.plugin.critterbot.crtrlog.CrtrLogFile;
+
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.utils.Misc;
 import zephyr.plugin.filehandling.IFileHandler;
-import critterbot.crtrlog.CrtrLogFile;
 
 public class FileHandler implements IFileHandler {
 

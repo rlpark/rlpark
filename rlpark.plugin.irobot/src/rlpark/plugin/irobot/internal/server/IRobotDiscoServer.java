@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import rlpark.plugin.irobot.data.IRobots;
+import rlpark.plugin.irobot.data.IRobotLabels;
 import rlpark.plugin.irobot.internal.descriptors.IRobotSerialDescriptor;
 import rlpark.plugin.irobot.internal.irobot.IRobotSerialConnection;
 import rlpark.plugin.robot.internal.disco.Server;
@@ -70,7 +70,7 @@ public class IRobotDiscoServer {
   }
 
   public static void runServer(String path, IRobotSerialDescriptor descriptor) {
-    boolean result = runServer(IRobots.DiscoDefaultPort, path, descriptor);
+    boolean result = runServer(IRobotLabels.DiscoDefaultPort, path, descriptor);
     System.exit(result ? 0 : 1);
   }
 

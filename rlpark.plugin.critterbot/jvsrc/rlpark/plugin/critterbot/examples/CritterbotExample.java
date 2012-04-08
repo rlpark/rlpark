@@ -1,4 +1,4 @@
-package rlpark.example.robots.critterbot;
+package rlpark.plugin.critterbot.examples;
 
 import rlpark.plugin.critterbot.actions.CritterbotAction;
 import rlpark.plugin.critterbot.actions.VoltageSpaceAction;

@@ -2,8 +2,7 @@ package rlpark.plugin.irobot.robots;
 
 import rlpark.plugin.irobot.data.CreateAction;
 import rlpark.plugin.irobot.data.CreateLeds;
-import rlpark.plugin.irobot.data.IRobotObservationReceiver;
-import rlpark.plugin.rltoys.agents.Agent;
+import rlpark.plugin.irobot.internal.descriptors.IRobotObservationReceiver;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.robot.helpers.RobotEnvironment;
@@ -12,7 +11,6 @@ import rlpark.plugin.robot.observations.ObservationReceiver;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
-import zephyr.plugin.core.api.synchronization.Clock;
 
 abstract public class IRobotEnvironment extends RobotEnvironment implements MonitorContainer {
   protected final CreateAction lastSent = new CreateAction(0, 0);
@@ -102,39 +100,6 @@ abstract public class IRobotEnvironment extends RobotEnvironment implements Moni
 
   protected short toActionValue(double maxAction, double value) {
     return (short) Math.min(maxAction, Math.max(-maxAction, value));
-  }
-
-
-  /**
-   * Do not use this method, use your own main loop instead using sendAction(),
-   * setLed() waitNewObs() and lastReceivedObs()
-   * 
-   * @see rlpark.plugin.robot.helpers.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
-   *      .Clock, rlpark.plugin.rltoys.agents.Agent)
-   */
-  @Deprecated
-  public void run(Agent agent) {
-    String name = String.format("%s[%s]", getClass().getSimpleName(), agent.getClass().getSimpleName());
-    run(new Clock(name), agent);
-  }
-
-  /**
-   * Do not use this method, use your own main loop instead using sendAction(),
-   * setLed() waitNewObs() and lastReceivedObs()
-   * 
-   * @see rlpark.plugin.robot.helpers.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
-   *      .Clock, rlpark.plugin.rltoys.agents.Agent)
-   */
-  @Deprecated
-  @Override
-  public void run(Clock clock, Agent agent) {
-    CreateAction agentAction = null;
-    while (!isClosed() && clock.tick()) {
-      double[] obsArray = waitNewObs();
-      agentAction = (CreateAction) agent.getAtp1(obsArray);
-      if (agentAction != null && agentAction.actions != null)
-        sendAction(agentAction);
-    }
   }
 
   @Override

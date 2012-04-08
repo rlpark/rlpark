@@ -1,18 +1,18 @@
 package zephyr.plugin.critterview.views;
 
-import static critterbot.environment.CritterbotDrops.Accel;
-import static critterbot.environment.CritterbotDrops.BusVoltage;
-import static critterbot.environment.CritterbotDrops.Current;
-import static critterbot.environment.CritterbotDrops.IRDistance;
-import static critterbot.environment.CritterbotDrops.IRLight;
-import static critterbot.environment.CritterbotDrops.Light;
-import static critterbot.environment.CritterbotDrops.Mag;
-import static critterbot.environment.CritterbotDrops.MicrophoneFFT;
-import static critterbot.environment.CritterbotDrops.Motor;
-import static critterbot.environment.CritterbotDrops.RotationVel;
-import static critterbot.environment.CritterbotDrops.Speed;
-import static critterbot.environment.CritterbotDrops.Temperature;
-import static critterbot.environment.CritterbotDrops.Thermal;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.Accel;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.BusVoltage;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.Current;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.IRDistance;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.IRLight;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.Light;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.Mag;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.MicrophoneFFT;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.Motor;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.RotationVel;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.Speed;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.Temperature;
+import static rlpark.plugin.critterbot.data.CritterbotLabels.Thermal;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,6 +22,9 @@ import java.util.Map;
 
 import org.eclipse.jface.action.IToolBarManager;
 
+import rlpark.plugin.critterbot.CritterbotProblem;
+import rlpark.plugin.critterbot.crtrlog.CrtrLogFile;
+import rlpark.plugin.critterbot.data.CritterbotLabels;
 import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.core.ZephyrCore;
@@ -40,9 +43,6 @@ import zephyr.plugin.core.internal.observations.SensorTextGroup;
 import zephyr.plugin.core.internal.observations.SensorTextGroup.TextClient;
 import zephyr.plugin.core.internal.views.Restartable;
 import zephyr.plugin.critterview.FileHandler;
-import critterbot.CritterbotProblem;
-import critterbot.crtrlog.CrtrLogFile;
-import critterbot.environment.CritterbotDrops;
 
 @SuppressWarnings({ "synthetic-access", "restriction" })
 public class ObservationView extends EnvironmentView<CritterbotProblem> implements Closeable, Restartable {
@@ -133,7 +133,7 @@ public class ObservationView extends EnvironmentView<CritterbotProblem> implemen
       }
     };
     TextClient cycleTimeTextClient = new TextClient("Cycle Time:") {
-      int cycleTimeIndex = instance.current().legend().indexOf(CritterbotDrops.CycleTime);
+      int cycleTimeIndex = instance.current().legend().indexOf(CritterbotLabels.CycleTime);
 
       @Override
       public String currentText() {
@@ -142,12 +142,12 @@ public class ObservationView extends EnvironmentView<CritterbotProblem> implemen
         return String.valueOf((int) currentObservation[cycleTimeIndex]) + "%";
       }
     };
-    new IntegerTextClient(CritterbotDrops.CycleTime, "");
+    new IntegerTextClient(CritterbotLabels.CycleTime, "");
     return new SensorTextGroup("Info", busVoltageTextClient, loopTimeTextClient, cycleTimeTextClient,
-                               new IntegerTextClient(CritterbotDrops.PowerSource, "Power Source"),
-                               new IntegerTextClient(CritterbotDrops.ChargeState, "Charge State"),
-                               new IntegerTextClient(CritterbotDrops.MonitorState, "Monitor State"),
-                               new IntegerTextClient(CritterbotDrops.ErrorFlags, "Error Flag"));
+                               new IntegerTextClient(CritterbotLabels.PowerSource, "Power Source"),
+                               new IntegerTextClient(CritterbotLabels.ChargeState, "Charge State"),
+                               new IntegerTextClient(CritterbotLabels.MonitorState, "Monitor State"),
+                               new IntegerTextClient(CritterbotLabels.ErrorFlags, "Error Flag"));
   }
 
   private int[] startsWith(String prefix) {

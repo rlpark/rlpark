@@ -3,7 +3,7 @@ package rlpark.plugin.irobot.internal.irobot;
 
 import java.io.IOException;
 
-import rlpark.plugin.irobot.data.IRobotObservationReceiver;
+import rlpark.plugin.irobot.internal.descriptors.IRobotObservationReceiver;
 import rlpark.plugin.irobot.internal.descriptors.IRobotSerialDescriptor;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot;
 import rlpark.plugin.irobot.internal.statemachine.SerialLinkStateMachine;

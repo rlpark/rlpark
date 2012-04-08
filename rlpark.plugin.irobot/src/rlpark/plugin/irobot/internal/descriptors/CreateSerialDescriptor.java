@@ -4,7 +4,7 @@ import gnu.io.SerialPort;
 
 import java.io.IOException;
 
-import rlpark.plugin.irobot.data.IRobots;
+import rlpark.plugin.irobot.data.IRobotLabels;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot.SerialPortInfo;
 import rlpark.plugin.irobot.internal.statemachine.ChecksumNode;
@@ -60,7 +60,7 @@ public class CreateSerialDescriptor implements IRobotSerialDescriptor {
         }
       }
     });
-    DataNode dataNode = new DataNode(IRobots.CreateSensorsPacketSize);
+    DataNode dataNode = new DataNode(IRobotLabels.CreateSensorsPacketSize);
     ChecksumNode checksumNode = new ChecksumNode(Utils.asList(dataNode, headerNode));
     return new SerialLinkStateMachine(serialPort, checksumNode, headerNode, dataNode);
   }

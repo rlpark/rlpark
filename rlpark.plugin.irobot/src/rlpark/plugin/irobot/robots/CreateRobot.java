@@ -1,6 +1,6 @@
 package rlpark.plugin.irobot.robots;
 
-import rlpark.plugin.irobot.data.IRobots;
+import rlpark.plugin.irobot.data.IRobotLabels;
 import rlpark.plugin.irobot.internal.descriptors.CreateSerialDescriptor;
 import rlpark.plugin.irobot.internal.descriptors.DropDescriptors;
 import rlpark.plugin.irobot.internal.irobot.IRobotDiscoConnection;
@@ -17,7 +17,7 @@ public class CreateRobot extends IRobotEnvironment {
   }
 
   public CreateRobot(boolean persistent) {
-    this("localhost", IRobots.DiscoDefaultPort, persistent);
+    this("localhost", IRobotLabels.DiscoDefaultPort, persistent);
   }
 
   public CreateRobot(String serialPortPath) {

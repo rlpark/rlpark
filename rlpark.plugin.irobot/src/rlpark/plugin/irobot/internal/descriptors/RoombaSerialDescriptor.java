@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rlpark.plugin.irobot.data.IRobots;
+import rlpark.plugin.irobot.data.IRobotLabels;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot.SerialPortInfo;
 import rlpark.plugin.irobot.internal.statemachine.DataNode;
@@ -100,7 +100,7 @@ public class RoombaSerialDescriptor implements IRobotSerialDescriptor {
   @Override
   public SerialLinkStateMachine createStateMachine(SerialPortToRobot serialPort) {
     List<SerialLinkNode> serialLinkNodes = new ArrayList<SerialLinkNode>();
-    serialLinkNodes.add(new DataNode(IRobots.RoombaSensorsPacketSize));
+    serialLinkNodes.add(new DataNode(IRobotLabels.RoombaSensorsPacketSize));
     SerialLinkStateMachine serialLinkStateMachine = new SerialLinkStateMachine(serialPort, serialLinkNodes);
     serialLinkStateMachine.onDataPacket.connect(packetRequester);
     return serialLinkStateMachine;

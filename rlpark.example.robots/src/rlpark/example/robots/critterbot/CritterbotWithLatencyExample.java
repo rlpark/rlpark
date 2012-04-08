@@ -1,14 +1,14 @@
 package rlpark.example.robots.critterbot;
 
+import rlpark.plugin.critterbot.actions.CritterbotAction;
+import rlpark.plugin.critterbot.actions.VoltageSpaceAction;
+import rlpark.plugin.critterbot.actions.XYThetaAction;
+import rlpark.plugin.critterbot.data.CritterbotLabels;
+import rlpark.plugin.critterbot.environment.CritterbotEnvironment;
+import rlpark.plugin.critterbot.environment.CritterbotSimulator;
+import rlpark.plugin.critterbot.environment.CritterbotSimulator.SimulatorCommand;
 import rlpark.plugin.rltoys.envio.observations.Legend;
 import zephyr.plugin.core.api.synchronization.Chrono;
-import critterbot.actions.CritterbotAction;
-import critterbot.actions.VoltageSpaceAction;
-import critterbot.actions.XYThetaAction;
-import critterbot.environment.CritterbotDrops;
-import critterbot.environment.CritterbotEnvironment;
-import critterbot.environment.CritterbotSimulator;
-import critterbot.environment.CritterbotSimulator.SimulatorCommand;
 
 public class CritterbotWithLatencyExample {
   final static public long Latency = 100;
@@ -22,7 +22,7 @@ public class CritterbotWithLatencyExample {
       chrono.start();
       double[] obs = environment.waitNewObs();
       CritterbotAction action;
-      if (obs[legend.indexOf(CritterbotDrops.IRDistance + "0")] > 128)
+      if (obs[legend.indexOf(CritterbotLabels.IRDistance + "0")] > 128)
         action = new XYThetaAction(20, -20, 20);
       else
         action = new VoltageSpaceAction(20, -20, 20);

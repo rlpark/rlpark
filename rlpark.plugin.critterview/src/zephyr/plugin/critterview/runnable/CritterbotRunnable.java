@@ -1,8 +1,8 @@
 package zephyr.plugin.critterview.runnable;
 
+import rlpark.plugin.critterbot.environment.CritterbotRobot;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.synchronization.Clock;
-import critterbot.environment.CritterbotRobot;
 
 public class CritterbotRunnable implements Runnable {
   @Override

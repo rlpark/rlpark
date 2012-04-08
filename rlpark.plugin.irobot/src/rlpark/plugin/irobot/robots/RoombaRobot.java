@@ -1,6 +1,6 @@
 package rlpark.plugin.irobot.robots;
 
-import rlpark.plugin.irobot.data.IRobots;
+import rlpark.plugin.irobot.data.IRobotLabels;
 import rlpark.plugin.irobot.data.RoombaLeds;
 import rlpark.plugin.irobot.internal.descriptors.DropDescriptors;
 import rlpark.plugin.irobot.internal.descriptors.RoombaSerialDescriptor;
@@ -22,7 +22,7 @@ public class RoombaRobot extends IRobotEnvironment {
   }
 
   public RoombaRobot() {
-    this("localhost", IRobots.DiscoDefaultPort);
+    this("localhost", IRobotLabels.DiscoDefaultPort);
   }
 
   private RoombaRobot(ObservationReceiver receiver) {
@@ -59,10 +59,10 @@ public class RoombaRobot extends IRobotEnvironment {
       return;
     Legend legend = legend();
     final double[] lastObs = lastReceivedObsBuffer.doubleValues();
-    double icRight = lastObs[legend.indexOf(IRobots.ICRight)];
-    lastObs[legend.indexOf(IRobots.ICOmni)] = icRight;
+    double icRight = lastObs[legend.indexOf(IRobotLabels.ICRight)];
+    lastObs[legend.indexOf(IRobotLabels.ICOmni)] = icRight;
     if (icRight == 88 || icRight == 89)
-      lastObs[legend.indexOf(IRobots.WallVirtual)] = 1.0;
+      lastObs[legend.indexOf(IRobotLabels.WallVirtual)] = 1.0;
   }
 
   @Override

@@ -1,9 +1,9 @@
 package zephyr.plugin.critterview.runnable;
 
+import rlpark.plugin.critterbot.environment.CritterbotSimulator;
+import rlpark.plugin.critterbot.environment.CritterbotSimulator.SimulatorCommand;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.synchronization.Clock;
-import critterbot.environment.CritterbotSimulator;
-import critterbot.environment.CritterbotSimulator.SimulatorCommand;
 
 public class SimulatorRunnable implements Runnable {
   @Override

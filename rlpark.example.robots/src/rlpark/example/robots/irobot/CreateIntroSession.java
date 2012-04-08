@@ -1,7 +1,7 @@
 package rlpark.example.robots.irobot;
 
 import rlpark.plugin.irobot.data.CreateAction;
-import rlpark.plugin.irobot.data.IRobots;
+import rlpark.plugin.irobot.data.IRobotLabels;
 import rlpark.plugin.irobot.robots.CreateRobot;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -11,8 +11,8 @@ public class CreateIntroSession {
     Clock clock = new Clock("Create");
     CreateRobot robot = new CreateRobot("/dev/cu.ElementSerial-ElementSe");
     Zephyr.advertise(clock, robot);
-    int bumpRightObsIndex = robot.legend().indexOf(IRobots.BumpRight);
-    int bumpLeftObsIndex = robot.legend().indexOf(IRobots.BumpLeft);
+    int bumpRightObsIndex = robot.legend().indexOf(IRobotLabels.BumpRight);
+    int bumpLeftObsIndex = robot.legend().indexOf(IRobotLabels.BumpLeft);
     robot.safeMode();
     while (!robot.isClosed() && clock.tick()) {
       double obs[] = robot.waitNewObs();

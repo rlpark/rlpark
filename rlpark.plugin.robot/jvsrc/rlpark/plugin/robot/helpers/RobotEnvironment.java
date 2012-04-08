@@ -1,7 +1,6 @@
 package rlpark.plugin.robot.helpers;
 
 
-import rlpark.plugin.rltoys.agents.Agent;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.robot.interfaces.RobotLive;
 import rlpark.plugin.robot.internal.sync.ObservationSynchronizer;
@@ -9,7 +8,6 @@ import rlpark.plugin.robot.observations.ObservationReceiver;
 import rlpark.plugin.robot.observations.ObservationVersatile;
 import rlpark.plugin.robot.observations.ObservationVersatileArray;
 import zephyr.plugin.core.api.labels.Labeled;
-import zephyr.plugin.core.api.synchronization.Clock;
 
 public abstract class RobotEnvironment implements RobotLive, Labeled {
   protected final ObservationSynchronizer obsSync;
@@ -82,16 +80,6 @@ public abstract class RobotEnvironment implements RobotLive, Labeled {
   public boolean isClosed() {
     return obsSync.isTerminated();
   }
-
-  /**
-   * Do not use this method, use your own main loop instead using sendAction(),
-   * setLed() waitNewObs() and lastReceivedObs()
-   * 
-   * @see rlpark.plugin.robot.helpers.RobotEnvironment#run(zephyr.plugin.core.api.synchronization
-   *      .Clock, rlpark.plugin.rltoys.agents.Agent)
-   */
-  @Deprecated
-  public abstract void run(Clock clock, Agent agent);
 
   abstract public void sendAction(Action a);
 }

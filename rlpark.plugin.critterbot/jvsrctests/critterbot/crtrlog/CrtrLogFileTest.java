@@ -3,6 +3,8 @@ package critterbot.crtrlog;
 import org.junit.Assert;
 import org.junit.Test;
 
+import rlpark.plugin.critterbot.crtrlog.CrtrLogFile;
+import rlpark.plugin.critterbot.crtrlog.LogFiles;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;

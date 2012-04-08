@@ -2,8 +2,8 @@ package rlpark.plugin.irobot.internal.irobot;
 
 import java.io.IOException;
 
-import rlpark.plugin.irobot.data.IRobotObservationReceiver;
 import rlpark.plugin.irobot.internal.descriptors.DropDescriptors;
+import rlpark.plugin.irobot.internal.descriptors.IRobotObservationReceiver;
 import rlpark.plugin.robot.internal.disco.DiscoConnection;
 import rlpark.plugin.robot.internal.disco.drops.Drop;
 import rlpark.plugin.robot.internal.disco.drops.DropByteArray;

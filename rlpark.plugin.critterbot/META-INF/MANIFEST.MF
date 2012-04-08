@@ -6,12 +6,15 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: libs/CritterbotSimulator.jar,
  .
 Export-Package: critterbot,
- critterbot.actions,
- critterbot.agents,
- critterbot.colors,
- critterbot.crtrlog,
- critterbot.environment,
- critterbot.examples
+ rlpark.plugin.critterbot,
+ rlpark.plugin.critterbot.actions,
+ rlpark.plugin.critterbot.agents,
+ rlpark.plugin.critterbot.colors,
+ rlpark.plugin.critterbot.crtrlog,
+ rlpark.plugin.critterbot.data,
+ rlpark.plugin.critterbot.environment,
+ rlpark.plugin.critterbot.examples,
+ rlpark.plugin.critterbot.internal;x-internal:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: rlpark.plugin.rltoys;bundle-version="1.0.0",
  zephyr.plugin.core.api;bundle-version="1.0.0",
