@@ -1,4 +1,4 @@
-package rlpark.example.learning;
+package rlpark.example.demos.learning;
 
 import java.util.Random;
 

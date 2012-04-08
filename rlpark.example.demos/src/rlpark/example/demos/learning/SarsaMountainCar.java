@@ -1,4 +1,4 @@
-package rlpark.example.learning;
+package rlpark.example.demos.learning;
 
 import java.util.Random;
 
@@ -33,7 +33,7 @@ public class SarsaMountainCar implements Runnable {
     projector.addFullTilings(10, 10);
     projector.includeActiveFeature();
     TabularAction toStateAction = new TabularAction(problem.actions(), projector.vectorNorm(), projector.vectorSize());
-    double alpha = .2 / projector.vectorNorm();
+    double alpha = .15 / projector.vectorNorm();
     double gamma = 0.99;
     double lambda = .3;
     Sarsa sarsa = new Sarsa(alpha, gamma, lambda, toStateAction.vectorSize(), new AMaxTraces());

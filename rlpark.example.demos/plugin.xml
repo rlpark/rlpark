@@ -2,6 +2,19 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
+         point="zephyr.runnable">
+      <client
+            autostart="false"
+            class="rlpark.example.demos.learning.SarsaMountainCar"
+            id="rlpark.example.learning.sarsamountaincar">
+      </client>
+      <client
+            autostart="false"
+            class="rlpark.example.demos.learning.ActorCriticPendulum"
+            id="rlpark.example.learning.actorcriticpendulum">
+      </client>
+   </extension>
+   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"

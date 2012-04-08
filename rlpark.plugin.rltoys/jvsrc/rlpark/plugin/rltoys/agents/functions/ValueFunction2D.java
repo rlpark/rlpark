@@ -22,7 +22,7 @@ public class ValueFunction2D implements ContinuousFunction2D {
     assert problem.getObservationRanges().length == 2;
     this.predictor = predictor;
     xRange = problem.getObservationRanges()[0];
-    yRange = problem.getObservationRanges()[0];
+    yRange = problem.getObservationRanges()[1];
   }
 
   @Override
@@ -33,7 +33,7 @@ public class ValueFunction2D implements ContinuousFunction2D {
   @Override
   public Point2D position() {
     TRStep step = problem.lastStep();
-    if (step == null)
+    if (step == null || step.o_tp1 == null)
       return null;
     return new Point2D.Double(step.o_tp1[0], step.o_tp1[1]);
   }
