@@ -5,9 +5,11 @@ import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class ControlAgent implements RLAgent {
   private static final long serialVersionUID = 4670115173783709550L;
+  @Monitor
   private final Control control;
 
   public ControlAgent(Control control) {

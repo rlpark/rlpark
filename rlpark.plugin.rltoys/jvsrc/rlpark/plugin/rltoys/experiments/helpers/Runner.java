@@ -9,6 +9,7 @@ import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.signals.Signal;
 
 public class Runner implements Serializable, MonitorContainer {
@@ -29,7 +30,9 @@ public class Runner implements Serializable, MonitorContainer {
   public final Signal<RunnerEvent> onEpisodeEnd = new Signal<RunnerEvent>();
   public final Signal<RunnerEvent> onTimeStep = new Signal<RunnerEvent>();
   protected final RunnerEvent runnerEvent = new RunnerEvent();
+  @Monitor
   private final RLAgent agent;
+  @Monitor
   private final RLProblem problem;
   private final int maxEpisodeTimeSteps;
   private final int nbEpisode;
