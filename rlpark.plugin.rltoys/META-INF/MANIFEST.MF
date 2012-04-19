@@ -7,7 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Thomas
 Require-Bundle: zephyr.plugin.core.api;bundle-version="1.0.0",
  rlpark.plugin.apache;bundle-version="1.0.0",
- org.junit;bundle-version="4.8.2";resolution:=optional
+ org.junit;bundle-version="4.8.0";resolution:=optional
 Bundle-ClassPath: .,
  bin/
 Export-Package: rlpark.plugin.rltoys.agents,

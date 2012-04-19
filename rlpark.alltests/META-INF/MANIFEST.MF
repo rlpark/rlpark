@@ -5,7 +5,7 @@ Bundle-SymbolicName: rlpark.alltests;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Thomas
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.junit;bundle-version="4.8.2",
+Require-Bundle: org.junit;bundle-version="4.8.0",
  rlpark.plugin.critterbot;bundle-version="1.0.0",
  rlpark.plugin.critterview;bundle-version="1.0.0",
  rlpark.plugin.irobot;bundle-version="1.0.0",
