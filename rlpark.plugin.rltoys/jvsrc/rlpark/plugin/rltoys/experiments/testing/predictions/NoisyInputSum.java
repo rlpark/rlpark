@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoys.junit.algorithms.predictions.supervised;
+package rlpark.plugin.rltoys.experiments.testing.predictions;
 
 import java.util.Random;
 
@@ -8,7 +8,7 @@ import rlpark.plugin.rltoys.utils.Utils;
 
 public class NoisyInputSum {
   public static final int NbInputs = 20;
-  static protected final int NbNonZeroWeight = 5;
+  public static final int NbNonZeroWeight = 5;
 
   private PVector createWeights(Random random) {
     PVector weights = new PVector(NbInputs);

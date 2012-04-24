@@ -9,6 +9,7 @@ import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.VectorEntry;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.math.vector.implementations.PVectors;
 import rlpark.plugin.rltoys.math.vector.implementations.SVector;
 import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 
@@ -165,6 +166,14 @@ public abstract class VectorTest {
     VectorTest.assertEquals(newVector(1.0, 3.0, 5.0, 1.0, 7.0), v);
     v.addToSelf(-1.0, b);
     VectorTest.assertEquals(newVector(-2.0, -1.0, 5.0, 1.0, 3.0), v);
+  }
+
+  @Test
+  public void testMultiplySelfByExponential() {
+    PVector v1 = new PVector(0.0, 1.0, 2.0, 3.0, 4.0);
+    RealVector v2 = newVector(1.0, -2.0, -3.0, 0.0, 2.0);
+    PVectors.multiplySelfByExponential(v1, v2);
+    VectorTest.assertEquals(newVector(0.0, Math.exp(-2.0), 2.0 * Math.exp(-3.0), 3.0, 4 * Math.exp(2.0)), v1);
   }
 
   protected abstract RealVector newVector(RealVector v);

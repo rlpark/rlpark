@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.algorithms.predictions.supervised.IDBD;
+import rlpark.plugin.rltoys.experiments.testing.predictions.NoisyInputSum;
 
 public class IDBDTest {
   @Test

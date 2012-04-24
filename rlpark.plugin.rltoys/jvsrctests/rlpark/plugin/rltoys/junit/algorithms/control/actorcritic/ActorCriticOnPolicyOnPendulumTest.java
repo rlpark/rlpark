@@ -13,8 +13,8 @@ import rlpark.plugin.rltoys.algorithms.predictions.td.TD;
 import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambda;
 import rlpark.plugin.rltoys.algorithms.traces.ATraces;
 import rlpark.plugin.rltoys.algorithms.traces.Traces;
-import rlpark.plugin.rltoys.experiments.testing.ActorCriticOnPendulum;
-import rlpark.plugin.rltoys.experiments.testing.ActorCriticOnPendulum.ActorCriticFactory;
+import rlpark.plugin.rltoys.experiments.testing.control.ActorCriticOnPendulum;
+import rlpark.plugin.rltoys.experiments.testing.control.ActorCriticOnPendulum.ActorCriticFactory;
 
 public class ActorCriticOnPolicyOnPendulumTest {
   @Test

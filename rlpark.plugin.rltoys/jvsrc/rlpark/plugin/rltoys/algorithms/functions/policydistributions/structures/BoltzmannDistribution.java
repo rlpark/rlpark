@@ -1,7 +1,5 @@
 package rlpark.plugin.rltoys.algorithms.functions.policydistributions.structures;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Random;
 
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistribution;
@@ -16,7 +14,7 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class BoltzmannDistribution extends StochasticPolicy implements PolicyDistribution {
   private static final long serialVersionUID = 7036360201611314726L;
-  private final Map<Action, RealVector> actionToPhi_sa = new LinkedHashMap<Action, RealVector>();
+  private final RealVector[] actionToPhi_sa;
   @Monitor(level = 4)
   private PVector u;
   private RealVector lastS;
@@ -28,6 +26,7 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
     super(random, actions);
     this.toStateAction = toStateAction;
     distribution = new double[actions.length];
+    actionToPhi_sa = new RealVector[actions.length];
   }
 
   @Override
@@ -50,7 +49,7 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
       if (averagePhi == null)
         averagePhi = phi_sa.newInstance(u.size);
       averagePhi.addToSelf(phi_sa.mapMultiply(probabilityNotNormalized));
-      actionToPhi_sa.put(actions[a_i], phi_sa);
+      actionToPhi_sa[a_i] = phi_sa;
     }
     for (int i = 0; i < distribution.length; i++) {
       distribution[i] /= sum;
@@ -82,7 +81,7 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
     updateDistributionIFN(x_t);
     lastS = null;
-    return new RealVector[] { actionToPhi_sa.get(a_t).subtract(averagePhi) };
+    return new RealVector[] { actionToPhi_sa[actionToIndex.get(a_t)].subtract(averagePhi) };
   }
 
   @Override

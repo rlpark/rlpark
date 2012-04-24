@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoys.experiments.testing;
+package rlpark.plugin.rltoys.experiments.testing.control;
 
 import java.util.Random;
 
