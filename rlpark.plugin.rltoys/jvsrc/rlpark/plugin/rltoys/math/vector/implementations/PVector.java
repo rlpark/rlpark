@@ -174,7 +174,7 @@ public class PVector extends AbstractVector implements DenseVector {
 
   @Override
   public double[] accessData() {
-    return data.clone();
+    return data;
   }
 
   public void addToSelf(double[] array) {

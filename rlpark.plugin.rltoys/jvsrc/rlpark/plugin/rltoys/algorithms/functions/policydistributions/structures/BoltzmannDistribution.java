@@ -17,7 +17,7 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   private final RealVector[] actionToPhi_sa;
   @Monitor(level = 4)
   private PVector u;
-  private RealVector lastS;
+  private RealVector lastFeatureVector;
   private MutableVector averagePhi;
   private final StateToStateAction toStateAction;
   private final double[] distribution;
@@ -36,9 +36,9 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   }
 
   private void updateDistributionIFN(RealVector s) {
-    if (lastS == s)
+    if (lastFeatureVector == s)
       return;
-    lastS = s;
+    lastFeatureVector = s;
     double sum = 0;
     averagePhi = null;
     for (int a_i = 0; a_i < actions.length; a_i++) {
@@ -59,7 +59,7 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   }
 
   protected Action initialize() {
-    lastS = null;
+    lastFeatureVector = null;
     return null;
   }
 
@@ -80,7 +80,6 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   @Override
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
     updateDistributionIFN(x_t);
-    lastS = null;
     return new RealVector[] { actionToPhi_sa[actionToIndex.get(a_t)].subtract(averagePhi) };
   }
 

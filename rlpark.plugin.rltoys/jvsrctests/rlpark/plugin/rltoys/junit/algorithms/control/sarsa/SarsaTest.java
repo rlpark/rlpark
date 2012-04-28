@@ -100,7 +100,8 @@ public class SarsaTest extends MountainCarOnPolicyTest {
     }, new SarsaControlFactory() {
       @Override
       public RLAgent createAgent(MountainCar problem, Projector projector) {
-        StateToStateAction stateActionCoders = new StateToStateActionBuffer(createStateToStateAction(problem));
+        StateToStateAction stateActionCoders = new StateToStateActionBuffer(createStateToStateAction(problem), problem
+            .actions());
         Predictor predictor = createPredictor(problem.actions(), stateActionCoders,
                                               (int) stateActionCoders.vectorNorm(), stateActionCoders.vectorSize());
         Policy acting = createActing(problem, stateActionCoders, predictor);
