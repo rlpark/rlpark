@@ -40,18 +40,22 @@ public class PVectors {
   }
 
   public static PVector multiplySelfByExponential(PVector result, RealVector other) {
+    return multiplySelfByExponential(result, other, 0);
+  }
+
+  public static PVector multiplySelfByExponential(PVector result, RealVector other, double min) {
     if (other instanceof SVector)
-      return multiplySelfByExponential(result, (SVector) other);
+      return multiplySelfByExponential(result, (SVector) other, min);
     for (int i = 0; i < result.size; i++)
-      result.data[i] *= Math.exp(other.getEntry(i));
+      result.data[i] = Math.max(min, result.data[i] * Math.exp(other.getEntry(i)));
     return result;
   }
 
-  public static PVector multiplySelfByExponential(PVector result, SVector other) {
+  public static PVector multiplySelfByExponential(PVector result, SVector other, double min) {
     int[] activeIndexes = other.activeIndexes();
     for (int i = 0; i < activeIndexes.length; i++) {
       int index = activeIndexes[i];
-      result.data[index] *= Math.exp(other.values[i]);
+      result.data[index] = Math.max(min, result.data[index] * Math.exp(other.values[i]));
     }
     return result;
   }

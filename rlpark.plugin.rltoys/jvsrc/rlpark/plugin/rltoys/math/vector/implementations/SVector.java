@@ -411,4 +411,9 @@ public class SVector extends AbstractVector implements SparseRealVector {
     result.append("]");
     return result.toString();
   }
+
+  public SVector set(double d) {
+    Arrays.fill(values, 0, nbActive, d);
+    return this;
+  }
 }

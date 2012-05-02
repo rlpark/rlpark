@@ -70,4 +70,25 @@ public class Vectors {
       sum += entry.value();
     return sum;
   }
+
+  public static MutableVector toBinary(RealVector v) {
+    if (v instanceof SVector) {
+      SVector result = (SVector) v.copyAsMutable();
+      result.set(1.0);
+      return result;
+    }
+    SVector result = new SVector(v.getDimension());
+    double[] data = v.accessData();
+    for (int i = 0; i < data.length; i++)
+      if (data[i] != 0)
+        result.setEntry(i, 1);
+    return result;
+  }
+
+  public static boolean isNull(RealVector v) {
+    for (double value : v.accessData())
+      if (value != 0)
+        return false;
+    return true;
+  }
 }
