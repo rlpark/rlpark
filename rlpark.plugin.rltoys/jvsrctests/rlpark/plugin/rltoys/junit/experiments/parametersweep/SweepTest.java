@@ -29,6 +29,11 @@ public class SweepTest {
   static public void setup() {
     SchedulerTest.junitMode();
     SweepAll.disableVerbose();
+    try {
+      FileUtils.deleteDirectory(new File(JUnitFolder));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @Test

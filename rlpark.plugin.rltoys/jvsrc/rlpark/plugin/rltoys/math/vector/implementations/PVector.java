@@ -105,9 +105,7 @@ public class PVector extends AbstractVector implements DenseVector {
 
   @Override
   public PVector copy() {
-    PVector result = (PVector) newInstance(size);
-    result.set(data);
-    return result;
+    return new PVector(Arrays.copyOf(data, size));
   }
 
   @Override

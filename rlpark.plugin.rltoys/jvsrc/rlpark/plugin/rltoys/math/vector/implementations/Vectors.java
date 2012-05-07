@@ -13,6 +13,13 @@ public class Vectors {
     return equals(a, b, Float.MIN_VALUE);
   }
 
+  static public double diff(RealVector a, RealVector b) {
+    double diff = 0;
+    for (int i = 0; i < a.getDimension(); ++i)
+      diff = Math.max(diff, Math.abs(a.getEntry(i) - b.getEntry(i)));
+    return diff;
+  }
+
   static public boolean equals(RealVector a, RealVector b, double margin) {
     if (a == b)
       return true;
@@ -20,9 +27,11 @@ public class Vectors {
       return false;
     if (a.getDimension() != b.getDimension())
       return false;
-    for (int i = 0; i < a.getDimension(); ++i)
-      if (Math.abs(a.getEntry(i) - b.getEntry(i)) > margin)
+    for (int i = 0; i < a.getDimension(); ++i) {
+      final double diff = Math.abs(a.getEntry(i) - b.getEntry(i));
+      if (diff > margin)
         return false;
+    }
     return true;
   }
 
