@@ -6,5 +6,5 @@ public interface BinaryVector extends SparseVector {
 
   void setOn(int i);
 
-  int[] activeIndexes();
+  int[] getActiveIndexes();
 }

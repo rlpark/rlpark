@@ -3,9 +3,9 @@ package rlpark.plugin.rltoys.algorithms.predictions.td;
 import rlpark.plugin.rltoys.algorithms.traces.ATraces;
 import rlpark.plugin.rltoys.algorithms.traces.EligibilityTraceAlgorithm;
 import rlpark.plugin.rltoys.algorithms.traces.Traces;
+import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
-import rlpark.plugin.rltoys.math.vector.implementations.SVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
@@ -23,6 +23,9 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
   private final Traces e;
   protected double v_t;
   protected double delta_t;
+  private final MutableVector e_delta01;
+  private final MutableVector e_delta02;
+  private final MutableVector correction;
 
   public GTDLambda(double lambda, double gamma, double alpha_v, double alpha_w, int nbFeatures) {
     this(lambda, gamma, alpha_v, alpha_w, nbFeatures, new ATraces());
@@ -36,6 +39,9 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
     v = new PVector(nbFeatures);
     w = new PVector(nbFeatures);
     e = prototype.newTraces(nbFeatures);
+    e_delta01 = e.vect().newInstance(nbFeatures);
+    e_delta02 = e.vect().newInstance(nbFeatures);
+    correction = e.vect().newInstance(nbFeatures);
   }
 
   @Override
@@ -45,13 +51,20 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
     }
     v_t = v.dotProduct(x_t);
     delta_t = r_tp1 + (1 - gamma_tp1) * z_tp1 + gamma_tp1 * v.dotProduct(x_tp1) - v_t;
+    // Update traces
     e.update(gamma_t * lambda, x_t);
     e.vect().mapMultiplyToSelf(rho_t);
-    RealVector e_delta = e.vect().mapMultiply(delta_t);
-    RealVector correction = x_tp1 != null ? x_tp1.mapMultiply(e.vect().dotProduct(w) * gamma_tp1 * (1 - lambda))
-        : new SVector(w.size);
-    v.addToSelf(alpha_v, e_delta.subtract(correction));
-    w.addToSelf(alpha_w, e_delta.subtract(x_t.mapMultiply(w.dotProduct(x_t))));
+    // Prepare buffers
+    e_delta01.set(e.vect());
+    e_delta01.mapMultiplyToSelf(delta_t);
+    e_delta02.set(e_delta01);
+    // Compute correction
+    correction.clear();
+    if (x_tp1 != null)
+      correction.addToSelf(e.vect().dotProduct(w) * gamma_tp1 * (1 - lambda), x_tp1);
+    // Update parameters
+    v.addToSelf(alpha_v, e_delta01.subtractToSelf(correction));
+    w.addToSelf(alpha_w, e_delta02.addToSelf(-w.dotProduct(x_t), x_t));
     gamma_t = gamma_tp1;
     return delta_t;
   }

@@ -1,9 +1,6 @@
 package rlpark.plugin.rltoys.algorithms.traces;
 
 import rlpark.plugin.rltoys.math.vector.MutableVector;
-import rlpark.plugin.rltoys.math.vector.RealVector;
-import rlpark.plugin.rltoys.math.vector.SparseVector;
-import rlpark.plugin.rltoys.math.vector.VectorEntry;
 import rlpark.plugin.rltoys.math.vector.implementations.SVector;
 
 /**
@@ -11,53 +8,50 @@ import rlpark.plugin.rltoys.math.vector.implementations.SVector;
  */
 public class AMaxTraces extends ATraces {
   private static final long serialVersionUID = 8063854269195146376L;
-  final private double maximumValue;
+  final static public double DefaultMaximumValue = 1.0;
+  private final double maximumValue;
 
   public AMaxTraces() {
-    this(1);
+    this(DefaultPrototype);
+  }
+
+  public AMaxTraces(MutableVector prototype) {
+    this(prototype, DefaultMaximumValue);
   }
 
   public AMaxTraces(double maximumValue) {
-    this(maximumValue, DefaultPrototype);
+    this(DefaultPrototype, maximumValue, DefaultThreshold);
   }
 
-  public AMaxTraces(double maximumValue, int targetSize, double targetTolerance) {
-    this(maximumValue, DefaultPrototype, targetSize, targetTolerance);
+  public AMaxTraces(MutableVector prototype, double maximumValue) {
+    this(prototype, maximumValue, DefaultThreshold);
   }
 
-  public AMaxTraces(double maximumValue, MutableVector prototype) {
-    this(maximumValue, DefaultPrototype, -1, 0);
+  public AMaxTraces(MutableVector prototype, double maximumValue, double threshold) {
+    this(prototype, maximumValue, threshold, 0);
   }
 
-  public AMaxTraces(double maximumValue, MutableVector prototype, int targetSize, double targetTolerance) {
-    this(0, targetSize, targetTolerance, maximumValue, DefaultPrototype);
-    assert prototype instanceof SparseVector;
-  }
-
-  protected AMaxTraces(int size, int targetSize, double targetTolerance, double maximumValue, MutableVector prototype) {
-    super(size, targetSize, targetTolerance, prototype);
+  protected AMaxTraces(MutableVector prototype, double maximumValue, double threshold, int size) {
+    super(prototype, threshold, size);
     this.maximumValue = maximumValue;
   }
 
   @Override
   public AMaxTraces newTraces(int size) {
-    return new AMaxTraces(size, targetSize, targetTolerance, maximumValue, prototype);
+    return new AMaxTraces(prototype, maximumValue, threshold, size);
   }
 
   @Override
-  protected void addToSelf(RealVector phi) {
-    super.addToSelf(phi);
-    if (vector instanceof SVector) {
-      SVector svector = (SVector) vector;
-      for (int i = 0; i < svector.nonZeroElements(); i++)
-        svector.values[i] = adjustValue(svector.values[i]);
-      return;
-    }
-    for (VectorEntry entry : phi) {
-      int index = entry.index();
-      double value = adjustValue(vector.getEntry(index) + entry.value());
-      vector.setEntry(index, value);
-    }
+  protected void adjustUpdate() {
+    final boolean isSVector = vector instanceof SVector;
+    double[] data = isSVector ? ((SVector) vector).values : vector.accessData();
+    int length = isSVector ? ((SVector) vector).nonZeroElements() : vector.getDimension();
+    adjustValues(data, length);
+  }
+
+  private void adjustValues(double[] data, int length) {
+    for (int i = 0; i < length; i++)
+      data[i] = adjustValue(data[i]);
   }
 
   private double adjustValue(double value) {

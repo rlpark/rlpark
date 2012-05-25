@@ -132,6 +132,6 @@ public abstract class FiniteStateGraph implements Serializable {
   public GraphState state(RealVector s) {
     if (s == null)
       return null;
-    return states[((BVector) s).activeIndexes()[0]];
+    return states[((BVector) s).getActiveIndexes()[0]];
   }
 }

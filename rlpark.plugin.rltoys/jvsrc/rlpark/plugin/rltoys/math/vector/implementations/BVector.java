@@ -1,75 +1,15 @@
 package rlpark.plugin.rltoys.math.vector.implementations;
 
 import java.util.Arrays;
-import java.util.Iterator;
 
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
-import rlpark.plugin.rltoys.math.vector.VectorEntry;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 
 public class BVector extends AbstractVector implements BinaryVector {
   private static final long serialVersionUID = 5688026326299722364L;
-
-  private static class BVectorEntry implements VectorEntry {
-    private final int[] indexes;
-    private int current;
-
-    public BVectorEntry(int[] indexes) {
-      this.indexes = indexes;
-    }
-
-    @Override
-    public int index() {
-      return indexes[current];
-    }
-
-    @Override
-    public double value() {
-      return 1.0;
-    }
-
-    public void update(int current) {
-      this.current = current;
-    }
-  }
-
-  private class BVectorIterator implements Iterator<VectorEntry> {
-    private int current;
-    private final int nbActive;
-    private final BVectorEntry entry;
-    private boolean removed;
-
-    @SuppressWarnings("synthetic-access")
-    protected BVectorIterator() {
-      current = 0;
-      nbActive = BVector.this.nbActive;
-      entry = new BVectorEntry(indexes);
-    }
-
-    @Override
-    public boolean hasNext() {
-      return current < nbActive;
-    }
-
-    @Override
-    public VectorEntry next() {
-      if (!removed)
-        entry.update(current++);
-      else
-        removed = false;
-      return entry;
-    }
-
-    @Override
-    public void remove() {
-      removeEntry(entry.index());
-      removed = true;
-    }
-  }
-
   private int[] indexes;
   @Monitor
   private int nbActive = 0;
@@ -91,21 +31,21 @@ public class BVector extends AbstractVector implements BinaryVector {
 
   @Override
   public void addSelfTo(double[] data) {
-    for (int i : activeIndexes())
+    for (int i : getActiveIndexes())
       data[i] += 1;
   }
 
   @Override
   public double dotProduct(double[] data) {
     double result = 0.0;
-    for (int i : activeIndexes())
+    for (int i : getActiveIndexes())
       result += data[i];
     return result;
   }
 
   @Override
   public void subtractSelfTo(double[] data) {
-    for (int i : activeIndexes())
+    for (int i : getActiveIndexes())
       data[i] -= 1;
   }
 
@@ -122,7 +62,7 @@ public class BVector extends AbstractVector implements BinaryVector {
   @Override
   public double dotProduct(RealVector other) {
     double result = 0;
-    for (int i : activeIndexes())
+    for (int i : getActiveIndexes())
       result += other.getEntry(i);
     return result;
   }
@@ -178,7 +118,7 @@ public class BVector extends AbstractVector implements BinaryVector {
 
   @Override
   public String toString() {
-    return Arrays.toString(activeIndexes());
+    return Arrays.toString(getActiveIndexes());
   }
 
   @Override
@@ -187,7 +127,7 @@ public class BVector extends AbstractVector implements BinaryVector {
   }
 
   @Override
-  final public int[] activeIndexes() {
+  final public int[] getActiveIndexes() {
     if (indexes.length > nbActive)
       indexes = Arrays.copyOf(indexes, nbActive);
     return indexes;
@@ -196,7 +136,7 @@ public class BVector extends AbstractVector implements BinaryVector {
   public void mergeSubVector(int start, BinaryVector other) {
     if (!canAppend(start))
       throw new RuntimeException("cannot append when other indexes are less than already active indexes");
-    int[] otherIndexes = other.activeIndexes();
+    int[] otherIndexes = other.getActiveIndexes();
     assert otherIndexes.length == 0 || otherIndexes[otherIndexes.length - 1] + start < size;
     allocate(nbActive + otherIndexes.length);
     for (int otherIndex : otherIndexes) {
@@ -217,11 +157,6 @@ public class BVector extends AbstractVector implements BinaryVector {
     if (allocation <= indexes.length)
       return;
     indexes = Arrays.copyOf(indexes, allocation);
-  }
-
-  @Override
-  public Iterator<VectorEntry> iterator() {
-    return new BVectorIterator();
   }
 
   public void setOrderedIndexes(int[] orderedIndexes) {
@@ -267,7 +202,7 @@ public class BVector extends AbstractVector implements BinaryVector {
   @Override
   public double[] accessData() {
     double[] data = new double[size];
-    for (int i : activeIndexes())
+    for (int i : getActiveIndexes())
       data[i] = 1.0;
     return data;
   }

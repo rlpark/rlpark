@@ -10,8 +10,8 @@ import rlpark.plugin.rltoys.algorithms.traces.Traces;
 import rlpark.plugin.rltoys.junit.algorithms.control.mountaincar.MountainCarOnPolicyTest;
 import rlpark.plugin.rltoys.junit.algorithms.control.sarsa.SarsaTest.SarsaControlFactory;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
-import rlpark.plugin.rltoys.math.vector.SparseVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.math.vector.implementations.SSortedVector;
 import rlpark.plugin.rltoys.math.vector.implementations.SVector;
 
 public class TracesTest extends MountainCarOnPolicyTest {
@@ -21,17 +21,14 @@ public class TracesTest extends MountainCarOnPolicyTest {
 
   private void testTraces(MutableVector prototype) {
     testTraces(new ATraces(prototype));
-    testTraces(new AMaxTraces(1.0, prototype));
-    if (prototype instanceof SparseVector) {
-      testTraces(new ATraces(prototype, 100, 0.05));
-      testTraces(new AMaxTraces(1.0, prototype, 100, 0.05));
-    }
+    testTraces(new AMaxTraces(prototype));
   }
 
   @Test
   public void testSarsaOnMountainCarSVectorTraces() {
     testTraces(new SVector(0));
-    testTraces(new RTraces());
+    testTraces(new SSortedVector(0));
+    testTraces(new RTraces(new SVector(0)));
   }
 
   @Test
@@ -41,8 +38,8 @@ public class TracesTest extends MountainCarOnPolicyTest {
 
   @Test
   public void testSarsaOnMountainCarMaxLengthTraces() {
-    testTraces(new MaxLengthTraces(new ATraces(new SVector(0)), 100));
-    testTraces(new MaxLengthTraces(new AMaxTraces(1.0, new SVector(0)), 100));
-    testTraces(new MaxLengthTraces(new RTraces(), 100));
+    testTraces(new MaxLengthTraces(new ATraces(new SSortedVector(0)), 100));
+    testTraces(new MaxLengthTraces(new AMaxTraces(new SSortedVector(0)), 100));
+    testTraces(new MaxLengthTraces(new RTraces(new SSortedVector(0)), 100));
   }
 }

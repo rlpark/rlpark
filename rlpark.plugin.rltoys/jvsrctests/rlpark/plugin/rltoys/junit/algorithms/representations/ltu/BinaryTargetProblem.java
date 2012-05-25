@@ -41,7 +41,7 @@ public class BinaryTargetProblem {
 
   private double computeTarget(BinaryVector input) {
     double result = 0;
-    for (int activeIndex : input.activeIndexes())
+    for (int activeIndex : input.getActiveIndexes())
       result += weights[activeIndex];
     return result;
   }

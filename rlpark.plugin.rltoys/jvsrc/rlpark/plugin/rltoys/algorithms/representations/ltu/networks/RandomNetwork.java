@@ -79,12 +79,12 @@ public class RandomNetwork implements Serializable {
     updatedLTUs.clean();
     if (obs == null)
       return;
-    for (int activeIndex : obs.activeIndexes())
+    for (int activeIndex : obs.getActiveIndexes())
       denseInputVector[activeIndex] = 1;
   }
 
   protected void postProjection(BinaryVector obs) {
-    for (int activeIndex : obs.activeIndexes())
+    for (int activeIndex : obs.getActiveIndexes())
       denseInputVector[activeIndex] = 0;
   }
 

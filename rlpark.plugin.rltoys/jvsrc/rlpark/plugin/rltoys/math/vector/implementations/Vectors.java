@@ -1,16 +1,13 @@
 package rlpark.plugin.rltoys.math.vector.implementations;
 
-import rlpark.plugin.rltoys.math.vector.DenseVector;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
-import rlpark.plugin.rltoys.math.vector.SparseVector;
-import rlpark.plugin.rltoys.math.vector.VectorEntry;
 import rlpark.plugin.rltoys.utils.NotImplemented;
 import rlpark.plugin.rltoys.utils.Utils;
 
 public class Vectors {
   static public boolean equals(RealVector a, RealVector b) {
-    return equals(a, b, Float.MIN_VALUE);
+    return equals(a, b, 0);
   }
 
   static public double diff(RealVector a, RealVector b) {
@@ -27,7 +24,7 @@ public class Vectors {
       return false;
     if (a.getDimension() != b.getDimension())
       return false;
-    for (int i = 0; i < a.getDimension(); ++i) {
+    for (int i = 0; i < a.getDimension(); i++) {
       final double diff = Math.abs(a.getEntry(i) - b.getEntry(i));
       if (diff > margin)
         return false;
@@ -36,22 +33,10 @@ public class Vectors {
   }
 
   public static boolean checkValues(RealVector v) {
-    for (VectorEntry entry : v)
-      if (!Utils.checkValue(entry.value()))
+    for (int i = 0; i < v.getDimension(); i++)
+      if (!Utils.checkValue(v.getEntry(i)))
         return false;
     return true;
-  }
-
-  public static void clear(MutableVector vector) {
-    if (vector instanceof DenseVector) {
-      ((DenseVector) vector).set(0.0);
-      return;
-    }
-    if (vector instanceof SparseVector) {
-      ((SparseVector) vector).clear();
-      return;
-    }
-    throw new NotImplemented();
   }
 
   static public MutableVector absToSelf(MutableVector v) {
@@ -63,9 +48,7 @@ public class Vectors {
       absToSelf(((PVector) v).data);
       return v;
     }
-    for (VectorEntry entry : v)
-      v.setEntry(entry.index(), Math.abs(entry.value()));
-    return v;
+    throw new NotImplemented();
   }
 
   static public void absToSelf(double[] data) {
@@ -75,18 +58,35 @@ public class Vectors {
 
   static public double sum(RealVector v) {
     double sum = 0.0;
-    for (VectorEntry entry : v)
-      sum += entry.value();
+    for (int i = 0; i < v.getDimension(); i++)
+      sum += v.getEntry(i);
     return sum;
   }
 
-  public static MutableVector toBinary(RealVector v) {
+  static public double l1Norm(RealVector v) {
+    if (v instanceof BVector)
+      return ((BVector) v).nonZeroElements();
     if (v instanceof SVector) {
-      SVector result = (SVector) v.copyAsMutable();
-      result.set(1.0);
+      double sum = 0.0;
+      SVector sv = (SVector) v;
+      for (int i = 0; i < sv.nbActive; i++)
+        sum += Math.abs(sv.values[i]);
+      return sum;
+    }
+    double sum = 0.0;
+    for (int i = 0; i < v.getDimension(); i++)
+      sum += Math.abs(v.getEntry(i));
+    return sum;
+  }
+
+  public static MutableVector toBinary(RealVector v, MutableVector result) {
+    result.clear();
+    if (v instanceof SVector) {
+      SVector sv = (SVector) v;
+      for (int i = 0; i < sv.nbActive; i++)
+        result.setEntry(sv.activeIndexes[i], 1);
       return result;
     }
-    SVector result = new SVector(v.getDimension());
     double[] data = v.accessData();
     for (int i = 0; i < data.length; i++)
       if (data[i] != 0)
@@ -99,5 +99,25 @@ public class Vectors {
       if (value != 0)
         return false;
     return true;
+  }
+
+  public static MutableVector maxToSelf(MutableVector result, RealVector other) {
+    for (int i = 0; i < result.getDimension(); i++)
+      result.setEntry(i, Math.max(result.getEntry(i), other.getEntry(i)));
+    return result;
+  }
+
+  public static MutableVector positiveMaxToSelf(MutableVector result, RealVector other) {
+    if (other instanceof SVector)
+      return positiveMaxToSelf(result, (SVector) other);
+    return maxToSelf(result, other);
+  }
+
+  private static MutableVector positiveMaxToSelf(MutableVector result, SVector sother) {
+    for (int position = 0; position < sother.nbActive; position++) {
+      final int index = sother.activeIndexes[position];
+      result.setEntry(index, Math.max(result.getEntry(index), sother.values[position]));
+    }
+    return result;
   }
 }

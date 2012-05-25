@@ -8,7 +8,7 @@ import rlpark.plugin.rltoys.algorithms.control.sarsa.Sarsa;
 import rlpark.plugin.rltoys.algorithms.control.sarsa.SarsaControl;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.TabularAction;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
-import rlpark.plugin.rltoys.algorithms.traces.AMaxTraces;
+import rlpark.plugin.rltoys.algorithms.traces.RTraces;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
@@ -36,7 +36,7 @@ public class SarsaMountainCar implements Runnable {
     double alpha = .15 / projector.vectorNorm();
     double gamma = 0.99;
     double lambda = .3;
-    Sarsa sarsa = new Sarsa(alpha, gamma, lambda, toStateAction.vectorSize(), new AMaxTraces());
+    Sarsa sarsa = new Sarsa(alpha, gamma, lambda, toStateAction.vectorSize(), new RTraces());
     double epsilon = 0.01;
     Policy acting = new EpsilonGreedy(new Random(0), problem.actions(), toStateAction, sarsa, epsilon);
     control = new SarsaControl(acting, toStateAction, sarsa);

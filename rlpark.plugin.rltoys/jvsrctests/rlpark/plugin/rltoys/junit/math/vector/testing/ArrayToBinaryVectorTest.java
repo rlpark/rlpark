@@ -18,7 +18,7 @@ public class ArrayToBinaryVectorTest {
     double[] o = new double[] { 0.0, 1.0, 2.0, 4.0, 8.0 };
     BVector bob = BVector.toBinary(o);
     int[] expecteds = new int[] { 32, 65, 98, 131 };
-    Assert.assertArrayEquals(expecteds, bob.activeIndexes());
+    Assert.assertArrayEquals(expecteds, bob.getActiveIndexes());
   }
 
   @Test
@@ -34,7 +34,7 @@ public class ArrayToBinaryVectorTest {
   private int[] binaryToInts(BVector bob) {
     List<Integer> intNumbers = new ArrayList<Integer>();
     BigInteger value = BigInteger.ZERO;
-    for (int i : bob.activeIndexes()) {
+    for (int i : bob.getActiveIndexes()) {
       int nextIntegerBit = (intNumbers.size() + 1) * Integer.SIZE;
       while (i >= nextIntegerBit) {
         intNumbers.add(value.intValue());

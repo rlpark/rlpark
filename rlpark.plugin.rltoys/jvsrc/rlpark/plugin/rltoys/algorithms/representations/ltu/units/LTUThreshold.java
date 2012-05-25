@@ -2,14 +2,13 @@ package rlpark.plugin.rltoys.algorithms.representations.ltu.units;
 
 import java.util.Random;
 
-import rlpark.plugin.rltoys.math.vector.implementations.SVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class LTUThreshold implements LTUAdaptiveDensity {
   private static final long serialVersionUID = -4100313691365362138L;
   final static public double Beta = .6;
   final public int index;
-  protected final SVector connections;
+  protected final Connections connections;
   @Monitor
   protected double threshold;
   @Monitor
@@ -25,7 +24,7 @@ public class LTUThreshold implements LTUAdaptiveDensity {
   public LTUThreshold(int index, int[] inputs, byte[] weights) {
     this.index = index;
     int nbNegative = 0;
-    connections = new SVector(inputs.length, inputs.length);
+    connections = new Connections(inputs.length);
     for (int i = 0; i < inputs.length; i++) {
       connections.setEntry(inputs[i], weights[i]);
       if (weights[i] < 0)
@@ -46,7 +45,7 @@ public class LTUThreshold implements LTUAdaptiveDensity {
 
   @Override
   public int[] inputs() {
-    return connections.activeIndexes();
+    return connections.indexes;
   }
 
   @Override
@@ -56,22 +55,22 @@ public class LTUThreshold implements LTUAdaptiveDensity {
 
   @Override
   public void decreaseDensity(Random random, double[] inputVector) {
-    int bit = random.nextInt(connections.nonZeroElements());
-    double weight = connections.values[bit];
+    int bit = random.nextInt(connections.nbActive);
+    double weight = connections.weights[bit];
     boolean inputActive = inputVector[connections.indexes[bit]] > 0;
     if ((weight == 1 && inputActive) || (weight == -1 && !inputActive)) {
-      connections.values[bit] *= -1;
+      connections.weights[bit] *= -1;
       threshold += 1;
     }
   }
 
   @Override
   public void increaseDensity(Random random, double[] inputVector) {
-    int bit = random.nextInt(connections.nonZeroElements());
-    double weight = connections.values[bit];
+    int bit = random.nextInt(connections.nbActive);
+    double weight = connections.weights[bit];
     boolean inputActive = inputVector[connections.indexes[bit]] > 0;
     if ((weight == -1 && inputActive) || (weight == +1 && !inputActive)) {
-      connections.values[bit] *= -1;
+      connections.weights[bit] *= -1;
       threshold -= 1;
     }
   }
@@ -88,7 +87,7 @@ public class LTUThreshold implements LTUAdaptiveDensity {
     return isActive;
   }
 
-  public SVector connections() {
+  public Connections connections() {
     return connections;
   }
 

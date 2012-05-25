@@ -59,13 +59,23 @@ public class SweepTest {
     Assert.assertFalse(checkFile(nbValuesSecondSweep, nbParameters));
     int nbJobs = runFullSweep(scheduler, nbValuesFirstSweep, nbParameters);
     Assert.assertEquals((int) Math.pow(nbValuesFirstSweep, nbParameters) * NbRun, nbJobs);
+    forcedDelay();
     nbJobs = runFullSweep(scheduler, nbValuesSecondSweep, nbParameters);
     final int nbJobsPerRun = (int) (Math.pow(nbValuesSecondSweep, nbParameters) - Math.pow(nbValuesFirstSweep,
                                                                                            nbParameters));
     Assert.assertEquals(nbJobsPerRun * NbRun, nbJobs);
+    forcedDelay();
     nbJobs = runFullSweep(scheduler, nbValuesSecondSweep, nbParameters);
     Assert.assertEquals(0, nbJobs);
     Assert.assertTrue(checkFile(nbValuesSecondSweep, nbParameters));
+  }
+
+  private void forcedDelay() {
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   private boolean checkFile(int nbValues, int nbParameters) {

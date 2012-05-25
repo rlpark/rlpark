@@ -12,11 +12,12 @@ import rlpark.plugin.rltoys.junit.math.vector.testing.AllVectorsTest;
 import rlpark.plugin.rltoys.junit.math.vector.testing.ArrayToBinaryVectorTest;
 import rlpark.plugin.rltoys.junit.math.vector.testing.BVectorTest;
 import rlpark.plugin.rltoys.junit.math.vector.testing.PVectorTest;
+import rlpark.plugin.rltoys.junit.math.vector.testing.SSortedVectorTest;
 import rlpark.plugin.rltoys.junit.math.vector.testing.SVectorTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ BVectorTest.class, PVectorTest.class, SVectorTest.class, AllVectorsTest.class, RangeTest.class,
-    HistoryTest.class, NormalizerTest.class, MinMaxNormalizerTest.class, MovingMeanVarNormalizerTest.class,
-    ArrayToBinaryVectorTest.class, GrayCodeTest.class })
+@Suite.SuiteClasses({ BVectorTest.class, PVectorTest.class, SVectorTest.class, SSortedVectorTest.class,
+    AllVectorsTest.class, RangeTest.class, HistoryTest.class, NormalizerTest.class, MinMaxNormalizerTest.class,
+    MovingMeanVarNormalizerTest.class, ArrayToBinaryVectorTest.class, GrayCodeTest.class })
 public class Tests {
 }

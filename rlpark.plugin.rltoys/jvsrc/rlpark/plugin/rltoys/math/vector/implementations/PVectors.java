@@ -12,33 +12,6 @@ public class PVectors {
     return sum / vector.size;
   }
 
-  // TODO: Untested
-  static public double min(PVector vector) {
-    double min = Double.MAX_VALUE;
-    for (double value : vector.data)
-      min = Math.min(value, min);
-    return min;
-  }
-
-  // TODO: Untested
-  static public double max(PVector vector) {
-    double max = -Double.MAX_VALUE;
-    for (double value : vector.data)
-      max = Math.max(value, max);
-    return max;
-  }
-
-  // TODO: Untested
-  public static SVector toSVector(PVector v) {
-    SVector result = new SVector(v.getDimension());
-    for (int i = 0; i < v.size; i++) {
-      final double value = v.data[i];
-      if (value != 0)
-        result.setEntry(i, value);
-    }
-    return result;
-  }
-
   public static PVector multiplySelfByExponential(PVector result, RealVector other) {
     return multiplySelfByExponential(result, other, 0);
   }
@@ -52,8 +25,8 @@ public class PVectors {
   }
 
   public static PVector multiplySelfByExponential(PVector result, SVector other, double min) {
-    int[] activeIndexes = other.activeIndexes();
-    for (int i = 0; i < activeIndexes.length; i++) {
+    int[] activeIndexes = other.getActiveIndexes();
+    for (int i = 0; i < other.nonZeroElements(); i++) {
       int index = activeIndexes[i];
       result.data[index] = Math.max(min, result.data[index] * Math.exp(other.values[i]));
     }

@@ -1,8 +1,7 @@
 package rlpark.plugin.rltoys.algorithms.traces;
 
-import java.util.Arrays;
-
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
+import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.SVector;
 
@@ -14,43 +13,41 @@ public class RTraces extends ATraces {
   private static final long serialVersionUID = -324210619484987917L;
 
   public RTraces() {
-    this(-1, 0);
+    this(DefaultPrototype);
   }
 
-  public RTraces(int targetSize, double targetTolerance) {
-    this(0, targetSize, targetTolerance);
+  public RTraces(MutableVector prototype) {
+    this(prototype, DefaultThreshold);
   }
 
-  public RTraces(int size, int targetSize, double targetTolerance) {
-    super(size, targetSize, targetTolerance, new SVector(0));
+  protected RTraces(MutableVector prototype, double threshold) {
+    super(prototype, threshold);
+  }
+
+  protected RTraces(MutableVector prototype, double threshold, int size) {
+    super(prototype, threshold, size);
   }
 
   @Override
   public RTraces newTraces(int size) {
-    return new RTraces(size, targetSize, targetTolerance);
+    return new RTraces(prototype, threshold, size);
   }
 
   @Override
-  protected void addToSelf(RealVector phi) {
-    SVector svector = (SVector) vector;
-    int[] thisIndexes = Arrays.copyOf(svector.indexes, svector.indexes.length);
-    double[] thisValues = Arrays.copyOf(svector.values, svector.values.length);
-    int[] otherIndexes = ((BinaryVector) phi).activeIndexes();
-    int thisNbActive = svector.nonZeroElements();
-    int i = 0, j = 0;
-    svector.clear();
-    while (i < thisNbActive || j < otherIndexes.length) {
-      if (j < otherIndexes.length && (i == thisNbActive || thisIndexes[i] > otherIndexes[j])) {
-        svector.insertElementAtPosition(svector.nonZeroElements(), otherIndexes[j], 1.0);
-        j++;
-      } else if (j == otherIndexes.length || thisIndexes[i] < otherIndexes[j]) {
-        svector.insertElementAtPosition(svector.nonZeroElements(), thisIndexes[i], thisValues[i]);
-        i++;
-      } else {
-        svector.insertElementAtPosition(svector.nonZeroElements(), thisIndexes[i], 1.0);
-        i++;
-        j++;
-      }
-    }
+  protected void updateVector(double lambda, RealVector phi) {
+    vector.mapMultiplyToSelf(lambda);
+    replaceWith((BinaryVector) phi);
+  }
+
+  private void replaceWith(BinaryVector phi) {
+    SVector vector = vect();
+    int[] indexes = phi.getActiveIndexes();
+    for (int index : indexes)
+      vector.setEntry(index, 1.0);
+  }
+
+  @Override
+  public SVector vect() {
+    return (SVector) vector;
   }
 }

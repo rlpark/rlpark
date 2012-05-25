@@ -117,12 +117,12 @@ public class TDLambdaAutostep implements OnPolicyTD {
     final double[] alphaData = alpha.data;
     final SVector se = (SVector) e.vect();
     for (int i = 0; i < se.nonZeroElements(); i++)
-      updateStepSizeNormalizers(densePhi, normalizerData, alphaData, se.indexes[i], se.values[i], delta_t);
+      updateStepSizeNormalizers(densePhi, normalizerData, alphaData, se.activeIndexes[i], se.values[i], delta_t);
     m = 0.0;
     for (int i = 0; i < se.nonZeroElements(); i++)
-      m += featureNorm(densePhi, alphaData, se.indexes[i], se.values[i]);
+      m += featureNorm(densePhi, alphaData, se.activeIndexes[i], se.values[i]);
     maxOneM2 = Math.max(1, m);
-    for (int index : se.indexes)
+    for (int index : se.activeIndexes)
       if (densePhi[index] != 0)
         alphaData[index] /= maxOneM2;
   }

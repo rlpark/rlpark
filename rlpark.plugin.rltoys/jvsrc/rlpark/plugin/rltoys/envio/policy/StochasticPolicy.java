@@ -34,6 +34,8 @@ public abstract class StochasticPolicy implements DiscreteActionPolicy, MonitorC
     double sum = 0;
     for (int i = 0; i < distribution.length - 1; i++) {
       sum += distribution[i];
+      if (!Utils.checkValue(sum))
+        return null;
       if (sum >= randomValue)
         return actions[i];
     }
