@@ -9,13 +9,13 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 public class MemoryMonitor implements MonitorContainer {
   @Override
   public void addToMonitor(DataMonitor monitor) {
-    monitor.add("Free Memory", new Monitored() {
+    monitor.add("FreeMemory", new Monitored() {
       @Override
       public double monitoredValue() {
         return Runtime.getRuntime().freeMemory();
       }
     });
-    monitor.add("Total Memory", new Monitored() {
+    monitor.add("TotalMemory", new Monitored() {
       @Override
       public double monitoredValue() {
         return Runtime.getRuntime().totalMemory();
