@@ -47,7 +47,7 @@
             class="rlpark.plugin.rltoysview.internal.mountaincar.MountainCarView"
             icon="icons/environmentview.png"
             id="zephyr.rlpark.plugin.rltoysview.mountaincarview"
-            name="Mountain Car View"
+            name="Mountain Car"
             restorable="true">
       </view>
       <view
@@ -65,6 +65,14 @@
             name="Discrete Action Policy"
             restorable="true">
       </view>
+      <view
+            allowMultiple="true"
+            class="rlpark.plugin.rltoysview.internal.helicopter.HelicopterView"
+            icon="icons/environmentview.png"
+            id="zephyr.rlpark.plugin.rltoysview.helicopterview"
+            name="Helicopter"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="zephyr.viewprovider">
@@ -77,7 +85,7 @@
       <client
             class="rlpark.plugin.rltoysview.internal.pendulum.SwingPendulumView$Provider"
             icon="icons/environmentview.png"
-            name="Swing Pendulum"
+            name="Swing Pendulum View"
             viewid="zephyr.rlpark.plugin.rltoysview.swingpendulumview">
       </client>
       <client
@@ -109,6 +117,12 @@
             icon="icons/environmentview.png"
             name="Mountain Car View"
             viewid="zephyr.rlpark.plugin.rltoysview.mountaincarview">
+      </client>
+      <client
+            class="rlpark.plugin.rltoysview.internal.helicopter.HelicopterView$Provider"
+            icon="icons/environmentview.png"
+            name="Helicopter View"
+            viewid="zephyr.rlpark.plugin.rltoysview.helicopterview">
       </client>
       <client
             class="rlpark.plugin.rltoysview.internal.policystructure.PolicyDiscreteActionView$Provider"

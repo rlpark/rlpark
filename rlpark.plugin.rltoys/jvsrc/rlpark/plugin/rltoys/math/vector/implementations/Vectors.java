@@ -1,7 +1,9 @@
 package rlpark.plugin.rltoys.math.vector.implementations;
 
+
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.SparseVector;
 import rlpark.plugin.rltoys.utils.NotImplemented;
 import rlpark.plugin.rltoys.utils.Utils;
 
@@ -69,7 +71,7 @@ public class Vectors {
     if (v instanceof SVector) {
       double sum = 0.0;
       SVector sv = (SVector) v;
-      for (int i = 0; i < sv.nbActive; i++)
+      for (int i = 0; i < sv.nonZeroElements(); i++)
         sum += Math.abs(sv.values[i]);
       return sum;
     }
@@ -83,7 +85,7 @@ public class Vectors {
     result.clear();
     if (v instanceof SVector) {
       SVector sv = (SVector) v;
-      for (int i = 0; i < sv.nbActive; i++)
+      for (int i = 0; i < sv.nonZeroElements(); i++)
         result.setEntry(sv.activeIndexes[i], 1);
       return result;
     }
@@ -114,10 +116,21 @@ public class Vectors {
   }
 
   private static MutableVector positiveMaxToSelf(MutableVector result, SVector sother) {
-    for (int position = 0; position < sother.nbActive; position++) {
+    for (int position = 0; position < sother.nonZeroElements(); position++) {
       final int index = sother.activeIndexes[position];
       result.setEntry(index, Math.max(result.getEntry(index), sother.values[position]));
     }
     return result;
+  }
+
+  public static MutableVector mapMultiplyToSelf(PVector v, double d, RealVector mask) {
+    if (!(mask instanceof SparseVector))
+      return v.mapMultiplyToSelf(d);
+    SparseVector svector = (SparseVector) mask;
+    int nbActive = svector.nonZeroElements();
+    int[] actives = svector.nonZeroIndexes();
+    for (int i = 0; i < nbActive; i++)
+      v.data[actives[i]] *= d;
+    return v;
   }
 }

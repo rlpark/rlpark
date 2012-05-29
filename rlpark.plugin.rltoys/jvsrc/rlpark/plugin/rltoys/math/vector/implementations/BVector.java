@@ -206,4 +206,9 @@ public class BVector extends AbstractVector implements BinaryVector {
       data[i] = 1.0;
     return data;
   }
+
+  @Override
+  public int[] nonZeroIndexes() {
+    return indexes;
+  }
 }

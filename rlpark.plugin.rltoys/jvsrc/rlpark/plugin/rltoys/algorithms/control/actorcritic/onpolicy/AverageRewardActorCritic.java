@@ -51,4 +51,8 @@ public class AverageRewardActorCritic implements ControlLearner {
   public Actor actor() {
     return actor;
   }
+
+  public double currentAverage() {
+    return averageReward;
+  }
 }

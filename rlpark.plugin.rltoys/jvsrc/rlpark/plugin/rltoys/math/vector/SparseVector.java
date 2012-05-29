@@ -10,4 +10,6 @@ public interface SparseVector extends RealVector {
   void subtractSelfTo(double[] data);
 
   int nonZeroElements();
+
+  int[] nonZeroIndexes();
 }

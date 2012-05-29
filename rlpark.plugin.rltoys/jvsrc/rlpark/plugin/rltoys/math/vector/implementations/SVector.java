@@ -305,4 +305,9 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
       }
     });
   }
+
+  @Override
+  public int[] nonZeroIndexes() {
+    return activeIndexes;
+  }
 }

@@ -208,9 +208,9 @@ public abstract class VectorTest {
   public void testMultiplySelfByExponential() {
     PVector v1 = new PVector(0.0, 1.0, 2.0, 3.0, 4.0);
     RealVector v2 = newVector(1.0, -2.0, -3.0, 0.0, 2.0);
-    PVectors.multiplySelfByExponential(v1, v2);
+    PVectors.multiplySelfByExponential(v1, 1.0, v2);
     VectorsTestsUtils.assertEquals(newVector(0.0, Math.exp(-2.0), 2.0 * Math.exp(-3.0), 3.0, 4 * Math.exp(2.0)), v1);
-    PVectors.multiplySelfByExponential(v1, newVector(-10000.0, -10000.0, -10000.0, -100000.0, -10000.0));
+    PVectors.multiplySelfByExponential(v1, 1.0, newVector(-10000.0, -10000.0, -10000.0, -100000.0, -10000.0));
     Assert.assertTrue(Vectors.isNull(v1));
   }
 
@@ -218,9 +218,9 @@ public abstract class VectorTest {
   public void testMultiplySelfByExponentialBounded() {
     PVector v1 = new PVector(0.0, 1.0, 2.0, 3.0, 4.0);
     RealVector v2 = newVector(1.0, -2.0, -3.0, 0.0, 2.0);
-    PVectors.multiplySelfByExponential(v1, v2);
+    PVectors.multiplySelfByExponential(v1, 1.0, v2);
     VectorsTestsUtils.assertEquals(newVector(0.0, Math.exp(-2.0), 2.0 * Math.exp(-3.0), 3.0, 4 * Math.exp(2.0)), v1);
-    PVectors.multiplySelfByExponential(v1, newVector(-10000.0, -10000.0, -10000.0, -100000.0, -10000.0), .1);
+    PVectors.multiplySelfByExponential(v1, 1.0, newVector(-10000.0, -10000.0, -10000.0, -100000.0, -10000.0), .1);
     Assert.assertFalse(Vectors.isNull(v1));
   }
 
