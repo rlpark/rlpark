@@ -208,10 +208,11 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
   }
 
   @Override
-  public void clear() {
+  public SVector clear() {
     for (int i = 0; i < nbActive; i++)
       indexesPosition[activeIndexes[i]] = -1;
     nbActive = 0;
+    return this;
   }
 
   @Override

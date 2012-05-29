@@ -1,9 +1,8 @@
 package rlpark.plugin.rltoys.math.vector;
 
 
-
 public interface MutableVector extends RealVector {
-  void clear();
+  MutableVector clear();
 
   @Override
   MutableVector copy();

@@ -89,8 +89,9 @@ public class BVector extends AbstractVector implements BinaryVector {
   }
 
   @Override
-  public void clear() {
+  public BVector clear() {
     nbActive = 0;
+    return this;
   }
 
   @Override

@@ -174,8 +174,9 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
   }
 
   @Override
-  public void clear() {
+  public PVector clear() {
     Arrays.fill(data, 0);
+    return this;
   }
 
   @Override
