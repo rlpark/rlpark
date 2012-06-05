@@ -5,12 +5,13 @@ import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.SVector;
 import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
+import rlpark.plugin.rltoys.utils.Prototype;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 /**
  * Accumulating traces
  */
-public class ATraces implements Traces {
+public class ATraces implements Traces, Prototype<RealVector> {
   private static final long serialVersionUID = 6241887723527497111L;
   public static final SVector DefaultPrototype = new SVector(0);
   public static final double DefaultThreshold = 1e-8;
@@ -89,5 +90,10 @@ public class ATraces implements Traces {
   @Override
   public void clear() {
     vector.clear();
+  }
+
+  @Override
+  public RealVector prototype() {
+    return prototype;
   }
 }

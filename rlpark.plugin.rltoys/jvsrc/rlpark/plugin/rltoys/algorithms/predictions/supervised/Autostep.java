@@ -74,4 +74,8 @@ public class Autostep implements LearningAlgorithm {
   public double predict(RealVector x) {
     return weights.dotProduct(x);
   }
+
+  public PVector weights() {
+    return weights;
+  }
 }

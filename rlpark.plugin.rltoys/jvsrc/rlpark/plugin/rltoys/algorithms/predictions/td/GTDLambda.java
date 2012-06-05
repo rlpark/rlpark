@@ -25,6 +25,7 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
   private final Traces e;
   protected double v_t;
   protected double delta_t;
+  private double correction;
 
   public GTDLambda(double lambda, double gamma, double alpha_v, double alpha_w, int nbFeatures) {
     this(lambda, gamma, alpha_v, alpha_w, nbFeatures, new ATraces());
@@ -51,12 +52,14 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
     e.update(gamma_t * lambda, x_t);
     e.vect().mapMultiplyToSelf(rho_t);
     // Compute correction
-    MutableVector correction = pool.newVector(e.vect().getDimension());
-    if (x_tp1 != null)
-      correction.addToSelf(e.vect().dotProduct(w) * gamma_tp1 * (1 - lambda), x_tp1);
+    MutableVector correctionVector = pool.newVector(e.vect().getDimension());
+    if (x_tp1 != null) {
+      correction = e.vect().dotProduct(w);
+      correctionVector.addToSelf(correction * gamma_tp1 * (1 - lambda), x_tp1);
+    }
     // Update parameters
     MutableVector deltaE = pool.newVector(e.vect()).mapMultiplyToSelf(delta_t);
-    v.addToSelf(alpha_v, pool.newVector(deltaE).subtractToSelf(correction));
+    v.addToSelf(alpha_v, pool.newVector(deltaE).subtractToSelf(correctionVector));
     w.addToSelf(alpha_w, deltaE.addToSelf(-w.dotProduct(x_t), x_t));
     deltaE = null;
     gamma_t = gamma_tp1;
