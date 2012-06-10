@@ -42,18 +42,16 @@ public class SchedulerTest {
   public void testJobSchedulerWithManyIterators() {
     LocalScheduler scheduler = new LocalScheduler(10);
     final int NbJobs = 100;
-    for (int i = 0; i < 2; i++) {
-      List<Job> jobs = SchedulerTestsUtils.createJobs(NbJobs);
-      JobDoneListener listener = SchedulerTestsUtils.createListener();
-      for (Job job : jobs) {
-        List<Runnable> oneElement = new ArrayList<Runnable>();
-        oneElement.add(job);
-        ((LocalQueue) scheduler.queue()).add(oneElement.iterator(), listener);
-      }
-      scheduler.runAll();
-      Assert.assertEquals(NbJobs, listener.nbJobDone());
-      Assert.assertTrue(SchedulerTestsUtils.assertAreDone(listener.jobDone()));
+    List<Job> jobs = SchedulerTestsUtils.createJobs(NbJobs);
+    JobDoneListener listener = SchedulerTestsUtils.createListener();
+    for (Job job : jobs) {
+      List<Runnable> oneElement = new ArrayList<Runnable>();
+      oneElement.add(job);
+      ((LocalQueue) scheduler.queue()).add(oneElement.iterator(), listener);
     }
+    scheduler.runAll();
+    Assert.assertEquals(NbJobs, listener.nbJobDone());
+    Assert.assertTrue(SchedulerTestsUtils.assertAreDone(listener.jobDone()));
     scheduler.dispose();
   }
 
@@ -71,7 +69,7 @@ public class SchedulerTest {
 
       @Override
       public void run() {
-        NetworkClient client01 = new NetworkClient(1, Localhost, Port);
+        NetworkClient client01 = new NetworkClient(1, Localhost, Port, false);
         client01.start();
       }
 
@@ -86,7 +84,7 @@ public class SchedulerTest {
 
       @Override
       public void run() {
-        NetworkClient client01 = new NetworkClient(2, Localhost, Port);
+        NetworkClient client01 = new NetworkClient(2, Localhost, Port, false);
         client01.start();
 
       }
@@ -102,8 +100,8 @@ public class SchedulerTest {
 
       @Override
       public void run() {
-        NetworkClient client01 = new NetworkClient(10, Localhost, Port);
-        NetworkClient client02 = new NetworkClient(10, Localhost, Port);
+        NetworkClient client01 = new NetworkClient(10, Localhost, Port, false);
+        NetworkClient client02 = new NetworkClient(10, Localhost, Port, false);
         client01.start();
         client02.start();
       }

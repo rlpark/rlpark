@@ -25,6 +25,12 @@ public class SweepTest {
   private static final String JUnitFolder = ".junittests_parametersweep";
   private static final int NbRun = 3;
 
+  interface SchedulerManager {
+    Scheduler newScheduler();
+
+    void disposeScheduler(Scheduler scheduler);
+  }
+
   @BeforeClass
   static public void setup() {
     SchedulerTest.junitMode();
@@ -38,44 +44,64 @@ public class SweepTest {
 
   @Test
   public void testSweepLocalScheduler() throws IOException {
-    LocalScheduler scheduler = new LocalScheduler();
-    testSweep(scheduler);
-    scheduler.dispose();
+    testSweep(new SchedulerManager() {
+
+      @Override
+      public Scheduler newScheduler() {
+        return new LocalScheduler();
+      }
+
+      @Override
+      public void disposeScheduler(Scheduler scheduler) {
+        scheduler.dispose();
+      }
+    });
   }
 
   @Test(timeout = SchedulerTest.Timeout)
   public void testSweepNetworkScheduler() throws IOException {
-    ServerScheduler scheduler = UnreliableNetworkClientTest.createServerScheduler(true);
-    UnreliableNetworkClientTest.startUnreliableClients(5, true);
-    testSweep(scheduler);
-    scheduler.dispose();
+    testSweep(new SchedulerManager() {
+
+      @Override
+      public Scheduler newScheduler() {
+        ServerScheduler scheduler = null;
+        try {
+          scheduler = UnreliableNetworkClientTest.createServerScheduler(true);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+        UnreliableNetworkClientTest.startUnreliableClients(5, true);
+        return scheduler;
+      }
+
+      @Override
+      public void disposeScheduler(Scheduler scheduler) {
+        scheduler.dispose();
+      }
+    });
   }
 
-  private void testSweep(Scheduler scheduler) throws IOException {
+  private void testSweep(SchedulerManager schedulerManager) throws IOException {
     int nbParameters = 4;
     int nbValuesFirstSweep = 5;
     int nbValuesSecondSweep = 6;
     FileUtils.deleteDirectory(new File(JUnitFolder));
     Assert.assertFalse(checkFile(nbValuesSecondSweep, nbParameters));
+    Scheduler scheduler = schedulerManager.newScheduler();
     int nbJobs = runFullSweep(scheduler, nbValuesFirstSweep, nbParameters);
     Assert.assertEquals((int) Math.pow(nbValuesFirstSweep, nbParameters) * NbRun, nbJobs);
-    forcedDelay();
+    schedulerManager.disposeScheduler(scheduler);
+    scheduler = schedulerManager.newScheduler();
     nbJobs = runFullSweep(scheduler, nbValuesSecondSweep, nbParameters);
     final int nbJobsPerRun = (int) (Math.pow(nbValuesSecondSweep, nbParameters) - Math.pow(nbValuesFirstSweep,
                                                                                            nbParameters));
     Assert.assertEquals(nbJobsPerRun * NbRun, nbJobs);
-    forcedDelay();
+    schedulerManager.disposeScheduler(scheduler);
+    scheduler = schedulerManager.newScheduler();
     nbJobs = runFullSweep(scheduler, nbValuesSecondSweep, nbParameters);
+    schedulerManager.disposeScheduler(scheduler);
     Assert.assertEquals(0, nbJobs);
     Assert.assertTrue(checkFile(nbValuesSecondSweep, nbParameters));
-  }
-
-  private void forcedDelay() {
-    try {
-      Thread.sleep(1000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
   }
 
   private boolean checkFile(int nbValues, int nbParameters) {

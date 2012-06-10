@@ -146,6 +146,7 @@ public class ServerScheduler implements Scheduler {
     if (!removed)
       return;
     client.onClosed.disconnect(clientClosedListener);
+    client.close();
     Collection<Runnable> pendingJobs = new ArrayList<Runnable>(client.pendingJobs());
     for (Runnable pendingJob : pendingJobs)
       localQueue.requestCancel(pendingJob);

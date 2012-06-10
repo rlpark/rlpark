@@ -24,7 +24,7 @@ public class UnreliableNetworkClientTest {
     volatile private boolean terminated = false;
 
     public UnreliableNetworkQueue(String serverHostName, int port) {
-      super(serverHostName, port);
+      super(serverHostName, port, false);
       nbUnreliableQueue++;
     }
 
