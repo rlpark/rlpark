@@ -1,7 +1,7 @@
 package rlpark.plugin.rltoys.math.vector;
 
 public interface SparseVector extends RealVector {
-  SparseVector clear();
+  RealVector clear();
 
   double dotProduct(double[] data);
 

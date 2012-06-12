@@ -14,10 +14,12 @@ import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambda;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
+import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.pendulum.SwingPendulum;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 
@@ -28,6 +30,7 @@ public class ActorCriticPendulum implements Runnable {
   private final SwingPendulum problem;
   private final Clock clock = new Clock("ActorCriticPendulum");
   private final LearnerAgentFA agent;
+  private final Runner runner;
 
   public ActorCriticPendulum() {
     Random random = new Random(0);
@@ -46,12 +49,18 @@ public class ActorCriticPendulum implements Runnable {
     AverageRewardActorCritic actorCritic = new AverageRewardActorCritic(.0001, critic, actor);
     agent = new LearnerAgentFA(actorCritic, tileCoders);
     valueFunction = new ValueFunction2D(tileCoders, problem, critic);
+    runner = new Runner(problem, agent, -1, 1000);
+    runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
+      @Override
+      public void listen(RunnerEvent eventInfo) {
+        System.out.println(String.format("Episode %d: %f", eventInfo.episode, eventInfo.episodeReward));
+      }
+    });
     Zephyr.advertise(clock, this);
   }
 
   @Override
   public void run() {
-    Runner runner = new Runner(problem, agent, -1, 1000);
     while (clock.tick())
       runner.step();
   }

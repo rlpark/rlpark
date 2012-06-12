@@ -74,6 +74,8 @@ public class OffPACContinuousGridworld implements Runnable {
         episodeInfos[0] = eventInfo.step.time;
         episodeInfos[1] = eventInfo.episodeReward;
         episodeClock.tick();
+        System.out.println(String.format("Episodes %d: %d, %f", eventInfo.episode, eventInfo.step.time,
+                                         eventInfo.episodeReward));
       }
     });
     Zephyr.advertise(episodeClock, new Monitored() {
