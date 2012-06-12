@@ -1,0 +1,80 @@
+---
+title: Java Code Snippet Actor-critic
+layout: documentation 
+---
+
+<h1>Code Snippet: Actor-critic on the Pendulum problem with continuous action</h1>
+
+
+<div align="center">
+  <iframe width="480" height="360" src="http://www.youtube.com/embed/YXH1BhrDi0k" frameborder="0" allowfullscreen></iframe>
+  <br/><b>Description</b>: Actor-critic on the Pendulum problem with continuous action, tile coding,<br/> and a policy structure using a parameterized normal distribution. 
+</div>
+<br/>
+<br/>
+
+<h2>Source code:</h2>
+<ul>
+	<li>Doxygen: <a href="http://www.ualberta.ca/~degris/doxygen/html/_actor_critic_pendulum_8java_source.html">ActorCriticPendulum.java</a></li>
+	<li>Github: <a href="https://github.com/ThomasDegris/rlpark/blob/master/rlpark.example.demos/src/rlpark/example/demos/learning/ActorCriticPendulum.java">ActorCriticPendulum.java</a></li>
+</ul>
+
+<h2>Reference:</h2>
+<a href="http://webdocs.cs.ualberta.ca/~sutton/papers/DPS-ACC-12.pdf">Model-Free Reinforcement Learning with Continuous Action in Practice.</a> 
+T. Degris, P. M. Pilarski, R. S. Sutton (2012). In Proceedings of the 2012 American Control Conference.
+
+<h2>Running this demo:</h2>
+<ul>
+	<li><b>From the command line:</b>
+	<ol>
+	  <li>Download <a href="http://www.ualberta.ca/~degris/rlpark.jar">rlpark.jar</a></li>
+	  <li>Run the following command line:<br/>
+	    <code>java -cp rlpark.jar rlpark.example.demos.learning.ActorCriticPendulum</code>
+	  </li>
+	</ol>
+	</li>
+	<li><b>In Zephyr standalone application:</b>
+	<ol>
+	  <li>Download <a href="http://thomasdegris.github.com/zephyr/download.html">Zephyr standalone application</a></li>
+	  <li><a href="http://thomasdegris.github.com/rlpark/download.html">Install RLPark plug-ins</a> in Zephyr</li>
+	  <li>Go to: <span class='menu'>Demos-&gt;Sarsa on Mountain Car</span>
+	</ol>
+	</li>
+	<li><b>In Eclipse, as a Java Application:</b>
+	<ol>
+	  <li>Create a new <span class='menu'>Java Project</span> or use an existing project</li>
+	  <li>Include <a href="http://www.ualberta.ca/~degris/rlpark.jar">rlpark.jar</a> in the project classpath</li>
+	  <li>Run a <code>Java Application</code> target using 
+	  <code>rlpark.example.demos.learning.ActorCriticPendulum</code> as a main class</li>
+	</ol>
+	</li>
+	<li><b>In Eclipse, as an Eclipse Application:</b>
+	<ol>
+	  <li>Install <a href="http://thomasdegris.github.com/zephyr/download.html">Zephyr plug-ins</a> and 
+	  <a href="http://thomasdegris.github.com/rlpark/download.html">RLPark plug-ins</a> in Eclipse 
+	  <br/>or<br/>
+	  download RLPark source code and import RLPark projects (including the demo project 
+	  <span class='file'>rlpark.example.demos</span>) into the workspace
+	  </li>
+	  <li>Set up an <code>Eclipse Application</code> target following the tutorial
+          <a href="http://thomasdegris.github.com/zephyr/tutorial_plugins.html">Using Zephyr plug-ins</a></li> 
+      <li>In the <code>Eclipse Application</code> target configuration:
+          <ol>
+            <li>In the menu, go to: <span class='menu'>Run-&gt;Run Configurations...</span></li>
+            <li>Select the <code>Eclipse Application</code> target</li>
+            <li>In the <span class='menu'>Plug-ins</span> tab, select the plug-in 
+            <span class='file'>rlpark.example.demos</span> and 
+            <span class='file'>rlpark.plugin.rltoysview</span> to enable RLPark views</li>
+          </ol> 
+      </li>
+      <li>Start Zephyr by running the <code>Eclipse Application</code> target</li>
+	  <li>In the Zephyr menu, go to: <span class='menu'>Demos-&gt;Actor-Critic on Pendulum</span><br/>
+	    or in the <span class='menu'>Arguments</span> tab, add 
+	    <code>rlpark.example.demos.learning.ActorCriticPendulum</code> to the 
+	    <span class='menu'>Program Arguments</span> text field 
+	  </li>  
+	</ol>
+</ul>
+
+<h2>Dependencies</h2> 
+<span class='file'>zephyr.plugin.core.api</span>, <span class='file'>rlpark.plugin.rltoys</span>
