@@ -123,10 +123,9 @@ public class ServerScheduler implements Scheduler {
   }
 
   @Override
-  public void runAll() {
+  public void waitAll() {
     JobStatListener listener = new JobStatListener();
     localQueue.onJobDone().connect(listener);
-    start();
     LocalQueue.waitAllDone(localQueue);
     if (localScheduler != null) {
       Throwable exceptionOccured = localScheduler.exceptionOccured();
@@ -136,6 +135,7 @@ public class ServerScheduler implements Scheduler {
     localQueue.onJobDone().disconnect(listener);
   }
 
+  @Override
   synchronized public void start() {
     if (localScheduler != null)
       localScheduler.start();
@@ -153,6 +153,7 @@ public class ServerScheduler implements Scheduler {
     printConnectionInfo(String.format("%s disconnected. Canceling %d job%s. Did %d job%s.", client.clientName(),
                                       pendingJobs.size(), pendingJobs.size() > 1 ? "s" : "", client.nbJobDone(),
                                       client.nbJobDone() > 1 ? "s" : ""));
+    client.close();
   }
 
   @Override

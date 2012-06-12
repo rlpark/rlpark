@@ -15,7 +15,6 @@ public class LocalScheduler implements Scheduler {
   protected class RunnableProcessor implements Runnable {
     @Override
     public void run() {
-      runningThread++;
       try {
         Runnable runnable = runnables.request();
         while (exceptionThrown == null && runnable != null) {
@@ -28,9 +27,6 @@ public class LocalScheduler implements Scheduler {
           exceptionThrown = exception;
         exception.printStackTrace();
       }
-      runningThread--;
-      if (runningThread == 0)
-        dispose();
     }
   }
 
@@ -41,7 +37,6 @@ public class LocalScheduler implements Scheduler {
   protected final JobQueue runnables;
   private final Chrono chrono = new Chrono();
   protected final int nbThread;
-  int runningThread;
 
   public LocalScheduler() {
     this(getDefaultNbThreads() + 1);
@@ -68,7 +63,8 @@ public class LocalScheduler implements Scheduler {
     executor = SchedulingThreadFactory.newFixedThreadPool("LocalScheduler", nbThread);
   }
 
-  synchronized public void start() {
+  @Override
+  public void start() {
     exceptionThrown = null;
     chrono.start();
     for (int i = 0; i < updaters.size(); i++)
@@ -77,8 +73,7 @@ public class LocalScheduler implements Scheduler {
   }
 
   @Override
-  public void runAll() {
-    start();
+  public void waitAll() {
     if (runnables instanceof LocalQueue)
       LocalQueue.waitAllDone((LocalQueue) runnables);
     else
@@ -102,7 +97,7 @@ public class LocalScheduler implements Scheduler {
   }
 
   @Override
-  synchronized public void dispose() {
+  public void dispose() {
     executor.shutdown();
     runnables.dispose();
   }

@@ -24,6 +24,21 @@ public class SchedulerTest {
   private static final int Port = 5000;
   public static final int Timeout = 1000000;
 
+  class DefaultNetworkClient implements Runnable {
+    private final int nbLocalThread;
+
+    public DefaultNetworkClient(int nbLocalThread) {
+      this.nbLocalThread = nbLocalThread;
+    }
+
+    @Override
+    public void run() {
+      NetworkClient client = new NetworkClient(nbLocalThread, Localhost, Port, false);
+      client.run();
+      client.dispose();
+    }
+  }
+
   @BeforeClass
   static public void junitMode() {
     ClassLoading.enableForceNetworkClassResolution();
@@ -34,7 +49,7 @@ public class SchedulerTest {
   @Test(timeout = Timeout)
   public void testJobScheduler() {
     LocalScheduler scheduler = new LocalScheduler(10);
-    SchedulerTestsUtils.testScheduler(scheduler, 100000, null);
+    SchedulerTestsUtils.testScheduler(scheduler, 100000);
     scheduler.dispose();
   }
 
@@ -49,7 +64,8 @@ public class SchedulerTest {
       oneElement.add(job);
       ((LocalQueue) scheduler.queue()).add(oneElement.iterator(), listener);
     }
-    scheduler.runAll();
+    scheduler.start();
+    scheduler.waitAll();
     Assert.assertEquals(NbJobs, listener.nbJobDone());
     Assert.assertTrue(SchedulerTestsUtils.assertAreDone(listener.jobDone()));
     scheduler.dispose();
@@ -58,55 +74,28 @@ public class SchedulerTest {
   @Test(timeout = Timeout)
   public void testServerScheduler() throws IOException {
     ServerScheduler scheduler = new ServerScheduler(Port, 10);
-    SchedulerTestsUtils.testServerScheduler(scheduler, 10000, null);
+    SchedulerTestsUtils.testServerScheduler(scheduler, 10000);
     scheduler.dispose();
   }
 
   @Test(timeout = Timeout)
   public void testServerSchedulerWithUniqueClient() throws IOException {
     ServerScheduler scheduler = new ServerScheduler(Port, 0);
-    SchedulerTestsUtils.testServerScheduler(scheduler, 1000, new Runnable() {
-
-      @Override
-      public void run() {
-        NetworkClient client01 = new NetworkClient(1, Localhost, Port, false);
-        client01.start();
-      }
-
-    });
+    SchedulerTestsUtils.testServerScheduler(scheduler, 1000, new DefaultNetworkClient(1));
     scheduler.dispose();
   }
 
   @Test(timeout = Timeout)
   public void testServerSchedulerWithUniqueClientMultipleThreads() throws IOException {
     ServerScheduler scheduler = new ServerScheduler(Port, 0);
-    SchedulerTestsUtils.testServerScheduler(scheduler, 10000, new Runnable() {
-
-      @Override
-      public void run() {
-        NetworkClient client01 = new NetworkClient(2, Localhost, Port, false);
-        client01.start();
-
-      }
-
-    });
+    SchedulerTestsUtils.testServerScheduler(scheduler, 10000, new DefaultNetworkClient(2));
     scheduler.dispose();
   }
 
   @Test(timeout = Timeout)
   public void testServerSchedulerWithMultipleClients() throws IOException {
     ServerScheduler scheduler = new ServerScheduler(Port, 0);
-    SchedulerTestsUtils.testServerScheduler(scheduler, 50000, new Runnable() {
-
-      @Override
-      public void run() {
-        NetworkClient client01 = new NetworkClient(10, Localhost, Port, false);
-        NetworkClient client02 = new NetworkClient(10, Localhost, Port, false);
-        client01.start();
-        client02.start();
-      }
-
-    });
+    SchedulerTestsUtils.testServerScheduler(scheduler, 50000, new DefaultNetworkClient(10));
     scheduler.dispose();
   }
 

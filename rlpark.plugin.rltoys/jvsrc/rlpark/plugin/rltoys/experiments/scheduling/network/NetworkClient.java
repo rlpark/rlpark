@@ -31,10 +31,6 @@ public class NetworkClient {
     return new NetworkJobQueue(serverHost, port, multipleConnectionAttempts);
   }
 
-  public void start() {
-    localScheduler.start();
-  }
-
   private void setMaximumTime(final double wallTime) {
     networkJobQueue.onJobDone().connect(new Listener<JobDoneEvent>() {
       final Chrono chrono = new Chrono();
@@ -48,7 +44,19 @@ public class NetworkClient {
   }
 
   public void run() {
-    localScheduler.runAll();
+    localScheduler.start();
+    localScheduler.waitAll();
+  }
+
+  public void asyncRun() {
+    Thread thread = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        NetworkClient.this.run();
+      }
+    });
+    thread.setDaemon(true);
+    thread.start();
   }
 
   public void dispose() {

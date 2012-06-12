@@ -28,8 +28,7 @@ public class UnreliableNetworkClientWithPoolTest {
 
   @Test(timeout = SchedulerTestsUtils.Timeout)
   public void testServerSchedulerWithMultipleClients() throws IOException {
-    ServerScheduler scheduler = UnreliableNetworkClientTest.createServerScheduler(false);
-    UnreliableNetworkClientTest.startUnreliableClients(5, false);
+    ServerScheduler scheduler = new ServerScheduler(SchedulerTestsUtils.Port, 0);
     testServerSchedulerWithPool(scheduler, 1000, 100);
     scheduler.dispose();
   }
@@ -40,6 +39,7 @@ public class UnreliableNetworkClientWithPoolTest {
     JobPoolListenerTest poolListener = new JobPoolTest.JobPoolListenerTest();
     PoolResults poolResults = SchedulerTestsUtils.submitJobsInPool(scheduler, jobs, jobListener, poolListener, nbPools);
     scheduler.start();
+    UnreliableNetworkClientTest.startUnreliableClients(5, false);
     poolResults.waitPools();
     Assert.assertTrue(SchedulerTestsUtils.assertAreDone(jobListener.jobDone()));
     Assert.assertEquals(nbJobs, jobListener.nbJobDone());

@@ -19,6 +19,7 @@ import rlpark.plugin.rltoys.experiments.scheduling.interfaces.Scheduler;
 import rlpark.plugin.rltoys.experiments.scheduling.network.ServerScheduler;
 import rlpark.plugin.rltoys.experiments.scheduling.schedulers.LocalScheduler;
 import rlpark.plugin.rltoys.junit.experiments.scheduling.SchedulerTest;
+import rlpark.plugin.rltoys.junit.experiments.scheduling.SchedulerTestsUtils;
 import rlpark.plugin.rltoys.junit.experiments.scheduling.UnreliableNetworkClientTest;
 
 public class SweepTest {
@@ -28,7 +29,7 @@ public class SweepTest {
   interface SchedulerManager {
     Scheduler newScheduler();
 
-    void disposeScheduler(Scheduler scheduler);
+    void startClients();
   }
 
   @BeforeClass
@@ -52,8 +53,7 @@ public class SweepTest {
       }
 
       @Override
-      public void disposeScheduler(Scheduler scheduler) {
-        scheduler.dispose();
+      public void startClients() {
       }
     });
   }
@@ -66,17 +66,17 @@ public class SweepTest {
       public Scheduler newScheduler() {
         ServerScheduler scheduler = null;
         try {
-          scheduler = UnreliableNetworkClientTest.createServerScheduler(true);
+          scheduler = new ServerScheduler(SchedulerTestsUtils.Port, 0);
+          // Need to fix this
         } catch (IOException e) {
           e.printStackTrace();
         }
-        UnreliableNetworkClientTest.startUnreliableClients(5, true);
         return scheduler;
       }
 
       @Override
-      public void disposeScheduler(Scheduler scheduler) {
-        scheduler.dispose();
+      public void startClients() {
+        UnreliableNetworkClientTest.startUnreliableClients(4, true);
       }
     });
   }
@@ -87,19 +87,13 @@ public class SweepTest {
     int nbValuesSecondSweep = 6;
     FileUtils.deleteDirectory(new File(JUnitFolder));
     Assert.assertFalse(checkFile(nbValuesSecondSweep, nbParameters));
-    Scheduler scheduler = schedulerManager.newScheduler();
-    int nbJobs = runFullSweep(scheduler, nbValuesFirstSweep, nbParameters);
+    int nbJobs = runFullSweep(schedulerManager, nbValuesFirstSweep, nbParameters);
     Assert.assertEquals((int) Math.pow(nbValuesFirstSweep, nbParameters) * NbRun, nbJobs);
-    schedulerManager.disposeScheduler(scheduler);
-    scheduler = schedulerManager.newScheduler();
-    nbJobs = runFullSweep(scheduler, nbValuesSecondSweep, nbParameters);
+    nbJobs = runFullSweep(schedulerManager, nbValuesSecondSweep, nbParameters);
     final int nbJobsPerRun = (int) (Math.pow(nbValuesSecondSweep, nbParameters) - Math.pow(nbValuesFirstSweep,
                                                                                            nbParameters));
     Assert.assertEquals(nbJobsPerRun * NbRun, nbJobs);
-    schedulerManager.disposeScheduler(scheduler);
-    scheduler = schedulerManager.newScheduler();
-    nbJobs = runFullSweep(scheduler, nbValuesSecondSweep, nbParameters);
-    schedulerManager.disposeScheduler(scheduler);
+    nbJobs = runFullSweep(schedulerManager, nbValuesSecondSweep, nbParameters);
     Assert.assertEquals(0, nbJobs);
     Assert.assertTrue(checkFile(nbValuesSecondSweep, nbParameters));
   }
@@ -129,11 +123,16 @@ public class SweepTest {
     return true;
   }
 
-  private int runFullSweep(Scheduler scheduler, int nbValues, int nbParameters) {
+  private int runFullSweep(SchedulerManager schedulerManager, int nbValues, int nbParameters) {
     ProviderTest provider = new ProviderTest(nbValues, nbParameters);
     ExperimentCounter counter = new ExperimentCounter(NbRun, JUnitFolder);
+    Scheduler scheduler = schedulerManager.newScheduler();
     SweepAll sweep = new SweepAll(scheduler);
-    sweep.runSweep(provider, counter);
+    sweep.submitSweep(provider, counter);
+    sweep.startScheduler();
+    schedulerManager.startClients();
+    sweep.waitAll();
+    sweep.dispose();
     return sweep.nbJobs();
   }
 }

@@ -35,8 +35,10 @@ public class Vectors {
   }
 
   public static boolean checkValues(RealVector v) {
-    for (int i = 0; i < v.getDimension(); i++)
-      if (!Utils.checkValue(v.getEntry(i)))
+    final double[] data = (v instanceof SVector) ? ((SVector) v).values : v.accessData();
+    final int nbChecks = (v instanceof SVector) ? ((SVector) v).nonZeroElements() : v.getDimension();
+    for (int i = 0; i < nbChecks; i++)
+      if (!Utils.checkValue(data[i]))
         return false;
     return true;
   }

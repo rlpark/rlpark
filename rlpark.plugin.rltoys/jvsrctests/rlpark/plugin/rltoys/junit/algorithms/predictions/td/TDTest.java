@@ -14,8 +14,8 @@ import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambda;
 import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambdaAutostep;
 import rlpark.plugin.rltoys.algorithms.traces.AMaxTraces;
 import rlpark.plugin.rltoys.algorithms.traces.ATraces;
+import rlpark.plugin.rltoys.experiments.testing.predictions.RandomWalkOffPolicy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
-import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.problems.stategraph.FSGAgentState;
 import rlpark.plugin.rltoys.problems.stategraph.FiniteStateGraph;
@@ -149,7 +149,7 @@ public class TDTest {
     TDHelper td = new TDHelper(tdFactory.create(agentState.size));
     int nbEpisode = 0;
     double[] solution = problem.expectedDiscountedSolution();
-    while (distanceToSolution(solution, td.td.weights()) > 0.05) {
+    while (RandomWalkOffPolicy.distanceToSolution(solution, td.td.weights()) > 0.05) {
       StepData stepData = agentState.step();
       RealVector currentFeatureState = agentState.currentFeatureState();
       td.learn(stepData.r_tp1, currentFeatureState);
@@ -160,13 +160,5 @@ public class TDTest {
     }
     Assert.assertTrue(nbEpisode > 2);
     Assert.assertTrue(Vectors.checkValues(td.td.weights()));
-  }
-
-  static public double distanceToSolution(double[] solution, PVector theta) {
-    Assert.assertTrue(solution.length == theta.size);
-    double max = 0;
-    for (int i = 0; i < solution.length; i++)
-      max = Math.max(max, Math.abs(solution[i] - theta.data[i]));
-    return max;
   }
 }

@@ -7,15 +7,17 @@ import java.util.Map;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 
 public class VectorPools {
-  static public Map<Thread, VectorPool> threadToPool = Collections.synchronizedMap(new HashMap<Thread, VectorPool>());
+  static public Map<Thread, ThreadVectorPool> threadToPool = Collections
+      .synchronizedMap(new HashMap<Thread, ThreadVectorPool>());
 
   public static VectorPool pool(RealVector prototype) {
     final Thread thread = Thread.currentThread();
-    VectorPool pool = threadToPool.get(thread);
+    ThreadVectorPool pool = threadToPool.get(thread);
     if (pool == null) {
-      pool = new ThreadVectorPool(prototype);
+      pool = new ThreadVectorPool();
       threadToPool.put(thread, pool);
     }
+    pool.setPrototype(prototype);
     return pool;
   }
 }

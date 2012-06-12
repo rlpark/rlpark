@@ -1,7 +1,9 @@
 package rlpark.plugin.rltoys.experiments.scheduling.interfaces;
 
 public interface Scheduler {
-  void runAll();
+  void start();
+
+  void waitAll();
 
   JobQueue queue();
 

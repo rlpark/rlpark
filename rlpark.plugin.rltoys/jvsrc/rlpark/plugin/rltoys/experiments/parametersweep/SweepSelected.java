@@ -69,7 +69,8 @@ public class SweepSelected {
           jobs.add(entry.getKey().createJob(parameters, counter));
     }
     Schedulers.addAll(scheduler, jobs, null);
-    scheduler.runAll();
+    scheduler.start();
+    scheduler.waitAll();
     scheduler.dispose();
   }
 

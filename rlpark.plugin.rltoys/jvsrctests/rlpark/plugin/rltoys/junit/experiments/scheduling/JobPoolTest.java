@@ -67,7 +67,8 @@ public class JobPoolTest {
       JobPool jobPool = preparePool(poolFactory, poolListener, jobListener);
       poolResults.add(jobPool.submitTo(scheduler));
     }
-    scheduler.runAll();
+    scheduler.start();
+    scheduler.waitAll();
     poolResults.waitPools();
     Assert.assertEquals(NbPool, poolListener.poolDone);
     Assert.assertEquals(NbJobs * NbPool, jobListener.nbJobDone());

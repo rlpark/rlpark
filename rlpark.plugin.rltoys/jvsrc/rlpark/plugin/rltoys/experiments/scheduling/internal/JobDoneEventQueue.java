@@ -24,7 +24,7 @@ public class JobDoneEventQueue {
     @Override
     public void run() {
       while (!terminated)
-        processEvents();
+        processEvent();
     }
   });
   boolean terminated = false;
@@ -45,15 +45,19 @@ public class JobDoneEventQueue {
       processEvents();
   }
 
-  synchronized protected void processEvents() {
+  protected void processEvents() {
     while (!queue.isEmpty()) {
-      try {
-        JobEventInternal event = queue.take();
-        if (event.listener != null)
-          event.listener.listen(event.jobDoneEvent);
-        onJobDone.fire(event.jobDoneEvent);
-      } catch (InterruptedException e) {
-      }
+      processEvent();
+    }
+  }
+
+  synchronized void processEvent() {
+    try {
+      JobEventInternal event = queue.take();
+      if (event.listener != null)
+        event.listener.listen(event.jobDoneEvent);
+      onJobDone.fire(event.jobDoneEvent);
+    } catch (InterruptedException e) {
     }
   }
 

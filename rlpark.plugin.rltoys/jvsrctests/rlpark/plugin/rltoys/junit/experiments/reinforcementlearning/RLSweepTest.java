@@ -30,7 +30,6 @@ public abstract class RLSweepTest {
   @Before
   public void before() throws IOException {
     FileUtils.deleteDirectory(new File(JUnitFolder));
-    sweep = new SweepAll(new LocalScheduler(2));
     SchedulerTest.junitMode();
     // Sweep.disableVerbose();
   }
@@ -38,11 +37,11 @@ public abstract class RLSweepTest {
   @After
   public void after() throws IOException {
     FileUtils.deleteDirectory(new File(JUnitFolder));
-    sweep.scheduler().dispose();
   }
 
   protected void testSweep(SweepDescriptor provider) {
     ExperimentCounter counter = new ExperimentCounter(NbRun, JUnitFolder);
+    sweep = new SweepAll(new LocalScheduler(2));
     sweep.runSweep(provider, counter);
   }
 

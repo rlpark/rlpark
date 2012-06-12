@@ -5,7 +5,6 @@ import java.util.Random;
 import rlpark.plugin.rltoys.algorithms.predictions.td.OffPolicyTD;
 import rlpark.plugin.rltoys.envio.policy.ConstantPolicy;
 import rlpark.plugin.rltoys.experiments.testing.results.TestingResult;
-import rlpark.plugin.rltoys.junit.algorithms.predictions.td.TDTest;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.problems.stategraph.FSGAgentState;
@@ -28,7 +27,7 @@ public class RandomWalkOffPolicy {
     int nbEpisode = 0;
     double[] solution = agentState.computeSolution(targetPolicy, gamma, lambda);
     PVector phi_t = null;
-    while (TDTest.distanceToSolution(solution, gtd.weights()) > 0.05) {
+    while (distanceToSolution(solution, gtd.weights()) > 0.05) {
       StepData stepData = agentState.step();
       double rho = 0.0;
       if (stepData.a_t != null)
@@ -47,6 +46,13 @@ public class RandomWalkOffPolicy {
     if (nbEpisode < 10)
       return new TestingResult<OffPolicyTD>(false, "That was too quick!", gtd);
     return new TestingResult<OffPolicyTD>(true, null, gtd);
+  }
+
+  static public double distanceToSolution(double[] solution, PVector theta) {
+    double max = 0;
+    for (int i = 0; i < Math.max(solution.length, theta.size); i++)
+      max = Math.max(max, Math.abs(solution[i] - theta.data[i]));
+    return max;
   }
 
 }

@@ -6,6 +6,7 @@ import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistr
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.StochasticPolicy;
+import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
@@ -19,8 +20,13 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   private PVector u;
   private RealVector lastFeatureVector;
   private MutableVector averagePhi;
+  private MutableVector gradBuffer;
   private final StateToStateAction toStateAction;
   private final double[] distribution;
+  @Monitor
+  private final Range linearRangeOverall = new Range(1.0, 1.0);
+  @Monitor
+  private final Range linearRangeAveraged = new Range(1.0, 1.0);
 
   public BoltzmannDistribution(Random random, Action[] actions, StateToStateAction toStateAction) {
     super(random, actions);
@@ -35,20 +41,22 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
     return distribution[atoi(a)];
   }
 
-  private void updateDistributionIFN(RealVector s) {
-    if (lastFeatureVector == s)
+  private void updateDistributionIFN(RealVector x) {
+    if (lastFeatureVector == x)
       return;
-    lastFeatureVector = s;
+    linearRangeAveraged.reset();
     double sum = 0;
-    averagePhi = null;
+    clearBuffers(x);
     for (int a_i = 0; a_i < actions.length; a_i++) {
-      RealVector phi_sa = toStateAction.stateAction(s, actions[a_i]);
-      double probabilityNotNormalized = Math.exp(u.dotProduct(phi_sa));
+      RealVector phi_sa = toStateAction.stateAction(x, actions[a_i]);
+      final double linearCombination = u.dotProduct(phi_sa);
+      linearRangeOverall.update(linearCombination);
+      linearRangeAveraged.update(linearCombination);
+      double probabilityNotNormalized = Math.exp(linearCombination);
+      assert Utils.checkValue(probabilityNotNormalized);
       distribution[a_i] = probabilityNotNormalized;
       sum += probabilityNotNormalized;
-      if (averagePhi == null)
-        averagePhi = phi_sa.newInstance(u.size);
-      averagePhi.addToSelf(phi_sa.mapMultiply(probabilityNotNormalized));
+      averagePhi.addToSelf(probabilityNotNormalized, phi_sa);
       actionToPhi_sa[a_i] = phi_sa;
     }
     for (int i = 0; i < distribution.length; i++) {
@@ -56,6 +64,16 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
       assert Utils.checkValue(distribution[i]);
     }
     averagePhi.mapMultiplyToSelf(1.0 / sum);
+    lastFeatureVector = x;
+  }
+
+  private void clearBuffers(RealVector x) {
+    if (averagePhi == null) {
+      averagePhi = toStateAction.stateAction(x, actions[0]).newInstance(u.size);
+      gradBuffer = averagePhi.newInstance(u.size);
+      return;
+    }
+    averagePhi.clear();
   }
 
   protected Action initialize() {
@@ -80,7 +98,9 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   @Override
   public RealVector[] getGradLog(RealVector x_t, Action a_t) {
     updateDistributionIFN(x_t);
-    return new RealVector[] { actionToPhi_sa[actionToIndex.get(a_t)].subtract(averagePhi) };
+    gradBuffer.clear();
+    gradBuffer.set(actionToPhi_sa[actionToIndex.get(a_t)]);
+    return new RealVector[] { gradBuffer.subtractToSelf(averagePhi) };
   }
 
   @Override
@@ -91,5 +111,11 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   @Override
   public double[] distribution() {
     return distribution;
+  }
+
+  static public double probaToLinearValue(int nbAction, double proba) {
+    double max = Math.log(proba * (nbAction - 1)) - Math.log(1 - proba);
+    assert proba > .5 && max > 0 || proba < .5 && max < 0;
+    return max;
   }
 }
