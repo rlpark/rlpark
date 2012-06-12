@@ -1,5 +1,6 @@
 package rlpark.plugin.rltoys.algorithms.control.actorcritic.offpolicy;
 
+import rlpark.plugin.rltoys.algorithms.functions.Predictor;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.predictions.td.OffPolicyTD;
 import rlpark.plugin.rltoys.math.vector.RealVector;
@@ -67,5 +68,13 @@ public class CriticAdapterFA implements OffPolicyTD {
   @Override
   public PVector secondaryWeights() {
     return offPolicyTD.secondaryWeights();
+  }
+
+  public Projector projector() {
+    return projector;
+  }
+
+  public Predictor predictor() {
+    return offPolicyTD;
   }
 }

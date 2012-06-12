@@ -6,12 +6,17 @@
       <client
             autostart="false"
             class="rlpark.example.demos.learning.SarsaMountainCar"
-            id="rlpark.example.learning.sarsamountaincar">
+            id="rlpark.example.demos.learning.SarsaMountainCar">
       </client>
       <client
             autostart="false"
             class="rlpark.example.demos.learning.ActorCriticPendulum"
-            id="rlpark.example.learning.actorcriticpendulum">
+            id="rlpark.example.demos.learning.ActorCriticPendulum">
+      </client>
+      <client
+            autostart="false"
+            class="rlpark.example.demos.learning.OffPACContinuousGridworld"
+            id="rlpark.example.demos.learning.OffPACContinuousGridworld">
       </client>
    </extension>
    <extension
@@ -28,7 +33,7 @@
                   style="push">
                <parameter
                      name="zephyr.plugin.core.command.parameter.runnableid"
-                     value="rlpark.example.learning.actorcriticpendulum">
+                     value="rlpark.example.demos.learning.ActorCriticPendulum">
                </parameter>
             </command>
             <command
@@ -37,7 +42,16 @@
                   style="push">
                <parameter
                      name="zephyr.plugin.core.command.parameter.runnableid"
-                     value="rlpark.example.learning.sarsamountaincar">
+                     value="rlpark.example.demos.learning.SarsaMountainCar">
+               </parameter>
+            </command>
+            <command
+                  commandId="zephyr.plugin.core.command.startrunnable"
+                  label="Off-PAC on Continuous Grid World"
+                  style="push">
+               <parameter
+                     name="zephyr.plugin.core.command.parameter.runnableid"
+                     value="rlpark.example.demos.learning.OffPACContinuousGridworld">
                </parameter>
             </command>
             <command
