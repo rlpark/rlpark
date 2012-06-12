@@ -45,7 +45,8 @@ public abstract class RobotEnvironment implements RobotLive, Labeled {
     ObservationVersatileArray observations = obsSync.waitNewObs();
     if (observations == null) {
       lastReceivedObsBuffer = null;
-      close();
+      // close(); JVM - removed this as it causes a lost observation to cause
+      // more problems.
       return null;
     }
     if (observations.last() != null)
