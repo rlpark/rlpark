@@ -70,17 +70,39 @@ public class Vectors {
   static public double l1Norm(RealVector v) {
     if (v instanceof BVector)
       return ((BVector) v).nonZeroElements();
+    double[] data;
+    int length;
     if (v instanceof SVector) {
-      double sum = 0.0;
       SVector sv = (SVector) v;
-      for (int i = 0; i < sv.nonZeroElements(); i++)
-        sum += Math.abs(sv.values[i]);
-      return sum;
+      data = sv.values;
+      length = sv.nonZeroElements();
+    } else {
+      data = v.accessData();
+      length = data.length;
     }
     double sum = 0.0;
-    for (int i = 0; i < v.getDimension(); i++)
-      sum += Math.abs(v.getEntry(i));
+    for (int i = 0; i < length; i++)
+      sum += Math.abs(data[i]);
     return sum;
+  }
+
+  public static double infNorm(RealVector v) {
+    if (v instanceof BVector)
+      return ((BVector) v).nonZeroElements() > 0 ? 1 : 0;
+    double[] data;
+    int length;
+    if (v instanceof SVector) {
+      SVector sv = (SVector) v;
+      data = sv.values;
+      length = sv.nonZeroElements();
+    } else {
+      data = v.accessData();
+      length = data.length;
+    }
+    double max = 0.0;
+    for (int i = 0; i < length; i++)
+      max = Math.max(max, Math.abs(data[i]));
+    return max;
   }
 
   public static MutableVector toBinary(RealVector v, MutableVector result) {

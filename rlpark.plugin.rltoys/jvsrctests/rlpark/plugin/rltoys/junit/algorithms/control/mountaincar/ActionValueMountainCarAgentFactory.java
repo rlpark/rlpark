@@ -20,7 +20,7 @@ public abstract class ActionValueMountainCarAgentFactory implements MountainCarA
   public RLAgent createAgent(MountainCar mountainCar, Projector projector) {
     StateToStateAction toStateAction = new TabularAction(mountainCar.actions(), projector.vectorNorm(),
                                                          projector.vectorSize());
-    Predictor predictor = createPredictor(mountainCar.actions(), toStateAction, (int) projector.vectorNorm(),
+    Predictor predictor = createPredictor(mountainCar.actions(), toStateAction, toStateAction.vectorNorm(),
                                           toStateAction.vectorSize());
     Policy acting = createActing(mountainCar, toStateAction, predictor);
     return new LearnerAgentFA(createControl(mountainCar, predictor, projector, toStateAction, acting), projector);

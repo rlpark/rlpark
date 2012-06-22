@@ -85,6 +85,8 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
   public double dotProduct(RealVector other) {
     if (other instanceof SparseVector)
       return ((SparseVector) other).dotProduct(data);
+    if (other instanceof VectorNull)
+      return 0;
     double result = 0;
     double[] o = ((PVector) other).data;
     for (int i = 0; i < data.length; i++)
@@ -181,10 +183,16 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
 
   @Override
   public void addToMonitor(DataMonitor monitor) {
-    monitor.add("l1norm", new Monitored() {
+    monitor.add("l1Norm", new Monitored() {
       @Override
       public double monitoredValue() {
         return Vectors.l1Norm(PVector.this);
+      }
+    });
+    monitor.add("infNorm", new Monitored() {
+      @Override
+      public double monitoredValue() {
+        return Vectors.infNorm(PVector.this);
       }
     });
   }
