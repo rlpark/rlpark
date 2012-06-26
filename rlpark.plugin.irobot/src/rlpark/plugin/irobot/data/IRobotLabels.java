@@ -3,9 +3,9 @@ package rlpark.plugin.irobot.data;
 
 public class IRobotLabels {
   static public class ICOmniValues {
-    static public final int SpinRight = 129;
+    static public final int SpinLeft = 129;
     static public final int Forward = 130;
-    static public final int SpinLeft = 131;
+    static public final int SpinRight = 131;
     static public final int Spot = 132;
     static public final int Max = 133;
     static public final int Clean = 136;

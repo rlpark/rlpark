@@ -48,7 +48,9 @@ public class ClientSocket implements Runnable {
     try {
       while (socket.dataAvailable() != 0) {
         DiscoPacket packet = socket.recv();
-        serialConnection.sendMessage(packet.buffer);
+        byte[] result = new byte[packet.buffer[0]];
+        System.arraycopy(packet.buffer, 1, result, 0, result.length);
+        serialConnection.sendMessage(result);
         wasSendingAction = true;
       }
     } catch (IOException e) {

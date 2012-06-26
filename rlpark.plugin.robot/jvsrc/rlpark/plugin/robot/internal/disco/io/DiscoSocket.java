@@ -110,7 +110,8 @@ public class DiscoSocket {
 
   public DiscoPacket recv() throws IOException {
     String name = readName();
-    LiteByteBuffer buffer = allocate(readSize());
+    int sz = readSize();
+    LiteByteBuffer buffer = allocate(sz > 0 ? sz : 0);
     in.readFully(buffer.array(), 0, buffer.capacity());
     DiscoPacket packet = new DiscoPacket(Direction.Recv, name, buffer);
     onPacket.fire(packet);

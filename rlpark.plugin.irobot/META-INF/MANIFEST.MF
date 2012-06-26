@@ -15,8 +15,10 @@ Export-Package: gnu.io,
  rlpark.plugin.irobot.data,
  rlpark.plugin.irobot.examples,
  rlpark.plugin.irobot.internal.descriptors;x-friends:="rlpark.plugin.irobotview",
+ rlpark.plugin.irobot.internal.irobot,
  rlpark.plugin.irobot.internal.serial;x-friends:="rlpark.plugin.irobotview",
  rlpark.plugin.irobot.internal.server;x-friends:="rlpark.plugin.irobotview",
+ rlpark.plugin.irobot.internal.statemachine,
  rlpark.plugin.irobot.logfiles,
  rlpark.plugin.irobot.robots
 Bundle-NativeCode: 
