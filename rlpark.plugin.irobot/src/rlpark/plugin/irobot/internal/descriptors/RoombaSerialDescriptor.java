@@ -5,6 +5,7 @@ import gnu.io.SerialPort;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import rlpark.plugin.irobot.data.IRobotLabels;
 import rlpark.plugin.irobot.internal.serial.SerialPortToRobot;
@@ -14,13 +15,11 @@ import rlpark.plugin.irobot.internal.statemachine.SerialLinkNode;
 import rlpark.plugin.irobot.internal.statemachine.SerialLinkStateMachine;
 import rlpark.plugin.robot.internal.disco.drops.Drop;
 import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.api.synchronization.Chrono;
 
 public class RoombaSerialDescriptor implements IRobotSerialDescriptor {
   static class PacketRequester implements Runnable, Listener<byte[]> {
     private final SerialPortToRobot serialPort;
-    private boolean dataReceived = true;
-    private final Chrono chrono = new Chrono();
+    private final Semaphore semaphore = new Semaphore(2);
 
     PacketRequester(SerialPortToRobot serialPort) {
       this.serialPort = serialPort;
@@ -28,35 +27,49 @@ public class RoombaSerialDescriptor implements IRobotSerialDescriptor {
 
     @Override
     public void run() {
-      while (!serialPort.isClosed()) {
-        dataReceived = false;
-        chrono.start();
-        try {
-          serialPort.send(new byte[] { (byte) 142, 100 });
-        } catch (IOException e) {
-          e.printStackTrace();
-          serialPort.close();
-          return;
-        }
-        while (!dataReceived && chrono.getCurrentMillis() < DataReceivedTimeout) {
-          try {
-            Thread.sleep(Latency);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
+      while (sendRequest()) {
+        avoidOverloading();
+        acquireSemaphore();
+      }
+    }
+
+    private void avoidOverloading() {
+      try {
+        Thread.sleep(50);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+
+    private boolean sendRequest() {
+      if (serialPort.isClosed())
+        return false;
+      try {
+        serialPort.send(new byte[] { (byte) 142, 100 });
+      } catch (IOException e) {
+        e.printStackTrace();
+        serialPort.close();
+        return false;
+      }
+      return true;
+    }
+
+    private void acquireSemaphore() {
+      try {
+        semaphore.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
     }
 
     @Override
     public void listen(byte[] eventInfo) {
-      dataReceived = true;
+      semaphore.release();
     }
   }
 
   static public final boolean SetupFireflyMandatory = true;
   static public final long Latency = 10;
-  static public final long DataReceivedTimeout = 1000;
   private PacketRequester packetRequester;
 
   private boolean setupFirefly(SerialPortToRobot serialPort) {
