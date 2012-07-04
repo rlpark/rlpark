@@ -3,9 +3,11 @@ package rlpark.plugin.rltoys.algorithms.predictions.td;
 import rlpark.plugin.rltoys.algorithms.traces.ATraces;
 import rlpark.plugin.rltoys.algorithms.traces.EligibilityTraceAlgorithm;
 import rlpark.plugin.rltoys.algorithms.traces.Traces;
+import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
-import rlpark.plugin.rltoys.math.vector.implementations.SVector;
+import rlpark.plugin.rltoys.math.vector.pool.VectorPool;
+import rlpark.plugin.rltoys.math.vector.pool.VectorPools;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
@@ -23,6 +25,7 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
   private final Traces e;
   protected double v_t;
   protected double delta_t;
+  private double correction;
 
   public GTDLambda(double lambda, double gamma, double alpha_v, double alpha_w, int nbFeatures) {
     this(lambda, gamma, alpha_v, alpha_w, nbFeatures, new ATraces());
@@ -40,19 +43,27 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
 
   @Override
   public double update(double rho_t, RealVector x_t, RealVector x_tp1, double r_tp1, double gamma_tp1, double z_tp1) {
-    if (x_t == null) {
+    if (x_t == null)
       return initEpisode(gamma_tp1);
-    }
+    VectorPool pool = VectorPools.pool(e.vect());
     v_t = v.dotProduct(x_t);
     delta_t = r_tp1 + (1 - gamma_tp1) * z_tp1 + gamma_tp1 * v.dotProduct(x_tp1) - v_t;
+    // Update traces
     e.update(gamma_t * lambda, x_t);
     e.vect().mapMultiplyToSelf(rho_t);
-    RealVector e_delta = e.vect().mapMultiply(delta_t);
-    RealVector correction = x_tp1 != null ? x_tp1.mapMultiply(e.vect().dotProduct(w) * gamma_tp1 * (1 - lambda))
-        : new SVector(w.size);
-    v.addToSelf(alpha_v, e_delta.subtract(correction));
-    w.addToSelf(alpha_w, e_delta.subtract(x_t.mapMultiply(w.dotProduct(x_t))));
+    // Compute correction
+    MutableVector correctionVector = pool.newVector(e.vect().getDimension());
+    if (x_tp1 != null) {
+      correction = e.vect().dotProduct(w);
+      correctionVector.addToSelf(correction * gamma_tp1 * (1 - lambda), x_tp1);
+    }
+    // Update parameters
+    MutableVector deltaE = pool.newVector(e.vect()).mapMultiplyToSelf(delta_t);
+    v.addToSelf(alpha_v, pool.newVector(deltaE).subtractToSelf(correctionVector));
+    w.addToSelf(alpha_w, deltaE.addToSelf(-w.dotProduct(x_t), x_t));
+    deltaE = null;
     gamma_t = gamma_tp1;
+    pool.releaseAll();
     return delta_t;
   }
 

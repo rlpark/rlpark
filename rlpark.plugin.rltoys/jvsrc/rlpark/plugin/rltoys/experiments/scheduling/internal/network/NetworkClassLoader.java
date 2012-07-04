@@ -5,8 +5,8 @@ import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.Map;
 
-import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.MessageClassData;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.ClassLoading.NetworkFindClass;
+import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.MessageClassData;
 
 
 public class NetworkClassLoader extends ClassLoader implements NetworkFindClass {
@@ -43,6 +43,8 @@ public class NetworkClassLoader extends ClassLoader implements NetworkFindClass 
       return result;
     try {
       MessageClassData messageClassData = socket.classTransaction(name);
+      if (messageClassData == null)
+        return null;
       byte[] classData = messageClassData.classData();
       result = defineClass(name, classData, 0, classData.length, getClass().getProtectionDomain());
       cache.put(name, result);

@@ -16,9 +16,9 @@ import rlpark.plugin.rltoys.experiments.parametersweep.parameters.FrozenParamete
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobPool;
+import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobPool.JobPoolListener;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.PoolResult;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.Scheduler;
-import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobPool.JobPoolListener;
 import rlpark.plugin.rltoys.experiments.scheduling.pools.FileJobPool;
 import rlpark.plugin.rltoys.experiments.scheduling.pools.PoolResults;
 import rlpark.plugin.rltoys.experiments.scheduling.schedulers.LocalScheduler;
@@ -113,8 +113,22 @@ public class SweepAll {
   }
 
   public void runAll() {
-    scheduler.runAll();
+    startScheduler();
+    waitAll();
+    dispose();
+  }
+
+  public void dispose() {
+    scheduler.dispose();
+  }
+
+  public void waitAll() {
     poolResults.waitPools();
+    scheduler.waitAll();
+  }
+
+  public void startScheduler() {
+    scheduler.start();
   }
 
   public void submitSweep(SweepDescriptor sweepDescriptor, ExperimentCounter counter) {

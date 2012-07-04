@@ -5,8 +5,9 @@
 	<property name="srcdir.robot" value="${basedir.rlpark}/rlpark.plugin.robot/jvsrc"/>
 	<property name="srcdir.critterbot" value="${basedir.rlpark}/rlpark.plugin.critterbot/jvsrc"/>
 	<property name="srcdir.irobot" value="${basedir.rlpark}/rlpark.plugin.irobot/src"/>
+	<property name="srcdir.demos" value="${basedir.rlpark}/rlpark.example.demos/src"/>
 		
-    <property name="src.dirs" value="${srcdir.rltoys}:${srcdir.robot}:${srcdir.irobot}:${srcdir.critterbot}"/>
+    <property name="src.dirs" value="${srcdir.rltoys}:${srcdir.robot}:${srcdir.irobot}:${srcdir.critterbot}:${srcdir.demos}"/>
 
     <property name="build.dir" value="build.ant"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
@@ -35,6 +36,7 @@
 			<fileset dir="${srcdir.robot}"/>
 			<fileset dir="${srcdir.irobot}"/>
 			<fileset dir="${srcdir.critterbot}"/>
+        	<fileset dir="${srcdir.demos}"/>
         	<zipfileset includes="**/*.class" src="${basedir.rlpark}/zephyr.jar"/>
 		    <zipfileset includes="**/*.class" src="${basedir.rlpark}/rlpark.plugin.apache/commons-math-2.0.jar"/>
         	<zipfileset includes="**/*.class" src="${basedir.rlpark}/rlpark.plugin.apache/commons-io-2.0.1.jar"/>

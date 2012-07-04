@@ -8,7 +8,7 @@ import org.junit.Test;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
-import rlpark.plugin.rltoys.junit.math.vector.testing.VectorTest;
+import rlpark.plugin.rltoys.junit.math.vector.testing.VectorsTestsUtils;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 
@@ -25,9 +25,9 @@ public class TileCodersNoHashingTest {
     Assert.assertEquals(4, coders.vectorSize());
     Assert.assertEquals(2.0, coders.vectorNorm(), 0.0);
     coders.project(new double[] { -0.5, 0.5 });
-    VectorTest.assertEquals(new PVector(1, 0, 0, 1), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(1, 0, 0, 1), coders.vector());
     coders.project(new double[] { 0.5, -0.5 });
-    VectorTest.assertEquals(new PVector(0, 1, 1, 0), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(0, 1, 1, 0), coders.vector());
   }
 
   @Test
@@ -37,9 +37,9 @@ public class TileCodersNoHashingTest {
     Assert.assertEquals(6, coders.vectorSize());
     Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
     coders.project(new double[] { -0.5, 0.5, 0.0 });
-    VectorTest.assertEquals(new PVector(1, 0, 0, 1, 0, 1), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(1, 0, 0, 1, 0, 1), coders.vector());
     coders.project(new double[] { 0.5, -0.5, 0.0 });
-    VectorTest.assertEquals(new PVector(0, 1, 1, 0, 0, 1), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(0, 1, 1, 0, 0, 1), coders.vector());
   }
 
   @Test
@@ -49,15 +49,15 @@ public class TileCodersNoHashingTest {
     Assert.assertEquals(2 * 2 * 3, coders.vectorSize());
     Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
     coders.project(new double[] { 0.0, 0.0 });
-    VectorTest.assertEquals(new PVector(0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0), coders.vector());
     coders.project(new double[] { -0.9, -0.9 });
-    VectorTest.assertEquals(new PVector(1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1), coders.vector());
     coders.project(new double[] { 0.9, 0.9 });
-    VectorTest.assertEquals(new PVector(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1), coders.vector());
     coders.project(new double[] { -0.1, 0.5 });
-    VectorTest.assertEquals(new PVector(0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0), coders.vector());
     coders.project(new double[] { 0.5, -0.5 });
-    VectorTest.assertEquals(new PVector(0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0), coders.vector());
   }
 
   @Test
@@ -68,9 +68,9 @@ public class TileCodersNoHashingTest {
     Assert.assertEquals(2 * 2 + 1, coders.vectorSize());
     Assert.assertEquals(1 + 1, coders.vectorNorm(), 0.0);
     coders.project(new double[] { 0.1, 0.1 });
-    VectorTest.assertEquals(new PVector(0, 0, 0, 1, 1), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(0, 0, 0, 1, 1), coders.vector());
     coders.project(new double[] { -0.1, -0.1 });
-    VectorTest.assertEquals(new PVector(1, 0, 0, 0, 1), coders.vector());
+    VectorsTestsUtils.assertEquals(new PVector(1, 0, 0, 0, 1), coders.vector());
   }
 
   @Test
@@ -111,7 +111,7 @@ public class TileCodersNoHashingTest {
         inputs[0] = (float) i / step;
         inputs[1] = (float) j / step;
         BinaryVector vector = coders.project(inputs);
-        for (int activeIndex : vector.activeIndexes())
+        for (int activeIndex : vector.getActiveIndexes())
           frequencies[activeIndex]++;
       }
     int sum = 0;

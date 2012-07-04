@@ -13,6 +13,7 @@ public class ServeurWithLocalScheduling {
     Iterator<? extends Runnable> jobList = LocalScheduling.createJobList();
     Listener<JobDoneEvent> jobDoneListener = LocalScheduling.createJobDoneListener();
     scheduler.queue().add(jobList, jobDoneListener);
-    scheduler.runAll();
+    scheduler.start();
+    scheduler.waitAll();
   }
 }

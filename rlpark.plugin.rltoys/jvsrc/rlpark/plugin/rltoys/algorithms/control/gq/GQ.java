@@ -8,7 +8,8 @@ import rlpark.plugin.rltoys.algorithms.traces.Traces;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
-import rlpark.plugin.rltoys.math.vector.implementations.SVector;
+import rlpark.plugin.rltoys.math.vector.pool.VectorPool;
+import rlpark.plugin.rltoys.math.vector.pool.VectorPools;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
@@ -47,13 +48,17 @@ public class GQ implements Predictor, LinearLearner, EligibilityTraceAlgorithm {
   public double update(RealVector x_t, double rho_t, double r_tp1, RealVector x_bar_tp1, double z_tp1) {
     if (x_t == null)
       return initEpisode();
+    VectorPool pool = VectorPools.pool(x_t);
     delta_t = r_tp1 + beta_tp1 * z_tp1 + (1 - beta_tp1) * v.dotProduct(x_bar_tp1) - v.dotProduct(x_t);
     e.update((1 - beta_tp1) * lambda_t * rho_t, x_t);
-    MutableVector delta_e = e.vect().mapMultiply(delta_t);
-    RealVector tdCorrection = x_bar_tp1 != null ? x_bar_tp1.mapMultiply((1 - beta_tp1) * (1 - lambda_t)
-        * e.vect().dotProduct(w)) : new SVector(v.size);
-    v.addToSelf(alpha_v, delta_e.subtract(tdCorrection));
-    w.addToSelf(alpha_w, delta_e.subtractToSelf(x_t.mapMultiply(w.dotProduct(x_t))));
+    MutableVector delta_e = pool.newVector(e.vect()).mapMultiplyToSelf(delta_t);
+    MutableVector tdCorrection = pool.newVector(v.size);
+    if (x_bar_tp1 != null)
+      tdCorrection.set(x_bar_tp1).mapMultiplyToSelf((1 - beta_tp1) * (1 - lambda_t) * e.vect().dotProduct(w));
+    v.addToSelf(alpha_v, pool.newVector(delta_e).subtractToSelf(tdCorrection));
+    w.addToSelf(alpha_w, delta_e.subtractToSelf(pool.newVector(x_t).mapMultiplyToSelf(w.dotProduct(x_t))));
+    delta_e = null;
+    pool.releaseAll();
     return delta_t;
   }
 

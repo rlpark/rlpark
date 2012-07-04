@@ -1,49 +1,38 @@
 package rlpark.plugin.rltoys.algorithms.functions.stateactions;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 
 public class StateToStateActionBuffer implements StateToStateAction {
   private static final long serialVersionUID = -2580625240502199207L;
+  protected final Map<Action, Integer> actionToIndex = new LinkedHashMap<Action, Integer>();
   private final StateToStateAction toStateAction;
-  private final LinkedHashMap<RealVector, Map<Action, RealVector>> buffer = new LinkedHashMap<RealVector, Map<Action, RealVector>>();
-  private final Queue<RealVector> stateQueue = new LinkedList<RealVector>();
-  private final int capacity;
+  private final RealVector[] stateActionBuffered;
+  private RealVector lastFeatureVector = null;
 
-  public StateToStateActionBuffer(StateToStateAction toStateAction) {
-    this(toStateAction, 10);
-  }
-
-  public StateToStateActionBuffer(StateToStateAction toStateAction, int capacity) {
+  public StateToStateActionBuffer(StateToStateAction toStateAction, Action[] actions) {
     this.toStateAction = toStateAction;
-    this.capacity = capacity;
+    for (int i = 0; i < actions.length; i++)
+      actionToIndex.put(actions[i], i);
+    stateActionBuffered = new RealVector[actions.length];
   }
 
   @Override
-  public RealVector stateAction(RealVector s, Action a) {
-    if (s == null || a == null)
-      return toStateAction.stateAction(s, a);
-    if (buffer.size() > capacity) {
-      RealVector oldestState = stateQueue.poll();
-      buffer.remove(oldestState);
+  public RealVector stateAction(RealVector x, Action a) {
+    if (x == null || a == null)
+      return toStateAction.stateAction(x, a);
+    if (x != lastFeatureVector) {
+      Arrays.fill(stateActionBuffered, null);
+      lastFeatureVector = x;
     }
-    Map<Action, RealVector> actionToFeatures = buffer.get(s);
-    if (actionToFeatures == null) {
-      stateQueue.add(s);
-      actionToFeatures = new LinkedHashMap<Action, RealVector>();
-      buffer.put(s, actionToFeatures);
-    }
-    RealVector phi_sa = actionToFeatures.get(a);
-    if (phi_sa == null) {
-      phi_sa = toStateAction.stateAction(s, a);
-      actionToFeatures.put(a, phi_sa);
-    }
-    return phi_sa;
+    int a_i = actionToIndex.get(a);
+    if (stateActionBuffered[a_i] == null)
+      stateActionBuffered[a_i] = toStateAction.stateAction(x, a);
+    return stateActionBuffered[a_i];
   }
 
   @Override

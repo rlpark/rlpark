@@ -7,8 +7,8 @@ import java.util.List;
 import junit.framework.Assert;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobPool;
-import rlpark.plugin.rltoys.experiments.scheduling.interfaces.Scheduler;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobPool.JobPoolListener;
+import rlpark.plugin.rltoys.experiments.scheduling.interfaces.Scheduler;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.network.SocketClient;
 import rlpark.plugin.rltoys.experiments.scheduling.network.ServerScheduler;
 import rlpark.plugin.rltoys.experiments.scheduling.pools.FileJobPool;
@@ -18,7 +18,7 @@ import zephyr.plugin.core.api.signals.Listener;
 
 public class SchedulerTestsUtils {
   static final String Localhost = "localhost";
-  static final int Port = 5000;
+  public static final int Port = 5000;
   public static final int Timeout = 1000000;
 
   static class ClassResolutionListener implements Listener<String> {
@@ -70,26 +70,34 @@ public class SchedulerTestsUtils {
     return jobs;
   }
 
-  static public void testServerScheduler(ServerScheduler scheduler, int nbJobs, Runnable startClients) {
+  static public void testServerScheduler(ServerScheduler scheduler, int nbJobs, Runnable... clients) {
     if (scheduler.isLocalSchedulingEnabled()) {
-      testScheduler(scheduler, nbJobs, startClients);
+      testScheduler(scheduler, nbJobs, clients);
       return;
     }
     ClassResolutionListener listener = new ClassResolutionListener();
     SocketClient.onClassRequested.connect(listener);
-    testScheduler(scheduler, nbJobs, startClients);
+    testScheduler(scheduler, nbJobs, clients);
     SocketClient.onClassRequested.disconnect(listener);
     Assert.assertTrue(listener.names.contains(Job.class.getName()));
   }
 
-  static public void testScheduler(Scheduler scheduler, int nbJobs, Runnable startClients) {
+  static public void testScheduler(Scheduler scheduler, int nbJobs, Runnable... clients) {
     List<Job> jobs = SchedulerTestsUtils.createJobs(nbJobs);
     JobDoneListener listener = createListener();
     Schedulers.addAll(scheduler, jobs, listener);
-    if (startClients != null)
-      startClients.run();
-    scheduler.runAll();
+    scheduler.start();
+    startClients(clients);
+    scheduler.waitAll();
     Assert.assertTrue(listener.checkJobs(nbJobs));
+  }
+
+  private static void startClients(Runnable[] clients) {
+    for (Runnable client : clients) {
+      Thread thread = new Thread(client);
+      thread.setDaemon(true);
+      thread.start();
+    }
   }
 
   static public JobDoneListener createListener() {

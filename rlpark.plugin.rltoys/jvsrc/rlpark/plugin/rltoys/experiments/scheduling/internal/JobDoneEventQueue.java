@@ -23,10 +23,11 @@ public class JobDoneEventQueue {
   private final Thread currentThread = new Thread(new Runnable() {
     @Override
     public void run() {
-      processEvents();
+      while (!terminated)
+        processEvent();
     }
   });
-  private boolean terminated = false;
+  boolean terminated = false;
 
   public JobDoneEventQueue() {
     currentThread.setDaemon(true);
@@ -40,17 +41,23 @@ public class JobDoneEventQueue {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+    if (terminated)
+      processEvents();
   }
 
   protected void processEvents() {
-    while (!queue.isEmpty() || !terminated) {
-      try {
-        JobEventInternal event = queue.take();
-        if (event.listener != null)
-          event.listener.listen(event.jobDoneEvent);
-        onJobDone.fire(event.jobDoneEvent);
-      } catch (InterruptedException e) {
-      }
+    while (!queue.isEmpty()) {
+      processEvent();
+    }
+  }
+
+  synchronized void processEvent() {
+    try {
+      JobEventInternal event = queue.take();
+      if (event.listener != null)
+        event.listener.listen(event.jobDoneEvent);
+      onJobDone.fire(event.jobDoneEvent);
+    } catch (InterruptedException e) {
     }
   }
 

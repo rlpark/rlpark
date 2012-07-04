@@ -32,7 +32,7 @@ public class RandomNetworkScheduler implements Serializable {
     @Override
     public void run() {
       int currentPosition = offset;
-      int[] activeIndexes = obs.activeIndexes();
+      int[] activeIndexes = obs.getActiveIndexes();
       while (currentPosition < activeIndexes.length) {
         int activeInput = activeIndexes[currentPosition];
         LTU[] connected = connectedLTUs[activeInput].array();

@@ -35,7 +35,7 @@ public class AveBinsTree implements Serializable {
   }
 
   public BinaryVector toBinary(double x) {
-    BVector result = new BVector(size, allAveBins.length);
+    BVector result = new BVector(size);
     int offset = 0;
     for (AveBins aveBins : allAveBins) {
       result.setOn(aveBins.discretize(x) + offset);

@@ -14,12 +14,12 @@ public class NetworkClient {
   private final LocalScheduler localScheduler;
   final protected NetworkJobQueue networkJobQueue;
 
-  public NetworkClient(String serverHost, int port) {
-    this(new LocalScheduler(createJobQueue(serverHost, port)));
+  public NetworkClient(String serverHost, int port, boolean multipleConnectionAttempts) {
+    this(new LocalScheduler(createJobQueue(serverHost, port, multipleConnectionAttempts)));
   }
 
-  public NetworkClient(int nbThread, String serverHost, int port) {
-    this(new LocalScheduler(nbThread, createJobQueue(serverHost, port)));
+  public NetworkClient(int nbThread, String serverHost, int port, boolean multipleAttempts) {
+    this(new LocalScheduler(nbThread, createJobQueue(serverHost, port, multipleAttempts)));
   }
 
   public NetworkClient(final LocalScheduler localScheduler) {
@@ -27,12 +27,8 @@ public class NetworkClient {
     networkJobQueue = (NetworkJobQueue) localScheduler.queue();
   }
 
-  private static NetworkJobQueue createJobQueue(String serverHost, int port) {
-    return new NetworkJobQueue(serverHost, port);
-  }
-
-  public void start() {
-    localScheduler.start();
+  private static NetworkJobQueue createJobQueue(String serverHost, int port, boolean multipleConnectionAttempts) {
+    return new NetworkJobQueue(serverHost, port, multipleConnectionAttempts);
   }
 
   private void setMaximumTime(final double wallTime) {
@@ -48,12 +44,24 @@ public class NetworkClient {
   }
 
   public void run() {
-    localScheduler.runAll();
+    localScheduler.start();
+    localScheduler.waitAll();
+  }
+
+  public void asyncRun() {
+    Thread thread = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        NetworkClient.this.run();
+      }
+    });
+    thread.setDaemon(true);
+    thread.start();
   }
 
   public void dispose() {
     localScheduler.dispose();
-    networkJobQueue.close();
+    networkJobQueue.dispose();
   }
 
   private static void readParams(String[] args) {
@@ -85,7 +93,7 @@ public class NetworkClient {
   }
 
   public static void runClient() {
-    NetworkClient scheduler = new NetworkClient(nbCore, serverHost, serverPort);
+    NetworkClient scheduler = new NetworkClient(nbCore, serverHost, serverPort, true);
     if (maximumMinutesTime > 0)
       scheduler.setMaximumTime(maximumMinutesTime * 60);
     scheduler.run();

@@ -7,11 +7,10 @@ import org.junit.Test;
 
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
-import rlpark.plugin.rltoys.math.vector.VectorEntry;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.math.vector.implementations.SSortedVector;
 import rlpark.plugin.rltoys.math.vector.implementations.SVector;
-import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.utils.Utils;
 
 public class AllVectorsTest {
@@ -30,7 +29,7 @@ public class AllVectorsTest {
 
     public boolean allEquals() {
       for (int i = 1; i < mutables.length; i++)
-        if (!Vectors.equals(mutables[0], mutables[1]))
+        if (!VectorsTestsUtils.equals(mutables[0], mutables[1]))
           return false;
       return true;
     }
@@ -38,7 +37,7 @@ public class AllVectorsTest {
     public boolean allCopyEquals() {
       MutableVector first = mutables[0].copy();
       for (int i = 1; i < mutables.length; i++) {
-        if (!Vectors.equals(first, mutables[1].copy()))
+        if (!VectorsTestsUtils.equals(first, mutables[1].copy()))
           return false;
       }
       return true;
@@ -52,11 +51,11 @@ public class AllVectorsTest {
       return true;
     }
 
-    public boolean allIteratorEquals() {
-      double[] first = toArrayWithIterator(mutables[0]);
-      for (int i = 1; i < mutables.length; i++)
-        if (!arraysEquals(first, toArrayWithIterator(mutables[i])))
-          return false;
+    public boolean allEntryEquals() {
+      for (int mutable = 1; mutable < mutables.length; mutable++)
+        for (int i = 0; i < mutables[0].getDimension(); i++)
+          if (mutables[mutable].getEntry(i) != mutables[mutable].getEntry(i))
+            return false;
       return true;
     }
 
@@ -67,13 +66,6 @@ public class AllVectorsTest {
         if (a[i] != b[i])
           return false;
       return true;
-    }
-
-    private double[] toArrayWithIterator(MutableVector mutableVector) {
-      double[] data = new double[mutableVector.getDimension()];
-      for (VectorEntry entry : mutableVector)
-        data[entry.index()] = entry.value();
-      return data;
     }
   }
 
@@ -89,7 +81,7 @@ public class AllVectorsTest {
       Assert.assertTrue(vectors.allCopyEquals());
     }
     Assert.assertTrue(vectors.allArrayDataEquals());
-    Assert.assertTrue(vectors.allIteratorEquals());
+    Assert.assertTrue(vectors.allEntryEquals());
   }
 
   private void performOperation(final Random random, final int vectorDimension, VectorForTests vectors) {
@@ -123,31 +115,33 @@ public class AllVectorsTest {
   }
 
   private VectorForTests createVectors(Random random, int vectorDimension) {
-    PVector v01 = new PVector(vectorDimension);
-    SVector v02 = new SVector(vectorDimension);
-    PVector arg01 = new PVector(vectorDimension);
-    SVector arg02 = new SVector(vectorDimension);
-    BVector arg03 = new BVector(vectorDimension);
+    final MutableVector[] mutables = new MutableVector[] { new PVector(vectorDimension), new SVector(vectorDimension),
+        new SSortedVector(vectorDimension) };
+    final RealVector[] args = new RealVector[] { new PVector(vectorDimension), new SVector(vectorDimension),
+        new SSortedVector(vectorDimension), new BVector(vectorDimension) };
     for (int n = 0; n < 500; n++) {
       int position = random.nextInt(vectorDimension);
       double value = random.nextDouble();
-      v01.setEntry(position, value);
-      v02.setEntry(position, value);
-      arg01.setEntry(position, value);
-      arg02.setEntry(position, value);
-      arg03.setOn(position);
+      for (MutableVector v : mutables)
+        v.setEntry(position, value);
+      new PVector(vectorDimension).setEntry(position, value);
+      new SVector(vectorDimension).setEntry(position, value);
+      new BVector(vectorDimension).setOn(position);
     }
     for (int n = 0; n < 500; n++) {
       int position = random.nextInt(vectorDimension);
       double value = random.nextDouble();
-      v01.setEntry(position, value);
-      v02.setEntry(position, value);
+      for (MutableVector v : mutables)
+        v.setEntry(position, value);
     }
     for (int n = 0; n < 500; n++) {
-      arg01.setEntry(random.nextInt(vectorDimension), random.nextDouble());
-      arg02.setEntry(random.nextInt(vectorDimension), random.nextDouble());
-      arg03.setOn(random.nextInt(vectorDimension));
+      for (RealVector arg : args) {
+        if (arg instanceof BVector)
+          ((BVector) arg).setOn(random.nextInt(vectorDimension));
+        else
+          ((MutableVector) arg).setEntry(random.nextInt(vectorDimension), random.nextDouble());
+      }
     }
-    return new VectorForTests(new MutableVector[] { v01, v02 }, new RealVector[] { arg01, arg02, arg03 });
+    return new VectorForTests(mutables, args);
   }
 }

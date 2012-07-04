@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoys.junit.algorithms.predictions.supervised;
+package rlpark.plugin.rltoys.experiments.testing.predictions;
 
 import java.util.Random;
 
@@ -8,7 +8,7 @@ import rlpark.plugin.rltoys.utils.Utils;
 
 public class NoisyInputSum {
   public static final int NbInputs = 20;
-  static protected final int NbNonZeroWeight = 5;
+  public static final int NbNonZeroWeight = 5;
 
   private PVector createWeights(Random random) {
     PVector weights = new PVector(NbInputs);
@@ -28,15 +28,19 @@ public class NoisyInputSum {
   }
 
   public double evaluateLearner(LearningAlgorithm algorithm) {
+    return evaluateLearner(algorithm, 20000, 10000);
+  }
+
+  public double evaluateLearner(LearningAlgorithm algorithm, int learningEpisodes, int evaluationEpisodes) {
     final Random random = new Random(0);
     PVector inputs = new PVector(NbInputs);
     PVector weights = createWeights(random);
-    for (int i = 0; i < 20000; i++) {
+    for (int i = 0; i < learningEpisodes; i++) {
       changeWeight(random, weights, i);
       learningStep(random, algorithm, inputs, weights);
     }
-    PVector errors = new PVector(10000);
-    for (int i = 0; i < 10000; i++) {
+    PVector errors = new PVector(evaluationEpisodes);
+    for (int i = 0; i < evaluationEpisodes; i++) {
       changeWeight(random, weights, i);
       double error = learningStep(random, algorithm, inputs, weights);
       errors.data[i] = error;

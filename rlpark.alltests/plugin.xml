@@ -8,6 +8,11 @@
             class="rlpark.alltests.rlparkview.continuousgridworld.TestContinuousGridworldRunnable"
             id="rlpark.alltests.testcontinuousgridworld.runnable">
       </client>
+      <client
+            autostart="false"
+            class="rlpark.alltests.rlparkview.HelicopterRunnable"
+            id="rlpark.alltests.rlparkview.helicopterrunnable">
+      </client>
    </extension>
 
 </plugin>

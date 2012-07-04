@@ -8,7 +8,9 @@ import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
+@Monitor
 public class OffPolicyAgentDirect implements OffPolicyAgentEvaluable {
   private static final long serialVersionUID = -8255597969677460009L;
   private RealVector x_t;

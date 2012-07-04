@@ -2,7 +2,7 @@ package rlpark.plugin.rltoys.math.vector;
 
 import java.io.Serializable;
 
-public interface RealVector extends Serializable, Iterable<VectorEntry> {
+public interface RealVector extends Serializable {
   int getDimension();
 
   double getEntry(int i);

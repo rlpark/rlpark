@@ -1,68 +1,19 @@
 package rlpark.plugin.rltoys.math.vector.implementations;
 
 import java.util.Arrays;
-import java.util.Iterator;
 
 import rlpark.plugin.rltoys.math.vector.DenseVector;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.SparseVector;
-import rlpark.plugin.rltoys.math.vector.VectorEntry;
-import rlpark.plugin.rltoys.utils.NotImplemented;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
-public class PVector extends AbstractVector implements DenseVector {
+public class PVector extends AbstractVector implements DenseVector, MonitorContainer {
   private static final long serialVersionUID = -3114589590234820246L;
-
-  private static class PVectorEntry implements VectorEntry {
-    private int current;
-    private final double[] values;
-
-    public PVectorEntry(double[] values) {
-      this.values = values;
-    }
-
-    @Override
-    public int index() {
-      return current;
-    }
-
-    @Override
-    public double value() {
-      return values[current];
-    }
-
-    public void update(int current) {
-      this.current = current;
-    }
-  }
-
-  private class PVectorIterator implements Iterator<VectorEntry> {
-    private int current;
-    private final PVectorEntry entry;
-
-    protected PVectorIterator() {
-      current = 0;
-      entry = new PVectorEntry(accessData());
-    }
-
-    @Override
-    public boolean hasNext() {
-      return current < size;
-    }
-
-    @Override
-    public VectorEntry next() {
-      entry.update(current++);
-      return entry;
-    }
-
-    @Override
-    public void remove() {
-      throw new NotImplemented();
-    }
-  }
 
   final public double[] data;
 
@@ -87,11 +38,13 @@ public class PVector extends AbstractVector implements DenseVector {
       data[i] = v.getEntry(i);
   }
 
-  public void set(RealVector other) {
+  @Override
+  public MutableVector set(RealVector other) {
     if (other instanceof DenseVector)
-      set(((DenseVector) other).accessData());
-    for (VectorEntry entry : other)
-      data[entry.index()] = entry.value();
+      return set(((DenseVector) other).accessData());
+    for (int i = 0; i < other.getDimension(); i++)
+      data[i] = other.getEntry(i);
+    return this;
   }
 
   public PVector set(double[] v) {
@@ -99,15 +52,9 @@ public class PVector extends AbstractVector implements DenseVector {
     return this;
   }
 
-  protected PVector newInstance(double[] data) {
-    return new PVector(data, false);
-  }
-
   @Override
   public PVector copy() {
-    PVector result = (PVector) newInstance(size);
-    result.set(data);
-    return result;
+    return new PVector(Arrays.copyOf(data, size));
   }
 
   @Override
@@ -138,6 +85,8 @@ public class PVector extends AbstractVector implements DenseVector {
   public double dotProduct(RealVector other) {
     if (other instanceof SparseVector)
       return ((SparseVector) other).dotProduct(data);
+    if (other instanceof VectorNull)
+      return 0;
     double result = 0;
     double[] o = ((PVector) other).data;
     for (int i = 0; i < data.length; i++)
@@ -174,13 +123,20 @@ public class PVector extends AbstractVector implements DenseVector {
 
   @Override
   public double[] accessData() {
-    return data.clone();
+    return data;
   }
 
   public void addToSelf(double[] array) {
     assert array.length == size;
     for (int i = 0; i < array.length; i++)
       data[i] += array[i];
+  }
+
+  @Override
+  public MutableVector ebeDivideToSelf(RealVector v) {
+    for (int i = 0; i < data.length; i++)
+      data[i] /= v.getEntry(i);
+    return this;
   }
 
   @Override
@@ -204,21 +160,40 @@ public class PVector extends AbstractVector implements DenseVector {
   }
 
   @Override
-  public Iterator<VectorEntry> iterator() {
-    return new PVectorIterator();
-  }
-
   public PVector addToSelf(double factor, RealVector vect) {
-    if (vect instanceof SVector)
+    if (vect instanceof SVector) {
       ((SVector) vect).addSelfTo(factor, data);
-    else
-      for (VectorEntry entry : vect)
-        data[entry.index()] += factor * entry.value();
+      return this;
+    }
+    for (int i = 0; i < vect.getDimension(); i++)
+      data[i] += factor * vect.getEntry(i);
     return this;
   }
 
   @Override
   public String toString() {
     return Arrays.toString(data);
+  }
+
+  @Override
+  public PVector clear() {
+    Arrays.fill(data, 0);
+    return this;
+  }
+
+  @Override
+  public void addToMonitor(DataMonitor monitor) {
+    monitor.add("l1Norm", new Monitored() {
+      @Override
+      public double monitoredValue() {
+        return Vectors.l1Norm(PVector.this);
+      }
+    });
+    monitor.add("infNorm", new Monitored() {
+      @Override
+      public double monitoredValue() {
+        return Vectors.infNorm(PVector.this);
+      }
+    });
   }
 }

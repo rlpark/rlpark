@@ -7,7 +7,6 @@ import org.eclipse.swt.graphics.Rectangle;
 
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.SparseVector;
-import rlpark.plugin.rltoys.math.vector.VectorEntry;
 import rlpark.plugin.rltoysview.internal.ColorScale;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
@@ -46,8 +45,8 @@ public class RealVectorMapView extends BackgroundCanvasView<RealVector> {
     final double yPixelSize = clipping.height / ySize;
     final int xPixelDisplaySize = (int) Math.max(xPixelSize, 1);
     final int yPixelDisplaySize = (int) Math.max(yPixelSize, 1);
-    for (VectorEntry entry : copy)
-      drawWeight(gc, xSize, xPixelSize, yPixelSize, xPixelDisplaySize, yPixelDisplaySize, entry.index(), entry.value());
+    for (int i = 0; i < copy.getDimension(); i++)
+      drawWeight(gc, xSize, xPixelSize, yPixelSize, xPixelDisplaySize, yPixelDisplaySize, i, copy.getEntry(i));
   }
 
   protected void drawWeight(GC gc, double xSize, double xPixelSize, double yPixelSize, int xPixelDisplaySize,
@@ -63,8 +62,9 @@ public class RealVectorMapView extends BackgroundCanvasView<RealVector> {
     if (copy instanceof SparseVector)
       if (((SparseVector) copy).nonZeroElements() < copy.getDimension())
         colorScale.update(0.0);
-    for (VectorEntry entry : copy)
-      colorScale.update(entry.value());
+    for (int i = 0; i < copy.getDimension(); i++)
+      colorScale.update(copy.getEntry(i));
+
   }
 
   @Override

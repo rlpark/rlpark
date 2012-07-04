@@ -15,7 +15,7 @@ import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.ConstantPolicy;
 import rlpark.plugin.rltoys.envio.policy.Policy;
-import rlpark.plugin.rltoys.junit.algorithms.predictions.td.TDTest;
+import rlpark.plugin.rltoys.experiments.testing.predictions.RandomWalkOffPolicy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
@@ -92,7 +92,7 @@ public class GQTest {
     int nbEpisode = 0;
     double[] solution = agentState.computeSolution(targetPolicy, 1 - learnerFactory.beta(), learnerFactory.lambda());
     PVector v = new PVector(agentState.size);
-    while (TDTest.distanceToSolution(solution, v) > 0.05) {
+    while (RandomWalkOffPolicy.distanceToSolution(solution, v) > 0.05) {
       StepData stepData = agentState.step();
       learner.learn(stepData.v_t(), stepData.a_t, stepData.v_tp1(), stepData.a_tp1, stepData.r_tp1);
       if (stepData.s_tp1 == null) {

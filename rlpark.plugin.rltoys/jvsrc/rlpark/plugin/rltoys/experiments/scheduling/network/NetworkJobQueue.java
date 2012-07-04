@@ -29,8 +29,8 @@ public class NetworkJobQueue implements JobQueue {
   private boolean denyNewJobRequest = false;
   private final LocalQueue localQueue = new LocalQueue();
 
-  public NetworkJobQueue(String serverHostName, int port) {
-    syncSocket = new SyncSocket(connectToServer(serverHostName, port));
+  public NetworkJobQueue(String serverHostName, int port, boolean multipleConnectionAttempts) {
+    syncSocket = new SyncSocket(connectToServer(serverHostName, port, multipleConnectionAttempts));
     syncSocket.sendClientName();
     classLoader = NetworkClassLoader.newClassLoader(syncSocket);
   }
@@ -83,11 +83,6 @@ public class NetworkJobQueue implements JobQueue {
     }
   }
 
-  public void close() {
-    classLoader.dispose();
-    syncSocket.close();
-  }
-
   public boolean canAnswerJobRequest() {
     return !syncSocket.isClosed() && !denyNewJobRequest;
   }
@@ -105,7 +100,7 @@ public class NetworkJobQueue implements JobQueue {
     return classLoader;
   }
 
-  static private Socket connectToServer(String serverHostName, int port) {
+  static private Socket connectToServer(String serverHostName, int port, boolean multipleAttempts) {
     Socket socket = null;
     Random random = null;
     Exception lastException = null;
@@ -117,6 +112,8 @@ public class NetworkJobQueue implements JobQueue {
         socket = new Socket(serverHostName, port);
       } catch (Exception e) {
         lastException = e;
+        if (!multipleAttempts)
+          break;
         if (random == null)
           random = new Random();
         if (connectionTime.getCurrentChrono() > 3600)
@@ -144,5 +141,6 @@ public class NetworkJobQueue implements JobQueue {
   public void dispose() {
     syncSocket.close();
     localQueue.dispose();
+    classLoader.dispose();
   }
 }

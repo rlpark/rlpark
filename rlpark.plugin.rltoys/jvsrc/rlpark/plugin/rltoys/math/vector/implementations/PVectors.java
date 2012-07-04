@@ -1,5 +1,7 @@
 package rlpark.plugin.rltoys.math.vector.implementations;
 
+import rlpark.plugin.rltoys.math.vector.RealVector;
+
 
 public class PVectors {
   static public double mean(PVector vector) {
@@ -10,26 +12,23 @@ public class PVectors {
     return sum / vector.size;
   }
 
-  static public double min(PVector vector) {
-    double min = Double.MAX_VALUE;
-    for (double value : vector.data)
-      min = Math.min(value, min);
-    return min;
+  public static PVector multiplySelfByExponential(PVector result, double factor, RealVector other) {
+    return multiplySelfByExponential(result, factor, other, 0);
   }
 
-  static public double max(PVector vector) {
-    double max = -Double.MAX_VALUE;
-    for (double value : vector.data)
-      max = Math.max(value, max);
-    return max;
+  public static PVector multiplySelfByExponential(PVector result, double factor, RealVector other, double min) {
+    if (other instanceof SVector)
+      return multiplySelfByExponential(result, factor, (SVector) other, min);
+    for (int i = 0; i < result.size; i++)
+      result.data[i] = Math.max(min, result.data[i] * Math.exp(factor * other.getEntry(i)));
+    return result;
   }
 
-  public static SVector toSVector(PVector v) {
-    SVector result = new SVector(v.getDimension());
-    for (int i = 0; i < v.size; i++) {
-      final double value = v.data[i];
-      if (value != 0)
-        result.setEntry(i, value);
+  public static PVector multiplySelfByExponential(PVector result, double factor, SVector other, double min) {
+    int[] activeIndexes = other.getActiveIndexes();
+    for (int i = 0; i < other.nonZeroElements(); i++) {
+      int index = activeIndexes[i];
+      result.data[index] = Math.max(min, result.data[index] * Math.exp(factor * other.values[i]));
     }
     return result;
   }

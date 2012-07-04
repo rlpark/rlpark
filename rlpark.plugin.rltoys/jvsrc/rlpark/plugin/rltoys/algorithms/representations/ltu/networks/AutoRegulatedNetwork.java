@@ -55,7 +55,7 @@ public class AutoRegulatedNetwork extends RandomNetwork {
 
   private Set<LTUAdaptiveDensity> buildCouldHaveAgreeUnits(BinaryVector obs) {
     Set<LTUAdaptiveDensity> couldHaveAgree = new LinkedHashSet<LTUAdaptiveDensity>();
-    for (int activeInput : obs.activeIndexes()) {
+    for (int activeInput : obs.getActiveIndexes()) {
       for (LTU ltu : parents(activeInput)) {
         if (ltu == null || ltu.isActive())
           continue;
@@ -71,7 +71,7 @@ public class AutoRegulatedNetwork extends RandomNetwork {
     overUnit = output.nonZeroElements() - maxUnitActive;
     assert overUnit > 0;
     double selectionProbability = overUnit / (double) output.nonZeroElements();
-    for (int activeLTUIndex : output.activeIndexes()) {
+    for (int activeLTUIndex : output.getActiveIndexes()) {
       if (random.nextFloat() > selectionProbability)
         continue;
       LTU ltu = ltus[activeLTUIndex];

@@ -50,10 +50,6 @@ public class RoombaRobot extends IRobotEnvironment {
         (byte) shortLeft });
   }
 
-  public static void main(String[] args) {
-    IRobotDiscoServer.runServer("/dev/cu.FireFly-155A-SPP", new RoombaSerialDescriptor());
-  }
-
   public void filterLastReceivedObs() {
     if (lastReceivedObsBuffer == null)
       return;
@@ -68,5 +64,9 @@ public class RoombaRobot extends IRobotEnvironment {
   @Override
   public void resetForCharging() {
     System.out.println("Resetted");
+  }
+
+  public static void main(String[] args) {
+    IRobotDiscoServer.runServer("/dev/cu.FireFly-155A-SPP", new RoombaSerialDescriptor());
   }
 }

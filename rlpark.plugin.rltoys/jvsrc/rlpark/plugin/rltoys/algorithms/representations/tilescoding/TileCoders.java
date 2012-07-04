@@ -34,7 +34,7 @@ public abstract class TileCoders implements Projector {
   }
 
   private BinaryVector newVectorInstance() {
-    return new BVector(vectorSize(), (int) vectorNorm());
+    return new BVector(vectorSize());
   }
 
   public void addIndependentTilings(int gridResolution, int nbTilings) {

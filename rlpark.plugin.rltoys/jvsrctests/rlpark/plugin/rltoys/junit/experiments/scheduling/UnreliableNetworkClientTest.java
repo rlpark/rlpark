@@ -14,7 +14,6 @@ import rlpark.plugin.rltoys.experiments.scheduling.network.NetworkClient;
 import rlpark.plugin.rltoys.experiments.scheduling.network.NetworkJobQueue;
 import rlpark.plugin.rltoys.experiments.scheduling.network.ServerScheduler;
 import rlpark.plugin.rltoys.experiments.scheduling.schedulers.LocalScheduler;
-import zephyr.plugin.core.api.signals.Listener;
 
 public class UnreliableNetworkClientTest {
   static int nbUnreliableQueue = 0;
@@ -22,9 +21,10 @@ public class UnreliableNetworkClientTest {
   static class UnreliableNetworkQueue extends NetworkJobQueue {
     private final Random random = new Random(nbUnreliableQueue);
     volatile private boolean terminated = false;
+    public boolean failed = false;
 
     public UnreliableNetworkQueue(String serverHostName, int port) {
-      super(serverHostName, port);
+      super(serverHostName, port, false);
       nbUnreliableQueue++;
     }
 
@@ -35,6 +35,7 @@ public class UnreliableNetworkClientTest {
       Runnable runnable = super.request();
       if (random.nextFloat() < .1) {
         terminated = true;
+        failed = true;
         return null;
       }
       return runnable;
@@ -58,48 +59,47 @@ public class UnreliableNetworkClientTest {
 
   @Test(timeout = SchedulerTestsUtils.Timeout)
   public void testServerSchedulerWithMultipleClients() throws IOException {
-    ServerScheduler scheduler = createServerScheduler(false);
+    ServerScheduler scheduler = new ServerScheduler(SchedulerTestsUtils.Port, 0);
+    scheduler.start();
     testServerScheduler(scheduler, 5000, new Runnable() {
       @Override
       public void run() {
-        startUnreliableClients(5, false);
+        startUnreliableClients(4, false);
       }
     });
     scheduler.dispose();
   }
 
-  static public ServerScheduler createServerScheduler(final boolean useContextClassLoader) throws IOException {
-    ServerScheduler scheduler = new ServerScheduler(SchedulerTestsUtils.Port, 0);
-    scheduler.onClientDisconnected.connect(new Listener<ServerScheduler>() {
-      @Override
-      public void listen(ServerScheduler eventInfo) {
-        startUnreliableClients(1, useContextClassLoader);
-      }
-    });
-    scheduler.start();
-    return scheduler;
-  }
-
-  static private UnreliableNetworkQueue newUnreliableQueue() {
-    return new UnreliableNetworkQueue(SchedulerTestsUtils.Localhost, SchedulerTestsUtils.Port);
-  }
-
   public static void startUnreliableClients(int nbClients, final boolean useContextClassLoader) {
     for (int i = 0; i < nbClients; i++) {
-      final UnreliableNetworkQueue queue = newUnreliableQueue();
       Runnable target = new Runnable() {
         @Override
         public void run() {
-          LocalScheduler localScheduler = new LocalScheduler(queue);
-          NetworkClient client = new NetworkClient(localScheduler);
-          if (useContextClassLoader)
-            client.queue().classLoader().setDefaultClassLoader(Thread.currentThread().getContextClassLoader());
-          client.run();
-          client.dispose();
+          boolean queueHasFailed = true;
+          NetworkClient client = null;
+          try {
+            while (queueHasFailed) {
+              UnreliableNetworkQueue queue = new UnreliableNetworkQueue(SchedulerTestsUtils.Localhost,
+                                                                        SchedulerTestsUtils.Port);
+              LocalScheduler localScheduler = new LocalScheduler(queue);
+              client = new NetworkClient(localScheduler);
+              if (useContextClassLoader)
+                client.queue().classLoader().setDefaultClassLoader(Thread.currentThread().getContextClassLoader());
+              client.run();
+              client.dispose();
+              client = null;
+              queueHasFailed = queue.failed;
+              System.gc();
+            }
+          } catch (Throwable t) {
+          }
+          if (client != null)
+            client.dispose();
         }
       };
       Thread thread = new Thread(target, "SpawnClientThread" + nbUnreliableQueue);
       thread.setDaemon(true);
+      thread.setName("Unreliable Client spawner " + i);
       thread.start();
     }
   }

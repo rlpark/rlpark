@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.algorithms.predictions.supervised.Adaline;
+import rlpark.plugin.rltoys.experiments.testing.predictions.NoisyInputSum;
 import rlpark.plugin.rltoys.math.History;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.utils.Utils;

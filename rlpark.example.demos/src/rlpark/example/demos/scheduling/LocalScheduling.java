@@ -33,6 +33,7 @@ public class LocalScheduling {
     Iterator<? extends Runnable> jobList = createJobList();
     Listener<JobDoneEvent> jobDoneListener = createJobDoneListener();
     ((LocalQueue) scheduler.queue()).add(jobList, jobDoneListener);
-    scheduler.runAll();
+    scheduler.start();
+    scheduler.waitAll();
   }
 }

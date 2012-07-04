@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.SocketException;
 
 
-
 public class Messages {
   static private boolean verbose = true;
   static private boolean debug = false;
@@ -13,15 +12,12 @@ public class Messages {
   static int HeaderSize = Header.length + Integer.SIZE / Byte.SIZE + Integer.SIZE / Byte.SIZE;
 
   public enum MessageType {
-    Error,
-    RequestJob,
-    Job,
-    RequestClass,
-    ClassData,
-    SendClientName
+    Error, RequestJob, Job, RequestClass, ClassData, SendClientName
   }
 
   public static Message cast(MessageBinary message, ClassLoader classLoader) {
+    if (message == null)
+      return null;
     try {
       switch (message.type()) {
       case Error:
