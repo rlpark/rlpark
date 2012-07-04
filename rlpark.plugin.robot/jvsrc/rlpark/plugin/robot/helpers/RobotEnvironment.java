@@ -37,7 +37,8 @@ public abstract class RobotEnvironment implements RobotLive, Labeled {
   }
 
   public double[] waitNewObs() {
-    return waitNewRawObs().doubleValues();
+    ObservationVersatileArray observations = waitNewRawObs();
+    return observations == null ? null : observations.doubleValues();
   }
 
   @Override

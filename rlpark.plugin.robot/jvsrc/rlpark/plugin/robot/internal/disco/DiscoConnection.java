@@ -25,6 +25,7 @@ public class DiscoConnection implements ObservationReceiver {
   protected DiscoSocket socket;
   private final ByteOrder byteOrdering;
   private final List<Listener<DiscoPacket>> packetListeners = new ArrayList<Listener<DiscoPacket>>();
+  private final int sensorGroupSize;
 
   public DiscoConnection(String hostname, int port, Drop sensorDrop) {
     this(hostname, port, sensorDrop, ByteOrder.BIG_ENDIAN);
@@ -35,6 +36,7 @@ public class DiscoConnection implements ObservationReceiver {
     this.port = port;
     this.sensorDrop = sensorDrop;
     sensorGroup = new DropScalarGroup(sensorDrop);
+    this.sensorGroupSize = sensorGroup.drop().dataSize();
     byteOrdering = order;
   }
 
@@ -68,8 +70,8 @@ public class DiscoConnection implements ObservationReceiver {
       e.printStackTrace();
       close();
     }
-    return packet != null ? Syncs.createObservation(System.currentTimeMillis(), packet.byteBuffer(), sensorGroup)
-        : null;
+    return (packet != null && packet.byteBuffer().array().length == sensorGroupSize) ? Syncs.createObservation(System
+        .currentTimeMillis(), packet.byteBuffer(), sensorGroup) : null;
   }
 
   @Override
