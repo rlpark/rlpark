@@ -154,4 +154,8 @@ public class LiteByteBuffer {
       buffer = buffer >> 8;
     }
   }
+
+  public int offset() {
+    return offset;
+  }
 }
