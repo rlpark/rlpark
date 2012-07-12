@@ -1,11 +1,13 @@
 package rlpark.plugin.rltoys.envio.rl;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.observations.ObsAsDoubles;
 
-public class TRStep implements ObsAsDoubles {
+public class TRStep implements ObsAsDoubles, Serializable {
+  private static final long serialVersionUID = 5694217784539677187L;
   // Time of o_tp1
   final public long time;
   final public double[] o_t;

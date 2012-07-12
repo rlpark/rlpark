@@ -15,7 +15,8 @@ import zephyr.plugin.core.api.signals.Signal;
 public class Runner implements Serializable, MonitorContainer {
   private static final long serialVersionUID = 465593140388569561L;
 
-  static public class RunnerEvent {
+  @SuppressWarnings("serial")
+  static public class RunnerEvent implements Serializable {
     public int nbTotalTimeSteps = 0;
     public int episode = -1;
     public TRStep step = null;
@@ -59,6 +60,7 @@ public class Runner implements Serializable, MonitorContainer {
   public boolean hasNext() {
     if (runnerEvent.step == null && nbEpisode > 0)
       return true;
+    assert runnerEvent.step != null;
     if (!runnerEvent.step.isEpisodeEnding())
       return true;
     if (nbEpisode <= 0)

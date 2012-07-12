@@ -8,9 +8,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 public class PackageCycleTest {
-  static private String[] folders = { "rlpark.plugin.rltoys", "rlpark.plugin.robot",
-      "rlpark.plugin.irobot", "rlpark.plugin.critterbot", "rlpark.plugin.eclipse",
-      "rlpark.plugin.critterview", "rlpark.alltests" };
+  static private String[] folders = { "rlpark.plugin.rltoys", "rlpark.plugin.robot", "rlpark.alltests" };
 
   @Test
   public void testAllPackages() throws IOException {

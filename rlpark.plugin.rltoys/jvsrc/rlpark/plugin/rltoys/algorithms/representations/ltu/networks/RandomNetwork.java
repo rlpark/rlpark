@@ -25,9 +25,8 @@ public class RandomNetwork implements Serializable {
   protected final double[] denseInputVector;
   final LTUUpdated updatedLTUs;
   private final RandomNetworkScheduler scheduler;
-  @SuppressWarnings("unused")
   @Monitor
-  private int nbUnitUpdated = 0;
+  int nbUnitUpdated = 0;
 
   public RandomNetwork(int inputSize, int outputSize) {
     this(new RandomNetworkScheduler(), inputSize, outputSize);

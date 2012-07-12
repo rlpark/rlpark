@@ -5,9 +5,8 @@ import org.junit.runners.Suite;
 
 import rlpark.plugin.rltoys.junit.RLToysTests;
 import rlpark.plugin.robot.RobotTests;
-import critterbot.CritterbotTests;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ PackageCycleTest.class, RLToysTests.class, RobotTests.class, CritterbotTests.class })
+@Suite.SuiteClasses({ PackageCycleTest.class, RLToysTests.class, RobotTests.class })
 public class RLParkAllTests {
 }
