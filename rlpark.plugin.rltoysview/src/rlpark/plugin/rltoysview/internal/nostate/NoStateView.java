@@ -51,7 +51,7 @@ public class NoStateView extends ForegroundCanvasView<NoStateProblem> {
     }
   }
 
-  final ExperimentData experimentData = null;
+  final ExperimentData experimentData = new ExperimentData();
   private final Plot2D plot = new Plot2D();
   private final Drawer2D rewardDrawer = new Drawer2D() {
     @Override

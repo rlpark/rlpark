@@ -111,7 +111,6 @@ public class SerialPortToRobot implements SerialPortEventListener {
     signals.get(event).disconnect(listener);
   }
 
-  @SuppressWarnings("unused")
   @Override
   synchronized public void serialEvent(SerialPortEvent event) {
     if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE)

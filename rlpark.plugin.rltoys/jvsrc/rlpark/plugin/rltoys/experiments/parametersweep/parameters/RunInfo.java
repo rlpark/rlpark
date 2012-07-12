@@ -38,18 +38,16 @@ public class RunInfo implements Serializable {
     keysToCheck.addAll(o.infos.keySet());
     keysToCheck.retainAll(infos.keySet());
     for (String key : keysToCheck) {
-      Double thisValue = infos.get(key);
-      Double otherValue = o.infos.get(key);
-      if (thisValue == otherValue)
-        continue;
-      if (thisValue == null && otherValue != null)
-        return false;
-      if (otherValue == null && thisValue != null)
-        return false;
-      if (!thisValue.equals(otherValue))
+      double thisValue = toDouble(infos.get(key));
+      double otherValue = toDouble(o.infos.get(key));
+      if (thisValue != otherValue)
         return false;
     }
     return true;
+  }
+
+  private double toDouble(Double value) {
+    return value != null ? (double) value : Double.NaN;
   }
 
   public String[] infoLabels() {

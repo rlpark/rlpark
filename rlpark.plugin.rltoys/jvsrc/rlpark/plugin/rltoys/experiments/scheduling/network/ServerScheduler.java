@@ -106,7 +106,6 @@ public class ServerScheduler implements Scheduler {
     acceptClientsRunnable = new AcceptClientsRunnable(serverSocket);
     serverThread = new Thread(acceptClientsRunnable, "AcceptThread");
     serverThread.setDaemon(true);
-    serverThread.start();
     localScheduler = nbLocalThread > 0 ? new LocalScheduler(nbLocalThread, localQueue) : null;
     localQueue.enablePoolFromPending();
   }
@@ -137,6 +136,7 @@ public class ServerScheduler implements Scheduler {
 
   @Override
   synchronized public void start() {
+    serverThread.start();
     if (localScheduler != null)
       localScheduler.start();
   }

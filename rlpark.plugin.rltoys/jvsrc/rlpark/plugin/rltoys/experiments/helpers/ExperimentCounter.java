@@ -1,12 +1,14 @@
 package rlpark.plugin.rltoys.experiments.helpers;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ExperimentCounter implements Cloneable {
+public class ExperimentCounter implements Cloneable, Serializable {
+  private static final long serialVersionUID = 4512747323143545399L;
   public final File folder;
   private static final String LOGEXTENSION = "logtxt";
   public static final String DefaultFileName = "data";
