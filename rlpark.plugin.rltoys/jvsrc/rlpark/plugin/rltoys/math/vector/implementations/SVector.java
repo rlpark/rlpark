@@ -285,8 +285,11 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
 
   private SVector set(SVector other) {
     allocate(other.nbActive);
-    for (int i = 0; i < other.nbActive; i++)
-      setNonZeroEntry(other.activeIndexes[i], other.values[i]);
+    nbActive = other.nbActive;
+    System.arraycopy(other.activeIndexes, 0, activeIndexes, 0, nbActive);
+    System.arraycopy(other.values, 0, values, 0, nbActive);
+    for (int position = 0; position < nbActive; position++)
+      indexesPosition[activeIndexes[position]] = position;
     return this;
   }
 
