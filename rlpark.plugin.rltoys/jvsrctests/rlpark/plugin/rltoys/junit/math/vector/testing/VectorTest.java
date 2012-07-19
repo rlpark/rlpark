@@ -240,7 +240,7 @@ public abstract class VectorTest {
   public void testToBinary() {
     MutableVector v = (MutableVector) newVector(1.0, 0.0, -3.0, 0.0, 2.0);
     BVector expected = BVector.toBVector(5, new int[] { 0, 2, 4 });
-    VectorsTestsUtils.assertEquals(expected, Vectors.toBinary(v, newPrototypeVector(5)));
+    VectorsTestsUtils.assertEquals(expected, Vectors.toBinary(newPrototypeVector(5), v));
   }
 
   @Test

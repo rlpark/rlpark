@@ -40,7 +40,7 @@ public class TestJointDistribution {
     for (int t = 0; t < 10000; t++) {
       final PVector x_t = new PVector(new double[] { 1.0 });
       ActionArray a_t = jointDistribution.decide(x_t);
-      Assert.assertEquals(4, jointDistribution.getGradLog(x_t, a_t).length);
+      Assert.assertEquals(4, jointDistribution.computeGradLog(x_t, a_t).length);
       double pi = jointDistribution.pi(x_t, a_t);
       Assert.assertTrue(pi >= 0 && pi <= 1);
       for (int i = 0; i < normalizer.length; i++)

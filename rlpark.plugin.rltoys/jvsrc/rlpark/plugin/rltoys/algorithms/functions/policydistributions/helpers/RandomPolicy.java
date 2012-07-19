@@ -36,7 +36,7 @@ public class RandomPolicy implements PolicyDistribution {
   }
 
   @Override
-  public RealVector[] getGradLog(RealVector x_t, Action a_t) {
+  public RealVector[] computeGradLog(RealVector x_t, Action a_t) {
     return new PVector[] {};
   }
 

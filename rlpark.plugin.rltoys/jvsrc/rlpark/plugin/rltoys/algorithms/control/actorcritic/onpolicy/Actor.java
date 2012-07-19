@@ -24,15 +24,19 @@ public class Actor implements Serializable {
   }
 
   public Actor(PolicyDistribution policyDistribution, double[] alpha_u, int nbFeatures) {
+    this(policyDistribution.createParameters(nbFeatures), policyDistribution, alpha_u, nbFeatures);
+  }
+
+  public Actor(PVector[] policyParameters, PolicyDistribution policyDistribution, double[] alpha_u, int nbFeatures) {
     this.policyDistribution = policyDistribution;
     this.alpha_u = alpha_u;
-    u = policyDistribution.createParameters(nbFeatures);
+    u = policyParameters;
   }
 
   public void update(RealVector x_t, Action a_t, double delta) {
     if (x_t == null)
       return;
-    RealVector[] gradLog = policyDistribution.getGradLog(x_t, a_t);
+    RealVector[] gradLog = policyDistribution.computeGradLog(x_t, a_t);
     for (int i = 0; i < u.length; i++)
       u[i].addToSelf(alpha_u[i] * delta, gradLog[i]);
   }
@@ -57,7 +61,7 @@ public class Actor implements Serializable {
   }
 
   @LabelProvider(ids = { "u" })
-  String labelOf(int index) {
+  protected String labelOf(int index) {
     if (policyDistribution instanceof LabeledCollection)
       return ((LabeledCollection) policyDistribution).label(index);
     return null;

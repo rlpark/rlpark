@@ -8,7 +8,7 @@ import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 public interface PolicyDistribution extends Policy {
   PVector[] createParameters(int vectorSize);
 
-  RealVector[] getGradLog(RealVector x_t, Action a_t);
+  RealVector[] computeGradLog(RealVector x_t, Action a_t);
 
   int nbParameterVectors();
 }

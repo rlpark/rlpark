@@ -44,8 +44,8 @@ public class ScaledPolicyDistribution implements PolicyDistribution, BoundedPdf 
   }
 
   @Override
-  public RealVector[] getGradLog(RealVector x_t, Action a_t) {
-    return policy.getGradLog(x_t, problemToPolicy(ActionArray.toDouble(a_t)));
+  public RealVector[] computeGradLog(RealVector x_t, Action a_t) {
+    return policy.computeGradLog(x_t, problemToPolicy(ActionArray.toDouble(a_t)));
   }
 
   private ActionArray policyToProblem(double policyAction) {

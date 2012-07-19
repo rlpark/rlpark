@@ -41,7 +41,7 @@ public class ScaledPolicyDistributionTest {
     }
 
     @Override
-    public RealVector[] getGradLog(RealVector x_t, Action a_t) {
+    public RealVector[] computeGradLog(RealVector x_t, Action a_t) {
       ActionArray action = (ActionArray) a_t;
       Assert.assertEquals(1, action.actions.length);
       Assert.assertTrue(policyRange.in(action.actions[0]));
@@ -68,7 +68,7 @@ public class ScaledPolicyDistributionTest {
       for (int a_i = 0; a_i < actionRanges.length; a_i++)
         Assert.assertTrue(actionRanges[a_i].in(a.actions[a_i]));
       Assert.assertEquals(1.0, scaledPolicy.pi(null, a));
-      scaledPolicy.getGradLog(null, a);
+      scaledPolicy.computeGradLog(null, a);
     }
   }
 }

@@ -96,7 +96,7 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   }
 
   @Override
-  public RealVector[] getGradLog(RealVector x_t, Action a_t) {
+  public RealVector[] computeGradLog(RealVector x_t, Action a_t) {
     updateDistributionIFN(x_t);
     gradBuffer.clear();
     gradBuffer.set(actionToPhi_sa[actionToIndex.get(a_t)]);

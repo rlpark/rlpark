@@ -169,24 +169,24 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
 
   @Override
   public MutableVector ebeDivideToSelf(RealVector other) {
-    int[] activeIndexesBuffered = Arrays.copyOf(activeIndexes, nbActive);
-    double[] valuesBuffered = Arrays.copyOf(values, nbActive);
-    clear();
-    for (int position = 0; position < valuesBuffered.length; position++) {
-      final int index = activeIndexesBuffered[position];
-      setEntry(index, valuesBuffered[position] / other.getEntry(index));
+    for (int position = 0; position < nbActive; position++) {
+      final int index = activeIndexes[position];
+      values[position] /= other.getEntry(index);
     }
     return this;
   }
 
   @Override
   public MutableVector ebeMultiplyToSelf(RealVector other) {
-    int[] activeIndexesBuffered = Arrays.copyOf(activeIndexes, nbActive);
-    double[] valuesBuffered = Arrays.copyOf(values, nbActive);
-    clear();
-    for (int position = 0; position < valuesBuffered.length; position++) {
-      final int index = activeIndexesBuffered[position];
-      setEntry(index, valuesBuffered[position] * other.getEntry(index));
+    int position = 0;
+    while (position < nbActive) {
+      final int index = activeIndexes[position];
+      double value = values[position] * other.getEntry(index);
+      if (value != 0) {
+        values[position] = value;
+        position++;
+      } else
+        removeEntry(position, index);
     }
     return this;
   }

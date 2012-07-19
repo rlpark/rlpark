@@ -3,7 +3,6 @@ package rlpark.plugin.rltoys.math.vector.implementations;
 
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
-import rlpark.plugin.rltoys.math.vector.SparseVector;
 import rlpark.plugin.rltoys.utils.NotImplemented;
 import rlpark.plugin.rltoys.utils.Utils;
 
@@ -105,7 +104,8 @@ public class Vectors {
     return max;
   }
 
-  public static MutableVector toBinary(RealVector v, MutableVector result) {
+  public static MutableVector toBinary(MutableVector result, RealVector v) {
+    assert result.getDimension() == v.getDimension();
     result.clear();
     if (v instanceof SVector) {
       SVector sv = (SVector) v;
@@ -145,16 +145,5 @@ public class Vectors {
       result.setEntry(index, Math.max(result.getEntry(index), sother.values[position]));
     }
     return result;
-  }
-
-  public static MutableVector mapMultiplyToSelf(PVector v, double d, RealVector mask) {
-    if (!(mask instanceof SparseVector))
-      return v.mapMultiplyToSelf(d);
-    SparseVector svector = (SparseVector) mask;
-    int nbActive = svector.nonZeroElements();
-    int[] actives = svector.nonZeroIndexes();
-    for (int i = 0; i < nbActive; i++)
-      v.data[actives[i]] *= d;
-    return v;
   }
 }

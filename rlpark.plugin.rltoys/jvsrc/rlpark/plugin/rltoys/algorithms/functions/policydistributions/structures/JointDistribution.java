@@ -67,11 +67,11 @@ public class JointDistribution implements PolicyDistribution, BoundedPdf {
   }
 
   @Override
-  public RealVector[] getGradLog(RealVector x_t, Action a_t) {
+  public RealVector[] computeGradLog(RealVector x_t, Action a_t) {
     List<RealVector> gradLogs = new ArrayList<RealVector>();
     for (int i = 0; i < distributions.length; i++) {
       PolicyDistribution distribution = distributions[i];
-      RealVector[] gradLog = distribution.getGradLog(x_t, ActionArray.getDim(a_t, i));
+      RealVector[] gradLog = distribution.computeGradLog(x_t, ActionArray.getDim(a_t, i));
       for (RealVector parameterVector : gradLog)
         gradLogs.add(parameterVector);
     }
