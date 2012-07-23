@@ -2,10 +2,12 @@ package rlpark.plugin.rltoys.math.vector.implementations;
 
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.SparseVector;
 
-public class VectorNull implements RealVector {
+public class VectorNull implements SparseVector {
   private static final long serialVersionUID = 1316689252364870190L;
   private final int size;
+  private final int[] activeIndexes = new int[] {};
 
   public VectorNull(int size) {
     this.size = size;
@@ -66,4 +68,31 @@ public class VectorNull implements RealVector {
     return new double[size];
   }
 
+  @Override
+  public RealVector clear() {
+    return this;
+  }
+
+  @Override
+  public double dotProduct(double[] data) {
+    return 0;
+  }
+
+  @Override
+  public void addSelfTo(double[] data) {
+  }
+
+  @Override
+  public void subtractSelfTo(double[] data) {
+  }
+
+  @Override
+  public int nonZeroElements() {
+    return 0;
+  }
+
+  @Override
+  public int[] nonZeroIndexes() {
+    return activeIndexes;
+  }
 }
