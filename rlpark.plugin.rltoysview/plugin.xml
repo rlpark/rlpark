@@ -73,6 +73,13 @@
             name="Helicopter"
             restorable="true">
       </view>
+      <view
+            class="rlpark.plugin.rltoysview.internal.vectors.VectorProjectedView"
+            icon="icons/continuousfunctionview.png"
+            id="rlpark.plugin.rltoysview.VectorProjectedView"
+            name="Vector Projected"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="zephyr.viewprovider">
@@ -129,6 +136,12 @@
             icon="icons/policiesview.png"
             name="Discrete Action Policy"
             viewid="zephyr.rlpark.plugin.rltoysview.discreteactionpolicyview">
+      </client>
+      <client
+            class="rlpark.plugin.rltoysview.internal.vectors.VectorProjectedView$Provider"
+            icon="icons/continuousfunctionview.png"
+            name="Vector Projected"
+            viewid="rlpark.plugin.rltoysview.VectorProjectedView">
       </client>
    </extension>
    <extension

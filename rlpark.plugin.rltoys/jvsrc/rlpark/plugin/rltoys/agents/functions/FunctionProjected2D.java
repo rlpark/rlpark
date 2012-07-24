@@ -2,7 +2,6 @@ package rlpark.plugin.rltoys.agents.functions;
 
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.math.ranges.Range;
-import rlpark.plugin.rltoys.math.vector.RealVector;
 
 public abstract class FunctionProjected2D {
   protected final Projector projector;
@@ -14,12 +13,6 @@ public abstract class FunctionProjected2D {
     this.xRange = xRange;
     this.yRange = yRange;
   }
-
-  public double value(double x, double y) {
-    return value(projector.project(new double[] { x, y }));
-  }
-
-  abstract double value(RealVector project);
 
   public double minX() {
     return xRange.min();

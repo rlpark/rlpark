@@ -44,7 +44,7 @@ public class PartitionFactory implements DiscretizerFactory {
   private Discretizer boundedPartition(int resolution, Range range, double shift) {
     double min = range.min() - shift;
     double max = range.max() - shift + (range.length() / resolution);
-    return new BoundedPartition(min, max, resolution + 1);
+    return new BoundedPartition(min, max, resolution);
   }
 
   public static Range[] getRanges(double min, double max, int stateSize) {

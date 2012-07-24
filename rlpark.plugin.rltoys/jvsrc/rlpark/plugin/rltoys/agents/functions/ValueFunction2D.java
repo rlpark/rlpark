@@ -6,7 +6,6 @@ import java.awt.geom.Point2D;
 import rlpark.plugin.rltoys.algorithms.functions.Predictor;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
-import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.problems.ProblemBounded;
 import zephyr.plugin.core.api.viewable.ContinuousFunction2D;
 import zephyr.plugin.core.api.viewable.PositionFunction2D;
@@ -31,7 +30,7 @@ public class ValueFunction2D extends FunctionProjected2D implements ContinuousFu
   }
 
   @Override
-  double value(RealVector projected) {
-    return predictor.predict(projected);
+  public double value(double x, double y) {
+    return predictor.predict(projector.project(new double[] { x, y }));
   }
 }

@@ -47,6 +47,10 @@ public abstract class TileCoders implements Projector {
   }
 
   public void addTileCoder(int[] inputIndexes, int resolution, int nbTilings) {
+    addTileCoder(discretizerFactory, inputIndexes, resolution, nbTilings);
+  }
+
+  public void addTileCoder(DiscretizerFactory discretizerFactory, int[] inputIndexes, int resolution, int nbTilings) {
     assert resolution > 0;
     assert nbTilings > 0;
     assert inputIndexes.length > 0;
