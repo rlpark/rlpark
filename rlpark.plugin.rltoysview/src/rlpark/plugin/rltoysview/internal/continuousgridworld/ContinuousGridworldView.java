@@ -12,6 +12,7 @@ import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
 import rlpark.plugin.rltoys.problems.continuousgridworld.NormalizedFunction;
 import zephyr.ZephyrPlotting;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
@@ -43,13 +44,13 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   private final ColorMapAction colorMapAction = new ColorMapAction(this, rewardDrawer);
   private float[][][] trajectories = null;
   private MapData rewardData;
+  private double[] startPosition;
 
   @Override
   protected void paint(GC gc) {
     axes.updateScaling(gc.getClipping());
     rewardDrawer.paint(gc, canvas, rewardData, false);
-    ContinuousGridworld current = instance.current();
-    drawStartPosition(gc, current);
+    drawStartPosition(gc, startPosition);
     drawTrajectory(gc);
   }
 
@@ -59,8 +60,7 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     toolbarManager.add(colorMapAction);
   }
 
-  private void drawStartPosition(GC gc, ContinuousGridworld current) {
-    double[] start = current.start();
+  private void drawStartPosition(GC gc, double[] start) {
     if (start == null)
       return;
     int lineSize = ZephyrPlotting.preferredLineWidth();
@@ -89,7 +89,8 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
           gc.drawLine(lastPoint.x, lastPoint.y, point.x, point.y);
         lastPoint = point;
       }
-      gc.fillRectangle(lastPoint.x - (extremities / 2), lastPoint.y - (extremities / 2), extremities, extremities);
+      if (lastPoint != null)
+        gc.fillRectangle(lastPoint.x - (extremities / 2), lastPoint.y - (extremities / 2), extremities, extremities);
     }
   }
 
@@ -105,15 +106,14 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   }
 
   @Override
-  protected boolean synchronize() {
+  protected boolean synchronize(ContinuousGridworld current) {
     if (rewardData == null)
-      synchronizeRewardFunction();
+      synchronizeRewardFunction(current);
     trajectories = episodeTrajectories.copyTrajectories();
     return true;
   }
 
-  private void synchronizeRewardFunction() {
-    final ContinuousGridworld problem = instance.current();
+  private void synchronizeRewardFunction(ContinuousGridworld problem) {
     ContinuousFunction rewardFunction = problem.rewardFunction();
     rewardData = new MapData(200);
     if (rewardFunction != null) {
@@ -127,13 +127,14 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
       FunctionSampler sampler = new FunctionSampler(rewardFunctionAdapter);
       sampler.updateData(rewardData);
     }
-    updateAxes();
+    updateAxes(problem);
   }
 
   @Override
-  public void onInstanceSet() {
-    super.onInstanceSet();
-    episodeTrajectories.connect(instance.current(), instance.clock());
+  public void onInstanceSet(Clock clock, ContinuousGridworld problem) {
+    super.onInstanceSet(clock, problem);
+    startPosition = problem.start();
+    episodeTrajectories.connect(problem, clock);
     trajectories = null;
     rewardData = null;
   }
@@ -150,8 +151,8 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     colorMapAction.saveState(memento);
   }
 
-  private void updateAxes() {
-    Range[] ranges = instance.current().getObservationRanges();
+  private void updateAxes(ContinuousGridworld problem) {
+    Range[] ranges = problem.getObservationRanges();
     axes.x.reset();
     axes.y.reset();
     axes.x.update(ranges[0].min());
@@ -161,11 +162,12 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   }
 
   @Override
-  public void onInstanceUnset() {
-    super.onInstanceUnset();
+  public void onInstanceUnset(Clock clock) {
+    super.onInstanceUnset(clock);
     episodeTrajectories.disconnect();
     rewardDrawer.unset();
     trajectories = null;
     rewardData = null;
+    startPosition = null;
   }
 }

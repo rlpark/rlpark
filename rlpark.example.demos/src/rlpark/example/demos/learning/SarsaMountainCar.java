@@ -3,6 +3,7 @@ package rlpark.example.demos.learning;
 import java.util.Random;
 
 import rlpark.plugin.rltoys.agents.functions.ValueFunction2D;
+import rlpark.plugin.rltoys.agents.functions.FunctionProjected2D;
 import rlpark.plugin.rltoys.algorithms.control.acting.EpsilonGreedy;
 import rlpark.plugin.rltoys.algorithms.control.sarsa.Sarsa;
 import rlpark.plugin.rltoys.algorithms.control.sarsa.SarsaControl;
@@ -21,7 +22,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 
 @Monitor
 public class SarsaMountainCar implements Runnable {
-  final ValueFunction2D valueFunctionDisplay;
+  final FunctionProjected2D valueFunctionDisplay;
   private final MountainCar problem;
   private final SarsaControl control;
   private final TileCodersNoHashing projector;

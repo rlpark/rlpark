@@ -3,6 +3,7 @@ package rlpark.example.demos.learning;
 import java.util.Random;
 
 import rlpark.plugin.rltoys.agents.functions.ValueFunction2D;
+import rlpark.plugin.rltoys.agents.functions.FunctionProjected2D;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentDirect;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
 import rlpark.plugin.rltoys.algorithms.control.actorcritic.offpolicy.ActorLambdaOffPolicy;
@@ -51,7 +52,7 @@ public class OffPACContinuousGridworld implements Runnable {
   private final Runner learningRunner;
   private final Runner evaluationRunner;
   // Visualization with Zephyr
-  final ValueFunction2D valueFunction;
+  final FunctionProjected2D valueFunction;
   final Clock clock = new Clock("Off-PAC Demo");
   final Clock episodeClock = new Clock("Episodes");
 

@@ -31,11 +31,15 @@ public class NoStateView extends ForegroundCanvasView<NoStateProblem> {
     static final public int HistoryLength = 1000;
     public final History actionHistory = new History(HistoryLength);
     public final History rewardHistory = new History(HistoryLength);
+    private final NoStateProblem problem;
+
+    public ExperimentData(NoStateProblem problem) {
+      this.problem = problem;
+    }
 
     @Override
     public void listen(Clock eventInfo) {
-      @SuppressWarnings("synthetic-access")
-      TRStep step = instance.current().lastStep();
+      TRStep step = problem.lastStep();
       final double action = ActionArray.toDouble(step.a_t);
       actionHistory.append(action);
       rewardHistory.append(step.r_tp1);
@@ -51,7 +55,7 @@ public class NoStateView extends ForegroundCanvasView<NoStateProblem> {
     }
   }
 
-  final ExperimentData experimentData = new ExperimentData();
+  ExperimentData experimentData;
   private final Plot2D plot = new Plot2D();
   private final Drawer2D rewardDrawer = new Drawer2D() {
     @Override
@@ -66,7 +70,7 @@ public class NoStateView extends ForegroundCanvasView<NoStateProblem> {
   int radius = 1;
 
   @Override
-  public boolean synchronize() {
+  public boolean synchronize(NoStateProblem current) {
     experimentData.actionHistory.toArray(data.xdata);
     experimentData.rewardHistory.toArray(data.ydata);
     for (float reward : data.ydata)
@@ -95,15 +99,16 @@ public class NoStateView extends ForegroundCanvasView<NoStateProblem> {
   }
 
   @Override
-  public void onInstanceSet() {
+  public void onInstanceSet(Clock clock, NoStateProblem current) {
     experimentData.reset();
     rewardNormalizer.reset();
-    instance.clock().onTick.connect(experimentData);
-    super.onInstanceSet();
+    experimentData = new ExperimentData(current);
+    clock.onTick.connect(experimentData);
+    super.onInstanceSet(clock, current);
   }
 
   @Override
-  protected void setLayout() {
+  protected void setLayout(Clock clock, NoStateProblem current) {
     data = new Data2D("Reward", experimentData.actionHistory.length);
   }
 

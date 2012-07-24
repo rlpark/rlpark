@@ -27,8 +27,8 @@ public class HelicopterView extends ForegroundCanvasView<Helicopter> {
   private double[] heliState;
 
   @Override
-  public boolean synchronize() {
-    TRStep step = instance.current().lastStep();
+  public boolean synchronize(Helicopter current) {
+    TRStep step = current.lastStep();
     if (step == null || step.o_tp1 == null)
       return false;
     heliState = step.o_tp1.clone();

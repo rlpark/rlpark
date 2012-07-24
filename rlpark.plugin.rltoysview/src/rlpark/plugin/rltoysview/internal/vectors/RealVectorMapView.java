@@ -8,6 +8,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.SparseVector;
 import rlpark.plugin.rltoysview.internal.ColorScale;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.BackgroundCanvasView;
@@ -25,8 +26,8 @@ public class RealVectorMapView extends BackgroundCanvasView<RealVector> {
   private RealVector copy;
 
   @Override
-  public boolean synchronize() {
-    copy = instance.current().copy();
+  public boolean synchronize(RealVector vector) {
+    copy = vector.copy();
     return true;
   }
 
@@ -68,7 +69,7 @@ public class RealVectorMapView extends BackgroundCanvasView<RealVector> {
   }
 
   @Override
-  public void setLayout() {
+  public void setLayout(Clock clock, RealVector current) {
     colorScale.init();
   }
 

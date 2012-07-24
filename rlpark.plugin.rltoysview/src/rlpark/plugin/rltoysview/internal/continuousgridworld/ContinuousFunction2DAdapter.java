@@ -1,7 +1,5 @@
 package rlpark.plugin.rltoysview.internal.continuousgridworld;
 
-import java.awt.geom.Point2D;
-
 import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 import zephyr.plugin.core.api.viewable.ContinuousFunction2D;
 import zephyr.plugin.plotting.internal.heatmap.Interval;
@@ -21,11 +19,6 @@ public class ContinuousFunction2DAdapter implements ContinuousFunction2D {
   @Override
   public double value(double x, double y) {
     return function.value(new double[] { x, y });
-  }
-
-  @Override
-  public Point2D position() {
-    return null;
   }
 
   @Override

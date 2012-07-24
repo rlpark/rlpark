@@ -1,11 +1,9 @@
 package rlpark.plugin.rltoys.algorithms;
 
-import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.algorithms.functions.ParameterizedFunction;
 
-public interface LinearLearner {
+public interface LinearLearner extends ParameterizedFunction {
   void resetWeight(int index);
-
-  PVector weights();
 
   double error();
 }
