@@ -74,6 +74,7 @@
             restorable="true">
       </view>
       <view
+            allowMultiple="true"
             class="rlpark.plugin.rltoysview.internal.vectors.VectorProjectedView"
             icon="icons/continuousfunctionview.png"
             id="rlpark.plugin.rltoysview.VectorProjectedView"

@@ -88,6 +88,8 @@ public class FunctionAdapter implements ContinuousFunction2D {
   }
 
   public void init(IMemento memento) {
+    if (memento == null)
+      return;
     IMemento child = memento.getChild(MementoLabel);
     if (child != null)
       loadedPath = Eclipse.loadPath(child);

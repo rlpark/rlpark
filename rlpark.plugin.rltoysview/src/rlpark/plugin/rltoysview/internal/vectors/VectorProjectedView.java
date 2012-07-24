@@ -9,6 +9,7 @@ import org.eclipse.ui.PartInitException;
 import rlpark.plugin.rltoys.agents.functions.VectorProjection2D;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
@@ -76,6 +77,13 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
     axes.y.reset();
     axes.y.update(function.minY());
     axes.y.update(function.maxY());
+  }
+
+  @Override
+  public boolean[] provide(CodeNode[] codeNodes) {
+    if (codeNode() == codeNodes[0])
+      return CodeTrees.toBooleans(codeNodes, -1);
+    return super.provide(codeNodes);
   }
 
   @Override
