@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.algorithms.predictions.supervised.Adaline;
-import rlpark.plugin.rltoys.experiments.testing.predictions.NoisyInputSum;
+import rlpark.plugin.rltoys.experiments.testing.predictions.NoisyInputSumEvaluation;
 import rlpark.plugin.rltoys.math.History;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.utils.Utils;
@@ -25,11 +25,10 @@ public class AdalineTest {
 
   @Test
   public void testAdalineOnTracking() {
-    NoisyInputSum problem = new NoisyInputSum();
-    double error = problem.evaluateLearner(new Adaline(NoisyInputSum.NbInputs, 0));
-    Assert.assertEquals(NoisyInputSum.NbNonZeroWeight, error, 0.2);
-    error = problem.evaluateLearner(new Adaline(NoisyInputSum.NbInputs, 0.03));
-    Assert.assertEquals(3.5, error, 0.2);
+    double error = NoisyInputSumEvaluation.evaluateLearner(new Adaline(NoisyInputSumEvaluation.NbInputs, 0));
+    Assert.assertEquals(NoisyInputSumEvaluation.NbNonZeroWeights, error, 0.2);
+    error = NoisyInputSumEvaluation.evaluateLearner(new Adaline(NoisyInputSumEvaluation.NbInputs, 0.03));
+    Assert.assertEquals(3.2, error, 0.2);
   }
 
   public static void learnTarget(Random random, PVector targetWeights, Adaline learner) {
