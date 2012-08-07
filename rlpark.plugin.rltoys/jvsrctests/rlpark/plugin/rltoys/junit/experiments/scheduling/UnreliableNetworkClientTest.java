@@ -60,7 +60,7 @@ public class UnreliableNetworkClientTest {
   @Test(timeout = SchedulerTestsUtils.Timeout)
   public void testServerSchedulerWithMultipleClients() throws IOException {
     ServerScheduler scheduler = new ServerScheduler(SchedulerTestsUtils.Port, 0);
-    testServerScheduler(scheduler, 5000, new Runnable() {
+    testServerScheduler(scheduler, 2000, new Runnable() {
       @Override
       public void run() {
         startUnreliableClients(4, false);

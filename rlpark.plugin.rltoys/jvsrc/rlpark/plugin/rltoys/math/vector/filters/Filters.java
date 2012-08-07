@@ -58,4 +58,21 @@ public class Filters {
     };
     return operate(mapMultiplySelfOperation, filter);
   }
+
+  public static MutableVector mapDivideToSelf(final PVector result, final double d, RealVector filter) {
+    FilteredOperation mapDivideSelfOperation = new FilteredOperation() {
+      @Override
+      public MutableVector sparseOperate(int[] indexes, int nbActive) {
+        for (int i = 0; i < nbActive; i++)
+          result.data[indexes[i]] /= d;
+        return result;
+      }
+
+      @Override
+      public MutableVector operate() {
+        return result.mapMultiplyToSelf(1 / d);
+      }
+    };
+    return operate(mapDivideSelfOperation, filter);
+  }
 }

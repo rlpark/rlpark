@@ -1,5 +1,7 @@
 package rlpark.plugin.rltoysview.internal.vectors;
 
+import java.util.Arrays;
+
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.ui.IMemento;
@@ -11,6 +13,7 @@ import rlpark.plugin.rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
@@ -39,6 +42,18 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
   private final MapData functionData = new MapData(200);
   private FunctionSampler functionSampler;
   private final FunctionAdapter adapter = new FunctionAdapter();
+
+  public VectorProjectedView() {
+    adapter.projectedSet.connect(new Listener<ClassNode>() {
+      @Override
+      public void listen(ClassNode classNode) {
+        if (classNode == null)
+          setDefaultName();
+        else
+          setViewName(classNode.label(), Arrays.toString(classNode.path()));
+      }
+    });
+  }
 
   @Override
   protected void paint(GC gc) {
@@ -102,6 +117,7 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
     super.init(site, memento);
     colorMapAction.init(memento);
     adapter.init(memento);
+    synchronizeAction.init(memento);
   }
 
   @Override
@@ -109,6 +125,7 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
     super.saveState(memento);
     colorMapAction.saveState(memento);
     adapter.saveState(memento);
+    synchronizeAction.saveState(memento);
   }
 
   @Override

@@ -8,6 +8,7 @@ import rlpark.plugin.rltoys.agents.functions.VectorProjection2D;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.viewable.ContinuousFunction2D;
 import zephyr.plugin.core.internal.ZephyrSync;
 import zephyr.plugin.core.utils.Eclipse;
@@ -15,6 +16,7 @@ import zephyr.plugin.core.utils.Eclipse;
 @SuppressWarnings("restriction")
 public class FunctionAdapter implements ContinuousFunction2D {
   static private final String MementoLabel = "projected";
+  public Signal<ClassNode> projectedSet = new Signal<ClassNode>();
   private VectorProjection2D projection;
   private final Semaphore semaphore = new Semaphore(1);
   private RealVector projected;
@@ -66,6 +68,7 @@ public class FunctionAdapter implements ContinuousFunction2D {
     this.classNode = classNode;
     lockProjected();
     this.projected = (RealVector) classNode.instance();
+    projectedSet.fire(classNode);
     unlockProjected();
   }
 
