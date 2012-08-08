@@ -6,7 +6,9 @@ import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 
 public interface Policy extends Serializable {
-  double pi(RealVector s, Action a);
+  void update(RealVector x);
 
-  Action decide(RealVector s);
+  double pi(Action a);
+
+  Action sampleAction();
 }

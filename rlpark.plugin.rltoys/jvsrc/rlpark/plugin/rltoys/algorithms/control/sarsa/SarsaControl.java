@@ -3,6 +3,7 @@ package rlpark.plugin.rltoys.algorithms.control.sarsa;
 import rlpark.plugin.rltoys.algorithms.control.ControlLearner;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -26,7 +27,7 @@ public class SarsaControl implements ControlLearner {
   public Action step(RealVector x_t, Action a_t, RealVector x_tp1, double r_tp1) {
     if (x_t == null)
       xa_t = null;
-    Action a_tp1 = acting.decide(x_tp1);
+    Action a_tp1 = Policies.decide(acting, x_tp1);
     RealVector xa_tp1 = toStateAction.stateAction(x_tp1, a_tp1);
     sarsa.update(xa_t, xa_tp1, r_tp1);
     xa_t = xa_tp1;
@@ -39,6 +40,6 @@ public class SarsaControl implements ControlLearner {
 
   @Override
   public Action proposeAction(RealVector x) {
-    return acting.decide(x);
+    return Policies.decide(acting, x);
   }
 }

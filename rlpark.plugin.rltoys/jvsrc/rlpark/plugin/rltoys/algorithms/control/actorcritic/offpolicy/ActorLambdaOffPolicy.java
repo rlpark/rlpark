@@ -25,23 +25,24 @@ public class ActorLambdaOffPolicy extends AbstractActorOffPolicy {
       e_u[i] = prototype.newTraces(nbFeatures);
   }
 
-  protected void updateEligibilityTraces(double rho_t, RealVector x_t, Action a_t, double delta) {
-    RealVector[] gradLog = policyDistribution.computeGradLog(x_t, a_t);
+  protected void updateEligibilityTraces(double rho_t, Action a_t, double delta) {
+    RealVector[] gradLog = policyDistribution.computeGradLog(a_t);
     for (int i = 0; i < u.length; i++) {
       e_u[i].update(lambda, gradLog[i]);
       e_u[i].vect().mapMultiplyToSelf(rho_t);
     }
   }
 
-  protected void updatePolicyParameters(double rho_t, RealVector x_t, Action a_t, double delta) {
+  protected void updatePolicyParameters(double rho_t, Action a_t, double delta) {
     for (int i = 0; i < u.length; i++)
       u[i].addToSelf(alpha_u * delta, e_u[i].vect());
   }
 
   @Override
   protected void updateParameters(double rho_t, RealVector x_t, Action a_t, double delta) {
-    updateEligibilityTraces(rho_t, x_t, a_t, delta);
-    updatePolicyParameters(rho_t, x_t, a_t, delta);
+    policyDistribution.update(x_t);
+    updateEligibilityTraces(rho_t, a_t, delta);
+    updatePolicyParameters(rho_t, a_t, delta);
   }
 
   @Override

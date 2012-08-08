@@ -30,18 +30,18 @@ public class UniformDistribution implements PolicyDistribution, BoundedPolicy, B
   }
 
   @Override
-  public RealVector[] computeGradLog(RealVector x_t, Action a_t) {
+  public RealVector[] computeGradLog(Action a_t) {
     assert Actions.isOneDimension(a_t);
     return new PVector[] {};
   }
 
   @Override
-  public Action decide(RealVector x) {
+  public Action sampleAction() {
     return new ActionArray(range.choose(random));
   }
 
   @Override
-  public double pi(RealVector s, Action action) {
+  public double pi(Action action) {
     assert ((ActionArray) action).actions.length == 1;
     double a = ActionArray.toDouble(action);
     return range.in(a) ? pdfValue : 0;
@@ -58,7 +58,11 @@ public class UniformDistribution implements PolicyDistribution, BoundedPolicy, B
   }
 
   @Override
-  public double piMax(RealVector s) {
+  public double piMax() {
     return pdfValue;
+  }
+
+  @Override
+  public void update(RealVector x) {
   }
 }

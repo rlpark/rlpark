@@ -20,13 +20,13 @@ public class RandomPolicy implements PolicyDistribution {
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
+  public double pi(Action a) {
     assert Arrays.asList(a).contains(a);
     return 1.0 / actions.length;
   }
 
   @Override
-  public Action decide(RealVector s) {
+  public Action sampleAction() {
     return Utils.choose(random, actions);
   }
 
@@ -36,12 +36,16 @@ public class RandomPolicy implements PolicyDistribution {
   }
 
   @Override
-  public RealVector[] computeGradLog(RealVector x_t, Action a_t) {
+  public RealVector[] computeGradLog(Action a_t) {
     return new PVector[] {};
   }
 
   @Override
   public int nbParameterVectors() {
     return 0;
+  }
+
+  @Override
+  public void update(RealVector x) {
   }
 }

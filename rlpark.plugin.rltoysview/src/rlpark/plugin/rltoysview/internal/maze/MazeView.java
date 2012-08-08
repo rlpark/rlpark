@@ -163,14 +163,16 @@ public class MazeView extends ForegroundCanvasView<Maze> {
   public void init(IViewSite site, IMemento memento) throws PartInitException {
     super.init(site, memento);
     gridAction.init(memento);
-    adapter.init(memento);
+    if (adapter != null)
+      adapter.init(memento);
   }
 
   @Override
   public void saveState(IMemento memento) {
     super.saveState(memento);
     gridAction.saveState(memento);
-    adapter.saveState(memento);
+    if (adapter != null)
+      adapter.saveState(memento);
   }
 
   @Override

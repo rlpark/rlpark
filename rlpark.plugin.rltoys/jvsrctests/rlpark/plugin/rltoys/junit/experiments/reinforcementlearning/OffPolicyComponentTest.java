@@ -94,13 +94,17 @@ public class OffPolicyComponentTest {
       final Random random = new Random(seed);
       return new Policy() {
         @Override
-        public double pi(RealVector s, Action a) {
+        public double pi(Action a) {
           return 1;
         }
 
         @Override
-        public Action decide(RealVector s) {
+        public Action sampleAction() {
           return new ActionArray(random.nextDouble());
+        }
+
+        @Override
+        public void update(RealVector x) {
         }
       };
     }

@@ -2,6 +2,7 @@ package rlpark.plugin.rltoys.algorithms.control.actorcritic.offpolicy;
 
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistribution;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
@@ -14,8 +15,8 @@ public abstract class AbstractActorOffPolicy implements ActorOffPolicy {
   }
 
   @Override
-  public Action proposeAction(RealVector s) {
-    return policyDistribution.decide(s);
+  public Action proposeAction(RealVector x) {
+    return Policies.decide(policyDistribution, x);
   }
 
 

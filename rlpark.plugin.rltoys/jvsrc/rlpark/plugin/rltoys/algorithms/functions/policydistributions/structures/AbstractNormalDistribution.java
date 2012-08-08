@@ -10,7 +10,6 @@ import rlpark.plugin.rltoys.envio.actions.Actions;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import zephyr.plugin.core.api.monitoring.abstracts.LabeledCollection;
-import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
@@ -25,11 +24,10 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
   protected double mean;
   protected double stddev;
   protected final Random random;
-  @IgnoreMonitor
-  protected RealVector lastX;
   public double a_t;
   protected double meanStep;
   protected double stddevStep;
+  protected RealVector x;
 
   public AbstractNormalDistribution(Random random, double mean, double sigma) {
     initialMean = mean;
@@ -46,22 +44,6 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
     return new PVector[] { u_mean, u_stddev };
   }
 
-  protected ActionArray initialize() {
-    lastX = null;
-    return null;
-  }
-
-  public void updateDistributionIFN(RealVector x) {
-    if (lastX == x)
-      return;
-    lastX = x;
-    if (lastX == null)
-      return;
-    updateDistribution(x);
-  }
-
-  abstract protected void updateDistribution(RealVector x);
-
   public double stddev() {
     return stddev;
   }
@@ -71,9 +53,16 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
+  final public void update(RealVector x) {
+    this.x = x.copy();
+    updateDistribution();
+  }
+
+  abstract protected void updateDistribution();
+
+  @Override
+  public double pi(Action a) {
     assert Actions.isOneDimension(a);
-    updateDistributionIFN(s);
     return pi_s(ActionArray.toDouble(a));
   }
 

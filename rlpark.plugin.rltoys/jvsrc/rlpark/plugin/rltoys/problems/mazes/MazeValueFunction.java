@@ -32,8 +32,9 @@ public class MazeValueFunction implements MazeFunction {
     RealVector v_x = projector.project(new double[] { x, y });
     if (toStateAction == null)
       return (float) predictor.predict(v_x);
+    policy.update(v_x);
     for (Action a : maze.actions()) {
-      double prob = policy.pi(v_x, a);
+      double prob = policy.pi(a);
       RealVector v_xa = toStateAction.stateAction(v_x, a);
       sum += predictor.predict(v_xa) * prob;
     }

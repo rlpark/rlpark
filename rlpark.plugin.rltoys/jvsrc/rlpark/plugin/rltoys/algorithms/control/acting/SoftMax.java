@@ -16,7 +16,6 @@ public class SoftMax extends StochasticPolicy {
   private final double temperature;
   private final Predictor predictor;
   private final double[] distribution;
-  private RealVector last;
 
   public SoftMax(Random random, Predictor predictor, Action[] actions, StateToStateAction toStateAction,
       double temperature) {
@@ -32,21 +31,16 @@ public class SoftMax extends StochasticPolicy {
   }
 
   @Override
-  public Action decide(RealVector s) {
-    updateActionDistributionIFN(s);
+  public Action sampleAction() {
     return chooseAction(distribution);
   }
 
-  private void updateActionDistributionIFN(RealVector s) {
-    if (last == s)
-      return;
-    last = s;
-    if (last == null)
-      return;
+  @Override
+  public void update(RealVector x) {
     double sum = 0.0;
     for (int i = 0; i < actions.length; i++) {
       Action action = actions[i];
-      RealVector phi_sa = toStateAction.stateAction(s, action);
+      RealVector phi_sa = toStateAction.stateAction(x, action);
       double value = Math.exp(predictor.predict(phi_sa) / temperature);
       assert Utils.checkValue(value);
       sum += value;
@@ -64,8 +58,7 @@ public class SoftMax extends StochasticPolicy {
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
-    updateActionDistributionIFN(s);
+  public double pi(Action a) {
     return distribution[atoi(a)];
   }
 

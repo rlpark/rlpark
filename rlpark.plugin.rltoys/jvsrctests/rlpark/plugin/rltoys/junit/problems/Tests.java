@@ -8,13 +8,12 @@ import rlpark.plugin.rltoys.junit.envio.actions.ActionArrayTest;
 import rlpark.plugin.rltoys.junit.envio.observations.ObsFilterTest;
 import rlpark.plugin.rltoys.junit.problems.continuousgridworld.ContinuousGridworldTest;
 import rlpark.plugin.rltoys.junit.problems.mazes.MazeTest;
-import rlpark.plugin.rltoys.junit.problems.mountaincar.MountainCarBehaviourPolicyTest;
 import rlpark.plugin.rltoys.junit.problems.mountaincar.MountainCarTest;
 import rlpark.plugin.rltoys.junit.problems.pendulum.SwingPendulumTest;
 import rlpark.plugin.rltoys.junit.problems.stategraph.FiniteStateGraphTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ FiniteStateGraphTest.class, ActionArrayTest.class, ObsFilterTest.class, MountainCarTest.class,
-    SwingPendulumTest.class, MountainCarBehaviourPolicyTest.class, ContinuousGridworldTest.class, MazeTest.class })
+    SwingPendulumTest.class, ContinuousGridworldTest.class, MazeTest.class })
 public class Tests {
 }

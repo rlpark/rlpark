@@ -18,7 +18,6 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   private final RealVector[] actionToPhi_sa;
   @Monitor(level = 4)
   private PVector u;
-  private RealVector lastFeatureVector;
   private MutableVector averagePhi;
   private MutableVector gradBuffer;
   private final StateToStateAction toStateAction;
@@ -36,14 +35,12 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
-    updateDistributionIFN(s);
+  public double pi(Action a) {
     return distribution[atoi(a)];
   }
 
-  private void updateDistributionIFN(RealVector x) {
-    if (lastFeatureVector == x)
-      return;
+  @Override
+  public void update(RealVector x) {
     linearRangeAveraged.reset();
     double sum = 0;
     clearBuffers(x);
@@ -64,7 +61,6 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
       assert Utils.checkValue(distribution[i]);
     }
     averagePhi.mapMultiplyToSelf(1.0 / sum);
-    lastFeatureVector = x;
   }
 
   private void clearBuffers(RealVector x) {
@@ -76,16 +72,8 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
     averagePhi.clear();
   }
 
-  protected Action initialize() {
-    lastFeatureVector = null;
-    return null;
-  }
-
   @Override
-  public Action decide(RealVector x_t) {
-    if (x_t == null)
-      return initialize();
-    updateDistributionIFN(x_t);
+  public Action sampleAction() {
     return chooseAction(distribution);
   }
 
@@ -96,8 +84,7 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
   }
 
   @Override
-  public RealVector[] computeGradLog(RealVector x_t, Action a_t) {
-    updateDistributionIFN(x_t);
+  public RealVector[] computeGradLog(Action a_t) {
     gradBuffer.clear();
     gradBuffer.set(actionToPhi_sa[actionToIndex.get(a_t)]);
     return new RealVector[] { gradBuffer.subtractToSelf(averagePhi) };

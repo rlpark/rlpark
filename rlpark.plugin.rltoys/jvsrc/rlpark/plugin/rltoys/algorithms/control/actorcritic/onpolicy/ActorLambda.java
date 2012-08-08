@@ -42,7 +42,8 @@ public class ActorLambda extends Actor {
       initEpisode();
       return;
     }
-    RealVector[] gradLog = policyDistribution.computeGradLog(x_t, a_t);
+    policyDistribution.update(x_t);
+    RealVector[] gradLog = policyDistribution.computeGradLog(a_t);
     for (int i = 0; i < u.length; i++)
       e_u[i].update(gamma * lambda, gradLog[i]);
     updatePolicyParameters(gradLog, delta);

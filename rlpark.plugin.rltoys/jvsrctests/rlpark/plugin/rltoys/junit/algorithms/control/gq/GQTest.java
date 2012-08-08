@@ -112,9 +112,10 @@ public class GQTest {
       GraphState s = entry.getKey();
       int si = entry.getValue();
       double v_s = 0;
+      targetPolicy.update(s.v());
       for (Action a : agentState.graph().actions()) {
         RealVector phi_sa = agentState.stateAction(s.v(), a);
-        v_s += targetPolicy.pi(s.v(), a) * actionValuePredictor.predict(phi_sa);
+        v_s += targetPolicy.pi(a) * actionValuePredictor.predict(phi_sa);
       }
       v.data[si] = v_s;
     }

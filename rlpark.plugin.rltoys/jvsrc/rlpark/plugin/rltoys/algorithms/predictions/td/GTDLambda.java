@@ -114,7 +114,7 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
   }
 
   @Override
-  public Traces trace() {
+  public Traces traces() {
     return e;
   }
 

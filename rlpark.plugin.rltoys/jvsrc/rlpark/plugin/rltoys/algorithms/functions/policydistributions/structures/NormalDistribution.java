@@ -21,10 +21,9 @@ public class NormalDistribution extends AbstractNormalDistribution {
   }
 
   @Override
-  public RealVector[] computeGradLog(RealVector x_t, Action a_t) {
-    updateDistributionIFN(x_t);
-    updateSteps(ActionArray.toDouble(a_t));
-    return new RealVector[] { x_t.mapMultiply(meanStep), x_t.mapMultiply(stddevStep) };
+  public RealVector[] computeGradLog(Action a) {
+    updateSteps(ActionArray.toDouble(a));
+    return new RealVector[] { x.mapMultiply(meanStep), x.mapMultiply(stddevStep) };
   }
 
   protected void updateSteps(double a) {
@@ -33,10 +32,7 @@ public class NormalDistribution extends AbstractNormalDistribution {
   }
 
   @Override
-  public Action decide(RealVector x_t) {
-    if (x_t == null)
-      return initialize();
-    updateDistributionIFN(x_t);
+  public Action sampleAction() {
     a_t = random.nextGaussian() * stddev + mean;
     if (!Utils.checkValue(a_t))
       return null;
@@ -44,7 +40,7 @@ public class NormalDistribution extends AbstractNormalDistribution {
   }
 
   @Override
-  protected void updateDistribution(RealVector x) {
+  protected void updateDistribution() {
     mean = u_mean.dotProduct(x) + initialMean;
     stddev = Math.exp(u_stddev.dotProduct(x)) * initialStddev + Utils.EPSILON;
     sigma2 = square(stddev);
@@ -65,7 +61,7 @@ public class NormalDistribution extends AbstractNormalDistribution {
   }
 
   @Override
-  public double piMax(RealVector s) {
-    return Math.max(pi(s, new ActionArray(mean)), Utils.EPSILON);
+  public double piMax() {
+    return Math.max(pi(new ActionArray(mean)), Utils.EPSILON);
   }
 }

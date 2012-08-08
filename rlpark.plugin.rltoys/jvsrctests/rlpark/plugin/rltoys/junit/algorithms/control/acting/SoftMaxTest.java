@@ -40,6 +40,7 @@ public class SoftMaxTest {
     ActionInteger[] actions = createActions(10);
     SoftMax softMax = new SoftMax(new Random(0), new ActionPredictor(new PVector(actions.length)), actions,
                                   new TabularAction(actions, 1, 1));
+    softMax.update(new PVector(1.0));
     double[] dist = pollActions(softMax, 100000);
     double expected = 1.0 / actions.length;
     for (int i = 0; i < dist.length; i++)
@@ -53,6 +54,7 @@ public class SoftMaxTest {
     final double qa2 = 0.2;
     SoftMax softMax = new SoftMax(new Random(0), new ActionPredictor(new PVector(qa1, qa2)), actions,
                                   new TabularAction(actions, 1, 1));
+    softMax.update(new PVector(1.0));
     double[] actionDistribution = pollActions(softMax, 1000);
     Assert.assertEquals(Math.exp(qa1) / (Math.exp(qa1) + Math.exp(qa2)), actionDistribution[0], 0.1);
     Assert.assertEquals(Math.exp(qa2) / (Math.exp(qa1) + Math.exp(qa2)), actionDistribution[1], 0.1);
@@ -61,7 +63,7 @@ public class SoftMaxTest {
   private double[] pollActions(SoftMax softMax, int nbPolls) {
     int[] dist = new int[softMax.actions().length];
     for (int i = 0; i < nbPolls; i++) {
-      ActionInteger a = (ActionInteger) softMax.decide(new PVector(1.0));
+      ActionInteger a = (ActionInteger) softMax.sampleAction();
       dist[a.a]++;
     }
     double[] result = new double[dist.length];

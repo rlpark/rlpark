@@ -3,6 +3,7 @@ package rlpark.plugin.rltoys.algorithms.control.gq;
 import rlpark.plugin.rltoys.algorithms.control.ControlLearner;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 
@@ -19,10 +20,10 @@ public class GQOnPolicyControl implements ControlLearner {
   }
 
   @Override
-  public Action step(RealVector s_t, Action a_t, RealVector s_tp1, double r_tp1) {
-    RealVector phi_t = toStateAction.stateAction(s_t, a_t);
-    Action a_tp1 = acting.decide(s_tp1);
-    gq.update(phi_t, 1.0, r_tp1, toStateAction.stateAction(s_tp1, a_tp1), 0.0);
+  public Action step(RealVector x_t, Action a_t, RealVector x_tp1, double r_tp1) {
+    RealVector phi_t = toStateAction.stateAction(x_t, a_t);
+    Action a_tp1 = Policies.decide(acting, x_tp1);
+    gq.update(phi_t, 1.0, r_tp1, toStateAction.stateAction(x_tp1, a_tp1), 0.0);
     return a_tp1;
   }
 
@@ -32,6 +33,6 @@ public class GQOnPolicyControl implements ControlLearner {
 
   @Override
   public Action proposeAction(RealVector x) {
-    return acting.decide(x);
+    return Policies.decide(acting, x);
   }
 }

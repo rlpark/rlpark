@@ -4,6 +4,7 @@ import rlpark.plugin.rltoys.algorithms.LinearLearner;
 import rlpark.plugin.rltoys.algorithms.control.acting.Greedy;
 import rlpark.plugin.rltoys.algorithms.functions.Predictor;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
+import rlpark.plugin.rltoys.algorithms.traces.EligibilityTraceAlgorithm;
 import rlpark.plugin.rltoys.algorithms.traces.Traces;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.Policy;
@@ -12,7 +13,7 @@ import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
-public class QLearning implements Predictor, LinearLearner {
+public class QLearning implements Predictor, LinearLearner, EligibilityTraceAlgorithm {
   private static final long serialVersionUID = -404558746167490755L;
   @Monitor(level = 4)
   protected final PVector theta;
@@ -23,7 +24,6 @@ public class QLearning implements Predictor, LinearLearner {
   private final StateToStateAction toStateAction;
   private double delta;
   private final Greedy greedy;
-  private Action at_star;
 
   public QLearning(Action[] actions, double alpha, double gamma, double lambda, StateToStateAction toStateAction,
       Traces prototype) {
@@ -39,8 +39,10 @@ public class QLearning implements Predictor, LinearLearner {
   public double update(RealVector x_t, Action a_t, RealVector x_tp1, Action a_tp1, double r_tp1) {
     if (x_t == null)
       return initEpisode();
-    Action atp1_star = greedy.decide(x_tp1);
+    greedy.update(x_t);
+    Action at_star = greedy.bestAction();
     RealVector phi_sa_t = toStateAction.stateAction(x_t, a_t);
+    greedy.update(x_tp1);
     delta = r_tp1 + gamma * greedy.bestActionValue() - theta.dotProduct(phi_sa_t);
     if (a_t == at_star)
       e.update(gamma * lambda, phi_sa_t);
@@ -49,7 +51,6 @@ public class QLearning implements Predictor, LinearLearner {
       e.update(0, phi_sa_t);
     }
     theta.addToSelf(alpha * delta, e.vect());
-    at_star = atp1_star;
     return delta;
   }
 
@@ -57,7 +58,6 @@ public class QLearning implements Predictor, LinearLearner {
     if (e != null)
       e.clear();
     delta = 0.0;
-    at_star = null;
     return delta;
   }
 
@@ -87,5 +87,10 @@ public class QLearning implements Predictor, LinearLearner {
 
   public Policy greedy() {
     return greedy;
+  }
+
+  @Override
+  public Traces traces() {
+    return e;
   }
 }

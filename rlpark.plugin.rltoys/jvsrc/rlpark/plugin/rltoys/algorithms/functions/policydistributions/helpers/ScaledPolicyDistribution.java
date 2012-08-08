@@ -29,8 +29,8 @@ public class ScaledPolicyDistribution implements PolicyDistribution, BoundedPdf 
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
-    return policy.pi(s, problemToPolicy(ActionArray.toDouble(a)));
+  public double pi(Action a) {
+    return policy.pi(problemToPolicy(ActionArray.toDouble(a)));
   }
 
   @Override
@@ -39,13 +39,13 @@ public class ScaledPolicyDistribution implements PolicyDistribution, BoundedPdf 
   }
 
   @Override
-  public Action decide(RealVector s) {
-    return policyToProblem(ActionArray.toDouble(policy.decide(s)));
+  public Action sampleAction() {
+    return policyToProblem(ActionArray.toDouble(policy.sampleAction()));
   }
 
   @Override
-  public RealVector[] computeGradLog(RealVector x_t, Action a_t) {
-    return policy.computeGradLog(x_t, problemToPolicy(ActionArray.toDouble(a_t)));
+  public RealVector[] computeGradLog(Action a_t) {
+    return policy.computeGradLog(problemToPolicy(ActionArray.toDouble(a_t)));
   }
 
   private ActionArray policyToProblem(double policyAction) {
@@ -73,7 +73,13 @@ public class ScaledPolicyDistribution implements PolicyDistribution, BoundedPdf 
 
 
   @Override
-  public double piMax(RealVector s) {
-    return ((BoundedPdf) policy).piMax(s);
+  public double piMax() {
+    return ((BoundedPdf) policy).piMax();
+  }
+
+
+  @Override
+  public void update(RealVector x) {
+    policy.update(x);
   }
 }

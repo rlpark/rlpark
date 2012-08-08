@@ -17,7 +17,6 @@ public class Greedy implements DiscreteActionPolicy {
   protected Action bestAction;
   @Monitor
   private double bestValue;
-  private RealVector lastUpdate = null;
 
   public Greedy(Predictor predictor, Action[] actions, StateToStateAction toStateAction) {
     this.toStateAction = toStateAction;
@@ -27,19 +26,14 @@ public class Greedy implements DiscreteActionPolicy {
   }
 
   @Override
-  public Action decide(RealVector s) {
-    return computeBestAction(s);
+  public Action sampleAction() {
+    return bestAction;
   }
 
-  public Action computeBestAction(RealVector s_tp1) {
-    if (s_tp1 == null)
-      return null;
-    if (lastUpdate == s_tp1)
-      return bestAction;
-    updateActionValues(s_tp1);
+  @Override
+  public void update(RealVector x_tp1) {
+    updateActionValues(x_tp1);
     findBestAction();
-    lastUpdate = s_tp1;
-    return bestAction;
   }
 
   private void findBestAction() {
@@ -62,8 +56,7 @@ public class Greedy implements DiscreteActionPolicy {
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
-    computeBestAction(s);
+  public double pi(Action a) {
     return a == bestAction ? 1 : 0;
   }
 

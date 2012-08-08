@@ -5,6 +5,7 @@ import java.util.Random;
 import rlpark.plugin.rltoys.agents.Agent;
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.helpers.RandomPolicy;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
 
@@ -18,12 +19,12 @@ public class RandomAgent implements Agent, RLAgent {
 
   @Override
   public Action getAtp1(double[] obs) {
-    return policy.decide(null);
+    return Policies.decide(policy, null);
   }
 
   @Override
   public Action getAtp1(TRStep step) {
-    return policy.decide(null);
+    return Policies.decide(policy, null);
   }
 
   public RandomPolicy policy() {

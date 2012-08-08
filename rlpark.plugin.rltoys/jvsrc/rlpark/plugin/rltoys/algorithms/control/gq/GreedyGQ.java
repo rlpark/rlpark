@@ -1,9 +1,9 @@
 package rlpark.plugin.rltoys.algorithms.control.gq;
 
 import rlpark.plugin.rltoys.algorithms.control.OffPolicyLearner;
-import rlpark.plugin.rltoys.algorithms.functions.Predictor;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
@@ -38,24 +38,28 @@ public class GreedyGQ implements OffPolicyLearner {
     prototype = ((Prototype<RealVector>) gq.e).prototype();
   }
 
-  public double update(RealVector s_t, Action a_t, double r_tp1, double gamma_tp1, double z_tp1, RealVector s_tp1,
+  public double update(RealVector x_t, Action a_t, double r_tp1, double gamma_tp1, double z_tp1, RealVector x_tp1,
       Action a_tp1) {
     rho_t = 0.0;
-    if (a_t != null)
-      rho_t = target.pi(s_t, a_t) / behaviour.pi(s_t, a_t);
+    if (a_t != null) {
+      target.update(x_t);
+      behaviour.update(x_t);
+      rho_t = target.pi(a_t) / behaviour.pi(a_t);
+    }
     assert Utils.checkValue(rho_t);
     VectorPool pool = VectorPools.pool(prototype);
     MutableVector sa_bar_tp1 = pool.newVector(gq.v.size);
-    if (s_t != null && s_tp1 != null) {
+    if (x_t != null && x_tp1 != null) {
+      target.update(x_tp1);
       for (Action a : actions) {
-        double pi = target.pi(s_tp1, a);
+        double pi = target.pi(a);
         if (pi == 0)
           continue;
-        RealVector sa_tp1 = toStateAction.stateAction(s_tp1, a);
+        RealVector sa_tp1 = toStateAction.stateAction(x_tp1, a);
         sa_bar_tp1.addToSelf(pool.newVector(sa_tp1).mapMultiplyToSelf(pi));
       }
     }
-    RealVector phi_stat = s_t != null ? toStateAction.stateAction(s_t, a_t) : null;
+    RealVector phi_stat = x_t != null ? toStateAction.stateAction(x_t, a_t) : null;
     delta_t = gq.update(phi_stat, rho_t, r_tp1, sa_bar_tp1, z_tp1);
     pool.releaseAll();
     return delta_t;
@@ -85,11 +89,11 @@ public class GreedyGQ implements OffPolicyLearner {
 
   @Override
   public Action proposeAction(RealVector x_t) {
-    return target.decide(x_t);
+    return Policies.decide(target, x_t);
   }
 
   @Override
-  public Predictor predictor() {
+  public GQ predictor() {
     return gq;
   }
 }

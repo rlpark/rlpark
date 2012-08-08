@@ -47,7 +47,7 @@ public class TDLambda extends TD implements EligibilityTraceAlgorithm {
   }
 
   @Override
-  public Traces trace() {
+  public Traces traces() {
     return e;
   }
 }

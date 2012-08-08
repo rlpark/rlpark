@@ -5,7 +5,6 @@ import java.util.Random;
 import rlpark.plugin.rltoys.algorithms.functions.Predictor;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.envio.actions.Action;
-import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.utils.Utils;
 
 public class EpsilonGreedy extends Greedy {
@@ -21,16 +20,14 @@ public class EpsilonGreedy extends Greedy {
   }
 
   @Override
-  public Action decide(RealVector s) {
-    Action bestAction = computeBestAction(s);
+  public Action sampleAction() {
     if (random.nextFloat() < epsilon)
       return Utils.choose(random, actions);
-    return bestAction;
+    return super.bestAction();
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
-    computeBestAction(s);
+  public double pi(Action a) {
     double probability = a == bestAction ? 1.0 - epsilon : 0.0;
     return probability + epsilon / actions.length;
   }
