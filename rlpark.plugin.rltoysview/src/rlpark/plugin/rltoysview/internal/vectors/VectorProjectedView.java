@@ -22,7 +22,7 @@ import zephyr.plugin.core.internal.views.helpers.ScreenShotAction;
 import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.axes.Axes;
 import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
-import zephyr.plugin.plotting.internal.heatmap.Function2DDrawer;
+import zephyr.plugin.plotting.internal.heatmap.Function2DBufferedDrawer;
 import zephyr.plugin.plotting.internal.heatmap.FunctionSampler;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
 
@@ -35,16 +35,16 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
   }
 
   private final Colors colors = new Colors();
-  private final Function2DDrawer valueFunctionDrawer = new Function2DDrawer(colors);
+  private final Function2DBufferedDrawer valueFunctionDrawer = new Function2DBufferedDrawer(colors);
   private final Axes axes = new Axes();
   private final ColorMapAction colorMapAction = new ColorMapAction(this, valueFunctionDrawer);
   private final SynchronizeAction synchronizeAction = new SynchronizeAction();
   private final MapData functionData = new MapData(200);
   private FunctionSampler functionSampler;
-  private final FunctionAdapter adapter = new FunctionAdapter();
+  private final VectorAdapter adapter = new VectorAdapter();
 
   public VectorProjectedView() {
-    adapter.projectedSet.connect(new Listener<ClassNode>() {
+    adapter.layoutFunctionSet.connect(new Listener<ClassNode>() {
       @Override
       public void listen(ClassNode classNode) {
         if (classNode == null)
@@ -57,7 +57,7 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
 
   @Override
   protected void paint(GC gc) {
-    if (!adapter.canProject()) {
+    if (!adapter.layoutFunctionIsSet()) {
       defaultPainting(gc);
       return;
     }
@@ -74,10 +74,10 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
   protected boolean synchronize(VectorProjection2D projection) {
     if (!synchronizeAction.synchronizedData())
       return false;
-    RealVector projected = adapter.lockProjected();
+    RealVector projected = adapter.lockLayoutFunction();
     if (projected != null)
       functionSampler.updateData(functionData);
-    adapter.unlockProjected();
+    adapter.unlockLayoutFunction();
     return true;
   }
 
@@ -129,12 +129,6 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
   }
 
   @Override
-  public void onInstanceUnset(Clock clock) {
-    super.onInstanceUnset(clock);
-    valueFunctionDrawer.unset();
-  }
-
-  @Override
   public void drop(CodeNode[] supported) {
     ClassNode classNode = (ClassNode) supported[0];
     Object instance = classNode.instance();
@@ -143,6 +137,6 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
       return;
     }
     if (instance instanceof RealVector)
-      adapter.setProjected(classNode);
+      adapter.setLayoutFunction(classNode);
   }
 }

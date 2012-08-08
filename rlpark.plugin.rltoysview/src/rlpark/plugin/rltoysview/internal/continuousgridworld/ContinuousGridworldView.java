@@ -19,7 +19,7 @@ import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.core.internal.views.helpers.ScreenShotAction;
 import zephyr.plugin.plotting.internal.axes.Axes;
 import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
-import zephyr.plugin.plotting.internal.heatmap.Function2DDrawer;
+import zephyr.plugin.plotting.internal.heatmap.Function2DBufferedDrawer;
 import zephyr.plugin.plotting.internal.heatmap.FunctionSampler;
 import zephyr.plugin.plotting.internal.heatmap.Interval;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
@@ -40,7 +40,7 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   private final Colors colors = new Colors();
   private final Axes axes = new Axes();
   private final EpisodeTrajectories episodeTrajectories = new EpisodeTrajectories();
-  private final Function2DDrawer rewardDrawer = new Function2DDrawer(colors);
+  private final Function2DBufferedDrawer rewardDrawer = new Function2DBufferedDrawer(colors);
   private final ColorMapAction colorMapAction = new ColorMapAction(this, rewardDrawer);
   private float[][][] trajectories = null;
   private MapData rewardData;

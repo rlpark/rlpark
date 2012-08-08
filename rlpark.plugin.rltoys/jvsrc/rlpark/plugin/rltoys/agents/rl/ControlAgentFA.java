@@ -11,7 +11,7 @@ public class ControlAgentFA implements RLAgent {
   private final Control control;
   private final Projector projector;
 
-  public ControlAgentFA(Projector projector, Control control) {
+  public ControlAgentFA(Control control, Projector projector) {
     this.projector = projector;
     this.control = control;
   }

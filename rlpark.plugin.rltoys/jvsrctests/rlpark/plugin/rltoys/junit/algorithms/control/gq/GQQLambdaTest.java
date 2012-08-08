@@ -58,8 +58,7 @@ public class GQQLambdaTest {
     private QLearningControl createQLearning(TileCoders projector, Action[] actions) {
       double alpha = Alpha / projector.vectorNorm();
       TabularAction toStateAction = new TabularAction(actions, projector.vectorNorm(), projector.vectorSize());
-      QLearning qlearning = new QLearning(actions, alpha, Gamma, Lambda, toStateAction, toStateAction.vectorSize(),
-                                          new RTraces());
+      QLearning qlearning = new QLearning(actions, alpha, Gamma, Lambda, toStateAction, new RTraces());
       Greedy acting = new Greedy(qlearning, actions, toStateAction);
       return new QLearningControl(acting, qlearning);
     }

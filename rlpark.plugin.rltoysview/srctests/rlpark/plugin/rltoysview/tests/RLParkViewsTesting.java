@@ -6,6 +6,7 @@ import org.junit.Test;
 import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;
 import rlpark.plugin.rltoys.problems.pendulum.SwingPendulum;
 import rlpark.plugin.rltoysview.tests.internal.TestHelicopterRunnable;
+import rlpark.plugin.rltoysview.tests.internal.TestMazeRunnable;
 import rlpark.plugin.rltoysview.tests.internal.TestProblem;
 import rlpark.plugin.rltoysview.tests.internal.continuousgridworld.TestContinuousGridworldRunnable;
 import zephyr.plugin.core.RunnableFactory;
@@ -18,6 +19,11 @@ public class RLParkViewsTesting {
   @Before
   public void before() {
     ZephyrCore.setSynchronous(true);
+  }
+
+  @Test
+  public void testMazeView() {
+    RunnableTests.startRunnable(TestMazeRunnable.class, new NumberTickCondition(20));
   }
 
   @Test(timeout = RunnableFilesTests.TimeOut)

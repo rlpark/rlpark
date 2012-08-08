@@ -9,9 +9,12 @@ import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
+@Monitor
 public class QLearning implements Predictor, LinearLearner {
   private static final long serialVersionUID = -404558746167490755L;
+  @Monitor(level = 4)
   protected final PVector theta;
   private final Traces e;
   private final double lambda;
@@ -23,14 +26,14 @@ public class QLearning implements Predictor, LinearLearner {
   private Action at_star;
 
   public QLearning(Action[] actions, double alpha, double gamma, double lambda, StateToStateAction toStateAction,
-      int nbFeatures, Traces prototype) {
+      Traces prototype) {
     this.alpha = alpha;
     this.gamma = gamma;
     this.lambda = lambda;
     this.toStateAction = toStateAction;
     greedy = new Greedy(this, actions, toStateAction);
-    theta = new PVector(nbFeatures);
-    e = prototype.newTraces(nbFeatures);
+    theta = new PVector(toStateAction.vectorSize());
+    e = prototype.newTraces(toStateAction.vectorSize());
   }
 
   public double update(RealVector x_t, Action a_t, RealVector x_tp1, Action a_tp1, double r_tp1) {

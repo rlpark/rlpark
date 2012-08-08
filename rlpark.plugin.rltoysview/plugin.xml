@@ -75,6 +75,14 @@
       </view>
       <view
             allowMultiple="true"
+            class="rlpark.plugin.rltoysview.internal.maze.MazeView"
+            icon="icons/mazeview.png"
+            id="zephyr.rlpark.plugin.rltoysview.mazeview"
+            name="Maze"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="true"
             class="rlpark.plugin.rltoysview.internal.vectors.VectorProjectedView"
             icon="icons/continuousfunctionview.png"
             id="rlpark.plugin.rltoysview.VectorProjectedView"
@@ -131,6 +139,12 @@
             icon="icons/environmentview.png"
             name="Helicopter View"
             viewid="zephyr.rlpark.plugin.rltoysview.helicopterview">
+      </client>
+      <client
+            class="rlpark.plugin.rltoysview.internal.maze.MazeView$Provider"
+            icon="icons/mazeview.png"
+            name="Maze View"
+            viewid="zephyr.rlpark.plugin.rltoysview.mazeview">
       </client>
       <client
             class="rlpark.plugin.rltoysview.internal.policystructure.PolicyDiscreteActionView$Provider"

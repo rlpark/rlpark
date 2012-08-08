@@ -6,7 +6,9 @@ import rlpark.plugin.rltoys.algorithms.functions.Predictor;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
+@Monitor
 public class QLearningControl implements ControlLearner, OffPolicyLearner {
   private static final long serialVersionUID = 5784749108581105369L;
   private final QLearning qlearning;

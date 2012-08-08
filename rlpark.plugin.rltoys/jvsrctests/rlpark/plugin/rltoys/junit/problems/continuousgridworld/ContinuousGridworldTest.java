@@ -14,7 +14,7 @@ import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
 import rlpark.plugin.rltoys.problems.continuousgridworld.TargetReachedL2NormTermination;
 import rlpark.plugin.rltoys.utils.Utils;
 
-public class TestContinuousGridworld {
+public class ContinuousGridworldTest {
   class TestRewardFunction implements ContinuousFunction {
     @Override
     public double value(double[] position) {

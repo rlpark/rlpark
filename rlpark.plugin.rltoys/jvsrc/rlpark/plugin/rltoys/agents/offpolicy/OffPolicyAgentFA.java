@@ -47,6 +47,6 @@ public class OffPolicyAgentFA implements OffPolicyAgentEvaluable {
 
   @Override
   public RLAgent createEvaluatedAgent() {
-    return new ControlAgentFA(projector, learner);
+    return new ControlAgentFA(learner, projector);
   }
 }

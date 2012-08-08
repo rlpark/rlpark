@@ -18,6 +18,11 @@
             class="rlpark.example.demos.learning.OffPACContinuousGridworld"
             id="rlpark.example.demos.learning.OffPACContinuousGridworld">
       </client>
+      <client
+            autostart="false"
+            class="rlpark.example.demos.learning.QLearningMaze"
+            id="rlpark.example.demos.learning.QLearningMaze">
+      </client>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
