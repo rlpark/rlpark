@@ -52,6 +52,15 @@
             </command>
             <command
                   commandId="zephyr.plugin.core.command.startrunnable"
+                  label="QLearning in a Maze"
+                  style="push">
+               <parameter
+                     name="zephyr.plugin.core.command.parameter.runnableid"
+                     value="rlpark.example.demos.learning.QLearningMaze">
+               </parameter>
+            </command>
+            <command
+                  commandId="zephyr.plugin.core.command.startrunnable"
                   label="Off-PAC on Continuous Grid World"
                   style="push">
                <parameter

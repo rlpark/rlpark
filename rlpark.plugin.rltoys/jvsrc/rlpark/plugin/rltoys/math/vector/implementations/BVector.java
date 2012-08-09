@@ -160,6 +160,12 @@ public class BVector extends AbstractVector implements BinaryVector {
     indexes = Arrays.copyOf(indexes, allocation);
   }
 
+  public void set(BVector source) {
+    allocate(source.nbActive);
+    nbActive = source.nbActive;
+    System.arraycopy(source.indexes, 0, indexes, 0, nbActive);
+  }
+
   public void setOrderedIndexes(int[] orderedIndexes) {
     indexes = orderedIndexes.clone();
     nbActive = indexes.length;

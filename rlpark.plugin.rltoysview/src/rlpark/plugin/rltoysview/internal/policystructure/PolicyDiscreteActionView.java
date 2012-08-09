@@ -33,7 +33,7 @@ public class PolicyDiscreteActionView extends ForegroundCanvasView<DiscreteActio
     @Override
     public RGB toColor(int x, double value) {
       if (actions[x] == bestAction)
-        return Colors.COLOR_MAGENTA;
+        return Colors.COLOR_YELLOW;
       return value > 0 ? Colors.COLOR_RED : Colors.COLOR_BLUE;
     }
   };

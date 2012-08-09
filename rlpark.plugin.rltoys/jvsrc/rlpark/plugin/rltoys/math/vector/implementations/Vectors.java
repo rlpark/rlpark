@@ -146,4 +146,21 @@ public class Vectors {
     }
     return result;
   }
+
+  public static RealVector bufferedCopy(RealVector source, RealVector target) {
+    if (source == null) {
+      if (target != null)
+        if (target instanceof BVector)
+          ((BVector) target).clear();
+        else
+          ((MutableVector) target).clear();
+      return target;
+    }
+    RealVector result = target != null ? target : source.copy();
+    if (result instanceof BVector)
+      ((BVector) result).set((BVector) source);
+    else
+      ((MutableVector) result).set(source);
+    return result;
+  }
 }
