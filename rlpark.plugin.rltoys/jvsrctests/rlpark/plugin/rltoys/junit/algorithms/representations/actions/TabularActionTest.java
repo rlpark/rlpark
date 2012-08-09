@@ -20,6 +20,15 @@ public class TabularActionTest {
   public void testTabularActionPVector() {
     TabularAction tabularAction = new TabularAction(new Action[] { a0, a1 }, 5.0, 2);
     PVector s = new PVector(2.0, 3.0);
+    VectorsTestsUtils.assertEquals(new PVector(new double[] { 2.0, 3.0, 0.0, 0.0 }), tabularAction.stateAction(s, a0));
+    VectorsTestsUtils.assertEquals(new PVector(new double[] { 0.0, 0.0, 2.0, 3.0 }), tabularAction.stateAction(s, a1));
+  }
+
+  @Test
+  public void testTabularActionWithActiveFeaturePVector() {
+    TabularAction tabularAction = new TabularAction(new Action[] { a0, a1 }, 5.0, 2);
+    tabularAction.includeActiveFeature();
+    PVector s = new PVector(2.0, 3.0);
     VectorsTestsUtils.assertEquals(new PVector(new double[] { 2.0, 3.0, 0.0, 0.0, 1.0 }),
                                    tabularAction.stateAction(s, a0));
     VectorsTestsUtils.assertEquals(new PVector(new double[] { 0.0, 0.0, 2.0, 3.0, 1.0 }),
@@ -29,6 +38,7 @@ public class TabularActionTest {
   @Test
   public void testTabularActionSVector() {
     TabularAction tabularAction = new TabularAction(new Action[] { a0, a1 }, 5.0, 2);
+    tabularAction.includeActiveFeature();
     BVector s = new BVector(2);
     s.setOn(0);
     s.setOn(1);

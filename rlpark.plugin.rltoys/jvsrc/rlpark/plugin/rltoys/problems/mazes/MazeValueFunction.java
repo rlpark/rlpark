@@ -35,6 +35,8 @@ public class MazeValueFunction implements MazeFunction {
     policy.update(v_x);
     for (Action a : maze.actions()) {
       double prob = policy.pi(a);
+      if (prob == 0)
+        continue;
       RealVector v_xa = toStateAction.stateAction(v_x, a);
       sum += predictor.predict(v_xa) * prob;
     }

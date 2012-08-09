@@ -10,19 +10,28 @@ public class TabularAction implements StateToStateAction {
   private static final long serialVersionUID = 1705117400022134128L;
   private final Action[] actions;
   private final int stateVectorSize;
-  private final BVector nullVector;
+  private BVector nullVector;
   private final double vectorNorm;
+  private boolean includeActiveFeature = false;
 
   public TabularAction(Action[] actions, double vectorNorm, int vectorSize) {
     this.actions = actions;
     this.vectorNorm = vectorNorm + 1;
     this.stateVectorSize = vectorSize;
-    this.nullVector = new BVector(vectorSize() + 1);
+    this.nullVector = new BVector(vectorSize());
+  }
+
+  public void includeActiveFeature() {
+    includeActiveFeature = true;
+    this.nullVector = new BVector(vectorSize());
   }
 
   @Override
   public int vectorSize() {
-    return stateVectorSize * actions.length + 1;
+    int result = stateVectorSize * actions.length;
+    if (includeActiveFeature)
+      result += 1;
+    return result;
   }
 
   @Override
@@ -32,7 +41,8 @@ public class TabularAction implements StateToStateAction {
     if (s instanceof BinaryVector)
       return stateAction((BinaryVector) s, a);
     MutableVector phi_sa = s.newInstance(vectorSize());
-    phi_sa.setEntry(vectorSize() - 1, 1);
+    if (includeActiveFeature)
+      phi_sa.setEntry(vectorSize() - 1, 1);
     for (int a_i = 0; a_i < actions.length; a_i++)
       if (actions[a_i] == a) {
         int offset = stateVectorSize * a_i;
@@ -52,7 +62,8 @@ public class TabularAction implements StateToStateAction {
         int[] indexes = phi_sa.getActiveIndexes();
         for (int j = 0; j < phi_sa.nonZeroElements(); j++)
           indexes[j] += offset;
-        phi_sa.setOn(vectorSize() - 1);
+        if (includeActiveFeature)
+          phi_sa.setOn(vectorSize() - 1);
         return phi_sa;
       }
     return null;

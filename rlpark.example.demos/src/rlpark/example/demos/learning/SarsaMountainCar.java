@@ -2,8 +2,8 @@ package rlpark.example.demos.learning;
 
 import java.util.Random;
 
-import rlpark.plugin.rltoys.agents.functions.ValueFunction2D;
 import rlpark.plugin.rltoys.agents.functions.FunctionProjected2D;
+import rlpark.plugin.rltoys.agents.functions.ValueFunction2D;
 import rlpark.plugin.rltoys.algorithms.control.acting.EpsilonGreedy;
 import rlpark.plugin.rltoys.algorithms.control.sarsa.Sarsa;
 import rlpark.plugin.rltoys.algorithms.control.sarsa.SarsaControl;
@@ -34,6 +34,7 @@ public class SarsaMountainCar implements Runnable {
     projector.addFullTilings(10, 10);
     projector.includeActiveFeature();
     TabularAction toStateAction = new TabularAction(problem.actions(), projector.vectorNorm(), projector.vectorSize());
+    toStateAction.includeActiveFeature();
     double alpha = .15 / projector.vectorNorm();
     double gamma = 0.99;
     double lambda = .3;
