@@ -5,12 +5,9 @@ import java.util.List;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.observations.Observation;
+import rlpark.plugin.rltoys.horde.HordeScheduler.Context;
 import rlpark.plugin.rltoys.horde.demons.Demon;
-import rlpark.plugin.rltoys.horde.demons.DemonScheduler;
-import rlpark.plugin.rltoys.horde.functions.GammaFunction;
 import rlpark.plugin.rltoys.horde.functions.HordeUpdatable;
-import rlpark.plugin.rltoys.horde.functions.OutcomeFunction;
-import rlpark.plugin.rltoys.horde.functions.RewardFunction;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
@@ -18,34 +15,36 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
 public class Horde {
-  final private List<HordeUpdatable> functions = new ArrayList<HordeUpdatable>();
-  final private List<Demon> demons = new ArrayList<Demon>();
-  private final DemonScheduler demonScheduler;
+  final List<HordeUpdatable> functions = new ArrayList<HordeUpdatable>();
+  final List<Demon> demons = new ArrayList<Demon>();
+  private final HordeScheduler scheduler;
 
   public Horde() {
-    this(new DemonScheduler());
+    this(new HordeScheduler());
   }
 
-  public Horde(DemonScheduler demonScheduler) {
-    this.demonScheduler = demonScheduler;
+  public Horde(HordeScheduler scheduler) {
+    this(scheduler, null, null);
   }
 
-  public Horde(List<Demon> demons, List<RewardFunction> rewardFunctions, List<OutcomeFunction> outcomeFunctions,
-      List<GammaFunction> gammaFunctions) {
-    this();
-    this.demons.addAll(demons);
-    addFunctions(rewardFunctions);
-    addFunctions(outcomeFunctions);
-    addFunctions(gammaFunctions);
+  public Horde(List<? extends Demon> demons, List<?> functions) {
+    this(new HordeScheduler(), demons, functions);
+  }
+
+  public Horde(HordeScheduler scheduler, List<? extends Demon> demons, List<?> functions) {
+    this.scheduler = scheduler;
+    if (demons != null)
+      this.demons.addAll(demons);
+    addFunctions(functions);
   }
 
   @LabelProvider(ids = { "demons" })
-  String demonLabel(int i) {
+  public String demonLabel(int i) {
     return Labels.label(demons.get(i));
   }
 
   @LabelProvider(ids = { "functions" })
-  String functionLabel(int i) {
+  public String functionLabel(int i) {
     return Labels.label(functions.get(i));
   }
 
@@ -56,10 +55,39 @@ public class Horde {
       this.functions.add((HordeUpdatable) function);
   }
 
-  public void update(Observation o_tp1, RealVector x_t, Action a_t, RealVector x_tp1) {
-    for (HordeUpdatable function : functions)
-      function.update(o_tp1, x_t, a_t, x_tp1);
-    demonScheduler.update(demons, x_t, a_t, x_tp1);
+  public void update(final Observation o_tp1, final RealVector x_t, final Action a_t, final RealVector x_tp1) {
+    scheduler.update(new Context() {
+      @Override
+      public void updateElement(int index) {
+        functions.get(index).update(o_tp1, x_t, a_t, x_tp1);
+      }
+
+      @Override
+      public int nbElements() {
+        return functions.size();
+      }
+    });
+    scheduler.update(new Context() {
+      @Override
+      public void updateElement(int index) {
+        demons.get(index).update(x_t, a_t, x_tp1);
+      }
+
+      @Override
+      public int nbElements() {
+        return demons.size();
+      }
+    });
+  }
+
+  @LabelProvider(ids = { "functions" })
+  String functionsLabelOf(int index) {
+    return Labels.label(functions.get(index));
+  }
+
+  @LabelProvider(ids = { "demons" })
+  String demonsLabelOf(int index) {
+    return Labels.label(demons.get(index));
   }
 
   public List<HordeUpdatable> functions() {
