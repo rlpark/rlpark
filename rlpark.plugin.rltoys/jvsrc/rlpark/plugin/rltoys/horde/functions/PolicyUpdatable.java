@@ -16,4 +16,8 @@ public class PolicyUpdatable implements HordeUpdatable {
   public void update(Observation o_tp1, RealVector x_t, Action a_t, RealVector x_tp1) {
     policy.update(x_t);
   }
+
+  public Policy policy() {
+    return policy;
+  }
 }
