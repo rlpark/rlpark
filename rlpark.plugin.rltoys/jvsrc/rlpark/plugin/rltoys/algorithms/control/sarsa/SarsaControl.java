@@ -6,6 +6,7 @@ import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class SarsaControl implements ControlLearner {
@@ -25,12 +26,10 @@ public class SarsaControl implements ControlLearner {
 
   @Override
   public Action step(RealVector x_t, Action a_t, RealVector x_tp1, double r_tp1) {
-    if (x_t == null)
-      xa_t = null;
     Action a_tp1 = Policies.decide(acting, x_tp1);
     RealVector xa_tp1 = toStateAction.stateAction(x_tp1, a_tp1);
-    sarsa.update(xa_t, xa_tp1, r_tp1);
-    xa_t = xa_tp1;
+    sarsa.update(x_t != null ? xa_t : null, xa_tp1, r_tp1);
+    xa_t = Vectors.bufferedCopy(xa_tp1, xa_t);
     return a_tp1;
   }
 

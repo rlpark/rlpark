@@ -5,7 +5,6 @@ import java.util.Random;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.helpers.RandomPolicy;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
-import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateActionBuffer;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.TabularActionDiscretizer;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
@@ -75,6 +74,6 @@ public class MountainCarOffPolicyLearning {
     StateActionCoders stateActionCoders = new StateActionCoders(actionDiscretizer, hashing, discretizerFactory,
                                                                 observationRanges.length);
     setTileCoders(stateActionCoders.tileCoders());
-    return new StateToStateActionBuffer(stateActionCoders, problem.actions());
+    return stateActionCoders;
   }
 }

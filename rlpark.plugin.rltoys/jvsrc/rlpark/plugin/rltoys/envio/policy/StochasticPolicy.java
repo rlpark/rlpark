@@ -1,10 +1,10 @@
 package rlpark.plugin.rltoys.envio.policy;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.actions.Actions;
 import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
@@ -15,13 +15,12 @@ public abstract class StochasticPolicy implements DiscreteActionPolicy, MonitorC
   private static final long serialVersionUID = 6747532059495537542L;
   protected final Random random;
   protected final Action[] actions;
-  protected final Map<Action, Integer> actionToIndex = new LinkedHashMap<Action, Integer>();
+  protected final Map<Action, Integer> actionToIndex;
 
   public StochasticPolicy(Random random, Action[] actions) {
     this.random = random;
     this.actions = actions;
-    for (int i = 0; i < actions.length; i++)
-      actionToIndex.put(actions[i], i);
+    actionToIndex = Actions.createActionIntMap(actions);
   }
 
   protected int atoi(Action a) {

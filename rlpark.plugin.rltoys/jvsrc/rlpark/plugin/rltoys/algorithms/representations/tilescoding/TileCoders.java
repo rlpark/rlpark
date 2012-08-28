@@ -67,10 +67,6 @@ public abstract class TileCoders implements Projector {
     vector = newVectorInstance();
   }
 
-  public BinaryVector getCurrentState() {
-    return vector.nonZeroElements() > 0 ? vector.copy() : null;
-  }
-
   public int nbInputs() {
     return nbInputs;
   }
@@ -93,11 +89,11 @@ public abstract class TileCoders implements Projector {
   public BinaryVector project(double[] inputs) {
     vector.clear();
     if (inputs == null)
-      return vector.copy();
+      return vector;
     activateIndexes(inputs, vector);
     if (includeActiveFeature)
       vector.setOn(vector.getDimension() - 1);
-    return vector.copy();
+    return vector;
   }
 
   protected void addTileCoder(TileCoder tileCoder) {

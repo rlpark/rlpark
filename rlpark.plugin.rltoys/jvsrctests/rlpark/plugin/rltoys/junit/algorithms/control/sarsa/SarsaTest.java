@@ -14,7 +14,6 @@ import rlpark.plugin.rltoys.algorithms.control.sarsa.Sarsa;
 import rlpark.plugin.rltoys.algorithms.control.sarsa.SarsaControl;
 import rlpark.plugin.rltoys.algorithms.functions.Predictor;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
-import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateActionBuffer;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.TabularActionDiscretizer;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
@@ -100,8 +99,7 @@ public class SarsaTest extends MountainCarOnPolicyTest {
     }, new SarsaControlFactory() {
       @Override
       public RLAgent createAgent(MountainCar problem, Projector projector) {
-        StateToStateAction stateActionCoders = new StateToStateActionBuffer(createStateToStateAction(problem), problem
-            .actions());
+        StateToStateAction stateActionCoders = createStateToStateAction(problem);
         Predictor predictor = createPredictor(problem.actions(), stateActionCoders,
                                               (int) stateActionCoders.vectorNorm(), stateActionCoders.vectorSize());
         Policy acting = createActing(problem, stateActionCoders, predictor);

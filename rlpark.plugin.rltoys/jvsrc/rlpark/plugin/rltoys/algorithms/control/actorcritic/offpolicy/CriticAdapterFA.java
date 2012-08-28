@@ -5,6 +5,7 @@ import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.predictions.td.OffPolicyTD;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 
@@ -13,10 +14,8 @@ public class CriticAdapterFA implements OffPolicyTD {
   @Monitor
   private final OffPolicyTD offPolicyTD;
   private final Projector projector;
-  private PVector o_t;
-  private PVector o_tp1;
-  private RealVector x_t;
-  private RealVector x_tp1;
+  private RealVector o_t = null;
+  private RealVector x_t = null;
 
   public CriticAdapterFA(Projector projector, OffPolicyTD offPolicyTD) {
     this.projector = projector;
@@ -34,15 +33,7 @@ public class CriticAdapterFA implements OffPolicyTD {
   }
 
   private RealVector projectIFN(RealVector o) {
-    if (o == o_t)
-      return x_t;
-    if (o == o_tp1)
-      return x_tp1;
-    o_t = o_tp1;
-    x_t = x_tp1;
-    o_tp1 = (PVector) o;
-    x_tp1 = projector.project(o_tp1 != null ? o_tp1.data : null);
-    return x_tp1;
+    return projector.project(o != null ? ((PVector) o).data : null);
   }
 
   @Override
@@ -56,8 +47,16 @@ public class CriticAdapterFA implements OffPolicyTD {
   }
 
   @Override
-  public double update(double rho_t, RealVector x_t, RealVector x_tp1, double r_tp1) {
-    return offPolicyTD.update(rho_t, projectIFN(x_t), projectIFN(x_tp1), r_tp1);
+  public double update(double rho_t, RealVector o_t, RealVector o_tp1, double r_tp1) {
+    if (o_t != this.o_t) {
+      x_t = Vectors.bufferedCopy(projectIFN(o_t), x_t);
+      this.o_t = o_t;
+    }
+    RealVector x_tp1 = projectIFN(o_tp1);
+    double delta = offPolicyTD.update(rho_t, x_t, x_tp1, r_tp1);
+    x_t = Vectors.bufferedCopy(x_tp1, x_t);
+    this.o_t = o_tp1;
+    return delta;
   }
 
   @Override

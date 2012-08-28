@@ -41,8 +41,8 @@ public class QLearning implements Predictor, LinearLearner, EligibilityTraceAlgo
       return initEpisode();
     greedy.update(x_t);
     Action at_star = greedy.bestAction();
-    RealVector phi_sa_t = toStateAction.stateAction(x_t, a_t);
     greedy.update(x_tp1);
+    RealVector phi_sa_t = toStateAction.stateAction(x_t, a_t);
     delta = r_tp1 + gamma * greedy.bestActionValue() - theta.dotProduct(phi_sa_t);
     if (a_t == at_star)
       e.update(gamma * lambda, phi_sa_t);

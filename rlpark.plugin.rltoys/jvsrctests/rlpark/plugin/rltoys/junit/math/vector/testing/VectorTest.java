@@ -66,7 +66,7 @@ public abstract class VectorTest {
   public void testDotProductSVector() {
     Assert.assertEquals(16.0, a.dotProduct(newSVector(b)), 0.0);
     BVector cResized = new BVector(a.getDimension());
-    cResized.setOrderedIndexes(c.getActiveIndexes());
+    cResized.set(c);
     Assert.assertEquals(3.0, a.dotProduct(cResized), 0.0);
   }
 

@@ -111,6 +111,6 @@ public class OffPolicyTests {
   }
 
   public static void main(String[] args) {
-    new OffPolicyTests().offpacOnMountainCarTest();
+    new OffPolicyTests().qlearningOnMountainCarTest();
   }
 }

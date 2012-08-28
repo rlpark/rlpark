@@ -2,8 +2,8 @@ package rlpark.example.demos.learning;
 
 import java.util.Random;
 
-import rlpark.plugin.rltoys.agents.functions.ValueFunction2D;
 import rlpark.plugin.rltoys.agents.functions.FunctionProjected2D;
+import rlpark.plugin.rltoys.agents.functions.ValueFunction2D;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentDirect;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
 import rlpark.plugin.rltoys.algorithms.control.actorcritic.offpolicy.ActorLambdaOffPolicy;
@@ -15,7 +15,6 @@ import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistr
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.helpers.RandomPolicy;
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.structures.BoltzmannDistribution;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
-import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateActionBuffer;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.predictions.td.GTDLambda;
 import rlpark.plugin.rltoys.algorithms.predictions.td.OffPolicyTD;
@@ -127,7 +126,7 @@ public class OffPACContinuousGridworld implements Runnable {
     StateActionCoders stateActionCoders = new StateActionCoders(actionDiscretizer, hashing, discretizerFactory,
                                                                 observationRanges.length);
     setTileCoders(stateActionCoders.tileCoders());
-    return new StateToStateActionBuffer(stateActionCoders, problem.actions());
+    return stateActionCoders;
   }
 
   private OffPolicyTD createCritic(Projector criticProjector, double gamma) {
