@@ -58,9 +58,8 @@ public class Runner implements Serializable, MonitorContainer {
   }
 
   public boolean hasNext() {
-    if (runnerEvent.step == null && nbEpisode > 0)
-      return true;
-    assert runnerEvent.step != null;
+    if (runnerEvent.step == null)
+      return nbEpisode != 0;
     if (!runnerEvent.step.isEpisodeEnding())
       return true;
     if (nbEpisode <= 0)

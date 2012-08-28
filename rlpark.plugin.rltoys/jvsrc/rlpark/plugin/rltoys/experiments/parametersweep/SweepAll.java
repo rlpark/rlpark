@@ -115,7 +115,6 @@ public class SweepAll {
   public void runAll() {
     startScheduler();
     waitAll();
-    dispose();
   }
 
   public void dispose() {

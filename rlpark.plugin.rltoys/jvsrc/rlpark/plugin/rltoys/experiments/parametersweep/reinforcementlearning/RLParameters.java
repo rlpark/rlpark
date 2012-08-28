@@ -33,6 +33,4 @@ public class RLParameters {
     result[0] = 0.0;
     return result;
   }
-
-  public static final String NoisyInputs = "NoisyInputs";
 }

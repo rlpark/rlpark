@@ -18,7 +18,7 @@ public class TileCodersNoHashing extends TileCoders {
   }
 
   public TileCodersNoHashing(Range... ranges) {
-    this(new PartitionFactory(true, ranges), ranges.length);
+    this(new PartitionFactory(false, ranges), ranges.length);
   }
 
   public TileCodersNoHashing(DiscretizerFactory discretizerFactory, int nbInputs) {

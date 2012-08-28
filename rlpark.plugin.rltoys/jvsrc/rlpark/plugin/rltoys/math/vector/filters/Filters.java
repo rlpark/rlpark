@@ -42,6 +42,28 @@ public class Filters {
     return operate(minOperation, filter);
   }
 
+  public static MutableVector maxToSelf(final MutableVector result, final double other, RealVector filter) {
+    FilteredOperation maxOperation = new FilteredOperation() {
+      @Override
+      public MutableVector sparseOperate(int[] indexes, int nbActive) {
+        for (int i = 0; i < nbActive; i++) {
+          int index = indexes[i];
+          result.setEntry(index, Math.max(result.getEntry(index), other));
+        }
+        return result;
+      }
+
+      @Override
+      public MutableVector operate() {
+        int dimension = result.getDimension();
+        for (int index = 0; index < dimension; index++)
+          result.setEntry(index, Math.max(result.getEntry(index), other));
+        return result;
+      }
+    };
+    return operate(maxOperation, filter);
+  }
+
   public static MutableVector mapMultiplyToSelf(final PVector result, final double d, RealVector filter) {
     FilteredOperation mapMultiplySelfOperation = new FilteredOperation() {
       @Override

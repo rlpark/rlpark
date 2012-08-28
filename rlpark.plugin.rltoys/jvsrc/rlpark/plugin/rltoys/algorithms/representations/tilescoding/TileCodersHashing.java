@@ -13,11 +13,11 @@ public class TileCodersHashing extends TileCoders {
   private final Hashing hashing;
 
   public TileCodersHashing(Hashing hashing, int inputSize, double min, double max) {
-    this(hashing, new PartitionFactory(true, min, max, inputSize), inputSize);
+    this(hashing, new PartitionFactory(false, min, max, inputSize), inputSize);
   }
 
   public TileCodersHashing(Hashing hashing, Range... ranges) {
-    this(hashing, new PartitionFactory(true, ranges), ranges.length);
+    this(hashing, new PartitionFactory(false, ranges), ranges.length);
   }
 
   public TileCodersHashing(Hashing hashing, DiscretizerFactory discretizerFactory, int nbInputs) {
