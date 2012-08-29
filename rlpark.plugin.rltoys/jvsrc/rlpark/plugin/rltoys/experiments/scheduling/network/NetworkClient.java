@@ -102,6 +102,10 @@ public class NetworkClient {
     System.out.println("nbCore: " + String.valueOf(nbCore));
   }
 
+  public NetworkJobQueue queue() {
+    return networkJobQueue;
+  }
+
   public static void main(String[] args) {
     if (args.length < 1) {
       System.err.println("Usage: java -jar <jarfile.jar> -t<max time: 30,60,... mins> -c<nb cores> <hostname:port>");
@@ -114,9 +118,5 @@ public class NetworkClient {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  public NetworkJobQueue queue() {
-    return networkJobQueue;
   }
 }

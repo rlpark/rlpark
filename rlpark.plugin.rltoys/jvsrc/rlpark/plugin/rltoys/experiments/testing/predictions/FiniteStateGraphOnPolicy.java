@@ -1,8 +1,7 @@
 package rlpark.plugin.rltoys.experiments.testing.predictions;
 
-import org.junit.Assert;
-
 import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
+import rlpark.plugin.rltoys.experiments.testing.results.TestingResult;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
@@ -23,7 +22,8 @@ public class FiniteStateGraphOnPolicy {
     return max;
   }
 
-  public static void testTD(FiniteStateGraph problem, FiniteStateGraphOnPolicy.OnPolicyTDFactory tdFactory) {
+  public static TestingResult<OnPolicyTD> testTD(FiniteStateGraph problem,
+      FiniteStateGraphOnPolicy.OnPolicyTDFactory tdFactory) {
     FSGAgentState agentState = new FSGAgentState(problem);
     OnPolicyTD td = tdFactory.create(agentState.size);
     int nbEpisode = 0;
@@ -35,11 +35,15 @@ public class FiniteStateGraphOnPolicy {
       td.update(x_t, x_tp1, stepData.r_tp1);
       if (stepData.s_tp1 == null) {
         nbEpisode += 1;
-        Assert.assertTrue(nbEpisode < 100000);
+        if (nbEpisode >= 100000)
+          return new TestingResult<OnPolicyTD>(false, "Not learning", td);
       }
       x_t = x_tp1 != null ? x_tp1.copy() : null;
     }
-    Assert.assertTrue(nbEpisode > 2);
-    Assert.assertTrue(Vectors.checkValues(td.weights()));
+    if (nbEpisode <= 2)
+      return new TestingResult<OnPolicyTD>(false, "That was too quick!", td);
+    if (!Vectors.checkValues(td.weights()))
+      return new TestingResult<OnPolicyTD>(false, "Weights are incorrect!", td);
+    return new TestingResult<OnPolicyTD>(true, null, td);
   }
 }

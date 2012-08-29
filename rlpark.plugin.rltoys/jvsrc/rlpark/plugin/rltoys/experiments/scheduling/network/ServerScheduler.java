@@ -138,8 +138,8 @@ public class ServerScheduler implements Scheduler {
     Collection<Runnable> pendingJobs = new ArrayList<Runnable>(client.pendingJobs());
     for (Runnable pendingJob : pendingJobs)
       localQueue.requestCancel(pendingJob);
-    String message = String.format("%s disconnected. Canceling %d job(s). Did %d job(s).", client.clientInfo(),
-                                   pendingJobs.size(), client.nbJobDone());
+    String message = String.format("%s disconnected. Canceling %d job(s). Did %d job(s).",
+                                   client.clientInfo().hostName, pendingJobs.size(), client.nbJobDone());
     serverLog.clientEvent(clients, message);
     client.close();
   }
