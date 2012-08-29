@@ -35,8 +35,8 @@ public class ServerLog {
       nbThreads += client.clientInfo().nbThreads;
     }
     clientsLog.writeRow(chrono.getCurrentMillis(), clients.size(), nbThreads, nbCores);
-    Messages.println(String.format("%s %d client(s) %d thread(s) %d core(s).", message, clients.size(), nbThreads,
-                                   nbCores));
+    Messages.println(String.format("%s %d[%d] client%s", message, clients.size(), nbThreads, clients.size() > 1 ? "s"
+        : ""));
   }
 
   public void jobEvent(Runnable done) {

@@ -99,6 +99,7 @@ public class ServerScheduler implements Scheduler {
     serverThread = new Thread(acceptClientsRunnable, "AcceptThread");
     serverThread.setDaemon(true);
     localScheduler = nbLocalThread > 0 ? new LocalScheduler(nbLocalThread, localQueue) : null;
+    localQueue.onJobDone().connect(new JobStatListener());
     localQueue.enablePoolFromPending();
   }
 
@@ -111,15 +112,12 @@ public class ServerScheduler implements Scheduler {
 
   @Override
   public void waitAll() {
-    JobStatListener listener = new JobStatListener();
-    localQueue.onJobDone().connect(listener);
     LocalQueue.waitAllDone(localQueue);
     if (localScheduler != null) {
       Throwable exceptionOccured = localScheduler.exceptionOccured();
       if (exceptionOccured != null)
         throw new RuntimeException(exceptionOccured);
     }
-    localQueue.onJobDone().disconnect(listener);
   }
 
   @Override
