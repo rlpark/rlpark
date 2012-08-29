@@ -4,13 +4,13 @@ import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.JobWithParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
+import rlpark.plugin.rltoys.experiments.scheduling.interfaces.TimedJob;
 import zephyr.plugin.core.api.synchronization.Chrono;
 
-public class SweepJob implements JobWithParameters {
+public class SweepJob implements JobWithParameters, TimedJob {
   private static final long serialVersionUID = -1636763888764939471L;
   private final Parameters parameters;
   private final OnPolicyEvaluationContext context;
-  private long computationTime;
   private final int counter;
 
   public SweepJob(OnPolicyEvaluationContext context, Parameters parameters, ExperimentCounter counter) {
@@ -25,21 +25,23 @@ public class SweepJob implements JobWithParameters {
     OnPolicyRewardMonitor rewardMonitor = context.createRewardMonitor(parameters);
     rewardMonitor.connect(runner);
     Chrono chrono = new Chrono();
-    boolean diverged = false;
     try {
       runner.run();
     } catch (Throwable e) {
       rewardMonitor.worstResultUntilEnd();
-      diverged = true;
     }
-    computationTime = chrono.getCurrentMillis();
     rewardMonitor.putResult(parameters);
-    parameters.putResult("computationTime", diverged ? -1 : computationTime);
     parameters.putResult("totalTimeStep", runner.runnerEvent().nbTotalTimeSteps);
+    parameters.setComputationTimeMillis(chrono.getCurrentMillis());
   }
 
   @Override
   public Parameters parameters() {
     return parameters;
+  }
+
+  @Override
+  public long getComputationTimeMillis() {
+    return parameters.getComputationTimeMillis();
   }
 }

@@ -9,6 +9,7 @@ import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobPool;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobPool.JobPoolListener;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.Scheduler;
+import rlpark.plugin.rltoys.experiments.scheduling.interfaces.TimedJob;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.network.SocketClient;
 import rlpark.plugin.rltoys.experiments.scheduling.network.ServerScheduler;
 import rlpark.plugin.rltoys.experiments.scheduling.pools.FileJobPool;
@@ -30,13 +31,18 @@ public class SchedulerTestsUtils {
     }
   }
 
-  static public class Job implements Runnable, Serializable {
+  static public class Job implements TimedJob, Runnable, Serializable {
     private static final long serialVersionUID = -1405281337225571229L;
     public boolean done = false;
 
     @Override
     public void run() {
       done = true;
+    }
+
+    @Override
+    public long getComputationTimeMillis() {
+      return 1;
     }
   }
 

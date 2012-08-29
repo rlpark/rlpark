@@ -10,6 +10,7 @@ import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.SweepDescripto
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.FrozenParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.RunInfo;
+import rlpark.plugin.rltoys.experiments.scheduling.interfaces.TimedJob;
 import rlpark.plugin.rltoys.utils.Utils;
 
 public class ProviderTest implements SweepDescriptor, Context {
@@ -17,7 +18,7 @@ public class ProviderTest implements SweepDescriptor, Context {
   public static final String ParameterName = "Param";
   public static final String ContextPath = "providertest";
 
-  static public class SweepJob implements JobWithParameters {
+  static public class SweepJob implements JobWithParameters, TimedJob {
     private static final long serialVersionUID = 4238136913870025414L;
     private final Parameters parameters;
     private final int counter;
@@ -31,11 +32,17 @@ public class ProviderTest implements SweepDescriptor, Context {
     public void run() {
       parameters.putResult(SweepDone, 1);
       parameters.putResult("counter", counter);
+      parameters.setComputationTimeMillis(2);
     }
 
     @Override
     public Parameters parameters() {
       return parameters;
+    }
+
+    @Override
+    public long getComputationTimeMillis() {
+      return parameters.getComputationTimeMillis();
     }
   }
 
