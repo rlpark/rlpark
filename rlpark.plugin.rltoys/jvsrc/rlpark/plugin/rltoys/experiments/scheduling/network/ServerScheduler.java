@@ -113,12 +113,19 @@ public class ServerScheduler implements Scheduler {
   synchronized protected void addClient(SocketClient client) {
     clients.add(client);
     client.onClosed.connect(clientClosedListener);
-    printConnectionInfo(client.clientName() + " connected");
+    printConnectionInfo(client.clientInfo().hostName + " connected");
     SocketClient.nbJobSendPerRequest(clients.size());
   }
 
   protected void printConnectionInfo(String news) {
-    Messages.println(String.format("%s %d client%s.", news, clients.size(), clients.size() > 1 ? "s" : ""));
+    int nbCores = 0;
+    int nbThreads = 0;
+    for (SocketClient client : clients) {
+      nbCores += client.clientInfo().nbCores;
+      nbThreads += client.clientInfo().nbThreads;
+    }
+    Messages
+        .println(String.format("%s %d client(s) %d thread(s) %d core(s).", news, clients.size(), nbThreads, nbCores));
   }
 
   @Override
@@ -150,7 +157,7 @@ public class ServerScheduler implements Scheduler {
     Collection<Runnable> pendingJobs = new ArrayList<Runnable>(client.pendingJobs());
     for (Runnable pendingJob : pendingJobs)
       localQueue.requestCancel(pendingJob);
-    printConnectionInfo(String.format("%s disconnected. Canceling %d job%s. Did %d job%s.", client.clientName(),
+    printConnectionInfo(String.format("%s disconnected. Canceling %d job%s. Did %d job%s.", client.clientInfo(),
                                       pendingJobs.size(), pendingJobs.size() > 1 ? "s" : "", client.nbJobDone(),
                                       client.nbJobDone() > 1 ? "s" : ""));
     client.close();

@@ -24,7 +24,7 @@ public class UnreliableNetworkClientTest {
     public boolean failed = false;
 
     public UnreliableNetworkQueue(String serverHostName, int port) {
-      super(serverHostName, port, false);
+      super(serverHostName, port, 1, false);
       nbUnreliableQueue++;
     }
 

@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobQueue;
+import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.ClientInfo;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.Message;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.MessageClassData;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.MessageJob;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.MessageRequestClass;
-import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.MessageSendClientName;
+import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.MessageSendClientInfo;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.Messages.MessageType;
 import zephyr.plugin.core.api.signals.Signal;
 
@@ -34,7 +35,7 @@ public class SocketClient {
   private final Thread clientThread = new Thread(clientRunnable, "ServerScheduler-ClientThread");
   private final Map<Integer, Runnable> idtoJob = new HashMap<Integer, Runnable>();
   private int id;
-  private String clientName;
+  private ClientInfo clientInfo;
   private final JobQueue jobQueue;
   private int nbJobDone = 0;
 
@@ -55,7 +56,7 @@ public class SocketClient {
       System.err.println("error: client did not declare its name, it is rejected.");
       return false;
     }
-    clientName = ((MessageSendClientName) message).clientName();
+    clientInfo = ((MessageSendClientInfo) message).clientInfo();
     return true;
   }
 
@@ -125,8 +126,8 @@ public class SocketClient {
     onClosed.fire(this);
   }
 
-  public String clientName() {
-    return clientName;
+  public ClientInfo clientInfo() {
+    return clientInfo;
   }
 
   public Collection<Runnable> pendingJobs() {

@@ -31,7 +31,7 @@ public class Messages {
       case ClassData:
         return new MessageClassData(message);
       case SendClientName:
-        return new MessageSendClientName(message);
+        return new MessageSendClientInfo(message);
       }
     } catch (IOException e) {
       displayError(e);
