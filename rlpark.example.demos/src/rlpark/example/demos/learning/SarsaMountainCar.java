@@ -15,6 +15,7 @@ import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -54,7 +55,7 @@ public class SarsaMountainCar implements Runnable {
     while (clock.tick()) {
       BinaryVector x_tp1 = projector.project(step.o_tp1);
       Action action = control.step(x_t, step.a_t, x_tp1, step.r_tp1);
-      x_t = x_tp1;
+      x_t = Vectors.bufferedCopy(x_tp1, x_t);
       if (step.isEpisodeEnding()) {
         System.out.println(String.format("Episode %d: %d steps", nbEpisode, step.time));
         step = problem.initialize();

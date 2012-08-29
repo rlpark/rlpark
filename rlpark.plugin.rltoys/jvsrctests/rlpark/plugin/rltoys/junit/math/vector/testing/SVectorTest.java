@@ -75,4 +75,11 @@ public class SVectorTest extends VectorTest {
   protected SVector newPrototypeVector(int size) {
     return new SVector(size);
   }
+
+  @Test
+  public void testSVectorSet() {
+    SVector s = newSVector(new double[] { 1.0, 2.0, 3.0, 4.0 });
+    s.set(newSVector(new double[] { 0.0, 1.0, 0.0, 0.0 }));
+    Assert.assertTrue(VectorsTestsUtils.checkConsistency(s));
+  }
 }
