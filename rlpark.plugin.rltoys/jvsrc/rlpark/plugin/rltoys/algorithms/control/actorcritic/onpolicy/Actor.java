@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistribution;
 import rlpark.plugin.rltoys.envio.actions.Action;
-import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.utils.Utils;
@@ -37,14 +36,9 @@ public class Actor implements Serializable {
   public void update(RealVector x_t, Action a_t, double delta) {
     if (x_t == null)
       return;
-    policyDistribution.update(x_t);
     RealVector[] gradLog = policyDistribution.computeGradLog(a_t);
     for (int i = 0; i < u.length; i++)
       u[i].addToSelf(alpha_u[i] * delta, gradLog[i]);
-  }
-
-  public Action proposeAction(RealVector x) {
-    return Policies.decide(policyDistribution, x);
   }
 
   public PolicyDistribution policy() {

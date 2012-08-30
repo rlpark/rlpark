@@ -11,6 +11,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
 import rlpark.plugin.rltoys.algorithms.LinearLearner;
+import rlpark.plugin.rltoys.algorithms.control.actorcritic.onpolicy.AbstractActorCritic;
 import rlpark.plugin.rltoys.algorithms.control.actorcritic.onpolicy.ActorCritic;
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.structures.AbstractNormalDistribution;
 import rlpark.plugin.rltoys.math.History;
@@ -57,7 +58,7 @@ public class NormalDistributionView extends Plot2DView<AbstractNormalDistributio
 
   private NormalDistributionDrawer normalDistributionDrawer = null;
   private MinMaxNormalizer tdErrorNormalized = null;
-  private ActorCritic actorCritic = null;
+  private AbstractActorCritic actorCritic = null;
   private Listener<Clock> clockListener;
   protected boolean displayActionFlag;
   private final History actionHistory = new History(HistoryLength);
