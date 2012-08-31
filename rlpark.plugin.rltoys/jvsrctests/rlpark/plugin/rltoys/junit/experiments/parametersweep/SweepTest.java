@@ -93,6 +93,7 @@ public class SweepTest {
     final int nbJobsPerRun = (int) (Math.pow(nbValuesSecondSweep, nbParameters) - Math.pow(nbValuesFirstSweep,
                                                                                            nbParameters));
     Assert.assertEquals(nbJobsPerRun * NbRun, nbJobs);
+    Assert.assertTrue(checkFile(nbValuesSecondSweep, nbParameters));
     nbJobs = runFullSweep(schedulerManager, nbValuesSecondSweep, nbParameters);
     Assert.assertEquals(0, nbJobs);
     Assert.assertTrue(checkFile(nbValuesSecondSweep, nbParameters));
@@ -106,7 +107,8 @@ public class SweepTest {
         return false;
       RunInfo infos = ProviderTest.createRunInfo();
       ParametersLogFileReader logFile = new ParametersLogFileReader(dataFile.getAbsolutePath());
-      List<FrozenParameters> doneParameters = logFile.extractParameters(ProviderTest.ParameterName);
+      List<FrozenParameters> doneParameters = logFile
+          .extractParameters(ProviderTest.getParameterLabels(nbParameters));
       List<Parameters> todoParameters = ProviderTest.createParameters(nbValues, nbParameters);
       if (doneParameters.size() != todoParameters.size())
         return false;

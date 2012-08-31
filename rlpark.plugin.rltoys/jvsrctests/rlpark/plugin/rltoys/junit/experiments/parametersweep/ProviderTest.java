@@ -15,7 +15,7 @@ import rlpark.plugin.rltoys.utils.Utils;
 
 public class ProviderTest implements SweepDescriptor, Context {
   private static final String SweepDone = "sweepDone";
-  public static final String ParameterName = "Param";
+  private static final String ParameterName = "Param";
   public static final String ContextPath = "providertest";
 
   static public class SweepJob implements JobWithParameters, TimedJob {
@@ -87,14 +87,22 @@ public class ProviderTest implements SweepDescriptor, Context {
     return parameters.get(SweepDone) == 1;
   }
 
+  public static String[] getParameterLabels(int nbParameters) {
+    String[] labels = new String[nbParameters];
+    for (int i = 0; i < labels.length; i++)
+      labels[i] = ParameterName + i;
+    return labels;
+  }
+
   public static List<Parameters> createParameters(int nbValues, int nbParameters) {
     double[] parameterValues = new double[nbValues];
     for (int i = 0; i < parameterValues.length; i++)
       parameterValues[i] = i;
     RunInfo infos = createRunInfo();
+    String[] parameters = getParameterLabels(nbParameters);
     List<Parameters> result = Utils.asList(new Parameters(infos));
-    for (int i = 0; i < nbParameters; i++)
-      result = Parameters.combine(result, ParameterName + i, parameterValues);
+    for (String parameterLabel : parameters)
+      result = Parameters.combine(result, parameterLabel, parameterValues);
     return result;
   }
 

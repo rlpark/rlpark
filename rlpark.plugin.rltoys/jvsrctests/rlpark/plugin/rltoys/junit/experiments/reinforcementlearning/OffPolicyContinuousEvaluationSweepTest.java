@@ -14,9 +14,9 @@ public class OffPolicyContinuousEvaluationSweepTest extends AbstractOffPolicyRLS
   public void testSweepOneEpisode() {
     OffPolicyProblemFactory problemFactory = new OffPolicyRLProblemFactoryTest(1, NbTimeSteps);
     ContinuousOffPolicyEvaluation evaluation = new ContinuousOffPolicyEvaluation(10);
-    testSweep(new OffPolicySweepDescriptor(problemFactory, evaluation));
-    checkFile("Problem/Action01", Integer.MAX_VALUE);
-    checkFile("Problem/Action02", Integer.MAX_VALUE);
+    OffPolicySweepDescriptor descriptor = new OffPolicySweepDescriptor(problemFactory, evaluation);
+    testSweep(descriptor);
+    checkFile(descriptor, Integer.MAX_VALUE);
     Assert.assertTrue(isBehaviourPerformanceChecked());
   }
 
