@@ -6,7 +6,9 @@ import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistr
 import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
+@Monitor
 public abstract class AbstractActorCritic implements ControlLearner {
   private static final long serialVersionUID = -6085810735822394602L;
   public final Actor actor;
