@@ -23,7 +23,7 @@ public class ActorLambda extends Actor {
   public ActorLambda(double lambda, double gamma, PolicyDistribution policyDistribution, double alpha_u,
       int nbFeatures, Traces prototype) {
     this(lambda, gamma, policyDistribution, Utils.newFilledArray(policyDistribution.nbParameterVectors(), alpha_u),
-         nbFeatures, new ATraces());
+         nbFeatures, prototype);
   }
 
   public ActorLambda(double lambda, double gamma, PolicyDistribution policyDistribution, double[] alpha_u,

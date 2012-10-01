@@ -17,6 +17,8 @@ import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
 import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambda;
 import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambdaAutostep;
 import rlpark.plugin.rltoys.algorithms.traces.ATraces;
+import rlpark.plugin.rltoys.algorithms.traces.RTraces;
+import rlpark.plugin.rltoys.algorithms.traces.Traces;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.junit.algorithms.control.mountaincar.MountainCarOnPolicyTest;
 import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;
@@ -24,6 +26,18 @@ import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;
 
 public class ActorCriticMountainCarTest extends MountainCarOnPolicyTest {
   static class MountainCarActorCriticControlFactory implements MountainCarAgentFactory {
+    private final Traces actorTraces;
+    private final Traces criticTraces;
+
+    MountainCarActorCriticControlFactory() {
+      this(new ATraces(), new ATraces());
+    }
+
+    MountainCarActorCriticControlFactory(Traces actorTraces, Traces criticTraces) {
+      this.actorTraces = actorTraces;
+      this.criticTraces = criticTraces;
+    }
+
     @Override
     public RLAgent createAgent(MountainCar mountainCar, Projector projector) {
       final double lambda = .3;
@@ -33,18 +47,23 @@ public class ActorCriticMountainCarTest extends MountainCarOnPolicyTest {
                                                            projector.vectorSize());
       PolicyDistribution distribution = new BoltzmannDistribution(new Random(0), mountainCar.actions(), toStateAction);
       ActorLambda actor = new ActorLambda(lambda, gamma, distribution, .01 / projector.vectorNorm(),
-                                          projector.vectorSize());
+                                          projector.vectorSize(), actorTraces);
       return new LearnerAgentFA(new ActorCritic(critic, actor), projector);
     }
 
     protected OnPolicyTD createCritic(Projector projector, final double lambda, final double gamma) {
-      return new TDLambda(lambda, gamma, .1 / projector.vectorNorm(), projector.vectorSize(), new ATraces());
+      return new TDLambda(lambda, gamma, .1 / projector.vectorNorm(), projector.vectorSize(), criticTraces);
     }
   }
 
   @Test
   public void testDiscreteActorCriticOnMountainCar() {
     runTestOnOnMountainCar(new MountainCarActorCriticControlFactory());
+  }
+
+  @Test
+  public void testDiscreteActorCriticOnMountainCarRTraces() {
+    runTestOnOnMountainCar(new MountainCarActorCriticControlFactory(new RTraces(), new RTraces()));
   }
 
   @Test

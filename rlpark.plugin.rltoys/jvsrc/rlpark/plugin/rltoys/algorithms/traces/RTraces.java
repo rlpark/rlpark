@@ -3,6 +3,7 @@ package rlpark.plugin.rltoys.algorithms.traces;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.SparseVector;
 import rlpark.plugin.rltoys.math.vector.implementations.SVector;
 
 
@@ -36,7 +37,18 @@ public class RTraces extends ATraces {
   @Override
   protected void updateVector(double lambda, RealVector phi) {
     vector.mapMultiplyToSelf(lambda);
-    replaceWith((BinaryVector) phi);
+    if (phi instanceof BinaryVector)
+      replaceWith((BinaryVector) phi);
+    else
+      replaceWith((SparseVector) phi);
+  }
+
+  private void replaceWith(SparseVector phi) {
+    int[] indexes = phi.nonZeroIndexes();
+    for (int position = 0; position < phi.nonZeroElements(); position++) {
+      int index = indexes[position];
+      vector.setEntry(index, phi.getEntry(index));
+    }
   }
 
   private void replaceWith(BinaryVector phi) {
