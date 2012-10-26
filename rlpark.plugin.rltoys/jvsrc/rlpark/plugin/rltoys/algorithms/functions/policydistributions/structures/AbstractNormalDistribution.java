@@ -15,25 +15,20 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 @Monitor
 public abstract class AbstractNormalDistribution implements PolicyDistribution, LabeledCollection, BoundedPdf {
   private static final long serialVersionUID = -6707070542157254303L;
-  public final double initialMean;
-  public final double initialStddev;
   @Monitor(level = 4)
   protected PVector u_mean;
   @Monitor(level = 4)
   protected PVector u_stddev;
-  protected double mean;
-  protected double stddev;
+  protected double mean = 0;
+  protected double stddev = 1;
   protected final Random random;
   public double a_t;
   protected double meanStep;
   protected double stddevStep;
+
   protected RealVector x;
 
-  public AbstractNormalDistribution(Random random, double mean, double sigma) {
-    initialMean = mean;
-    initialStddev = sigma;
-    this.mean = initialMean;
-    this.stddev = sigma;
+  public AbstractNormalDistribution(Random random) {
     this.random = random;
   }
 

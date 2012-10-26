@@ -15,9 +15,13 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 public class NormalDistribution extends AbstractNormalDistribution {
   private static final long serialVersionUID = -4074721193363280217L;
   protected double sigma2;
+  private final double initialMean;
+  private final double initialStddev;
 
   public NormalDistribution(Random random, double mean, double sigma) {
-    super(random, mean, sigma);
+    super(random);
+    initialMean = mean;
+    initialStddev = sigma;
   }
 
   @Override
