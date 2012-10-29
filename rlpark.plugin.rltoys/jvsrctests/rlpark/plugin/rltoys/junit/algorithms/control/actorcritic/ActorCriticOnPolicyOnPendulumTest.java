@@ -18,11 +18,12 @@ import rlpark.plugin.rltoys.algorithms.traces.ATraces;
 import rlpark.plugin.rltoys.algorithms.traces.Traces;
 import rlpark.plugin.rltoys.experiments.testing.control.PendulumOnPolicyLearning;
 import rlpark.plugin.rltoys.experiments.testing.control.PendulumOnPolicyLearning.ControlFactory;
+import rlpark.plugin.rltoys.problems.pendulum.SwingPendulum;
 
 public class ActorCriticOnPolicyOnPendulumTest {
   public abstract class ActorCriticFactory implements ControlFactory {
     @Override
-    public ControlLearner create(int vectorSize, double vectorNorm) {
+    public ControlLearner create(SwingPendulum problem, int vectorSize, double vectorNorm) {
       PolicyDistribution policyDistribution = new NormalDistributionScaled(new Random(0), 0.0, 1.0);
       return create(vectorSize, vectorNorm, policyDistribution);
     }
