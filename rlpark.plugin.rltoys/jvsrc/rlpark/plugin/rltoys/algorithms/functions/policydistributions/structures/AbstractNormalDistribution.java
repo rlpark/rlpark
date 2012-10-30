@@ -9,10 +9,13 @@ import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.actions.Actions;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Abs;
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Squared;
 import zephyr.plugin.core.api.monitoring.abstracts.LabeledCollection;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
+@SuppressWarnings("restriction")
 public abstract class AbstractNormalDistribution implements PolicyDistribution, LabeledCollection, BoundedPdf {
   private static final long serialVersionUID = -6707070542157254303L;
   @Monitor(level = 4)
@@ -23,7 +26,9 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
   protected double stddev = 1;
   protected final Random random;
   public double a_t;
+  @Monitor(wrappers = { Squared.ID, Abs.ID })
   protected double meanStep;
+  @Monitor(wrappers = { Squared.ID, Abs.ID })
   protected double stddevStep;
 
   protected RealVector x;
