@@ -53,7 +53,7 @@ public class ScaledPolicyDistribution implements PolicyDistribution, BoundedPdf 
     return new ActionArray(scale(problemRange, normalizedAction));
   }
 
-  private ActionArray problemToPolicy(double problemAction) {
+  protected ActionArray problemToPolicy(double problemAction) {
     double normalizedAction = normalize(problemRange, problemAction);
     return new ActionArray(scale(policyRange, normalizedAction));
   }

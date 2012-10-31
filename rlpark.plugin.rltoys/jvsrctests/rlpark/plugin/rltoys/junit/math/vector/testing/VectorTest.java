@@ -154,6 +154,12 @@ public abstract class VectorTest {
   }
 
   @Test
+  public void testEbeMultiplySelf2() {
+    MutableVector a = newVector(0, 1, 0, -2, 0, 3, 0).copyAsMutable();
+    VectorsTestsUtils.assertEquals(new PVector(0, 1, 0, 4, 0, 9, 0), a.ebeMultiplyToSelf(a));
+  }
+
+  @Test
   public void testEbeDivideSelf() {
     MutableVector a2 = newSVector(3, 4, 0, -6);
     RealVector a1 = newVector(-1, -2, 2, 3);
