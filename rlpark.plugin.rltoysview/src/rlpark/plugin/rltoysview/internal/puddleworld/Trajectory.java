@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoysview.internal.continuousgridworld;
+package rlpark.plugin.rltoysview.internal.puddleworld;
 
 public class Trajectory {
   final private float[][] history;

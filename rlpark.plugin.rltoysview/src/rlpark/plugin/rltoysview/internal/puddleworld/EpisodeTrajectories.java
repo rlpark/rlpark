@@ -1,7 +1,7 @@
-package rlpark.plugin.rltoysview.internal.continuousgridworld;
+package rlpark.plugin.rltoysview.internal.puddleworld;
 
 import rlpark.plugin.rltoys.envio.rl.TRStep;
-import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
+import rlpark.plugin.rltoys.problems.puddleworld.PuddleWorld;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 
@@ -11,7 +11,7 @@ public class EpisodeTrajectories implements Listener<Clock> {
   private static final int MaximumTrajectoryLength = 10000;
   private final Trajectory[] trajectories = new Trajectory[NbEpisode];
   private int nbTrajectory = 0;
-  private ContinuousGridworld current;
+  private PuddleWorld current;
   private Clock clock;
 
   @Override
@@ -36,7 +36,7 @@ public class EpisodeTrajectories implements Listener<Clock> {
     return result;
   }
 
-  public void connect(ContinuousGridworld current, Clock clock) {
+  public void connect(PuddleWorld current, Clock clock) {
     this.current = current;
     this.clock = clock;
     clock.onTick.connect(this);

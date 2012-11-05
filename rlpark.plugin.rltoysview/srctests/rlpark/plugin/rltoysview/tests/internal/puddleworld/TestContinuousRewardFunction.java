@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoysview.tests.internal.continuousgridworld;
+package rlpark.plugin.rltoysview.tests.internal.puddleworld;
 
 import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 

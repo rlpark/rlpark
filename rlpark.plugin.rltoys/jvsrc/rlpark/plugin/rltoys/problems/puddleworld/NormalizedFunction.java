@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoys.problems.continuousgridworld;
+package rlpark.plugin.rltoys.problems.puddleworld;
 
 import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 import rlpark.plugin.rltoys.math.normalization.MinMaxNormalizer;

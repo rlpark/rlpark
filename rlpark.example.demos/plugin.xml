@@ -15,8 +15,8 @@
       </client>
       <client
             autostart="false"
-            class="rlpark.example.demos.learning.OffPACContinuousGridworld"
-            id="rlpark.example.demos.learning.OffPACContinuousGridworld">
+            class="rlpark.example.demos.learning.OffPACPuddleWorld"
+            id="rlpark.example.demos.learning.OffPACPuddleworld">
       </client>
       <client
             autostart="false"
@@ -61,7 +61,7 @@
             </command>
             <command
                   commandId="zephyr.plugin.core.command.startrunnable"
-                  label="Off-PAC on Continuous Grid World"
+                  label="Off-PAC in a Puddle World"
                   style="push">
                <parameter
                      name="zephyr.plugin.core.command.parameter.runnableid"

@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoysview.internal.continuousgridworld;
+package rlpark.plugin.rltoysview.internal.puddleworld;
 
 import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 import zephyr.plugin.core.api.viewable.ContinuousFunction2D;

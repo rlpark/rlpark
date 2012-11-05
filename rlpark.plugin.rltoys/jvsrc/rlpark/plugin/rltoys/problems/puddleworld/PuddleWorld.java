@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoys.problems.continuousgridworld;
+package rlpark.plugin.rltoys.problems.puddleworld;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -18,7 +18,7 @@ import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteAction, ProblemContinuousAction,
+public class PuddleWorld implements ProblemBounded, ProblemDiscreteAction, ProblemContinuousAction,
     MonitorContainer {
   private final Action[] actions;
   protected TRStep step = null;
@@ -35,7 +35,7 @@ public class ContinuousGridworld implements ProblemBounded, ProblemDiscreteActio
   @Monitor
   private final double[] lastActions;
 
-  public ContinuousGridworld(Random random, int nbDimension, Range observationRange, Range actionRange,
+  public PuddleWorld(Random random, int nbDimension, Range observationRange, Range actionRange,
       double relativeNoise) {
     this.random = random;
     this.observationRange = observationRange;

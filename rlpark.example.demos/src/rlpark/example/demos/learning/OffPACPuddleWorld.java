@@ -31,11 +31,11 @@ import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.ProblemBounded;
-import rlpark.plugin.rltoys.problems.continuousgridworld.ConstantFunction;
-import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
-import rlpark.plugin.rltoys.problems.continuousgridworld.LocalFeatureSumFunction;
-import rlpark.plugin.rltoys.problems.continuousgridworld.SmoothPuddle;
-import rlpark.plugin.rltoys.problems.continuousgridworld.TargetReachedL1NormTermination;
+import rlpark.plugin.rltoys.problems.puddleworld.ConstantFunction;
+import rlpark.plugin.rltoys.problems.puddleworld.LocalFeatureSumFunction;
+import rlpark.plugin.rltoys.problems.puddleworld.PuddleWorld;
+import rlpark.plugin.rltoys.problems.puddleworld.SmoothPuddle;
+import rlpark.plugin.rltoys.problems.puddleworld.TargetReachedL1NormTermination;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -44,10 +44,10 @@ import zephyr.plugin.core.api.synchronization.Clock;
 
 @SuppressWarnings("restriction")
 @Monitor
-public class OffPACContinuousGridworld implements Runnable {
+public class OffPACPuddleWorld implements Runnable {
   private final Random random = new Random(0);
-  private final ContinuousGridworld behaviourEnvironment = createEnvironment(random);
-  private final ContinuousGridworld evaluationEnvironment = createEnvironment(random);
+  private final PuddleWorld behaviourEnvironment = createEnvironment(random);
+  private final PuddleWorld evaluationEnvironment = createEnvironment(random);
   private final Runner learningRunner;
   private final Runner evaluationRunner;
   // Visualization with Zephyr
@@ -55,7 +55,7 @@ public class OffPACContinuousGridworld implements Runnable {
   final Clock clock = new Clock("Off-PAC Demo");
   final Clock episodeClock = new Clock("Episodes");
 
-  public OffPACContinuousGridworld() {
+  public OffPACPuddleWorld() {
     Policy behaviour = new RandomPolicy(random, behaviourEnvironment.actions());
     OffPolicyAgentEvaluable agent = createOffPACAgent(random, behaviourEnvironment, behaviour, .99);
     learningRunner = new Runner(behaviourEnvironment, agent, -1, 5000);
@@ -109,7 +109,7 @@ public class OffPACContinuousGridworld implements Runnable {
     return partitionFactory;
   }
 
-  static public Projector createProjector(Random random, ContinuousGridworld problem) {
+  static public Projector createProjector(Random random, PuddleWorld problem) {
     final Range[] observationRanges = ((ProblemBounded) problem).getObservationRanges();
     final PartitionFactory discretizerFactory = createPartitionFactory(random, observationRanges);
     Hashing hashing = createHashing(random);
@@ -118,7 +118,7 @@ public class OffPACContinuousGridworld implements Runnable {
     return projector;
   }
 
-  static public StateToStateAction createToStateAction(Random random, ContinuousGridworld problem) {
+  static public StateToStateAction createToStateAction(Random random, PuddleWorld problem) {
     final Range[] observationRanges = problem.getObservationRanges();
     final PartitionFactory discretizerFactory = createPartitionFactory(random, observationRanges);
     TabularActionDiscretizer actionDiscretizer = new TabularActionDiscretizer(problem.actions());
@@ -135,8 +135,7 @@ public class OffPACContinuousGridworld implements Runnable {
     return new CriticAdapterFA(criticProjector, gtd);
   }
 
-  private OffPolicyAgentEvaluable createOffPACAgent(Random random, ContinuousGridworld problem, Policy behaviour,
-      double gamma) {
+  private OffPolicyAgentEvaluable createOffPACAgent(Random random, PuddleWorld problem, Policy behaviour, double gamma) {
     Projector criticProjector = createProjector(random, problem);
     OffPolicyTD critic = createCritic(criticProjector, gamma);
     StateToStateAction toStateAction = createToStateAction(random, problem);
@@ -147,8 +146,8 @@ public class OffPACContinuousGridworld implements Runnable {
     return new OffPolicyAgentDirect(behaviour, new OffPAC(behaviour, critic, actor));
   }
 
-  static private ContinuousGridworld createEnvironment(Random random) {
-    ContinuousGridworld problem = new ContinuousGridworld(random, 2, new Range(0, 1), new Range(-.05, .05), .1);
+  static private PuddleWorld createEnvironment(Random random) {
+    PuddleWorld problem = new PuddleWorld(random, 2, new Range(0, 1), new Range(-.05, .05), .1);
     final int[] patternIndexes = new int[] { 0, 1 };
     final double smallStddev = 0.03;
     ContinuousFunction[] features = new ContinuousFunction[] { new ConstantFunction(1),
@@ -172,6 +171,6 @@ public class OffPACContinuousGridworld implements Runnable {
   }
 
   public static void main(String[] args) {
-    new OffPACContinuousGridworld().run();
+    new OffPACPuddleWorld().run();
   }
 }

@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoysview.internal.continuousgridworld;
+package rlpark.plugin.rltoysview.internal.puddleworld;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.graphics.GC;
@@ -9,8 +9,8 @@ import org.eclipse.ui.PartInitException;
 
 import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
 import rlpark.plugin.rltoys.math.ranges.Range;
-import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
-import rlpark.plugin.rltoys.problems.continuousgridworld.NormalizedFunction;
+import rlpark.plugin.rltoys.problems.puddleworld.NormalizedFunction;
+import rlpark.plugin.rltoys.problems.puddleworld.PuddleWorld;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
@@ -25,10 +25,10 @@ import zephyr.plugin.plotting.internal.heatmap.Interval;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
 
 @SuppressWarnings("restriction")
-public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGridworld> {
+public class PuddleWorldView extends ForegroundCanvasView<PuddleWorld> {
   public static class Provider extends ClassViewProvider {
     public Provider() {
-      super(ContinuousGridworld.class);
+      super(PuddleWorld.class);
     }
 
     @Override
@@ -100,20 +100,20 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   }
 
   static boolean isSupported(Object instance) {
-    if (!(instance instanceof ContinuousGridworld))
+    if (!(instance instanceof PuddleWorld))
       return false;
-    return ((ContinuousGridworld) instance).nbDimensions() == 2;
+    return ((PuddleWorld) instance).nbDimensions() == 2;
   }
 
   @Override
-  protected boolean synchronize(ContinuousGridworld current) {
+  protected boolean synchronize(PuddleWorld current) {
     if (rewardData == null)
       synchronizeRewardFunction(current);
     trajectories = episodeTrajectories.copyTrajectories();
     return true;
   }
 
-  private void synchronizeRewardFunction(ContinuousGridworld problem) {
+  private void synchronizeRewardFunction(PuddleWorld problem) {
     ContinuousFunction rewardFunction = problem.rewardFunction();
     rewardData = new MapData(200);
     if (rewardFunction != null) {
@@ -131,7 +131,7 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
   }
 
   @Override
-  public void onInstanceSet(Clock clock, ContinuousGridworld problem) {
+  public void onInstanceSet(Clock clock, PuddleWorld problem) {
     super.onInstanceSet(clock, problem);
     startPosition = problem.start();
     episodeTrajectories.connect(problem, clock);
@@ -151,7 +151,7 @@ public class ContinuousGridworldView extends ForegroundCanvasView<ContinuousGrid
     colorMapAction.saveState(memento);
   }
 
-  private void updateAxes(ContinuousGridworld problem) {
+  private void updateAxes(PuddleWorld problem) {
     Range[] ranges = problem.getObservationRanges();
     axes.x.reset();
     axes.y.reset();

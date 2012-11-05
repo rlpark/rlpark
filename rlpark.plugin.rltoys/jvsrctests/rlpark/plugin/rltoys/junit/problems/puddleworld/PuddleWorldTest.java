@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoys.junit.problems.continuousgridworld;
+package rlpark.plugin.rltoys.junit.problems.puddleworld;
 
 import java.util.Random;
 
@@ -10,11 +10,11 @@ import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.ranges.Range;
-import rlpark.plugin.rltoys.problems.continuousgridworld.ContinuousGridworld;
-import rlpark.plugin.rltoys.problems.continuousgridworld.TargetReachedL2NormTermination;
+import rlpark.plugin.rltoys.problems.puddleworld.PuddleWorld;
+import rlpark.plugin.rltoys.problems.puddleworld.TargetReachedL2NormTermination;
 import rlpark.plugin.rltoys.utils.Utils;
 
-public class ContinuousGridworldTest {
+public class PuddleWorldTest {
   class TestRewardFunction implements ContinuousFunction {
     @Override
     public double value(double[] position) {
@@ -25,11 +25,11 @@ public class ContinuousGridworldTest {
     }
   }
 
-  private ContinuousGridworld createProblem(Random random) {
+  private PuddleWorld createProblem(Random random) {
     Range observationRange = new Range(-50, 50);
     Range actionRange = new Range(-1, 1);
     double noise = .1;
-    ContinuousGridworld world = new ContinuousGridworld(random, 2, observationRange, actionRange, noise);
+    PuddleWorld world = new PuddleWorld(random, 2, observationRange, actionRange, noise);
     world.setStart(new double[] { -49, -49 });
     world.setRewardFunction(new TestRewardFunction());
     world.setTermination(new TargetReachedL2NormTermination(new double[] { 49, 49 }, actionRange.max() + 2 * noise));
@@ -41,7 +41,7 @@ public class ContinuousGridworldTest {
     Random random = new Random(0);
     Range observationRange = new Range(-50, 50);
     Range actionRange = new Range(-1, 1);
-    ContinuousGridworld world = new ContinuousGridworld(random, 2, observationRange, actionRange, .1);
+    PuddleWorld world = new PuddleWorld(random, 2, observationRange, actionRange, .1);
     Action[] actions = world.actions();
     Assert.assertEquals(5, actions.length);
     Assert.assertArrayEquals(new double[] { -1, 0 }, toArray(actions[0]), 0);
@@ -58,7 +58,7 @@ public class ContinuousGridworldTest {
   @Test
   public void testEpisodeWithContinuousAction() {
     Random random = new Random(0);
-    ContinuousGridworld world = createProblem(random);
+    PuddleWorld world = createProblem(random);
     TRStep step = world.initialize();
     while (!step.isEpisodeEnding()) {
       Assert.assertEquals(step.o_tp1[0] + step.o_tp1[1], step.r_tp1, 0.0);
@@ -70,7 +70,7 @@ public class ContinuousGridworldTest {
   @Test
   public void testEpisodeWithDiscreteAction() {
     Random random = new Random(0);
-    ContinuousGridworld world = createProblem(random);
+    PuddleWorld world = createProblem(random);
     Action[] actions = world.actions();
     TRStep step = world.initialize();
     while (!step.isEpisodeEnding()) {

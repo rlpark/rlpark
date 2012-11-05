@@ -37,7 +37,7 @@
       </view>
       <view
             allowMultiple="true"
-            class="rlpark.plugin.rltoysview.internal.continuousgridworld.ContinuousGridworldView"
+            class="rlpark.plugin.rltoysview.internal.puddleworld.PuddleWorldView"
             icon="icons/continuousfunctionview.png"
             id="zephyr.rlpark.plugin.rltoysview.continuousgridworldview"
             name="Continuous Gridworld"
@@ -123,7 +123,7 @@
             viewid="zephyr.rlpark.plugin.rltoysview.vectorbarview">
       </client>
       <client
-            class="rlpark.plugin.rltoysview.internal.continuousgridworld.ContinuousGridworldView$Provider"
+            class="rlpark.plugin.rltoysview.internal.puddleworld.PuddleWorldView$Provider"
             icon="icons/continuousfunctionview.png"
             name="Continuous Gridworld"
             viewid="zephyr.rlpark.plugin.rltoysview.continuousgridworldview">

@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoys.problems.continuousgridworld;
+package rlpark.plugin.rltoys.problems.puddleworld;
 
 public class TargetReachedL1NormTermination implements TerminationFunction {
   private final double[] target;

@@ -13,7 +13,6 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.monitoring.annotations.Popup;
 import zephyr.plugin.core.api.synchronization.Clock;
 
-@SuppressWarnings("restriction")
 @Monitor
 public class TestHelicopterRunnable implements Runnable, RLAgent {
   private static final long serialVersionUID = -7618574896704964858L;
