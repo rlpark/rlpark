@@ -1,5 +1,6 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.onpolicy;
 
+import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyEvaluationContext;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyRewardMonitor;
@@ -15,8 +16,8 @@ public class ContextEvaluation extends AbstractContextOnPolicy implements OnPoli
   private static final long serialVersionUID = -5926779335932073094L;
   private final int nbRewardCheckpoint;
 
-  public ContextEvaluation(ProblemFactory environmentFactory, AgentFactory agentFactory, int nbRewardCheckpoint) {
-    super(environmentFactory, agentFactory);
+  public ContextEvaluation(ProblemFactory environmentFactory, RepresentationFactory representationFactory, AgentFactory agentFactory, int nbRewardCheckpoint) {
+    super(environmentFactory, representationFactory, agentFactory);
     this.nbRewardCheckpoint = nbRewardCheckpoint;
   }
 

@@ -12,6 +12,6 @@ import zephyr.plugin.core.api.labels.Labeled;
 public interface OffPolicyAgentFactory extends Serializable, Labeled {
   Policy createBehaviourPolicy(long seed, RLProblem problem);
 
-  OffPolicyAgent createAgent(RLProblem problem, RepresentationFactory projectorFactory, Parameters parameters, Policy behaviourPolicy,
+  OffPolicyAgent createAgent(RLProblem problem, RepresentationFactory representationFactory, Parameters parameters, Policy behaviourPolicy,
       long seed);
 }

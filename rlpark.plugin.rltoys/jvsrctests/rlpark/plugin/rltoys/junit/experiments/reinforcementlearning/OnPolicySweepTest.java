@@ -35,7 +35,7 @@ public class OnPolicySweepTest extends RLSweepTest {
     public List<? extends Context> provideContexts() {
       AgentFactory agentFactory = new RLAgentFactoryTest(divergeAfter, AbstractRLProblemFactoryTest.Action01);
       ProblemFactory problemFactory = new OnPolicyRLProblemFactoryTest(nbEpisode, nbTimeSteps);
-      return Utils.asList(new ContextEvaluation(problemFactory, agentFactory, NbRewardCheckPoint));
+      return Utils.asList(new ContextEvaluation(problemFactory, null, agentFactory, NbRewardCheckPoint));
     }
 
     @Override

@@ -27,7 +27,9 @@ public class NormalDistribution extends AbstractNormalDistribution {
   @Override
   public RealVector[] computeGradLog(Action a) {
     updateSteps(ActionArray.toDouble(a));
-    return new RealVector[] { x.mapMultiply(meanStep), x.mapMultiply(stddevStep) };
+    gradMean.set(x).mapMultiplyToSelf(meanStep);
+    gradStddev.set(x).mapMultiplyToSelf(stddevStep);
+    return new RealVector[] { gradMean, gradStddev };
   }
 
   protected void updateSteps(double a) {

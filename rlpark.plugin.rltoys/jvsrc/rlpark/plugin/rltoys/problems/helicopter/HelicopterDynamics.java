@@ -73,8 +73,7 @@ public class HelicopterDynamics {
   public static final Range[] ObservationRanges = new Range[] { new Range(-MaxVel, MaxVel), new Range(-MaxVel, MaxVel),
       new Range(-MaxVel, MaxVel), new Range(-MaxPos, MaxPos), new Range(-MaxPos, MaxPos), new Range(-MaxPos, MaxPos),
       new Range(-MaxRate, MaxRate), new Range(-MaxRate, MaxRate), new Range(-MaxRate, MaxRate),
-      new Range(-MAX_QUAT, MAX_QUAT), new Range(-MAX_QUAT, MAX_QUAT), new Range(-MAX_QUAT, MAX_QUAT),
-      new Range(-MAX_QUAT, MAX_QUAT) };
+      new Range(-MAX_QUAT, MAX_QUAT), new Range(-MAX_QUAT, MAX_QUAT), new Range(-MAX_QUAT, MAX_QUAT) };
   public static final Range[] ActionRanges = new Range[] { new Range(-MaxAction, MaxAction),
       new Range(-MaxAction, MaxAction), new Range(-MaxAction, MaxAction), new Range(-MaxAction, MaxAction) };
   // very crude helicopter model, okay around hover:

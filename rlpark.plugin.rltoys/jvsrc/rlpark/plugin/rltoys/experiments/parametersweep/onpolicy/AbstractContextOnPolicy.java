@@ -1,5 +1,6 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.onpolicy;
 
+import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
@@ -14,16 +15,19 @@ public abstract class AbstractContextOnPolicy implements ReinforcementLearningCo
   private static final long serialVersionUID = -6212106048889219995L;
   private final AgentFactory agentFactory;
   private final ProblemFactory environmentFactory;
+  private final RepresentationFactory representationFactory;
 
-  public AbstractContextOnPolicy(ProblemFactory environmentFactory, AgentFactory agentFactory) {
+  public AbstractContextOnPolicy(ProblemFactory environmentFactory, RepresentationFactory representationFactory,
+      AgentFactory agentFactory) {
     this.environmentFactory = environmentFactory;
+    this.representationFactory = representationFactory;
     this.agentFactory = agentFactory;
   }
 
   @Override
   public Runner createRunner(int counter, Parameters parameters) {
     RLProblem problem = environmentFactory.createEnvironment(ExperimentCounter.newRandom(counter));
-    RLAgent agent = agentFactory.createAgent(problem, parameters, counter);
+    RLAgent agent = agentFactory.createAgent(problem, representationFactory, parameters, counter);
     int nbEpisode = parameters.nbEpisode();
     int maxEpisodeTimeSteps = parameters.maxEpisodeTimeSteps();
     return new Runner(problem, agent, nbEpisode, maxEpisodeTimeSteps);

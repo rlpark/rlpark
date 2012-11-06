@@ -7,6 +7,7 @@ import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistr
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.actions.Actions;
+import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import zephyr.plugin.core.api.internal.monitoring.wrappers.Abs;
@@ -31,7 +32,9 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
   @Monitor(wrappers = { Squared.ID, Abs.ID })
   protected double stddevStep;
 
-  protected RealVector x;
+  protected RealVector x = null;
+  protected MutableVector gradMean = null;
+  protected MutableVector gradStddev = null;
 
   public AbstractNormalDistribution(Random random) {
     this.random = random;
@@ -54,8 +57,16 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
 
   @Override
   final public void update(RealVector x) {
-    this.x = x.copy();
+    if (this.x == null)
+      allocateBuffers(x);
+    ((MutableVector) this.x).set(x);
     updateDistribution();
+  }
+
+  protected void allocateBuffers(RealVector prototype) {
+    x = prototype.copyAsMutable();
+    gradMean = prototype.copyAsMutable();
+    gradStddev = prototype.copyAsMutable();
   }
 
   abstract protected void updateDistribution();
