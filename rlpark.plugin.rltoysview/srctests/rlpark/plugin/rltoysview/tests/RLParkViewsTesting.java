@@ -8,6 +8,7 @@ import rlpark.plugin.rltoys.problems.pendulum.SwingPendulum;
 import rlpark.plugin.rltoysview.tests.internal.TestHelicopterRunnable;
 import rlpark.plugin.rltoysview.tests.internal.TestMazeRunnable;
 import rlpark.plugin.rltoysview.tests.internal.TestProblem;
+import rlpark.plugin.rltoysview.tests.internal.TestVectorViewRunnable;
 import rlpark.plugin.rltoysview.tests.internal.puddleworld.TestPuddleWorldRunnable;
 import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.ZephyrCore;
@@ -21,7 +22,12 @@ public class RLParkViewsTesting {
     ZephyrCore.setSynchronous(true);
   }
 
-  @Test
+  @Test(timeout = RunnableFilesTests.TimeOut)
+  public void testVectorView() {
+    RunnableTests.startRunnable(TestVectorViewRunnable.class, new NumberTickCondition(40));
+  }
+
+  @Test(timeout = RunnableFilesTests.TimeOut)
   public void testMazeView() {
     RunnableTests.startRunnable(TestMazeRunnable.class, new NumberTickCondition(20));
   }

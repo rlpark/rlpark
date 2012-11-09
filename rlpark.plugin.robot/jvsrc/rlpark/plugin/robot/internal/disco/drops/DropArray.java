@@ -24,6 +24,10 @@ public class DropArray extends DropData {
     this(new DropInteger(""), label, -1, suffixes);
   }
 
+  public DropArray(DropData prototype, String label, String... suffixes) {
+    this(prototype, label, -1, suffixes);
+  }
+
   public DropArray(DropData prototype, String label, int index, String... suffixes) {
     super(label, false, index);
     assert suffixes.length > 0;
