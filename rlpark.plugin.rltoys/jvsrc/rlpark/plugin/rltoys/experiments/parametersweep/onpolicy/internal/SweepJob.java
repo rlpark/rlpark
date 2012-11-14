@@ -28,7 +28,7 @@ public class SweepJob implements JobWithParameters, TimedJob {
     try {
       runner.run();
     } catch (Throwable e) {
-      System.err.println(e.getLocalizedMessage());
+      e.printStackTrace(System.err);
       rewardMonitor.worstResultUntilEnd();
     }
     rewardMonitor.putResult(parameters);

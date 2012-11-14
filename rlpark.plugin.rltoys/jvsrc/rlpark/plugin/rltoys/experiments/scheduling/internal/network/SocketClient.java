@@ -18,7 +18,7 @@ import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.Messages.Me
 import zephyr.plugin.core.api.signals.Signal;
 
 public class SocketClient {
-  static private volatile int nbJobSendPerRequest;
+  static private volatile int nbJobSendPerRequest = 1;
   static public final Signal<String> onClassRequested = new Signal<String>();
   public final Signal<SocketClient> onClosed = new Signal<SocketClient>();
   private final Runnable clientRunnable = new Runnable() {
@@ -135,7 +135,9 @@ public class SocketClient {
   }
 
   public static void nbJobSendPerRequest(int nbJobSendPerRequest) {
-    SocketClient.nbJobSendPerRequest = Math.min(Math.max(1, nbJobSendPerRequest), 20);
+    SocketClient.nbJobSendPerRequest = 1;
+    // SocketClient.nbJobSendPerRequest = Math.min(Math.max(1,
+    // nbJobSendPerRequest), 20);
   }
 
   public int nbJobDone() {
