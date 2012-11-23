@@ -26,9 +26,12 @@ public class OffPAC implements OffPolicyLearner {
 
   @Override
   public void learn(RealVector x_t, Action a_t, RealVector x_tp1, Action a_tp1, double r_tp1) {
-    actor.policy().update(x_t);
-    behavior.update(x_t);
-    rho_t = x_t != null ? computeRho(a_t) : 0.0;
+    rho_t = 0.0;
+    if (x_t != null) {
+      actor.policy().update(x_t);
+      behavior.update(x_t);
+      rho_t = computeRho(a_t);
+    }
     assert Utils.checkValue(rho_t);
     double delta = critic.update(rho_t, x_t, x_tp1, r_tp1);
     assert Utils.checkValue(delta);

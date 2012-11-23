@@ -5,28 +5,29 @@ import rlpark.plugin.rltoys.algorithms.traces.Traces;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
-import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class ActorLambdaOffPolicy extends AbstractActorOffPolicy {
   final protected Traces[] e_u;
   final public double lambda;
   final protected double alpha_u;
-  @Monitor(level = 4)
-  final protected PVector[] u;
 
   public ActorLambdaOffPolicy(double lambda, double gamma, PolicyDistribution policyDistribution, double alpha_u,
       int nbFeatures, Traces prototype) {
-    super(policyDistribution);
-    u = policyDistribution.createParameters(nbFeatures);
+    this(policyDistribution.createParameters(nbFeatures), lambda, gamma, policyDistribution, alpha_u, prototype);
+  }
+
+  public ActorLambdaOffPolicy(PVector[] policyParameters, double lambda, double gamma,
+      PolicyDistribution policyDistribution, double alpha_u, Traces prototype) {
+    super(policyParameters, policyDistribution);
     this.alpha_u = alpha_u;
     this.lambda = lambda;
     e_u = new Traces[u.length];
     for (int i = 0; i < e_u.length; i++)
-      e_u[i] = prototype.newTraces(nbFeatures);
+      e_u[i] = prototype.newTraces(u[i].size);
   }
 
   protected void updateEligibilityTraces(double rho_t, Action a_t, double delta) {
-    RealVector[] gradLog = policyDistribution.computeGradLog(a_t);
+    RealVector[] gradLog = targetPolicy.computeGradLog(a_t);
     for (int i = 0; i < u.length; i++) {
       e_u[i].update(lambda, gradLog[i]);
       e_u[i].vect().mapMultiplyToSelf(rho_t);
@@ -40,7 +41,7 @@ public class ActorLambdaOffPolicy extends AbstractActorOffPolicy {
 
   @Override
   protected void updateParameters(double rho_t, RealVector x_t, Action a_t, double delta) {
-    policyDistribution.update(x_t);
+    targetPolicy.update(x_t);
     updateEligibilityTraces(rho_t, a_t, delta);
     updatePolicyParameters(rho_t, a_t, delta);
   }
@@ -53,10 +54,5 @@ public class ActorLambdaOffPolicy extends AbstractActorOffPolicy {
 
   public Traces[] eligibilities() {
     return e_u;
-  }
-
-  @Override
-  public PVector[] actorParameters() {
-    return u;
   }
 }

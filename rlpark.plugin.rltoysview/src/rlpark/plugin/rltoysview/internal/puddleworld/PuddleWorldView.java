@@ -137,6 +137,7 @@ public class PuddleWorldView extends ForegroundCanvasView<PuddleWorld> {
     episodeTrajectories.connect(problem, clock);
     trajectories = null;
     rewardData = null;
+    setViewName();
   }
 
   @Override

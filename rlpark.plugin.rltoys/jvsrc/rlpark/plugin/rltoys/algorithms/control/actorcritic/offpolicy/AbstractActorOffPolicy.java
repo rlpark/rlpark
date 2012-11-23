@@ -4,21 +4,24 @@ import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistr
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public abstract class AbstractActorOffPolicy implements ActorOffPolicy {
   @Monitor
-  final protected PolicyDistribution policyDistribution;
+  final protected PolicyDistribution targetPolicy;
+  @Monitor(level = 4)
+  final protected PVector[] u;
 
-  protected AbstractActorOffPolicy(PolicyDistribution policyDistribution) {
-    this.policyDistribution = policyDistribution;
+  protected AbstractActorOffPolicy(PVector[] policyParameters, PolicyDistribution policyDistribution) {
+    u = policyParameters;
+    this.targetPolicy = policyDistribution;
   }
 
   @Override
   public Action proposeAction(RealVector x) {
-    return Policies.decide(policyDistribution, x);
+    return Policies.decide(targetPolicy, x);
   }
-
 
   @Override
   public void update(double rho_t, RealVector x_t, Action a_t, double delta) {
@@ -31,7 +34,12 @@ public abstract class AbstractActorOffPolicy implements ActorOffPolicy {
 
   @Override
   public PolicyDistribution policy() {
-    return policyDistribution;
+    return targetPolicy;
+  }
+
+  @Override
+  public PVector[] actorParameters() {
+    return u;
   }
 
   abstract protected void initEpisode();

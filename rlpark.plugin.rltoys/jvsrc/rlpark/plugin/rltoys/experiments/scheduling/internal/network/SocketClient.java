@@ -135,9 +135,7 @@ public class SocketClient {
   }
 
   public static void nbJobSendPerRequest(int nbJobSendPerRequest) {
-    SocketClient.nbJobSendPerRequest = 1;
-    // SocketClient.nbJobSendPerRequest = Math.min(Math.max(1,
-    // nbJobSendPerRequest), 20);
+    SocketClient.nbJobSendPerRequest = Math.min(Math.max(1, nbJobSendPerRequest), 20);
   }
 
   public int nbJobDone() {
