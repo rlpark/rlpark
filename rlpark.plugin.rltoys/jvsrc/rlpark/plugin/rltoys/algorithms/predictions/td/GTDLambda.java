@@ -127,4 +127,8 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
   public double prediction() {
     return v_t;
   }
+
+  public double correction() {
+    return correction;
+  }
 }
