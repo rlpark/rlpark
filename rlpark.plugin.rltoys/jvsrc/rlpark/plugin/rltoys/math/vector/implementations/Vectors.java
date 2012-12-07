@@ -59,13 +59,6 @@ public class Vectors {
       data[i] = Math.abs(data[i]);
   }
 
-  static public double sum(RealVector v) {
-    double sum = 0.0;
-    for (int i = 0; i < v.getDimension(); i++)
-      sum += v.getEntry(i);
-    return sum;
-  }
-
   static public double l1Norm(RealVector v) {
     if (v instanceof BVector)
       return ((BVector) v).nonZeroElements();

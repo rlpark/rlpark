@@ -209,4 +209,12 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
       }
     });
   }
+
+  @Override
+  public double sum() {
+    double sum = 0;
+    for (double v : data)
+      sum += v;
+    return sum;
+  }
 }

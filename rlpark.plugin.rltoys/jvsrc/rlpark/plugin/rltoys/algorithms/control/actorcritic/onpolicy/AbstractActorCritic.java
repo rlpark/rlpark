@@ -45,12 +45,13 @@ public abstract class AbstractActorCritic implements ControlLearner {
   @Override
   public Action step(RealVector x_t, Action a_t, RealVector x_tp1, double r_tp1) {
     reward = r_tp1;
-    double delta = updateCritic(x_t, x_tp1, r_tp1);
+    double actorDelta = updateCritic(x_t, x_tp1, r_tp1);
+    policyRequireUpdate = x_t == null || policyRequireUpdate;
     if (policyRequireUpdate && x_t != null) {
       policy().update(x_t);
       policyRequireUpdate = false;
     }
-    updateActor(x_t, a_t, delta);
+    updateActor(x_t, a_t, actorDelta);
     policy().update(x_tp1);
     policyRequireUpdate = false;
     return policy().sampleAction();

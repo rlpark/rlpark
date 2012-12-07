@@ -43,6 +43,14 @@ public class AllVectorsTest {
       return true;
     }
 
+    public boolean sumEquals() {
+      double first = mutables[0].sum();
+      for (int i = 1; i < mutables.length; i++)
+        if (Math.abs(first - mutables[i].sum()) > 1e-10)
+          return false;
+      return true;
+    }
+
     public boolean allArrayDataEquals() {
       double[] first = mutables[0].accessData();
       for (int i = 1; i < mutables.length; i++)
@@ -79,6 +87,7 @@ public class AllVectorsTest {
       performOperation(random, vectorDimension, vectors);
       Assert.assertTrue(vectors.allEquals());
       Assert.assertTrue(vectors.allCopyEquals());
+      Assert.assertTrue(vectors.sumEquals());
     }
     Assert.assertTrue(vectors.allArrayDataEquals());
     Assert.assertTrue(vectors.allEntryEquals());

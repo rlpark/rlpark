@@ -109,4 +109,8 @@ public class JointDistribution implements PolicyDistribution, BoundedPdf {
     for (PolicyDistribution distribution : distributions)
       distribution.update(x);
   }
+
+  public PolicyDistribution[] policies() {
+    return distributions;
+  }
 }

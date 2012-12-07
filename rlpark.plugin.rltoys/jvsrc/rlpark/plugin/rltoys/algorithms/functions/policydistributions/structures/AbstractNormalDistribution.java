@@ -24,7 +24,7 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
   @Monitor(level = 4)
   protected PVector u_stddev;
   protected double mean = 0;
-  protected double stddev = 1;
+  protected double stddev = 0;
   protected final Random random;
   public double a_t;
   @Monitor(wrappers = { Squared.ID, Abs.ID })

@@ -52,9 +52,9 @@ public abstract class VectorTest {
 
   @Test
   public void testSum() {
-    Assert.assertEquals(6.0, Vectors.sum(a), 0.0);
-    Assert.assertEquals(11.0, Vectors.sum(b), 0.0);
-    Assert.assertEquals(1.0, Vectors.sum(c), 0.0);
+    Assert.assertEquals(6.0, a.sum(), 0.0);
+    Assert.assertEquals(11.0, b.sum(), 0.0);
+    Assert.assertEquals(1.0, c.sum(), 0.0);
   }
 
   @Test

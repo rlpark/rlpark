@@ -8,6 +8,7 @@ import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistr
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
@@ -29,6 +30,7 @@ public class NormalDistribution extends AbstractNormalDistribution {
     updateSteps(ActionArray.toDouble(a));
     gradMean.set(x).mapMultiplyToSelf(meanStep);
     gradStddev.set(x).mapMultiplyToSelf(stddevStep);
+    assert Vectors.checkValues(gradMean) && Vectors.checkValues(gradStddev);
     return new RealVector[] { gradMean, gradStddev };
   }
 
@@ -50,6 +52,7 @@ public class NormalDistribution extends AbstractNormalDistribution {
     mean = u_mean.dotProduct(x) + initialMean;
     stddev = Math.exp(u_stddev.dotProduct(x)) * initialStddev + Utils.EPSILON;
     sigma2 = square(stddev);
+    assert Utils.checkValue(mean) && Utils.checkValue(sigma2);
   }
 
   @Override
