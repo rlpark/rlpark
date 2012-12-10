@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.ConstantPolicy;
+import rlpark.plugin.rltoys.envio.policy.Policies;
 
 @SuppressWarnings("serial")
 public class ConstantPolicyTest {
@@ -23,7 +24,7 @@ public class ConstantPolicyTest {
     int nbSample = 1000;
     double na = 0, nb = 0, nc = 0;
     for (int i = 0; i < nbSample; i++) {
-      Action action = policy.decide(null);
+      Action action = Policies.decide(policy, null);
       if (action == a)
         na++;
       else if (action == b)

@@ -8,6 +8,7 @@ import rlpark.plugin.rltoys.algorithms.control.acting.Greedy;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.DiscreteActionPolicy;
 import zephyr.plugin.core.api.labels.Labels;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
@@ -32,7 +33,7 @@ public class PolicyDiscreteActionView extends ForegroundCanvasView<DiscreteActio
     @Override
     public RGB toColor(int x, double value) {
       if (actions[x] == bestAction)
-        return Colors.COLOR_MAGENTA;
+        return Colors.COLOR_YELLOW;
       return value > 0 ? Colors.COLOR_RED : Colors.COLOR_BLUE;
     }
   };
@@ -45,8 +46,7 @@ public class PolicyDiscreteActionView extends ForegroundCanvasView<DiscreteActio
   }
 
   @Override
-  public boolean synchronize() {
-    DiscreteActionPolicy current = instance.current();
+  public boolean synchronize(DiscreteActionPolicy current) {
     System.arraycopy(current.values(), 0, values, 0, values.length);
     bestAction = (current instanceof Greedy) ? ((Greedy) current).bestAction() : null;
     return true;
@@ -59,9 +59,8 @@ public class PolicyDiscreteActionView extends ForegroundCanvasView<DiscreteActio
   }
 
   @Override
-  public void onInstanceSet() {
-    super.onInstanceSet();
-    DiscreteActionPolicy current = instance.current();
+  public void onInstanceSet(Clock clock, DiscreteActionPolicy current) {
+    super.onInstanceSet(clock, current);
     actions = current.actions();
     values = new double[actions.length];
     String[] labels = new String[actions.length];
@@ -71,8 +70,8 @@ public class PolicyDiscreteActionView extends ForegroundCanvasView<DiscreteActio
   }
 
   @Override
-  public void onInstanceUnset() {
-    super.onInstanceUnset();
+  public void onInstanceUnset(Clock clock) {
+    super.onInstanceUnset(clock);
     actions = null;
     values = null;
   }

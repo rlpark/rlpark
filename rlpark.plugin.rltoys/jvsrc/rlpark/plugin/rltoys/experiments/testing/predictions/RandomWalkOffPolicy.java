@@ -27,11 +27,11 @@ public class RandomWalkOffPolicy {
     int nbEpisode = 0;
     double[] solution = agentState.computeSolution(targetPolicy, gamma, lambda);
     PVector phi_t = null;
-    while (distanceToSolution(solution, gtd.weights()) > 0.05) {
+    while (FiniteStateGraphOnPolicy.distanceToSolution(solution, gtd.weights()) > 0.05) {
       StepData stepData = agentState.step();
       double rho = 0.0;
       if (stepData.a_t != null)
-        rho = targetPolicy.pi(stepData.v_t(), stepData.a_t) / behaviourPolicy.pi(stepData.v_t(), stepData.a_t);
+        rho = targetPolicy.pi(stepData.a_t) / behaviourPolicy.pi(stepData.a_t);
       PVector phi_tp1 = agentState.currentFeatureState();
       gtd.update(rho, phi_t, phi_tp1, stepData.r_tp1);
       if (stepData.s_tp1 == null) {
@@ -43,16 +43,8 @@ public class RandomWalkOffPolicy {
       }
       phi_t = phi_tp1 != null ? phi_tp1.copy() : null;
     }
-    if (nbEpisode < 10)
+    if (nbEpisode < 2)
       return new TestingResult<OffPolicyTD>(false, "That was too quick!", gtd);
     return new TestingResult<OffPolicyTD>(true, null, gtd);
   }
-
-  static public double distanceToSolution(double[] solution, PVector theta) {
-    double max = 0;
-    for (int i = 0; i < Math.max(solution.length, theta.size); i++)
-      max = Math.max(max, Math.abs(solution[i] - theta.data[i]));
-    return max;
-  }
-
 }

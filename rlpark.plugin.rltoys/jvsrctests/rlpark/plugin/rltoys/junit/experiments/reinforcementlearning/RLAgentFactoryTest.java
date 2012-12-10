@@ -1,6 +1,7 @@
 package rlpark.plugin.rltoys.junit.experiments.reinforcementlearning;
 
 
+import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
@@ -25,7 +26,7 @@ class RLAgentFactoryTest implements AgentFactory {
   }
 
   @Override
-  public RLAgent createAgent(RLProblem problem, Parameters parameters, long seed) {
+  public RLAgent createAgent(RLProblem problem, RepresentationFactory representationFactory, Parameters parameters, long seed) {
     return new RLAgent() {
       @Override
       public Action getAtp1(TRStep step) {

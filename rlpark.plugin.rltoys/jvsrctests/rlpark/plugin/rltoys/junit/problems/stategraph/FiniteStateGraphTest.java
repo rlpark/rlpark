@@ -6,73 +6,48 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.ActionPolicy;
 import rlpark.plugin.rltoys.envio.policy.Policy;
-import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.problems.stategraph.FSGAgentState;
+import rlpark.plugin.rltoys.problems.stategraph.FiniteStateGraph.StepData;
 import rlpark.plugin.rltoys.problems.stategraph.LineProblem;
 import rlpark.plugin.rltoys.problems.stategraph.RandomWalk;
-import rlpark.plugin.rltoys.problems.stategraph.FiniteStateGraph.StepData;
 
 public class FiniteStateGraphTest {
-  static private final Policy leftPolicy = new Policy() {
-    private static final long serialVersionUID = -3697408235150317492L;
-
-    @Override
-    public Action decide(RealVector state) {
-      return RandomWalk.left;
-    }
-
-    @Override
-    public double pi(RealVector s, Action a) {
-      return a == RandomWalk.left ? 1 : 0;
-    }
-  };
-  static private final Policy rightPolicy = new Policy() {
-    private static final long serialVersionUID = -5534122517914442095L;
-
-    @Override
-    public Action decide(RealVector state) {
-      return RandomWalk.right;
-    }
-
-    @Override
-    public double pi(RealVector s, Action a) {
-      return a == RandomWalk.right ? 1 : 0;
-    }
-  };
+  static private final Policy leftPolicy = new ActionPolicy(RandomWalk.Left);
+  static private final Policy rightPolicy = new ActionPolicy(RandomWalk.Right);
 
   @Test
   public void testSimpleProblemTrajectory() {
     LineProblem sp = new LineProblem();
-    assertEquals(new StepData(0, null, null, LineProblem.A, 0.0, LineProblem.a), sp.step());
-    assertEquals(new StepData(1, LineProblem.A, LineProblem.a, LineProblem.B, 0.0, LineProblem.a), sp.step());
-    assertEquals(new StepData(2, LineProblem.B, LineProblem.a, LineProblem.C, 0.0, LineProblem.a), sp.step());
-    assertEquals(new StepData(3, LineProblem.C, LineProblem.a, null, 1.0, null), sp.step());
-    assertEquals(new StepData(4, null, null, LineProblem.A, 0.0, LineProblem.a), sp.step());
-    assertEquals(new StepData(5, LineProblem.A, LineProblem.a, LineProblem.B, 0.0, LineProblem.a), sp.step());
+    assertEquals(new StepData(0, null, null, LineProblem.A, 0.0, LineProblem.Move), sp.step());
+    assertEquals(new StepData(1, LineProblem.A, LineProblem.Move, LineProblem.B, 0.0, LineProblem.Move), sp.step());
+    assertEquals(new StepData(2, LineProblem.B, LineProblem.Move, LineProblem.C, 0.0, LineProblem.Move), sp.step());
+    assertEquals(new StepData(3, LineProblem.C, LineProblem.Move, null, 1.0, null), sp.step());
+    assertEquals(new StepData(4, null, null, LineProblem.A, 0.0, LineProblem.Move), sp.step());
+    assertEquals(new StepData(5, LineProblem.A, LineProblem.Move, LineProblem.B, 0.0, LineProblem.Move), sp.step());
   }
 
   @Test
   public void testRandomWalkRightTrajectory() {
     RandomWalk sp = new RandomWalk(rightPolicy);
-    assertEquals(new StepData(0, null, null, RandomWalk.C, 0.0, RandomWalk.right), sp.step());
-    assertEquals(new StepData(1, RandomWalk.C, RandomWalk.right, RandomWalk.D, 0.0, RandomWalk.right), sp.step());
-    assertEquals(new StepData(2, RandomWalk.D, RandomWalk.right, RandomWalk.E, 0.0, RandomWalk.right), sp.step());
-    assertEquals(new StepData(3, RandomWalk.E, RandomWalk.right, null, 1.0, null), sp.step());
-    assertEquals(new StepData(4, null, null, RandomWalk.C, 0.0, RandomWalk.right), sp.step());
-    assertEquals(new StepData(5, RandomWalk.C, RandomWalk.right, RandomWalk.D, 0.0, RandomWalk.right), sp.step());
+    assertEquals(new StepData(0, null, null, RandomWalk.C, 0.0, RandomWalk.Right), sp.step());
+    assertEquals(new StepData(1, RandomWalk.C, RandomWalk.Right, RandomWalk.D, 0.0, RandomWalk.Right), sp.step());
+    assertEquals(new StepData(2, RandomWalk.D, RandomWalk.Right, RandomWalk.E, 0.0, RandomWalk.Right), sp.step());
+    assertEquals(new StepData(3, RandomWalk.E, RandomWalk.Right, null, 1.0, null), sp.step());
+    assertEquals(new StepData(4, null, null, RandomWalk.C, 0.0, RandomWalk.Right), sp.step());
+    assertEquals(new StepData(5, RandomWalk.C, RandomWalk.Right, RandomWalk.D, 0.0, RandomWalk.Right), sp.step());
   }
 
   @Test
   public void testRandomWalkLeftTrajectory() {
     RandomWalk sp = new RandomWalk(leftPolicy);
-    assertEquals(new StepData(0, null, null, RandomWalk.C, 0.0, RandomWalk.left), sp.step());
-    assertEquals(new StepData(1, RandomWalk.C, RandomWalk.left, RandomWalk.B, 0.0, RandomWalk.left), sp.step());
-    assertEquals(new StepData(2, RandomWalk.B, RandomWalk.left, RandomWalk.A, 0.0, RandomWalk.left), sp.step());
-    assertEquals(new StepData(3, RandomWalk.A, RandomWalk.left, null, 0.0, null), sp.step());
-    assertEquals(new StepData(4, null, null, RandomWalk.C, 0.0, RandomWalk.left), sp.step());
-    assertEquals(new StepData(5, RandomWalk.C, RandomWalk.left, RandomWalk.B, 0.0, RandomWalk.left), sp.step());
+    assertEquals(new StepData(0, null, null, RandomWalk.C, 0.0, RandomWalk.Left), sp.step());
+    assertEquals(new StepData(1, RandomWalk.C, RandomWalk.Left, RandomWalk.B, 0.0, RandomWalk.Left), sp.step());
+    assertEquals(new StepData(2, RandomWalk.B, RandomWalk.Left, RandomWalk.A, 0.0, RandomWalk.Left), sp.step());
+    assertEquals(new StepData(3, RandomWalk.A, RandomWalk.Left, null, 0.0, null), sp.step());
+    assertEquals(new StepData(4, null, null, RandomWalk.C, 0.0, RandomWalk.Left), sp.step());
+    assertEquals(new StepData(5, RandomWalk.C, RandomWalk.Left, RandomWalk.B, 0.0, RandomWalk.Left), sp.step());
   }
 
   @Test

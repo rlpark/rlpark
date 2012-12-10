@@ -15,13 +15,13 @@ public class PolicyDistributionAdapter implements PolicyDistribution {
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
-    return policy.pi(s, a);
+  public double pi(Action a) {
+    return policy.pi(a);
   }
 
   @Override
-  public Action decide(RealVector s) {
-    return policy.decide(s);
+  public Action sampleAction() {
+    return policy.sampleAction();
   }
 
   @Override
@@ -30,12 +30,17 @@ public class PolicyDistributionAdapter implements PolicyDistribution {
   }
 
   @Override
-  public RealVector[] getGradLog(RealVector x_t, Action a_t) {
+  public RealVector[] computeGradLog(Action a_t) {
     return new PVector[] {};
   }
 
   @Override
   public int nbParameterVectors() {
     return 0;
+  }
+
+  @Override
+  public void update(RealVector x) {
+    policy.update(x);
   }
 }

@@ -13,12 +13,17 @@ public class UnknownPolicy implements Policy {
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
+  public double pi(Action a) {
     return 1.0;
   }
 
   @Override
-  public Action decide(RealVector s) {
-    return policy.decide(s);
+  public Action sampleAction() {
+    return policy.sampleAction();
+  }
+
+  @Override
+  public void update(RealVector x) {
+    policy.update(x);
   }
 }

@@ -45,7 +45,7 @@ public class PredictionOffPolicyDemon implements Demon, Labeled {
 
   @Override
   public void update(RealVector x_t, Action a_t, RealVector x_tp1) {
-    rho_t = a_t != null ? target.pi(x_t, a_t) / behaviour.pi(x_t, a_t) : 0;
+    rho_t = a_t != null ? target.pi(a_t) / behaviour.pi(a_t) : 0;
     gtd.update(rho_t, x_t, x_tp1, rewardFunction.reward(), gammaFunction.gamma(), outcomeFunction.outcome());
   }
 

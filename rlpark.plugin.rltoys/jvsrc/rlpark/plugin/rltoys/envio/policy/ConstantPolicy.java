@@ -16,17 +16,21 @@ public class ConstantPolicy extends StochasticPolicy {
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
+  public double pi(Action a) {
     return distribution[atoi(a)];
   }
 
   @Override
-  public Action decide(RealVector s) {
+  public Action sampleAction() {
     return chooseAction(distribution);
   }
 
   @Override
   public double[] distribution() {
     return distribution;
+  }
+
+  @Override
+  public void update(RealVector x) {
   }
 }

@@ -47,6 +47,10 @@ public abstract class TileCoders implements Projector {
   }
 
   public void addTileCoder(int[] inputIndexes, int resolution, int nbTilings) {
+    addTileCoder(discretizerFactory, inputIndexes, resolution, nbTilings);
+  }
+
+  public void addTileCoder(DiscretizerFactory discretizerFactory, int[] inputIndexes, int resolution, int nbTilings) {
     assert resolution > 0;
     assert nbTilings > 0;
     assert inputIndexes.length > 0;
@@ -61,10 +65,6 @@ public abstract class TileCoders implements Projector {
     }
     addTileCoder(new TileCoder(tilings, resolution));
     vector = newVectorInstance();
-  }
-
-  public BinaryVector getCurrentState() {
-    return vector.nonZeroElements() > 0 ? vector.copy() : null;
   }
 
   public int nbInputs() {
@@ -89,11 +89,11 @@ public abstract class TileCoders implements Projector {
   public BinaryVector project(double[] inputs) {
     vector.clear();
     if (inputs == null)
-      return vector.copy();
+      return vector;
     activateIndexes(inputs, vector);
     if (includeActiveFeature)
       vector.setOn(vector.getDimension() - 1);
-    return vector.copy();
+    return vector;
   }
 
   protected void addTileCoder(TileCoder tileCoder) {

@@ -15,14 +15,14 @@ import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.ConstantPolicy;
 import rlpark.plugin.rltoys.envio.policy.Policy;
-import rlpark.plugin.rltoys.experiments.testing.predictions.RandomWalkOffPolicy;
+import rlpark.plugin.rltoys.experiments.testing.predictions.FiniteStateGraphOnPolicy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.problems.stategraph.FSGAgentState;
+import rlpark.plugin.rltoys.problems.stategraph.FiniteStateGraph.StepData;
 import rlpark.plugin.rltoys.problems.stategraph.GraphState;
 import rlpark.plugin.rltoys.problems.stategraph.RandomWalk;
-import rlpark.plugin.rltoys.problems.stategraph.FiniteStateGraph.StepData;
 
 
 public class GQTest {
@@ -92,7 +92,7 @@ public class GQTest {
     int nbEpisode = 0;
     double[] solution = agentState.computeSolution(targetPolicy, 1 - learnerFactory.beta(), learnerFactory.lambda());
     PVector v = new PVector(agentState.size);
-    while (RandomWalkOffPolicy.distanceToSolution(solution, v) > 0.05) {
+    while (FiniteStateGraphOnPolicy.distanceToSolution(solution, v) > 0.05) {
       StepData stepData = agentState.step();
       learner.learn(stepData.v_t(), stepData.a_t, stepData.v_tp1(), stepData.a_tp1, stepData.r_tp1);
       if (stepData.s_tp1 == null) {
@@ -112,9 +112,10 @@ public class GQTest {
       GraphState s = entry.getKey();
       int si = entry.getValue();
       double v_s = 0;
+      targetPolicy.update(s.v());
       for (Action a : agentState.graph().actions()) {
         RealVector phi_sa = agentState.stateAction(s.v(), a);
-        v_s += targetPolicy.pi(s.v(), a) * actionValuePredictor.predict(phi_sa);
+        v_s += targetPolicy.pi(a) * actionValuePredictor.predict(phi_sa);
       }
       v.data[si] = v_s;
     }

@@ -12,12 +12,16 @@ public class ActionPolicy implements Policy {
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
+  public double pi(Action a) {
     return a == action ? 1.0 : 0.0;
   }
 
   @Override
-  public Action decide(RealVector s) {
+  public Action sampleAction() {
     return action;
+  }
+
+  @Override
+  public void update(RealVector x) {
   }
 }

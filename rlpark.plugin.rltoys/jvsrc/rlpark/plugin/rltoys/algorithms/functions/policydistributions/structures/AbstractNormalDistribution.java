@@ -7,35 +7,36 @@ import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistr
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.actions.Actions;
+import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Abs;
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Squared;
 import zephyr.plugin.core.api.monitoring.abstracts.LabeledCollection;
-import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
+@SuppressWarnings("restriction")
 public abstract class AbstractNormalDistribution implements PolicyDistribution, LabeledCollection, BoundedPdf {
   private static final long serialVersionUID = -6707070542157254303L;
-  public final double initialMean;
-  public final double initialStddev;
   @Monitor(level = 4)
   protected PVector u_mean;
   @Monitor(level = 4)
   protected PVector u_stddev;
-  protected double mean;
-  protected double stddev;
+  protected double mean = 0;
+  protected double stddev = 1;
   protected final Random random;
-  @IgnoreMonitor
-  protected RealVector lastX;
   public double a_t;
+  @Monitor(wrappers = { Squared.ID, Abs.ID })
   protected double meanStep;
+  @Monitor(wrappers = { Squared.ID, Abs.ID })
   protected double stddevStep;
 
-  public AbstractNormalDistribution(Random random, double mean, double sigma) {
-    initialMean = mean;
-    initialStddev = sigma;
-    this.mean = initialMean;
-    this.stddev = sigma;
+  protected RealVector x = null;
+  protected MutableVector gradMean = null;
+  protected MutableVector gradStddev = null;
+
+  public AbstractNormalDistribution(Random random) {
     this.random = random;
   }
 
@@ -46,22 +47,6 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
     return new PVector[] { u_mean, u_stddev };
   }
 
-  protected ActionArray initialize() {
-    lastX = null;
-    return null;
-  }
-
-  public void updateDistributionIFN(RealVector x) {
-    if (lastX == x)
-      return;
-    lastX = x;
-    if (lastX == null)
-      return;
-    updateDistribution(x);
-  }
-
-  abstract protected void updateDistribution(RealVector x);
-
   public double stddev() {
     return stddev;
   }
@@ -71,9 +56,24 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
+  final public void update(RealVector x) {
+    if (this.x == null)
+      allocateBuffers(x);
+    ((MutableVector) this.x).set(x);
+    updateDistribution();
+  }
+
+  protected void allocateBuffers(RealVector prototype) {
+    x = prototype.copyAsMutable();
+    gradMean = prototype.copyAsMutable();
+    gradStddev = prototype.copyAsMutable();
+  }
+
+  abstract protected void updateDistribution();
+
+  @Override
+  public double pi(Action a) {
     assert Actions.isOneDimension(a);
-    updateDistributionIFN(s);
     return pi_s(ActionArray.toDouble(a));
   }
 

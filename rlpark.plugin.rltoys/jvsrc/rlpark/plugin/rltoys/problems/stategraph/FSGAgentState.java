@@ -215,8 +215,9 @@ public class FSGAgentState implements StateToStateAction {
     RealMatrix p = new Array2DRowRealMatrix(nbStates(), nbStates());
     for (int si = 0; si < nbStates(); si++) {
       GraphState s_t = states()[si];
+      policy.update(s_t.v());
       for (Action a : graph.actions()) {
-        double pa = policy.pi(s_t.v(), a);
+        double pa = policy.pi(a);
         GraphState s_tp1 = s_t.nextState(a);
         if (s_tp1 != null)
           p.setEntry(si, graph.indexOf(s_tp1), pa);

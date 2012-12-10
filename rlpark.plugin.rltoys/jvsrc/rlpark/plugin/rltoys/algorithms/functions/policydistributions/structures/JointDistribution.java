@@ -24,19 +24,19 @@ public class JointDistribution implements PolicyDistribution, BoundedPdf {
   }
 
   @Override
-  public double pi(RealVector s, Action a) {
+  public double pi(Action a) {
     double product = 1.0;
     for (int i = 0; i < distributions.length; i++)
-      product *= distributions[i].pi(s, ActionArray.getDim(a, i));
+      product *= distributions[i].pi(ActionArray.getDim(a, i));
     return product;
   }
 
   @Override
-  public ActionArray decide(RealVector s) {
+  public ActionArray sampleAction() {
     List<ActionArray> actions = new ArrayList<ActionArray>();
     int nbDimension = 0;
     for (PolicyDistribution distribution : distributions) {
-      ActionArray a = (ActionArray) distribution.decide(s);
+      ActionArray a = (ActionArray) distribution.sampleAction();
       nbDimension += a.actions.length;
       actions.add(a);
     }
@@ -67,11 +67,11 @@ public class JointDistribution implements PolicyDistribution, BoundedPdf {
   }
 
   @Override
-  public RealVector[] getGradLog(RealVector x_t, Action a_t) {
+  public RealVector[] computeGradLog(Action a_t) {
     List<RealVector> gradLogs = new ArrayList<RealVector>();
     for (int i = 0; i < distributions.length; i++) {
       PolicyDistribution distribution = distributions[i];
-      RealVector[] gradLog = distribution.getGradLog(x_t, ActionArray.getDim(a_t, i));
+      RealVector[] gradLog = distribution.computeGradLog(ActionArray.getDim(a_t, i));
       for (RealVector parameterVector : gradLog)
         gradLogs.add(parameterVector);
     }
@@ -97,10 +97,16 @@ public class JointDistribution implements PolicyDistribution, BoundedPdf {
   }
 
   @Override
-  public double piMax(RealVector s) {
+  public double piMax() {
     double result = 1;
     for (PolicyDistribution distribution : distributions)
-      result *= ((BoundedPdf) distribution).piMax(s);
+      result *= ((BoundedPdf) distribution).piMax();
     return result;
+  }
+
+  @Override
+  public void update(RealVector x) {
+    for (PolicyDistribution distribution : distributions)
+      distribution.update(x);
   }
 }

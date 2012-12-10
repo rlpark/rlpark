@@ -39,8 +39,7 @@ public class OffPolicyTests {
           double gamma) {
         StateToStateAction toStateAction = MountainCarOffPolicyLearning.createToStateAction(random, problem);
         double alpha_v = .1 / toStateAction.vectorNorm();
-        QLearning qlearning = new QLearning(problem.actions(), alpha_v, gamma, .6, toStateAction,
-                                            toStateAction.vectorSize(), new ATraces());
+        QLearning qlearning = new QLearning(problem.actions(), alpha_v, gamma, .6, toStateAction, new ATraces());
         Policy targetPolicy = new Greedy(qlearning, problem.actions(), toStateAction);
         QLearningControl learner = new QLearningControl(targetPolicy, qlearning);
         return new OffPolicyAgentDirect(behaviour, learner);
@@ -64,7 +63,7 @@ public class OffPolicyTests {
         return new OffPolicyAgentDirect(behaviour, learner);
       }
     };
-    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 150);
+    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 165);
   }
 
   @Test
@@ -82,7 +81,7 @@ public class OffPolicyTests {
         return new OffPolicyAgentDirect(behaviour, learner);
       }
     };
-    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 145);
+    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 150);
   }
 
   @Test
@@ -112,6 +111,6 @@ public class OffPolicyTests {
   }
 
   public static void main(String[] args) {
-    new OffPolicyTests().offpacOnMountainCarTest();
+    new OffPolicyTests().qlearningOnMountainCarTest();
   }
 }

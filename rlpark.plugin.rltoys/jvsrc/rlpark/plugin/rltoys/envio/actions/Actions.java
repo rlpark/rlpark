@@ -2,7 +2,9 @@ package rlpark.plugin.rltoys.envio.actions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import rlpark.plugin.rltoys.math.ranges.Range;
 
@@ -57,5 +59,12 @@ public class Actions {
 
   static public boolean isOneDimension(Action action) {
     return ((ActionArray) action).actions.length == 1;
+  }
+
+  static public Map<Action, Integer> createActionIntMap(Action[] actions) {
+    Map<Action, Integer> actionToIndex = new LinkedHashMap<Action, Integer>();
+    for (int i = 0; i < actions.length; i++)
+      actionToIndex.put(actions[i], i);
+    return actionToIndex;
   }
 }

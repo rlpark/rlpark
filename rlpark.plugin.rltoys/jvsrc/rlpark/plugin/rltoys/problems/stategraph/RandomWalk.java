@@ -15,13 +15,13 @@ public class RandomWalk extends FiniteStateGraph {
   static public final GraphState D = new GraphState("D", 0.0);
   static public final GraphState E = new GraphState("E", 0.0);
   static public final GraphState TR = new GraphState("TR", 1.0);
-  static public final Action left = new Action() {
+  static public final Action Left = new Action() {
     @Override
     public String toString() {
       return "left";
     };
   };
-  static public final Action right = new Action() {
+  static public final Action Right = new Action() {
     @Override
     public String toString() {
       return "right";
@@ -29,20 +29,20 @@ public class RandomWalk extends FiniteStateGraph {
   };
 
   static {
-    A.connect(left, TL);
-    A.connect(right, B);
+    A.connect(Left, TL);
+    A.connect(Right, B);
 
-    B.connect(left, A);
-    B.connect(right, C);
+    B.connect(Left, A);
+    B.connect(Right, C);
 
-    C.connect(left, B);
-    C.connect(right, D);
+    C.connect(Left, B);
+    C.connect(Right, D);
 
-    D.connect(left, C);
-    D.connect(right, E);
+    D.connect(Left, C);
+    D.connect(Right, E);
 
-    E.connect(left, D);
-    E.connect(right, TR);
+    E.connect(Left, D);
+    E.connect(Right, TR);
   }
 
   public RandomWalk(Random random) {
@@ -61,12 +61,12 @@ public class RandomWalk extends FiniteStateGraph {
   }
 
   public static ConstantPolicy newPolicy(Random random, double leftProbability) {
-    return new ConstantPolicy(random, new Action[] { left, right },
+    return new ConstantPolicy(random, new Action[] { Left, Right },
                               new double[] { leftProbability, 1 - leftProbability });
   }
 
   @Override
   public Action[] actions() {
-    return new Action[] { left, right };
+    return new Action[] { Left, Right };
   }
 }

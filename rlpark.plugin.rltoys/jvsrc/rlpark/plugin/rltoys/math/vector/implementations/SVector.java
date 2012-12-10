@@ -169,24 +169,24 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
 
   @Override
   public MutableVector ebeDivideToSelf(RealVector other) {
-    int[] activeIndexesBuffered = Arrays.copyOf(activeIndexes, nbActive);
-    double[] valuesBuffered = Arrays.copyOf(values, nbActive);
-    clear();
-    for (int position = 0; position < valuesBuffered.length; position++) {
-      final int index = activeIndexesBuffered[position];
-      setEntry(index, valuesBuffered[position] / other.getEntry(index));
+    for (int position = 0; position < nbActive; position++) {
+      final int index = activeIndexes[position];
+      values[position] /= other.getEntry(index);
     }
     return this;
   }
 
   @Override
   public MutableVector ebeMultiplyToSelf(RealVector other) {
-    int[] activeIndexesBuffered = Arrays.copyOf(activeIndexes, nbActive);
-    double[] valuesBuffered = Arrays.copyOf(values, nbActive);
-    clear();
-    for (int position = 0; position < valuesBuffered.length; position++) {
-      final int index = activeIndexesBuffered[position];
-      setEntry(index, valuesBuffered[position] * other.getEntry(index));
+    int position = 0;
+    while (position < nbActive) {
+      final int index = activeIndexes[position];
+      double value = values[position] * other.getEntry(index);
+      if (value != 0) {
+        values[position] = value;
+        position++;
+      } else
+        removeEntry(position, index);
     }
     return this;
   }
@@ -273,27 +273,32 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
 
   @Override
   public SVector set(RealVector other) {
-    clear();
     if (other instanceof SVector)
       return set((SVector) other);
     if (other instanceof BVector)
       return set((BVector) other, 1);
+    clear();
     for (int i = 0; i < other.getDimension(); i++)
       setEntry(i, other.getEntry(i));
     return this;
   }
 
   private SVector set(SVector other) {
+    clear();
     allocate(other.nbActive);
-    for (int i = 0; i < other.nbActive; i++)
-      setNonZeroEntry(other.activeIndexes[i], other.values[i]);
+    nbActive = other.nbActive;
+    System.arraycopy(other.activeIndexes, 0, activeIndexes, 0, nbActive);
+    System.arraycopy(other.values, 0, values, 0, nbActive);
+    for (int position = 0; position < nbActive; position++)
+      indexesPosition[activeIndexes[position]] = position;
     return this;
   }
 
   private SVector set(BVector other, double value) {
+    clear();
     allocate(other.nonZeroElements());
-    for (int index : other.getActiveIndexes())
-      setNonZeroEntry(index, value);
+    for (int i = 0; i < other.nonZeroElements(); i++)
+      setNonZeroEntry(other.activeIndexes[i], value);
     return this;
   }
 

@@ -8,7 +8,7 @@ import rlpark.plugin.rltoys.problems.pendulum.SwingPendulum;
 
 public class PendulumOnPolicyLearning {
   public interface ControlFactory {
-    ControlLearner create(int vectorSize, double vectorNorm);
+    ControlLearner create(SwingPendulum problem, int vectorSize, double vectorNorm);
   }
 
   public static double evaluate(ControlFactory controlFactory) {
@@ -16,7 +16,7 @@ public class PendulumOnPolicyLearning {
     TileCoders tileCoders = new TileCodersNoHashing(problem.getObservationRanges());
     tileCoders.addFullTilings(10, 10);
     tileCoders.includeActiveFeature();
-    ControlLearner control = controlFactory.create(tileCoders.vectorSize(), tileCoders.vectorNorm());
+    ControlLearner control = controlFactory.create(problem, tileCoders.vectorSize(), tileCoders.vectorNorm());
     return Evaluations.runEpisode(problem, control, tileCoders, 50, 5000);
   }
 }

@@ -19,8 +19,15 @@ public class Helicopter implements ProblemBounded, ProblemContinuousAction {
   @Monitor
   private final HelicopterDynamics heliDynamics;
   private TRStep step;
+  private final int episodeLength;
+  static private final int DefaultEpisodeLength = 6000;
 
   public Helicopter(Random random) {
+    this(random, DefaultEpisodeLength);
+  }
+
+  public Helicopter(Random random, int episodeLength) {
+    this.episodeLength = episodeLength;
     heliDynamics = new HelicopterDynamics(random);
   }
 
@@ -60,7 +67,9 @@ public class Helicopter implements ProblemBounded, ProblemContinuousAction {
         + -3.0f
         * HelicopterDynamics.MaxVel
         * HelicopterDynamics.MaxVel
-        - (1.0f - HelicopterDynamics.MIN_QW_BEFORE_HITTING_TERMINAL_STATE * HelicopterDynamics.MIN_QW_BEFORE_HITTING_TERMINAL_STATE);
+        - (1.0f - HelicopterDynamics.MIN_QW_BEFORE_HITTING_TERMINAL_STATE
+            * HelicopterDynamics.MIN_QW_BEFORE_HITTING_TERMINAL_STATE);
+    reward *= episodeLength - step.time;
     return reward;
   }
 
@@ -68,7 +77,7 @@ public class Helicopter implements ProblemBounded, ProblemContinuousAction {
   public TRStep step(Action action) {
     heliDynamics.step((ActionArray) action);
     step = new TRStep(step, action, heliDynamics.getObservation(), computeReward());
-    if (heliDynamics.isCrashed())
+    if (heliDynamics.isCrashed() || step.time == episodeLength)
       forceEndEpisode();
     return step;
   }

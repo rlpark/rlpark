@@ -75,6 +75,15 @@ public class BVectorTest {
     VectorsTestsUtils.assertEquals(BVector.toBVector(100, new int[] { 1, 5, 10, 70, 80 }), b1);
   }
 
+
+  @Test
+  public void testSet() {
+    BVector b1 = BVector.toBVector(100, new int[] { 1, 5, 10 });
+    BVector b2 = BVector.toBVector(100, new int[] { 20, 30 });
+    b1.set(b2);
+    VectorsTestsUtils.assertEquals(BVector.toBVector(100, new int[] { 20, 30 }), b1);
+  }
+
   @Test
   public void testL1Norm() {
     BVector b1 = BVector.toBVector(100, new int[] { 1, 5, 10 });

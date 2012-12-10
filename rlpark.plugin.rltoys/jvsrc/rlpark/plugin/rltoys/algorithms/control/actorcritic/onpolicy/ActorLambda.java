@@ -23,7 +23,7 @@ public class ActorLambda extends Actor {
   public ActorLambda(double lambda, double gamma, PolicyDistribution policyDistribution, double alpha_u,
       int nbFeatures, Traces prototype) {
     this(lambda, gamma, policyDistribution, Utils.newFilledArray(policyDistribution.nbParameterVectors(), alpha_u),
-         nbFeatures, new ATraces());
+         nbFeatures, prototype);
   }
 
   public ActorLambda(double lambda, double gamma, PolicyDistribution policyDistribution, double[] alpha_u,
@@ -42,7 +42,7 @@ public class ActorLambda extends Actor {
       initEpisode();
       return;
     }
-    RealVector[] gradLog = policyDistribution.getGradLog(x_t, a_t);
+    RealVector[] gradLog = policyDistribution.computeGradLog(a_t);
     for (int i = 0; i < u.length; i++)
       e_u[i].update(gamma * lambda, gradLog[i]);
     updatePolicyParameters(gradLog, delta);

@@ -85,7 +85,7 @@ public class GQ implements Predictor, LinearLearner, EligibilityTraceAlgorithm {
   }
 
   @Override
-  public Traces trace() {
+  public Traces traces() {
     return e;
   }
 }

@@ -1,5 +1,7 @@
 package rlpark.plugin.rltoys.horde.functions;
 
-public interface OutcomeFunction {
+import java.io.Serializable;
+
+public interface OutcomeFunction extends Serializable {
   double outcome();
 }

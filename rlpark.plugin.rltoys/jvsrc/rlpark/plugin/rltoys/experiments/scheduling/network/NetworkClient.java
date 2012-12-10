@@ -14,12 +14,8 @@ public class NetworkClient {
   private final LocalScheduler localScheduler;
   final protected NetworkJobQueue networkJobQueue;
 
-  public NetworkClient(String serverHost, int port, boolean multipleConnectionAttempts) {
-    this(new LocalScheduler(createJobQueue(serverHost, port, multipleConnectionAttempts)));
-  }
-
   public NetworkClient(int nbThread, String serverHost, int port, boolean multipleAttempts) {
-    this(new LocalScheduler(nbThread, createJobQueue(serverHost, port, multipleAttempts)));
+    this(new LocalScheduler(nbThread, createJobQueue(serverHost, port, nbThread, multipleAttempts)));
   }
 
   public NetworkClient(final LocalScheduler localScheduler) {
@@ -27,8 +23,9 @@ public class NetworkClient {
     networkJobQueue = (NetworkJobQueue) localScheduler.queue();
   }
 
-  private static NetworkJobQueue createJobQueue(String serverHost, int port, boolean multipleConnectionAttempts) {
-    return new NetworkJobQueue(serverHost, port, multipleConnectionAttempts);
+  private static NetworkJobQueue createJobQueue(String serverHost, int port, int nbCore,
+      boolean multipleConnectionAttempts) {
+    return new NetworkJobQueue(serverHost, port, nbCore, multipleConnectionAttempts);
   }
 
   private void setMaximumTime(final double wallTime) {
@@ -105,6 +102,10 @@ public class NetworkClient {
     System.out.println("nbCore: " + String.valueOf(nbCore));
   }
 
+  public NetworkJobQueue queue() {
+    return networkJobQueue;
+  }
+
   public static void main(String[] args) {
     if (args.length < 1) {
       System.err.println("Usage: java -jar <jarfile.jar> -t<max time: 30,60,... mins> -c<nb cores> <hostname:port>");
@@ -117,9 +118,5 @@ public class NetworkClient {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  public NetworkJobQueue queue() {
-    return networkJobQueue;
   }
 }

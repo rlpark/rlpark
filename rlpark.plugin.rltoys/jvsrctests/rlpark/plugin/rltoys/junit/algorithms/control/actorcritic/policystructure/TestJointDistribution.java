@@ -22,9 +22,9 @@ public class TestJointDistribution {
     UniformDistribution pi01 = new UniformDistribution(random, new Range(0, 1));
     UniformDistribution pi02 = new UniformDistribution(random, new Range(0, 1));
     JointDistribution jointDistribution = new JointDistribution(new PolicyDistribution[] { pi01, pi02 });
-    Assert.assertEquals(1.0, jointDistribution.pi(null, new ActionArray(.5, .5)), 0);
-    Assert.assertEquals(0.0, jointDistribution.pi(null, new ActionArray(-.5, .5)), 0);
-    Assert.assertEquals(0.0, jointDistribution.pi(null, new ActionArray(.5, -.5)), 0);
+    Assert.assertEquals(1.0, jointDistribution.pi(new ActionArray(.5, .5)), 0);
+    Assert.assertEquals(0.0, jointDistribution.pi(new ActionArray(-.5, .5)), 0);
+    Assert.assertEquals(0.0, jointDistribution.pi(new ActionArray(.5, -.5)), 0);
   }
 
 
@@ -39,9 +39,10 @@ public class TestJointDistribution {
         new IncMeanVarNormalizer() };
     for (int t = 0; t < 10000; t++) {
       final PVector x_t = new PVector(new double[] { 1.0 });
-      ActionArray a_t = jointDistribution.decide(x_t);
-      Assert.assertEquals(4, jointDistribution.getGradLog(x_t, a_t).length);
-      double pi = jointDistribution.pi(x_t, a_t);
+      jointDistribution.update(x_t);
+      ActionArray a_t = jointDistribution.sampleAction();
+      Assert.assertEquals(4, jointDistribution.computeGradLog(a_t).length);
+      double pi = jointDistribution.pi(a_t);
       Assert.assertTrue(pi >= 0 && pi <= 1);
       for (int i = 0; i < normalizer.length; i++)
         normalizer[i].update(a_t.actions[i]);

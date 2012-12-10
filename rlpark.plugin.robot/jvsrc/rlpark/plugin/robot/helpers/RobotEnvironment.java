@@ -26,12 +26,13 @@ public abstract class RobotEnvironment implements RobotLive, Labeled {
   }
 
   public double[] newObsNow() {
-    return newRawObsNow().doubleValues();
+    ObservationVersatileArray rawObs = newRawObsNow();
+    return rawObs != null ? rawObs.doubleValues() : null;
   }
 
   public ObservationVersatileArray newRawObsNow() {
     ObservationVersatileArray newObs = obsSync.newObsNow();
-    if (newObs.last() != null)
+    if (newObs != null)
       lastReceivedObsBuffer = newObs.last();
     return newObs;
   }

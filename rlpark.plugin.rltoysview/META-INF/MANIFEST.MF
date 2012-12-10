@@ -11,6 +11,9 @@ Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
  org.eclipse.ui,
  org.eclipse.core.runtime,
  rlpark.plugin.robot;bundle-version="1.0.0",
- zephyr.plugin.plotting;bundle-version="1.0.0"
+ zephyr.plugin.plotting;bundle-version="1.0.0",
+ zephyr.plugin.junittesting;bundle-version="1.0.0";resolution:=optional,
+ org.junit4;bundle-version="4.8.1";resolution:=optional
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: rlpark.plugin.rltoysview.internal.RLToysViewPlugin
+Export-Package: rlpark.plugin.rltoysview.tests

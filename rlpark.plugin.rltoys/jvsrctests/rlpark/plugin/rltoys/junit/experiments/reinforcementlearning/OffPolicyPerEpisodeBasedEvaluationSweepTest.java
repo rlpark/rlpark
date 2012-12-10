@@ -1,5 +1,7 @@
 package rlpark.plugin.rltoys.junit.experiments.reinforcementlearning;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,11 +26,11 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
                                                                          NbTimeStepsPerEvaluation,
                                                                          NbEpisodePerEvaluation);
     OffPolicyProblemFactory problemFactory = new OffPolicyRLProblemFactoryTest(NbEpisode, NbTimeSteps);
-    testSweep(new OffPolicySweepDescriptor(problemFactory, evaluation));
-    RunInfo infos = checkFile("Problem/Action01", Integer.MAX_VALUE);
-    checkInfos("Problem/Action01", Integer.MAX_VALUE, infos);
-    infos = checkFile("Problem/Action02", Integer.MAX_VALUE);
-    checkInfos("Problem/Action02", Integer.MAX_VALUE, infos);
+    OffPolicySweepDescriptor provider = new OffPolicySweepDescriptor(problemFactory, evaluation);
+    testSweep(provider);
+    List<RunInfo> infosList = checkFile(provider, Integer.MAX_VALUE);
+    checkInfos("Problem/Action01", Integer.MAX_VALUE, infosList.get(0));
+    checkInfos("Problem/Action02", Integer.MAX_VALUE, infosList.get(1));
     Assert.assertTrue(isBehaviourPerformanceChecked());
   }
 

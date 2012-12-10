@@ -2,6 +2,7 @@ package rlpark.plugin.rltoys.math.vector.implementations;
 
 import java.util.Arrays;
 
+import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.DenseVector;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
@@ -105,8 +106,9 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
   }
 
   @Override
-  public void set(double d) {
+  public PVector set(double d) {
     Arrays.fill(data, d);
+    return this;
   }
 
   @Override
@@ -161,6 +163,10 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
 
   @Override
   public PVector addToSelf(double factor, RealVector vect) {
+    if (vect instanceof BinaryVector) {
+      addBinaryToSelf(factor, (BinaryVector) vect);
+      return this;
+    }
     if (vect instanceof SVector) {
       ((SVector) vect).addSelfTo(factor, data);
       return this;
@@ -168,6 +174,13 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
     for (int i = 0; i < vect.getDimension(); i++)
       data[i] += factor * vect.getEntry(i);
     return this;
+  }
+
+  private void addBinaryToSelf(double factor, BinaryVector vect) {
+    int[] activeIndexes = vect.getActiveIndexes();
+    int nbActives = vect.nonZeroElements();
+    for (int i = 0; i < nbActives; i++)
+      data[activeIndexes[i]] += factor;
   }
 
   @Override

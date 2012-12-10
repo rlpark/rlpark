@@ -28,7 +28,7 @@ public class QLearningTest extends MountainCarOnPolicyTest {
       @Override
       protected Predictor createPredictor(Action[] actions, StateToStateAction toStateAction, double nbActiveFeatures,
           int vectorSize) {
-        return new QLearning(actions, 0.1 / nbActiveFeatures, 0.9, 0.0, toStateAction, vectorSize, new ATraces());
+        return new QLearning(actions, 0.1 / nbActiveFeatures, 0.9, 0.0, toStateAction, new ATraces());
       }
     });
   }

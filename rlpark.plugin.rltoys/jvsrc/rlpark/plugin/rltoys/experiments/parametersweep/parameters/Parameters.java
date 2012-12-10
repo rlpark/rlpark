@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Parameters extends AbstractParameters {
   private static final long serialVersionUID = -3022547944186532000L;
+  public static final String ComputationTime = "ComputationTime";
 
   public Parameters(RunInfo infos) {
     super(infos);
@@ -59,5 +60,13 @@ public class Parameters extends AbstractParameters {
         result.add(parameter);
     }
     return result;
+  }
+
+  public void setComputationTimeMillis(long computationTime) {
+    putResult(ComputationTime, computationTime);
+  }
+
+  public long getComputationTimeMillis() {
+    return (long) get(ComputationTime);
   }
 }

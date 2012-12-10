@@ -10,6 +10,7 @@ import java.util.Set;
 
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobQueue;
+import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.ClientInfo;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.MessageJob;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.Messages;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.network.NetworkClassLoader;
@@ -29,9 +30,10 @@ public class NetworkJobQueue implements JobQueue {
   private boolean denyNewJobRequest = false;
   private final LocalQueue localQueue = new LocalQueue();
 
-  public NetworkJobQueue(String serverHostName, int port, boolean multipleConnectionAttempts) {
-    syncSocket = new SyncSocket(connectToServer(serverHostName, port, multipleConnectionAttempts));
-    syncSocket.sendClientName();
+  public NetworkJobQueue(String serverHostName, int port, int nbCore, boolean multipleConnectionAttempts) {
+    Socket socket = connectToServer(serverHostName, port, multipleConnectionAttempts);
+    syncSocket = new SyncSocket(socket);
+    syncSocket.sendClientInfo(new ClientInfo(nbCore));
     classLoader = NetworkClassLoader.newClassLoader(syncSocket);
   }
 

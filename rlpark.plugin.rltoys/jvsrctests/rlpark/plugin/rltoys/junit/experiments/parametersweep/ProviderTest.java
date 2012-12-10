@@ -10,14 +10,15 @@ import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.SweepDescripto
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.FrozenParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.RunInfo;
+import rlpark.plugin.rltoys.experiments.scheduling.interfaces.TimedJob;
 import rlpark.plugin.rltoys.utils.Utils;
 
 public class ProviderTest implements SweepDescriptor, Context {
   private static final String SweepDone = "sweepDone";
-  public static final String ParameterName = "Param";
+  private static final String ParameterName = "Param";
   public static final String ContextPath = "providertest";
 
-  static public class SweepJob implements JobWithParameters {
+  static public class SweepJob implements JobWithParameters, TimedJob {
     private static final long serialVersionUID = 4238136913870025414L;
     private final Parameters parameters;
     private final int counter;
@@ -31,11 +32,17 @@ public class ProviderTest implements SweepDescriptor, Context {
     public void run() {
       parameters.putResult(SweepDone, 1);
       parameters.putResult("counter", counter);
+      parameters.setComputationTimeMillis(2);
     }
 
     @Override
     public Parameters parameters() {
       return parameters;
+    }
+
+    @Override
+    public long getComputationTimeMillis() {
+      return parameters.getComputationTimeMillis();
     }
   }
 
@@ -80,14 +87,22 @@ public class ProviderTest implements SweepDescriptor, Context {
     return parameters.get(SweepDone) == 1;
   }
 
+  public static String[] getParameterLabels(int nbParameters) {
+    String[] labels = new String[nbParameters];
+    for (int i = 0; i < labels.length; i++)
+      labels[i] = ParameterName + i;
+    return labels;
+  }
+
   public static List<Parameters> createParameters(int nbValues, int nbParameters) {
     double[] parameterValues = new double[nbValues];
     for (int i = 0; i < parameterValues.length; i++)
       parameterValues[i] = i;
     RunInfo infos = createRunInfo();
+    String[] parameters = getParameterLabels(nbParameters);
     List<Parameters> result = Utils.asList(new Parameters(infos));
-    for (int i = 0; i < nbParameters; i++)
-      result = Parameters.combine(result, ParameterName + i, parameterValues);
+    for (String parameterLabel : parameters)
+      result = Parameters.combine(result, parameterLabel, parameterValues);
     return result;
   }
 

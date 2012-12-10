@@ -24,7 +24,7 @@ public class UnreliableNetworkClientTest {
     public boolean failed = false;
 
     public UnreliableNetworkQueue(String serverHostName, int port) {
-      super(serverHostName, port, false);
+      super(serverHostName, port, 1, false);
       nbUnreliableQueue++;
     }
 
@@ -60,7 +60,7 @@ public class UnreliableNetworkClientTest {
   @Test(timeout = SchedulerTestsUtils.Timeout)
   public void testServerSchedulerWithMultipleClients() throws IOException {
     ServerScheduler scheduler = new ServerScheduler(SchedulerTestsUtils.Port, 0);
-    testServerScheduler(scheduler, 5000, new Runnable() {
+    testServerScheduler(scheduler, 2000, new Runnable() {
       @Override
       public void run() {
         startUnreliableClients(4, false);

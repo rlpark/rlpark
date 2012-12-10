@@ -6,7 +6,6 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
 import rlpark.plugin.rltoys.problems.pendulum.SwingPendulum;
-import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
@@ -25,21 +24,10 @@ public class SwingPendulumView extends ForegroundCanvasView<SwingPendulum> {
   private double theta_tm1;
 
   @Override
-  public boolean synchronize() {
+  public boolean synchronize(SwingPendulum problem) {
     theta_tm1 = theta_t;
-    theta_t = instance.current().theta();
+    theta_t = problem.theta();
     return true;
-  }
-
-  @Override
-  protected void setLayout() {
-    super.setLayout();
-    String policyName = getName(instance.codeNode());
-    setViewName("SwingPendulum" + (policyName.isEmpty() ? "" : "[" + policyName + "]"), "");
-  }
-
-  private String getName(CodeNode codeNode) {
-    return codeNode.label();
   }
 
   @Override

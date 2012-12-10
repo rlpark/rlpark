@@ -37,7 +37,7 @@
       </view>
       <view
             allowMultiple="true"
-            class="rlpark.plugin.rltoysview.internal.continuousgridworld.ContinuousGridworldView"
+            class="rlpark.plugin.rltoysview.internal.puddleworld.PuddleWorldView"
             icon="icons/continuousfunctionview.png"
             id="zephyr.rlpark.plugin.rltoysview.continuousgridworldview"
             name="Continuous Gridworld"
@@ -71,6 +71,22 @@
             icon="icons/environmentview.png"
             id="zephyr.rlpark.plugin.rltoysview.helicopterview"
             name="Helicopter"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="true"
+            class="rlpark.plugin.rltoysview.internal.maze.MazeView"
+            icon="icons/mazeview.png"
+            id="zephyr.rlpark.plugin.rltoysview.mazeview"
+            name="Maze"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="true"
+            class="rlpark.plugin.rltoysview.internal.vectors.VectorProjectedView"
+            icon="icons/continuousfunctionview.png"
+            id="rlpark.plugin.rltoysview.VectorProjectedView"
+            name="Vector Projected"
             restorable="true">
       </view>
    </extension>
@@ -107,7 +123,7 @@
             viewid="zephyr.rlpark.plugin.rltoysview.vectorbarview">
       </client>
       <client
-            class="rlpark.plugin.rltoysview.internal.continuousgridworld.ContinuousGridworldView$Provider"
+            class="rlpark.plugin.rltoysview.internal.puddleworld.PuddleWorldView$Provider"
             icon="icons/continuousfunctionview.png"
             name="Continuous Gridworld"
             viewid="zephyr.rlpark.plugin.rltoysview.continuousgridworldview">
@@ -125,10 +141,22 @@
             viewid="zephyr.rlpark.plugin.rltoysview.helicopterview">
       </client>
       <client
+            class="rlpark.plugin.rltoysview.internal.maze.MazeView$Provider"
+            icon="icons/mazeview.png"
+            name="Maze View"
+            viewid="zephyr.rlpark.plugin.rltoysview.mazeview">
+      </client>
+      <client
             class="rlpark.plugin.rltoysview.internal.policystructure.PolicyDiscreteActionView$Provider"
             icon="icons/policiesview.png"
             name="Discrete Action Policy"
             viewid="zephyr.rlpark.plugin.rltoysview.discreteactionpolicyview">
+      </client>
+      <client
+            class="rlpark.plugin.rltoysview.internal.vectors.VectorProjectedView$Provider"
+            icon="icons/continuousfunctionview.png"
+            name="Vector Projected"
+            viewid="rlpark.plugin.rltoysview.VectorProjectedView">
       </client>
    </extension>
    <extension

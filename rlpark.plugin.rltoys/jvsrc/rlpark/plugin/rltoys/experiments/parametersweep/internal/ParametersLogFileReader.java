@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +73,7 @@ public class ParametersLogFileReader {
   public List<FrozenParameters> extractParameters(String... parameterLabelsArray) {
     Set<String> parameterLabels = Utils.asSet(parameterLabelsArray);
     List<FrozenParameters> result = new ArrayList<FrozenParameters>();
+    Set<FrozenParameters> alreadyLoaded = new HashSet<FrozenParameters>();
     if (!canRead() || infos == null)
       return result;
     FileInputStream in = null;
@@ -84,8 +86,13 @@ public class ParametersLogFileReader {
         in.close();
         return result;
       }
-      while (reader.ready())
-        result.add(readParameter(parameterLabels, labels, reader));
+      while (reader.ready()) {
+        FrozenParameters parameters = readParameter(parameterLabels, labels, reader);
+        if (alreadyLoaded.contains(parameters))
+          continue;
+        result.add(parameters);
+        alreadyLoaded.add(parameters);
+      }
       in.close();
     } catch (IOException e) {
       e.printStackTrace();

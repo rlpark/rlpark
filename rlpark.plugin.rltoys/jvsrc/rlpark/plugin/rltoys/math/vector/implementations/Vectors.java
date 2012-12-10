@@ -3,7 +3,6 @@ package rlpark.plugin.rltoys.math.vector.implementations;
 
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
-import rlpark.plugin.rltoys.math.vector.SparseVector;
 import rlpark.plugin.rltoys.utils.NotImplemented;
 import rlpark.plugin.rltoys.utils.Utils;
 
@@ -105,7 +104,8 @@ public class Vectors {
     return max;
   }
 
-  public static MutableVector toBinary(RealVector v, MutableVector result) {
+  public static MutableVector toBinary(MutableVector result, RealVector v) {
+    assert result.getDimension() == v.getDimension();
     result.clear();
     if (v instanceof SVector) {
       SVector sv = (SVector) v;
@@ -147,14 +147,20 @@ public class Vectors {
     return result;
   }
 
-  public static MutableVector mapMultiplyToSelf(PVector v, double d, RealVector mask) {
-    if (!(mask instanceof SparseVector))
-      return v.mapMultiplyToSelf(d);
-    SparseVector svector = (SparseVector) mask;
-    int nbActive = svector.nonZeroElements();
-    int[] actives = svector.nonZeroIndexes();
-    for (int i = 0; i < nbActive; i++)
-      v.data[actives[i]] *= d;
-    return v;
+  public static RealVector bufferedCopy(RealVector source, RealVector target) {
+    if (source == null) {
+      if (target != null)
+        if (target instanceof BVector)
+          ((BVector) target).clear();
+        else
+          ((MutableVector) target).clear();
+      return target;
+    }
+    RealVector result = target != null ? target : source.copy();
+    if (result instanceof BVector)
+      ((BVector) result).set((BVector) source);
+    else
+      ((MutableVector) result).set(source);
+    return result;
   }
 }

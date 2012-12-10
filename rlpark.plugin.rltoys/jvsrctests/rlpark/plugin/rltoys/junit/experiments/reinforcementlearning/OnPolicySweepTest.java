@@ -20,8 +20,6 @@ import rlpark.plugin.rltoys.junit.experiments.reinforcementlearning.problemtest.
 import rlpark.plugin.rltoys.utils.Utils;
 
 public class OnPolicySweepTest extends RLSweepTest {
-  private static final String ResultFolderTest = "Problem/Agent";
-
   class OnPolicyTestSweep implements SweepDescriptor {
     private final int nbTimeSteps;
     private final int nbEpisode;
@@ -37,7 +35,7 @@ public class OnPolicySweepTest extends RLSweepTest {
     public List<? extends Context> provideContexts() {
       AgentFactory agentFactory = new RLAgentFactoryTest(divergeAfter, AbstractRLProblemFactoryTest.Action01);
       ProblemFactory problemFactory = new OnPolicyRLProblemFactoryTest(nbEpisode, nbTimeSteps);
-      return Utils.asList(new ContextEvaluation(problemFactory, agentFactory, NbRewardCheckPoint));
+      return Utils.asList(new ContextEvaluation(problemFactory, null, agentFactory, NbRewardCheckPoint));
     }
 
     @Override
@@ -48,31 +46,36 @@ public class OnPolicySweepTest extends RLSweepTest {
 
   @Test
   public void testSweepOneEpisode() {
-    testSweep(new OnPolicyTestSweep(Integer.MAX_VALUE, NbTimeSteps, 1));
-    RunInfo infos = checkFile(ResultFolderTest, Integer.MAX_VALUE);
-    checkInfos(infos, Integer.MAX_VALUE, NbTimeSteps, 1);
+    OnPolicyTestSweep provider = new OnPolicyTestSweep(Integer.MAX_VALUE, NbTimeSteps, 1);
+    testSweep(provider);
+    List<RunInfo> infosList = checkFile(provider, Integer.MAX_VALUE);
+    checkInfos(infosList, Integer.MAX_VALUE, NbTimeSteps, 1);
   }
 
   @Test
   public void testSweepMultipleEpisode() {
-    testSweep(new OnPolicyTestSweep(Integer.MAX_VALUE, NbTimeSteps, NbEpisode));
-    RunInfo infos = checkFile(ResultFolderTest, Integer.MAX_VALUE);
-    checkInfos(infos, Integer.MAX_VALUE, NbTimeSteps, NbEpisode);
+    OnPolicyTestSweep provider = new OnPolicyTestSweep(Integer.MAX_VALUE, NbTimeSteps, NbEpisode);
+    testSweep(provider);
+    List<RunInfo> infosList = checkFile(provider, Integer.MAX_VALUE);
+    checkInfos(infosList, Integer.MAX_VALUE, NbTimeSteps, NbEpisode);
   }
 
   @Test
   public void testSweepWithBadAgent() {
-    testSweep(new OnPolicyTestSweep(50, NbTimeSteps, 1));
-    RunInfo infos = checkFile(ResultFolderTest, 5);
-    checkInfos(infos, 50, NbTimeSteps, 1);
+    OnPolicyTestSweep provider = new OnPolicyTestSweep(50, NbTimeSteps, 1);
+    testSweep(provider);
+    List<RunInfo> infosList = checkFile(provider, 5);
+    checkInfos(infosList, 50, NbTimeSteps, 1);
   }
 
-  private void checkInfos(RunInfo infos, int divergedOnSlice, int nbTimesteps, int nbEpisodes) {
-    Assert.assertEquals(nbTimesteps, (int) (double) infos.get(RLParameters.MaxEpisodeTimeSteps));
-    Assert.assertEquals(nbEpisodes, (int) (double) infos.get(RLParameters.NbEpisode));
-    double expectedReward = expectedReward(infos);
-    for (String label : infos.infoLabels())
-      checkRewardParameter(divergedOnSlice, label, expectedReward, infos.get(label));
+  private void checkInfos(List<RunInfo> infosList, int divergedOnSlice, int nbTimesteps, int nbEpisodes) {
+    for (RunInfo infos : infosList) {
+      Assert.assertEquals(nbTimesteps, (int) (double) infos.get(RLParameters.MaxEpisodeTimeSteps));
+      Assert.assertEquals(nbEpisodes, (int) (double) infos.get(RLParameters.NbEpisode));
+      double expectedReward = expectedReward(infos);
+      for (String label : infos.infoLabels())
+        checkRewardParameter(divergedOnSlice, label, expectedReward, infos.get(label));
+    }
   }
 
   private double expectedReward(RunInfo infos) {

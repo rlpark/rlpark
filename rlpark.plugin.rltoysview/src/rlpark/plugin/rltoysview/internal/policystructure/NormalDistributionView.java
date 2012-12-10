@@ -11,6 +11,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
 import rlpark.plugin.rltoys.algorithms.LinearLearner;
+import rlpark.plugin.rltoys.algorithms.control.actorcritic.onpolicy.AbstractActorCritic;
 import rlpark.plugin.rltoys.algorithms.control.actorcritic.onpolicy.ActorCritic;
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.structures.AbstractNormalDistribution;
 import rlpark.plugin.rltoys.math.History;
@@ -33,10 +34,23 @@ public class NormalDistributionView extends Plot2DView<AbstractNormalDistributio
   static final Class<AbstractNormalDistribution> SupportedClass = AbstractNormalDistribution.class;
 
   public static class Provider extends ClassViewProvider {
-
     public Provider() {
       super(SupportedClass);
     }
+  }
+
+  class ClockListener implements Listener<Clock> {
+    private final AbstractNormalDistribution distribution;
+
+    ClockListener(AbstractNormalDistribution distribution) {
+      this.distribution = distribution;
+    }
+
+    @Override
+    public void listen(Clock eventInfo) {
+      updateData(distribution);
+    }
+
   }
 
   public static final int HistoryLength = 1000;
@@ -44,22 +58,14 @@ public class NormalDistributionView extends Plot2DView<AbstractNormalDistributio
 
   private NormalDistributionDrawer normalDistributionDrawer = null;
   private MinMaxNormalizer tdErrorNormalized = null;
-  private ActorCritic actorCritic = null;
-  private final Listener<Clock> clockListener = new Listener<Clock>() {
-    @Override
-    public void listen(Clock clock) {
-      updateData();
-    }
-  };
+  private AbstractActorCritic actorCritic = null;
+  private Listener<Clock> clockListener;
   protected boolean displayActionFlag;
   private final History actionHistory = new History(HistoryLength);
   private final History tdErrorHistory = new History(HistoryLength);
   private final Data2D data = new Data2D(HistoryLength);
 
-  synchronized protected void updateData() {
-    AbstractNormalDistribution distribution = instance.current();
-    if (distribution == null)
-      return;
+  synchronized protected void updateData(AbstractNormalDistribution distribution) {
     actionHistory.append(distribution.a_t);
     if (actorCritic != null) {
       double delta_t = ((LinearLearner) actorCritic.critic).error();
@@ -89,7 +95,7 @@ public class NormalDistributionView extends Plot2DView<AbstractNormalDistributio
   }
 
   @Override
-  synchronized public boolean synchronize() {
+  synchronized public boolean synchronize(AbstractNormalDistribution current) {
     if (plot.axes().y.transformationValid) {
       actionHistory.toArray(data.xdata);
       tdErrorHistory.toArray(data.ydata);
@@ -131,31 +137,32 @@ public class NormalDistributionView extends Plot2DView<AbstractNormalDistributio
   }
 
   @Override
-  synchronized public void onInstanceSet() {
-    CodeNode codeNode = instance.codeNode();
+  synchronized public void onInstanceSet(Clock clock, AbstractNormalDistribution distribution) {
     tdErrorNormalized = new MinMaxNormalizer(new Range(0, 1));
-    ClassNode actorCriticParentNode = CodeTrees.findParent(codeNode, ActorCritic.class);
+    ClassNode actorCriticParentNode = CodeTrees.findParent(codeNode(), ActorCritic.class);
     actorCritic = actorCriticParentNode != null ? (ActorCritic) actorCriticParentNode.instance() : null;
-    CodeTrees.clockOf(codeNode).onTick.connect(clockListener);
-    normalDistributionDrawer = new NormalDistributionDrawer(plot, instance.current());
-    super.onInstanceSet();
+    clockListener = new ClockListener(distribution);
+    clock.onTick.connect(clockListener);
+    normalDistributionDrawer = new NormalDistributionDrawer(plot, distribution);
+    super.onInstanceSet(clock, distribution);
   }
 
   @Override
-  protected void setLayout() {
-    CodeNode codeNode = instance.codeNode();
-    setViewName(String.format("%s[%s]", instance.current().getClass().getSimpleName(), codeNode.label()), "");
+  protected void setLayout(Clock clock, AbstractNormalDistribution current) {
+    CodeNode codeNode = codeNode();
+    setViewName(String.format("%s[%s]", current.getClass().getSimpleName(), codeNode.label()), "");
   }
 
   @Override
-  synchronized public void onInstanceUnset() {
-    instance.clock().onTick.disconnect(clockListener);
+  synchronized public void onInstanceUnset(Clock clock) {
+    clock.onTick.disconnect(clockListener);
+    clockListener = null;
     tdErrorNormalized = null;
     actorCritic = null;
     actionHistory.reset();
     tdErrorHistory.reset();
     normalDistributionDrawer = null;
-    super.onInstanceUnset();
+    super.onInstanceUnset(clock);
   }
 
   @Override

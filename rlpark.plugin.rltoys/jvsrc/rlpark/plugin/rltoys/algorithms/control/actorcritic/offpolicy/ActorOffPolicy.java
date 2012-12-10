@@ -10,7 +10,7 @@ public interface ActorOffPolicy {
 
   PolicyDistribution policy();
 
-  Action proposeAction(RealVector s);
+  Action proposeAction(RealVector x);
 
   PVector[] actorParameters();
 }

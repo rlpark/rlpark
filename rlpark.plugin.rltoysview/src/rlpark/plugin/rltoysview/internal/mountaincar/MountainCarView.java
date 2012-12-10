@@ -9,6 +9,7 @@ import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;
 import zephyr.ZephyrPlotting;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.canvas.BackgroundImage;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
@@ -32,8 +33,8 @@ public class MountainCarView extends ForegroundCanvasView<MountainCar> {
   private double position;
 
   @Override
-  public boolean synchronize() {
-    TRStep step = instance.current().lastStep();
+  public boolean synchronize(MountainCar current) {
+    TRStep step = current.lastStep();
     if (step == null || step.o_tp1 == null)
       return false;
     position = step.o_tp1[0];
@@ -74,9 +75,8 @@ public class MountainCarView extends ForegroundCanvasView<MountainCar> {
   }
 
   @Override
-  public void onInstanceSet() {
-    super.onInstanceSet();
-    MountainCar problem = instance.current();
+  public void onInstanceSet(Clock clock, MountainCar problem) {
+    super.onInstanceSet(clock, problem);
     Range[] obsRanges = problem.getObservationRanges();
     axes.x.update(obsRanges[0].min());
     axes.x.update(obsRanges[0].max());
@@ -85,8 +85,8 @@ public class MountainCarView extends ForegroundCanvasView<MountainCar> {
   }
 
   @Override
-  public void onInstanceUnset() {
-    super.onInstanceUnset();
+  public void onInstanceUnset(Clock clock) {
+    super.onInstanceUnset(clock);
     axes.x.reset();
     axes.y.reset();
   }

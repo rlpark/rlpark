@@ -6,6 +6,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.views.helpers.BackgroundCanvasView;
 import zephyr.plugin.plotting.internal.actions.CenterPlotAction;
@@ -38,8 +39,8 @@ public class RealVectorBarView extends BackgroundCanvasView<RealVector> implemen
   }
 
   @Override
-  public boolean synchronize() {
-    data = instance.current().accessData();
+  public boolean synchronize(RealVector vector) {
+    data = vector.accessData();
     return true;
   }
 
@@ -69,7 +70,7 @@ public class RealVectorBarView extends BackgroundCanvasView<RealVector> implemen
   }
 
   @Override
-  protected void setLayout() {
+  protected void setLayout(Clock clock, RealVector current) {
   }
 
   @Override

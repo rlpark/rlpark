@@ -1,5 +1,5 @@
 <project name="rlpark" basedir="." default="main">
-	<property name="basedir.zephyr" value="../../zephyr"/>
+	<property name="basedir.zephyr" value="../../../zephyr"/>
 	<property name="basedir.rlpark" value="../../rlpark"/>
 
 	<property name="srcdir.zephyr" value="${basedir.zephyr}/zephyr.plugin.core.api/src"/>
@@ -28,12 +28,12 @@
         <jar destfile="rltoys-client.jar" basedir="${classes.dir}">
         	<include name="zephyr/plugin/core/api/signals/**"/>
         	<include name="zephyr/plugin/core/api/synchronization/**"/>
-        	<include name="rltoys/experiments/scheduling/**"/>
+        	<include name="rlpark/plugin/rltoys/experiments/scheduling/**"/>
 		    <manifest>
 		      <attribute name="Implementation-Vendor" value="Thomas"/>
 		      <attribute name="Implementation-Title" value="RLPark-client"/>
 		      <attribute name="Implementation-Version" value="1.0.0"/>
-		      <attribute name="Main-Class" value="rltoys.experiments.scheduling.network.NetworkClient"/>
+		      <attribute name="Main-Class" value="rlpark.plugin.rltoys.experiments.scheduling.network.NetworkClient"/>
 		    </manifest>
 		</jar>
     </target>

@@ -66,7 +66,7 @@ public abstract class VectorTest {
   public void testDotProductSVector() {
     Assert.assertEquals(16.0, a.dotProduct(newSVector(b)), 0.0);
     BVector cResized = new BVector(a.getDimension());
-    cResized.setOrderedIndexes(c.getActiveIndexes());
+    cResized.set(c);
     Assert.assertEquals(3.0, a.dotProduct(cResized), 0.0);
   }
 
@@ -151,6 +151,12 @@ public abstract class VectorTest {
 
     PVector p1 = new PVector(2.0, 2.0, 2.0, 2.0, 2.0);
     VectorsTestsUtils.assertEquals(new PVector(0, 6.0, 4.0, 0.0, 2.0), p1.ebeMultiplyToSelf(a));
+  }
+
+  @Test
+  public void testEbeMultiplySelf2() {
+    MutableVector a = newVector(0, 1, 0, -2, 0, 3, 0).copyAsMutable();
+    VectorsTestsUtils.assertEquals(new PVector(0, 1, 0, 4, 0, 9, 0), a.ebeMultiplyToSelf(a));
   }
 
   @Test
@@ -240,7 +246,7 @@ public abstract class VectorTest {
   public void testToBinary() {
     MutableVector v = (MutableVector) newVector(1.0, 0.0, -3.0, 0.0, 2.0);
     BVector expected = BVector.toBVector(5, new int[] { 0, 2, 4 });
-    VectorsTestsUtils.assertEquals(expected, Vectors.toBinary(v, newPrototypeVector(5)));
+    VectorsTestsUtils.assertEquals(expected, Vectors.toBinary(newPrototypeVector(5), v));
   }
 
   @Test

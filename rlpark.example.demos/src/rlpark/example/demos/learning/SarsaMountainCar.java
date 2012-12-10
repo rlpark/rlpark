@@ -2,6 +2,7 @@ package rlpark.example.demos.learning;
 
 import java.util.Random;
 
+import rlpark.plugin.rltoys.agents.functions.FunctionProjected2D;
 import rlpark.plugin.rltoys.agents.functions.ValueFunction2D;
 import rlpark.plugin.rltoys.algorithms.control.acting.EpsilonGreedy;
 import rlpark.plugin.rltoys.algorithms.control.sarsa.Sarsa;
@@ -14,6 +15,7 @@ import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -21,7 +23,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 
 @Monitor
 public class SarsaMountainCar implements Runnable {
-  final ValueFunction2D valueFunctionDisplay;
+  final FunctionProjected2D valueFunctionDisplay;
   private final MountainCar problem;
   private final SarsaControl control;
   private final TileCodersNoHashing projector;
@@ -33,6 +35,7 @@ public class SarsaMountainCar implements Runnable {
     projector.addFullTilings(10, 10);
     projector.includeActiveFeature();
     TabularAction toStateAction = new TabularAction(problem.actions(), projector.vectorNorm(), projector.vectorSize());
+    toStateAction.includeActiveFeature();
     double alpha = .15 / projector.vectorNorm();
     double gamma = 0.99;
     double lambda = .3;
@@ -52,7 +55,7 @@ public class SarsaMountainCar implements Runnable {
     while (clock.tick()) {
       BinaryVector x_tp1 = projector.project(step.o_tp1);
       Action action = control.step(x_t, step.a_t, x_tp1, step.r_tp1);
-      x_t = x_tp1;
+      x_t = Vectors.bufferedCopy(x_tp1, x_t);
       if (step.isEpisodeEnding()) {
         System.out.println(String.format("Episode %d: %d steps", nbEpisode, step.time));
         step = problem.initialize();

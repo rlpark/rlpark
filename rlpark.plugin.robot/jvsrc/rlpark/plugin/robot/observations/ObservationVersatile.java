@@ -1,7 +1,9 @@
 package rlpark.plugin.robot.observations;
 
+import rlpark.plugin.rltoys.envio.observations.Observation;
 
-public class ObservationVersatile {
+
+public class ObservationVersatile implements Observation {
   private final long timestamp;
   private final double[] doubleValues;
   private final byte[] byteValues;

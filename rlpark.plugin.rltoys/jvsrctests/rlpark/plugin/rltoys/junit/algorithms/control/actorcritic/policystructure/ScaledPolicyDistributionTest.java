@@ -23,7 +23,7 @@ public class ScaledPolicyDistributionTest {
     private final Random random = new Random(0);
 
     @Override
-    public double pi(RealVector s, Action a) {
+    public double pi(Action a) {
       ActionArray action = (ActionArray) a;
       Assert.assertEquals(1, action.actions.length);
       Assert.assertTrue(policyRange.in(action.actions[0]));
@@ -31,7 +31,7 @@ public class ScaledPolicyDistributionTest {
     }
 
     @Override
-    public Action decide(RealVector s) {
+    public Action sampleAction() {
       return new ActionArray(policyRange.choose(random));
     }
 
@@ -41,7 +41,7 @@ public class ScaledPolicyDistributionTest {
     }
 
     @Override
-    public RealVector[] getGradLog(RealVector x_t, Action a_t) {
+    public RealVector[] computeGradLog(Action a_t) {
       ActionArray action = (ActionArray) a_t;
       Assert.assertEquals(1, action.actions.length);
       Assert.assertTrue(policyRange.in(action.actions[0]));
@@ -51,6 +51,10 @@ public class ScaledPolicyDistributionTest {
     @Override
     public int nbParameterVectors() {
       return 0;
+    }
+
+    @Override
+    public void update(RealVector x) {
     }
   }
 
@@ -64,11 +68,11 @@ public class ScaledPolicyDistributionTest {
         new ScaledPolicyDistribution(pi02, policyRange, actionRanges[1]) };
     JointDistribution scaledPolicy = new JointDistribution(scaledPolicies);
     for (int n = 0; n < 10000; n++) {
-      ActionArray a = scaledPolicy.decide(null);
+      ActionArray a = scaledPolicy.sampleAction();
       for (int a_i = 0; a_i < actionRanges.length; a_i++)
         Assert.assertTrue(actionRanges[a_i].in(a.actions[a_i]));
-      Assert.assertEquals(1.0, scaledPolicy.pi(null, a));
-      scaledPolicy.getGradLog(null, a);
+      Assert.assertEquals(1.0, scaledPolicy.pi(a));
+      scaledPolicy.computeGradLog(a);
     }
   }
 }

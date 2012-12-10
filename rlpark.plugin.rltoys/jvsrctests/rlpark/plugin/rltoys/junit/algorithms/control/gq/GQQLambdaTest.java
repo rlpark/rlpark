@@ -20,11 +20,14 @@ import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoH
 import rlpark.plugin.rltoys.algorithms.traces.AMaxTraces;
 import rlpark.plugin.rltoys.algorithms.traces.RTraces;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
+import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;
 
 public class GQQLambdaTest {
@@ -58,14 +61,15 @@ public class GQQLambdaTest {
     private QLearningControl createQLearning(TileCoders projector, Action[] actions) {
       double alpha = Alpha / projector.vectorNorm();
       TabularAction toStateAction = new TabularAction(actions, projector.vectorNorm(), projector.vectorSize());
-      QLearning qlearning = new QLearning(actions, alpha, Gamma, Lambda, toStateAction, toStateAction.vectorSize(),
-                                          new RTraces());
+      toStateAction.includeActiveFeature();
+      QLearning qlearning = new QLearning(actions, alpha, Gamma, Lambda, toStateAction, new RTraces());
       Greedy acting = new Greedy(qlearning, actions, toStateAction);
       return new QLearningControl(acting, qlearning);
     }
 
     private GreedyGQ createGreedyGQ(Policy behaviourPolicy, TileCoders projector, Action[] actions) {
       TabularAction toStateAction = new TabularAction(actions, projector.vectorNorm(), projector.vectorSize());
+      toStateAction.includeActiveFeature();
       double alpha = Alpha / projector.vectorNorm();
       GQ gq = new GQ(alpha, 0.0, 1 - Gamma, Lambda, toStateAction.vectorSize(), new AMaxTraces(1.0));
       Greedy acting = new Greedy(gq, actions, toStateAction);
@@ -77,9 +81,10 @@ public class GQQLambdaTest {
       if (step.isEpisodeStarting())
         x_t = null;
       BinaryVector x_tp1 = representation.project(step.o_tp1);
-      Action a_tp1 = behaviourPolicy.decide(x_tp1);
+      Action a_tp1 = Policies.decide(behaviourPolicy, x_tp1);
       qlearning.learn(x_t, step.a_t, x_tp1, a_tp1, step.r_tp1);
       greedygq.learn(x_t, step.a_t, x_tp1, a_tp1, step.r_tp1);
+      Assert.assertTrue(Vectors.equals(traces(qlearning), traces(greedygq), 1e-8));
       Assert.assertArrayEquals(weights(qlearning), weights(greedygq), 1e-8);
       x_t = x_tp1;
       return a_tp1;
@@ -94,5 +99,13 @@ public class GQQLambdaTest {
   public void compareGQToQLearning() {
     MountainCar problem = new MountainCar(null);
     new Runner(problem, new Agent(problem), 2, 1000).run();
+  }
+
+  public RealVector traces(GreedyGQ greedygq) {
+    return greedygq.predictor().traces().vect();
+  }
+
+  public RealVector traces(QLearningControl qlearning) {
+    return qlearning.predictor().traces().vect();
   }
 }

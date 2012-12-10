@@ -4,15 +4,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.algorithms.predictions.supervised.K1;
-import rlpark.plugin.rltoys.experiments.testing.predictions.NoisyInputSum;
+import rlpark.plugin.rltoys.experiments.testing.predictions.NoisyInputSumEvaluation;
 
 public class K1Test {
   @Test
   public void testK1() {
-    NoisyInputSum problem = new NoisyInputSum();
-    double error = problem.evaluateLearner(new K1(NoisyInputSum.NbInputs, 0.001));
-    Assert.assertEquals(1.7, error, 0.1);
-    error = problem.evaluateLearner(new K1(NoisyInputSum.NbInputs, 0.01));
+    double error = NoisyInputSumEvaluation.evaluateLearner(new K1(NoisyInputSumEvaluation.NbInputs, 0.001));
+    Assert.assertEquals(1.5, error, 0.1);
+    error = NoisyInputSumEvaluation.evaluateLearner(new K1(NoisyInputSumEvaluation.NbInputs, 0.01));
     Assert.assertEquals(1.0, error, 0.1);
   }
 }

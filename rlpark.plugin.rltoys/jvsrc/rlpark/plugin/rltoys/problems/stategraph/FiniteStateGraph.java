@@ -3,6 +3,7 @@ package rlpark.plugin.rltoys.problems.stategraph;
 import java.io.Serializable;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;
@@ -87,7 +88,7 @@ public abstract class FiniteStateGraph implements Serializable {
       a_tm1 = a_t;
       s_t = s_tm1.nextState(a_tm1);
     }
-    a_t = acting.decide(s_t.v());
+    a_t = Policies.decide(acting, s_t.v());
     double r_t = s_t.reward;
     if (!s_t.hasNextState()) {
       a_t = null;

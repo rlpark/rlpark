@@ -3,6 +3,7 @@ package rlpark.example.demos.learning;
 import java.util.Random;
 
 import rlpark.plugin.rltoys.agents.functions.ValueFunction2D;
+import rlpark.plugin.rltoys.agents.functions.FunctionProjected2D;
 import rlpark.plugin.rltoys.agents.rl.LearnerAgentFA;
 import rlpark.plugin.rltoys.algorithms.control.actorcritic.onpolicy.Actor;
 import rlpark.plugin.rltoys.algorithms.control.actorcritic.onpolicy.AverageRewardActorCritic;
@@ -25,7 +26,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 
 @Monitor
 public class ActorCriticPendulum implements Runnable {
-  final ValueFunction2D valueFunction;
+  final FunctionProjected2D valueFunction;
   double reward;
   private final SwingPendulum problem;
   private final Clock clock = new Clock("ActorCriticPendulum");

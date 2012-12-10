@@ -13,11 +13,11 @@ import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.Scheduler;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.messages.Messages;
 import rlpark.plugin.rltoys.experiments.scheduling.internal.network.SocketClient;
+import rlpark.plugin.rltoys.experiments.scheduling.internal.serverlog.ServerLog;
 import rlpark.plugin.rltoys.experiments.scheduling.queue.LocalQueue;
 import rlpark.plugin.rltoys.experiments.scheduling.schedulers.LocalScheduler;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
-import zephyr.plugin.core.api.synchronization.Chrono;
 
 public class ServerScheduler implements Scheduler {
   static final public double StatPeriod = 3600;
@@ -65,18 +65,9 @@ public class ServerScheduler implements Scheduler {
   }
 
   class JobStatListener implements Listener<JobDoneEvent> {
-    private final Chrono chrono = new Chrono();
-    private double lastChronoValue = 0.0;
-
     @Override
     public void listen(JobDoneEvent eventInfo) {
-      if (chrono.getCurrentChrono() - lastChronoValue < StatPeriod)
-        return;
-      lastChronoValue = chrono.getCurrentChrono();
-      double nbJobPerSecond = localQueue.nbJobsDone() / lastChronoValue;
-      System.out.printf("%f jobs per second. ", nbJobPerSecond);
-      System.out.println();
-      chrono.start();
+      serverLog.jobEvent(eventInfo.done);
     }
   }
 
@@ -92,6 +83,7 @@ public class ServerScheduler implements Scheduler {
   };
   private final AcceptClientsRunnable acceptClientsRunnable;
   protected final LocalQueue localQueue = new LocalQueue();
+  final ServerLog serverLog = new ServerLog();
 
   private final LocalScheduler localScheduler;
   private final Thread serverThread;
@@ -107,31 +99,25 @@ public class ServerScheduler implements Scheduler {
     serverThread = new Thread(acceptClientsRunnable, "AcceptThread");
     serverThread.setDaemon(true);
     localScheduler = nbLocalThread > 0 ? new LocalScheduler(nbLocalThread, localQueue) : null;
+    localQueue.onJobDone().connect(new JobStatListener());
     localQueue.enablePoolFromPending();
   }
 
   synchronized protected void addClient(SocketClient client) {
     clients.add(client);
     client.onClosed.connect(clientClosedListener);
-    printConnectionInfo(client.clientName() + " connected");
+    serverLog.clientEvent(clients, client.clientInfo().hostName + " connected");
     SocketClient.nbJobSendPerRequest(clients.size());
-  }
-
-  protected void printConnectionInfo(String news) {
-    Messages.println(String.format("%s %d client%s.", news, clients.size(), clients.size() > 1 ? "s" : ""));
   }
 
   @Override
   public void waitAll() {
-    JobStatListener listener = new JobStatListener();
-    localQueue.onJobDone().connect(listener);
     LocalQueue.waitAllDone(localQueue);
     if (localScheduler != null) {
       Throwable exceptionOccured = localScheduler.exceptionOccured();
       if (exceptionOccured != null)
         throw new RuntimeException(exceptionOccured);
     }
-    localQueue.onJobDone().disconnect(listener);
   }
 
   @Override
@@ -150,9 +136,9 @@ public class ServerScheduler implements Scheduler {
     Collection<Runnable> pendingJobs = new ArrayList<Runnable>(client.pendingJobs());
     for (Runnable pendingJob : pendingJobs)
       localQueue.requestCancel(pendingJob);
-    printConnectionInfo(String.format("%s disconnected. Canceling %d job%s. Did %d job%s.", client.clientName(),
-                                      pendingJobs.size(), pendingJobs.size() > 1 ? "s" : "", client.nbJobDone(),
-                                      client.nbJobDone() > 1 ? "s" : ""));
+    String message = String.format("%s disconnected. Canceling %d job(s). Did %d job(s).",
+                                   client.clientInfo().hostName, pendingJobs.size(), client.nbJobDone());
+    serverLog.clientEvent(clients, message);
     client.close();
   }
 

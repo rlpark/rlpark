@@ -15,16 +15,21 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 public class NormalDistribution extends AbstractNormalDistribution {
   private static final long serialVersionUID = -4074721193363280217L;
   protected double sigma2;
+  private final double initialMean;
+  private final double initialStddev;
 
   public NormalDistribution(Random random, double mean, double sigma) {
-    super(random, mean, sigma);
+    super(random);
+    initialMean = mean;
+    initialStddev = sigma;
   }
 
   @Override
-  public RealVector[] getGradLog(RealVector x_t, Action a_t) {
-    updateDistributionIFN(x_t);
-    updateSteps(ActionArray.toDouble(a_t));
-    return new RealVector[] { x_t.mapMultiply(meanStep), x_t.mapMultiply(stddevStep) };
+  public RealVector[] computeGradLog(Action a) {
+    updateSteps(ActionArray.toDouble(a));
+    gradMean.set(x).mapMultiplyToSelf(meanStep);
+    gradStddev.set(x).mapMultiplyToSelf(stddevStep);
+    return new RealVector[] { gradMean, gradStddev };
   }
 
   protected void updateSteps(double a) {
@@ -33,10 +38,7 @@ public class NormalDistribution extends AbstractNormalDistribution {
   }
 
   @Override
-  public Action decide(RealVector x_t) {
-    if (x_t == null)
-      return initialize();
-    updateDistributionIFN(x_t);
+  public Action sampleAction() {
     a_t = random.nextGaussian() * stddev + mean;
     if (!Utils.checkValue(a_t))
       return null;
@@ -44,7 +46,7 @@ public class NormalDistribution extends AbstractNormalDistribution {
   }
 
   @Override
-  protected void updateDistribution(RealVector x) {
+  protected void updateDistribution() {
     mean = u_mean.dotProduct(x) + initialMean;
     stddev = Math.exp(u_stddev.dotProduct(x)) * initialStddev + Utils.EPSILON;
     sigma2 = square(stddev);
@@ -65,7 +67,7 @@ public class NormalDistribution extends AbstractNormalDistribution {
   }
 
   @Override
-  public double piMax(RealVector s) {
-    return Math.max(pi(s, new ActionArray(mean)), Utils.EPSILON);
+  public double piMax() {
+    return Math.max(pi(new ActionArray(mean)), Utils.EPSILON);
   }
 }

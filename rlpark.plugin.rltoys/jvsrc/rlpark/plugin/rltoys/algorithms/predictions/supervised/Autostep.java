@@ -2,6 +2,7 @@ package rlpark.plugin.rltoys.algorithms.predictions.supervised;
 
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.filters.Filters;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVectors;
 import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
@@ -40,7 +41,7 @@ public class Autostep implements LearningAlgorithm {
     MutableVector absDeltaXH = pool.newVector(deltaXH);
     Vectors.absToSelf(absDeltaXH);
     MutableVector sparseV = pool.newVector(deltaX.getDimension());
-    Vectors.toBinary(deltaX, sparseV).ebeMultiplyToSelf(v);
+    Vectors.toBinary(sparseV, deltaX).ebeMultiplyToSelf(v);
     MutableVector vUpdate = pool.newVector(absDeltaXH).subtractToSelf(sparseV).ebeMultiplyToSelf(x2)
         .ebeMultiplyToSelf(alphas);
     v.addToSelf(1.0 / Tau, vUpdate);
@@ -50,7 +51,7 @@ public class Autostep implements LearningAlgorithm {
     RealVector x2ByAlphas = pool.newVector(x2).ebeMultiplyToSelf(alphas);
     double sum = Math.max(Vectors.sum(x2ByAlphas), 1);
     if (sum > 1)
-      Vectors.mapMultiplyToSelf(alphas, 1 / sum, x);
+      Filters.mapMultiplyToSelf(alphas, 1 / sum, x);
   }
 
   @Override
