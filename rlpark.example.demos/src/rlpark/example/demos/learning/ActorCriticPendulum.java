@@ -54,7 +54,7 @@ public class ActorCriticPendulum implements Runnable {
     runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {
-        System.out.println(String.format("Episode %d: %f", eventInfo.episode, eventInfo.episodeReward));
+        System.out.println(String.format("Episode %d: %f", eventInfo.nbEpisodeDone, eventInfo.episodeReward));
       }
     });
     Zephyr.advertise(clock, this);

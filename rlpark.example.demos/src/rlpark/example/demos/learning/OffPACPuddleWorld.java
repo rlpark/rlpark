@@ -74,7 +74,7 @@ public class OffPACPuddleWorld implements Runnable {
         episodeInfos[0] = eventInfo.step.time;
         episodeInfos[1] = eventInfo.episodeReward;
         episodeClock.tick();
-        System.out.println(String.format("Episodes %d: %d, %f", eventInfo.episode, eventInfo.step.time,
+        System.out.println(String.format("Episodes %d: %d, %f", eventInfo.nbEpisodeDone, eventInfo.step.time,
                                          eventInfo.episodeReward));
       }
     });

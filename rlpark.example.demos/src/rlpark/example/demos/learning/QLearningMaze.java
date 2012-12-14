@@ -49,7 +49,7 @@ public class QLearningMaze implements Runnable {
     runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {
-        System.out.println(String.format("Episode %d: %d steps", eventInfo.episode, eventInfo.step.time));
+        System.out.println(String.format("Episode %d: %d steps", eventInfo.nbEpisodeDone, eventInfo.step.time));
       }
     });
     while (clock.tick()) {

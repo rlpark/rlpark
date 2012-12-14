@@ -26,7 +26,7 @@ public abstract class MountainCarOnPolicyTest {
   private class PerformanceVerifier implements Listener<RunnerEvent> {
     @Override
     public void listen(RunnerEvent eventInfo) {
-      if (eventInfo.episode < 200)
+      if (eventInfo.nbEpisodeDone < 200)
         return;
       Assert.assertTrue(eventInfo.episodeReward > -300);
     }

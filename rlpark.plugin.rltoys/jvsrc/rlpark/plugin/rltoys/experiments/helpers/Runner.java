@@ -18,13 +18,13 @@ public class Runner implements Serializable, MonitorContainer {
   @SuppressWarnings("serial")
   static public class RunnerEvent implements Serializable {
     public int nbTotalTimeSteps = 0;
-    public int episode = -1;
+    public int nbEpisodeDone = 0;
     public TRStep step = null;
     public double episodeReward = Double.NaN;
 
     @Override
     public String toString() {
-      return String.format("Ep(%d): %s on %d", episode, step, nbTotalTimeSteps);
+      return String.format("Ep(%d): %s on %d", nbEpisodeDone, step, nbTotalTimeSteps);
     }
   }
 
@@ -35,6 +35,7 @@ public class Runner implements Serializable, MonitorContainer {
   private final RLAgent agent;
   @Monitor
   private final RLProblem problem;
+  private Action agentAction = null;
   private final int maxEpisodeTimeSteps;
   private final int nbEpisode;
 
@@ -49,50 +50,40 @@ public class Runner implements Serializable, MonitorContainer {
     this.maxEpisodeTimeSteps = maxEpisodeTimeSteps;
   }
 
-  public RunnerEvent run() {
-    assert runnerEvent.nbTotalTimeSteps == 0;
-    assert runnerEvent.episode == -1;
-    while (hasNext())
-      step();
-    return runnerEvent;
-  }
-
-  public boolean hasNext() {
-    if (runnerEvent.step == null)
-      return nbEpisode != 0;
-    if (!runnerEvent.step.isEpisodeEnding())
-      return true;
-    if (nbEpisode <= 0)
-      return true;
-    return runnerEvent.episode < nbEpisode - 1;
+  public void run() {
+    for (int i = 0; i < nbEpisode; i++)
+      runEpisode();
   }
 
   public void runEpisode() {
     assert runnerEvent.step == null || runnerEvent.step.isEpisodeEnding();
+    int currentEpisode = runnerEvent.nbEpisodeDone;
     do {
       step();
-    } while (!runnerEvent.step.isEpisodeEnding());
+    } while (currentEpisode == runnerEvent.nbEpisodeDone);
+    assert runnerEvent.step.isEpisodeEnding();
   }
 
   public void step() {
-    // This code guarantee that o_tp1 and x_tp1 are non null
-    assert nbEpisode < 0 || runnerEvent.episode < nbEpisode;
+    assert nbEpisode < 0 || runnerEvent.nbEpisodeDone < nbEpisode;
     if (runnerEvent.step == null || runnerEvent.step.isEpisodeEnding()) {
       runnerEvent.step = problem.initialize();
-      assert runnerEvent.step.isEpisodeStarting();
-      runnerEvent.episode += 1;
       runnerEvent.episodeReward = 0;
+      agentAction = null;
+      assert runnerEvent.step.isEpisodeStarting();
+    } else {
+      runnerEvent.step = problem.step(agentAction);
+      if (runnerEvent.step.time == maxEpisodeTimeSteps)
+        runnerEvent.step = problem.forceEndEpisode();
     }
+    agentAction = agent.getAtp1(runnerEvent.step);
+    runnerEvent.episodeReward += runnerEvent.step.r_tp1;
+    runnerEvent.nbTotalTimeSteps++;
     onTimeStep.fire(runnerEvent);
-    Action action = agent.getAtp1(runnerEvent.step);
-    runnerEvent.step = problem.step(action);
-    if (runnerEvent.step.time == maxEpisodeTimeSteps)
-      runnerEvent.step = problem.forceEndEpisode();
-    if (!runnerEvent.step.isEpisodeEnding()) {
-      runnerEvent.episodeReward += runnerEvent.step.r_tp1;
-      runnerEvent.nbTotalTimeSteps++;
-    } else
+    if (runnerEvent.step.isEpisodeEnding()) {
+      runnerEvent.nbEpisodeDone += 1;
       onEpisodeEnd.fire(runnerEvent);
+    }
   }
 
   public RunnerEvent runnerEvent() {

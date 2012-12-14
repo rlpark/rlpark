@@ -45,7 +45,7 @@ public class OffPolicyTests {
         return new OffPolicyAgentDirect(behaviour, learner);
       }
     };
-    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 155);
+    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 165);
   }
 
   @Test

@@ -1,9 +1,11 @@
 package rlpark.plugin.rltoys.experiments.testing.control;
 
+import rlpark.plugin.rltoys.agents.rl.LearnerAgentFA;
 import rlpark.plugin.rltoys.algorithms.control.ControlLearner;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
-import rlpark.plugin.rltoys.experiments.helpers.Evaluations;
+import rlpark.plugin.rltoys.envio.rl.RLAgent;
+import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.problems.pendulum.SwingPendulum;
 
 public class PendulumOnPolicyLearning {
@@ -17,6 +19,9 @@ public class PendulumOnPolicyLearning {
     tileCoders.addFullTilings(10, 10);
     tileCoders.includeActiveFeature();
     ControlLearner control = controlFactory.create(problem, tileCoders.vectorSize(), tileCoders.vectorNorm());
-    return Evaluations.runEpisode(problem, control, tileCoders, 50, 5000);
+    RLAgent agent = new LearnerAgentFA(control, tileCoders);
+    Runner runner = new Runner(problem, agent, 50, 5000);
+    runner.run();
+    return runner.runnerEvent().episodeReward / runner.runnerEvent().step.time;
   }
 }

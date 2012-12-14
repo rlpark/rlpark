@@ -37,7 +37,7 @@ public class EpisodeBasedOffPolicyEvaluation extends AbstractOffPolicyEvaluation
     behaviourRunner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {
-        rewardMonitor.runEvaluationIFN(eventInfo.episode);
+        rewardMonitor.runEvaluationIFN(eventInfo.nbEpisodeDone);
       }
     });
     return rewardMonitor;

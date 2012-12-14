@@ -37,7 +37,7 @@ public class LearningCurveJob implements Runnable, Serializable {
     return new Listener<Runner.RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {
-        loggerRow.writeRow(eventInfo.episode, eventInfo.step.time);
+        loggerRow.writeRow(eventInfo.nbEpisodeDone, eventInfo.step.time);
       }
     };
   }

@@ -36,7 +36,8 @@ public class MountainCarOffPolicyLearning {
     Runner learningRunner = new Runner(problem, agent, 100, 5000);
     learningRunner.run();
     Runner evaluationRunner = new Runner(problem, agent.createEvaluatedAgent(), 1, 5000);
-    return evaluationRunner.run().step.time;
+    evaluationRunner.run();
+    return evaluationRunner.runnerEvent().step.time;
   }
 
   private static final int MemorySize = 1000000;

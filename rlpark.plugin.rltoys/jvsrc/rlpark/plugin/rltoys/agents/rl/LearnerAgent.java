@@ -22,7 +22,7 @@ public class LearnerAgent implements RLAgent {
   public Action getAtp1(TRStep step) {
     if (step.isEpisodeStarting())
       x_t = null;
-    PVector x_tp1 = new PVector(step.o_tp1);
+    RealVector x_tp1 = step.o_tp1 != null ? new PVector(step.o_tp1) : null;
     Action a_tp1 = control.step(x_t, step.a_t, x_tp1, step.r_tp1);
     x_t = x_tp1;
     return a_tp1;

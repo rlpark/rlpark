@@ -15,7 +15,7 @@ public class RewardMonitorEpisode extends AbstractEpisodeRewardMonitor implement
     runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {
-        registerMeasurement(eventInfo.episode, eventInfo.episodeReward, eventInfo.step.time);
+        registerMeasurement(eventInfo.nbEpisodeDone, eventInfo.episodeReward, eventInfo.step.time);
       }
     });
   }

@@ -4,6 +4,7 @@ package rlpark.plugin.rltoys.junit.experiments.tests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import rlpark.plugin.rltoys.junit.experiments.helpers.RunnerTest;
 import rlpark.plugin.rltoys.junit.experiments.offpolicy.OffPolicyTests;
 import rlpark.plugin.rltoys.junit.experiments.parametersweep.ParametersTest;
 import rlpark.plugin.rltoys.junit.experiments.parametersweep.SweepTest;
@@ -16,9 +17,9 @@ import rlpark.plugin.rltoys.junit.experiments.scheduling.UnreliableNetworkClient
 import rlpark.plugin.rltoys.junit.experiments.scheduling.UnreliableNetworkClientWithPoolTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ ParametersTest.class, SchedulerTest.class, JobPoolTest.class, UnreliableNetworkClientTest.class,
-    UnreliableNetworkClientWithPoolTest.class, SweepTest.class, OnPolicySweepTest.class,
-    OffPolicyContinuousEvaluationSweepTest.class, OffPolicyPerEpisodeBasedEvaluationSweepTest.class,
-    OffPolicyTests.class })
+@Suite.SuiteClasses({ RunnerTest.class, ParametersTest.class, SchedulerTest.class, JobPoolTest.class,
+    UnreliableNetworkClientTest.class, UnreliableNetworkClientWithPoolTest.class, SweepTest.class,
+    OnPolicySweepTest.class, OffPolicyContinuousEvaluationSweepTest.class,
+    OffPolicyPerEpisodeBasedEvaluationSweepTest.class, OffPolicyTests.class })
 public class Tests {
 }
