@@ -26,7 +26,8 @@ public class EpisodeTrajectories implements Listener<Clock> {
       trajectories[0] = new Trajectory(MaximumTrajectoryLength);
       nbTrajectory += 1;
     }
-    trajectories[0].append(step.o_t, step.o_tp1);
+    if (!step.isEpisodeEnding() && !step.isEpisodeStarting())
+      trajectories[0].append(step.o_t, step.o_tp1);
   }
 
   public float[][][] copyTrajectories() {

@@ -82,8 +82,6 @@ public class PuddleWorldView extends ForegroundCanvasView<PuddleWorld> {
         continue;
       Point lastPoint = null;
       for (float[] position : trajectory) {
-        if (position == null)
-          break;
         Point point = axes.toG(position[0], position[1]);
         if (lastPoint != null)
           gc.drawLine(lastPoint.x, lastPoint.y, point.x, point.y);
