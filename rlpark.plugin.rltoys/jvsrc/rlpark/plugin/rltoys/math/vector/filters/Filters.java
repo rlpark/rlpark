@@ -97,4 +97,23 @@ public class Filters {
     };
     return operate(mapDivideSelfOperation, filter);
   }
+
+  public static MutableVector ebeDivideToSelf(final MutableVector result, final RealVector arg, RealVector filter) {
+    FilteredOperation mapDivideSelfOperation = new FilteredOperation() {
+      @Override
+      public MutableVector sparseOperate(int[] indexes, int nbActive) {
+        for (int i = 0; i < nbActive; i++) {
+          int entryIndex = indexes[i];
+          result.setEntry(indexes[entryIndex], result.getEntry(entryIndex) / arg.getEntry(entryIndex));
+        }
+        return result;
+      }
+
+      @Override
+      public MutableVector operate() {
+        return result.ebeDivideToSelf(arg);
+      }
+    };
+    return operate(mapDivideSelfOperation, filter);
+  }
 }

@@ -8,6 +8,7 @@ import rlpark.plugin.rltoys.envio.policy.Policy;
 
 @SuppressWarnings("serial")
 public class RandomWalk extends FiniteStateGraph {
+  static private final double Gamma = .9;
   static public final GraphState TL = new GraphState("TL", 0.0);
   static public final GraphState A = new GraphState("A", 0.0);
   static public final GraphState B = new GraphState("B", 0.0);
@@ -68,5 +69,11 @@ public class RandomWalk extends FiniteStateGraph {
   @Override
   public Action[] actions() {
     return new Action[] { Left, Right };
+  }
+
+
+  @Override
+  public double gamma() {
+    return Gamma;
   }
 }

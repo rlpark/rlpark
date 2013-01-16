@@ -1,15 +1,13 @@
 package rlpark.plugin.rltoys.junit.algorithms.predictions.td;
 
 import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
-import rlpark.plugin.rltoys.algorithms.predictions.td.TD;
+import rlpark.plugin.rltoys.algorithms.predictions.td.TDC;
 import rlpark.plugin.rltoys.experiments.testing.predictions.OnPolicyTests;
 
-
-public class TDTest extends OnPolicyTests {
-
+public class TDCTest extends OnPolicyTests {
   @Override
   protected OnPolicyTD newOnPolicyTD(double lambda, double gamma, double vectorNorm, int vectorSize) {
-    return new TD(gamma, .01 / vectorNorm, vectorSize);
+    return new TDC(gamma, 0.01 / vectorNorm, 0.5 / vectorNorm, vectorSize);
   }
 
   @Override
@@ -17,9 +15,8 @@ public class TDTest extends OnPolicyTests {
     return new double[] {};
   }
 
-
   @Override
   protected double precision() {
-    return 0.01;
+    return 0.05;
   }
 }

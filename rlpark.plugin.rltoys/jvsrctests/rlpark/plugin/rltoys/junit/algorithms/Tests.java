@@ -18,8 +18,6 @@ import rlpark.plugin.rltoys.junit.algorithms.control.sarsa.TracesTest;
 import rlpark.plugin.rltoys.junit.algorithms.predictions.supervised.AdalineTest;
 import rlpark.plugin.rltoys.junit.algorithms.predictions.supervised.IDBDTest;
 import rlpark.plugin.rltoys.junit.algorithms.predictions.supervised.K1Test;
-import rlpark.plugin.rltoys.junit.algorithms.predictions.td.GTDLambdaTest;
-import rlpark.plugin.rltoys.junit.algorithms.predictions.td.TDTest;
 import rlpark.plugin.rltoys.junit.algorithms.representations.ObsHistoryTest;
 import rlpark.plugin.rltoys.junit.algorithms.representations.actions.TabularActionTest;
 import rlpark.plugin.rltoys.junit.algorithms.representations.discretizer.avebins.AveBinsTest;
@@ -36,9 +34,9 @@ import rlpark.plugin.rltoys.junit.envio.policy.ConstantPolicyTest;
 @Suite.SuiteClasses({ AveBinsTest.class, AveBinsTreeTest.class, ConstantPolicyTest.class, ObsHistoryTest.class,
     TabularActionTest.class, ScaledPolicyDistributionTest.class, SoftMaxTest.class, TestJointDistribution.class,
     ScaledPolicyDistributionTest.class, TileCodersNoHashingTest.class, TestRBFs.class, ATracesTest.class,
-    TileCodersHashingTest.class, MurmurHash2Test.class, AdalineTest.class, IDBDTest.class, K1Test.class, TDTest.class,
-    GTDLambdaTest.class, SarsaTest.class, QLearningTest.class, GQTest.class, GQOnPolicyTest.class, TracesTest.class,
-    GQQLambdaTest.class, ActorCriticOnPolicyOnStateTest.class, ActorCriticOnPolicyOnPendulumTest.class,
-    ActorCriticMountainCarTest.class, RandomNetworkTest.class })
+    TileCodersHashingTest.class, MurmurHash2Test.class, AdalineTest.class, IDBDTest.class, K1Test.class,
+    rlpark.plugin.rltoys.junit.algorithms.predictions.td.Tests.class, SarsaTest.class, QLearningTest.class,
+    GQTest.class, GQOnPolicyTest.class, TracesTest.class, GQQLambdaTest.class, ActorCriticOnPolicyOnStateTest.class,
+    ActorCriticOnPolicyOnPendulumTest.class, ActorCriticMountainCarTest.class, RandomNetworkTest.class })
 public class Tests {
 }

@@ -12,7 +12,7 @@ import rlpark.plugin.rltoys.problems.stategraph.FiniteStateGraph.StepData;
 public class FiniteStateGraphOnPolicy {
 
   static public interface OnPolicyTDFactory {
-    OnPolicyTD create(int nbFeatures);
+    OnPolicyTD create(double gamma, double lambda, double vectorNorm, int vectorSize);
   }
 
   static public double distanceToSolution(double[] solution, PVector theta) {
@@ -22,26 +22,30 @@ public class FiniteStateGraphOnPolicy {
     return max;
   }
 
-  public static TestingResult<OnPolicyTD> testTD(FiniteStateGraph problem,
-      FiniteStateGraphOnPolicy.OnPolicyTDFactory tdFactory) {
+  public static TestingResult<OnPolicyTD> testTD(double lambda, FiniteStateGraph problem,
+      FiniteStateGraphOnPolicy.OnPolicyTDFactory tdFactory, int nbEpisodeMax, double precision) {
     FSGAgentState agentState = new FSGAgentState(problem);
-    OnPolicyTD td = tdFactory.create(agentState.size);
+    OnPolicyTD td = tdFactory.create(problem.gamma(), lambda, agentState.vectorNorm(), agentState.vectorSize());
     int nbEpisode = 0;
     double[] solution = problem.expectedDiscountedSolution();
     RealVector x_t = null;
-    while (distanceToSolution(solution, td.weights()) > 0.05) {
+    if (FiniteStateGraphOnPolicy.distanceToSolution(solution, td.weights()) <= precision)
+      return new TestingResult<OnPolicyTD>(false, "Precision is incorrect!", td);
+    while (distanceToSolution(solution, td.weights()) > precision) {
       StepData stepData = agentState.step();
       RealVector x_tp1 = agentState.currentFeatureState();
       td.update(x_t, x_tp1, stepData.r_tp1);
       if (stepData.s_tp1 == null) {
         nbEpisode += 1;
-        if (nbEpisode >= 100000)
-          return new TestingResult<OnPolicyTD>(false, "Not learning", td);
+        if (nbEpisode >= nbEpisodeMax) {
+          String message = String.format("Not learning fast enough. Lambda=%f Gamma=%f. Distance to solution=%f",
+                                         lambda, problem.gamma(),
+                                         FiniteStateGraphOnPolicy.distanceToSolution(solution, td.weights()));
+          return new TestingResult<OnPolicyTD>(false, message, td);
+        }
       }
-      x_t = x_tp1 != null ? x_tp1.copy() : null;
+      x_t = stepData.s_tp1 != null ? x_tp1.copy() : null;
     }
-    if (nbEpisode <= 2)
-      return new TestingResult<OnPolicyTD>(false, "That was too quick!", td);
     if (!Vectors.checkValues(td.weights()))
       return new TestingResult<OnPolicyTD>(false, "Weights are incorrect!", td);
     return new TestingResult<OnPolicyTD>(true, null, td);

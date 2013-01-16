@@ -8,8 +8,11 @@ import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.math.vector.pool.VectorPool;
 import rlpark.plugin.rltoys.math.vector.pool.VectorPools;
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Abs;
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Squared;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
+@SuppressWarnings("restriction")
 @Monitor
 public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
   private static final long serialVersionUID = 8687476023177671278L;
@@ -24,6 +27,7 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
   protected final PVector w;
   private final Traces e;
   protected double v_t;
+  @Monitor(wrappers = { Squared.ID, Abs.ID })
   protected double delta_t;
   private double correction;
 

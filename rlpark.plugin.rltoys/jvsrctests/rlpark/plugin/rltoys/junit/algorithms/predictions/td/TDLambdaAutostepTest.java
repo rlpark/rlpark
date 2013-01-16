@@ -1,25 +1,24 @@
 package rlpark.plugin.rltoys.junit.algorithms.predictions.td;
 
 import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
-import rlpark.plugin.rltoys.algorithms.predictions.td.TD;
+import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambdaAutostep;
+import rlpark.plugin.rltoys.algorithms.traces.ATraces;
 import rlpark.plugin.rltoys.experiments.testing.predictions.OnPolicyTests;
 
-
-public class TDTest extends OnPolicyTests {
+public class TDLambdaAutostepTest extends OnPolicyTests {
 
   @Override
   protected OnPolicyTD newOnPolicyTD(double lambda, double gamma, double vectorNorm, int vectorSize) {
-    return new TD(gamma, .01 / vectorNorm, vectorSize);
+    return new TDLambdaAutostep(lambda, gamma, vectorSize, new ATraces());
   }
 
   @Override
   protected double[] lambdaValues() {
-    return new double[] {};
+    return new double[] { .1 };
   }
-
 
   @Override
   protected double precision() {
-    return 0.01;
+    return 0.05;
   }
 }

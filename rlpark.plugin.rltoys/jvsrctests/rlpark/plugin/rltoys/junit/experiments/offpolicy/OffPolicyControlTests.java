@@ -30,7 +30,7 @@ import rlpark.plugin.rltoys.experiments.testing.control.MountainCarOffPolicyLear
 import rlpark.plugin.rltoys.experiments.testing.control.MountainCarOffPolicyLearning.MountainCarEvaluationAgentFactory;
 import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;
 
-public class OffPolicyTests {
+public class OffPolicyControlTests {
   @Test
   public void qlearningOnMountainCarTest() {
     final MountainCarEvaluationAgentFactory factory = new MountainCarEvaluationAgentFactory() {
@@ -111,6 +111,6 @@ public class OffPolicyTests {
   }
 
   public static void main(String[] args) {
-    new OffPolicyTests().qlearningOnMountainCarTest();
+    new OffPolicyControlTests().qlearningOnMountainCarTest();
   }
 }

@@ -50,7 +50,7 @@ public class GQTest {
     @Override
     public OffPolicyLearner createLearner(Action[] actions, StateToStateAction toStateAction, Policy target,
         Policy behaviour) {
-      GQ gq = new GQ(alpha_theta, alpha_w, beta, lambda, toStateAction.vectorSize());
+      GQ gq = new GQ(alpha_theta, alpha_w, beta, lambda, toStateAction.vectorSize() * actions.length);
       return new GreedyGQ(gq, actions, toStateAction, target, behaviour);
     }
 
