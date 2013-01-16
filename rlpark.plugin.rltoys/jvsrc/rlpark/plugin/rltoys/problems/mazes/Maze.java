@@ -105,7 +105,8 @@ public class Maze implements ProblemDiscreteAction {
       @Override
       public RealVector project(double[] obs) {
         projection.clear();
-        projection.setOn((int) (obs[0] * size.y + obs[1]));
+        if (obs != null)
+          projection.setOn((int) (obs[0] * size.y + obs[1]));
         return projection;
       }
     };
