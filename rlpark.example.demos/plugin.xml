@@ -65,7 +65,7 @@
                   style="push">
                <parameter
                      name="zephyr.plugin.core.command.parameter.runnableid"
-                     value="rlpark.example.demos.learning.OffPACContinuousGridworld">
+                     value="rlpark.example.demos.learning.OffPACPuddleworld">
                </parameter>
             </command>
             <command
