@@ -14,7 +14,7 @@ public abstract class OffPolicyTests extends OnPolicyTests {
   @Test
   public void testOffPolicy() {
     for (OffPolicyTDFactory factory : offPolicyTDFactory()) {
-      // testOffPolicy(0.0, 0.2, 0.5, factory);
+      testOffPolicy(0.0, 0.2, 0.5, factory);
       testOffPolicy(0.0, 0.5, 0.2, factory);
     }
   }

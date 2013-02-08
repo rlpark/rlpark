@@ -23,8 +23,8 @@ public abstract class AbstractActorCritic implements ControlLearner {
 
   abstract protected double updateCritic(RealVector x_t, RealVector x_tp1, double r_tp1);
 
-  protected void updateActor(RealVector x_t, Action a_t, double delta) {
-    actor.update(x_t, a_t, delta);
+  protected void updateActor(RealVector x_t, Action a_t, double actorDelta) {
+    actor.update(x_t, a_t, actorDelta);
   }
 
   @Override

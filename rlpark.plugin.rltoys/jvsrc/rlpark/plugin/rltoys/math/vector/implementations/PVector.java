@@ -220,4 +220,12 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
       sum += v;
     return sum;
   }
+
+  public double min() {
+    double min = Double.MAX_VALUE;
+    for (double v : data)
+      if (v < min)
+        min = v;
+    return min;
+  }
 }

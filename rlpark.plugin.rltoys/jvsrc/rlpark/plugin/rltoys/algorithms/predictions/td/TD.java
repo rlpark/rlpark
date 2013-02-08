@@ -30,7 +30,8 @@ public class TD implements OnPolicyTD {
 
   protected double initEpisode() {
     v_t = 0;
-    return 0;
+    delta_t = 0;
+    return delta_t;
   }
 
   @Override

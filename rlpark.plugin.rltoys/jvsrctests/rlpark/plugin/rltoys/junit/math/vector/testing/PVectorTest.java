@@ -37,6 +37,12 @@ public class PVectorTest extends VectorTest {
     VectorsTestsUtils.assertEquals(v, a);
   }
 
+  @Test
+  public void testMin() {
+    Assert.assertEquals(0.0, new PVector(4, 3, 2, 1, 0).min(), 0.0);
+    Assert.assertEquals(-100.0, new PVector(4, -100, 2, 1, 0).min(), 0.0);
+  }
+
   @Override
   protected PVector newPrototypeVector(int size) {
     return new PVector(size);
