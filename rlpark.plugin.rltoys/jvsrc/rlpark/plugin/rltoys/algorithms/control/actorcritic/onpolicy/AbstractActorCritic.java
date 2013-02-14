@@ -42,6 +42,10 @@ public abstract class AbstractActorCritic implements ControlLearner {
     return actor;
   }
 
+  public OnPolicyTD critic() {
+    return critic;
+  }
+
   @Override
   public Action step(RealVector x_t, Action a_t, RealVector x_tp1, double r_tp1) {
     reward = r_tp1;

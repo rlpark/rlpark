@@ -104,8 +104,8 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </license>
 
    <url>
-      <update label="RLPark" url="http://www.ualberta.ca/~degris/rlpark"/>
-      <discovery label="Zephyr" url="http://www.ualberta.ca/~degris/zephyr"/>
+      <update label="RLPark" url="http://people.bordeaux.inria.fr/degris/public/rlpark"/>
+      <discovery label="Zephyr" url="http://people.bordeaux.inria.fr/degris/public/zephyr"/>
    </url>
 
    <includes
