@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -276,5 +277,29 @@ public class Utils {
     double[] result = new double[length];
     Arrays.fill(result, value);
     return result;
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T> T clone(T t) {
+    Method method;
+    try {
+      method = t.getClass().getMethod("clone");
+    } catch (SecurityException e) {
+      e.printStackTrace();
+      return null;
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+      return null;
+    }
+    try {
+      return (T) method.invoke(t);
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
