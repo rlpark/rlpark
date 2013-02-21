@@ -64,11 +64,11 @@ public class MazeView extends ForegroundCanvasView<Maze> {
   private final Colors colors = new Colors();
   private final Function2DBufferedDrawer mazeDrawer = new Function2DBufferedDrawer(colors);
   private final Function2DCanvasDrawer mazeFunctionDrawer = new Function2DCanvasDrawer(colors);
+  private final MazeFunctionAdapter adapter = new MazeFunctionAdapter();
   private MapData layoutData = null;
   private final DisplayGridAction gridAction = new DisplayGridAction();
   private double[] position;
   private boolean[][] endEpisodeData;
-  private MazeFunctionAdapter adapter = new MazeFunctionAdapter();
 
   public MazeView() {
     mazeDrawer.setColorMap(LayoutColorMap);
@@ -151,7 +151,6 @@ public class MazeView extends ForegroundCanvasView<Maze> {
     super.onInstanceUnset(clock);
     layoutData = null;
     endEpisodeData = null;
-    adapter = null;
   }
 
   @Override
@@ -163,16 +162,14 @@ public class MazeView extends ForegroundCanvasView<Maze> {
   public void init(IViewSite site, IMemento memento) throws PartInitException {
     super.init(site, memento);
     gridAction.init(memento);
-    if (adapter != null)
-      adapter.init(memento);
+    adapter.init(memento);
   }
 
   @Override
   public void saveState(IMemento memento) {
     super.saveState(memento);
     gridAction.saveState(memento);
-    if (adapter != null)
-      adapter.saveState(memento);
+    adapter.saveState(memento);
   }
 
   @Override
