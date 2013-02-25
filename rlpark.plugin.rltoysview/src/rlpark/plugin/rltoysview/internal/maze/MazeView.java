@@ -11,15 +11,18 @@ import org.eclipse.ui.PartInitException;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
+import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.problems.mazes.Maze;
 import rlpark.plugin.rltoys.problems.mazes.MazeFunction;
-import rlpark.plugin.rltoys.problems.mazes.MazePolicy;
+import rlpark.plugin.rltoys.problems.mazes.MazeProjector;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.helpers.CodeNodeToInstance;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.plotting.internal.actions.DisplayGridAction;
@@ -30,7 +33,7 @@ import zephyr.plugin.plotting.internal.heatmap.Interval;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
 
 @SuppressWarnings("restriction")
-public class MazeView extends ForegroundCanvasView<Maze> {
+public class MazeView extends ForegroundCanvasView<MazeProjector> implements CodeNodeToInstance<MazeProjector> {
   static final private ColorMapDescriptor LayoutColorMap = new ColorMapDescriptor(new int[][] {
       new int[] { 255, 255, 255 }, new int[] { 0, 0, 0 } }, new int[] { 0, 0, 255 });
   static final private ColorMapDescriptor OverlayColorMap = new ColorMapDescriptor(new int[][] {
@@ -38,7 +41,7 @@ public class MazeView extends ForegroundCanvasView<Maze> {
 
   public static class Provider extends ClassViewProvider {
     public Provider() {
-      super(Maze.class);
+      super(Maze.class, MazeProjector.class);
     }
   }
 
@@ -88,6 +91,7 @@ public class MazeView extends ForegroundCanvasView<Maze> {
   public MazeView() {
     mazeDrawer.setColorMap(LayoutColorMap);
     mazeFunctionDrawer.setColorMap(OverlayColorMap);
+    setNodeToInstance(this);
   }
 
   @Override
@@ -96,8 +100,8 @@ public class MazeView extends ForegroundCanvasView<Maze> {
   }
 
   @Override
-  protected boolean synchronize(Maze maze) {
-    position = maze.lastStep().o_tp1;
+  protected boolean synchronize(MazeProjector mazeProjector) {
+    position = mazeProjector.maze().lastStep().o_tp1;
     valueAdapter.synchronize();
     policyAdapter.synchronize();
     return true;
@@ -181,12 +185,22 @@ public class MazeView extends ForegroundCanvasView<Maze> {
   }
 
   @Override
-  public void onInstanceSet(Clock clock, Maze maze) {
-    super.onInstanceSet(clock, maze);
-    layoutData = createLayoutData(maze);
-    endEpisodeData = maze.endEpisode();
-    valueAdapter.setMazeLayout(layoutData);
-    policyAdapter.setMazeLayout(layoutData, maze.actions());
+  public void onInstanceSet(Clock clock, MazeProjector mazeProjector) {
+    super.onInstanceSet(clock, mazeProjector);
+    layoutData = createLayoutData(mazeProjector.maze());
+    endEpisodeData = mazeProjector.maze().endEpisode();
+    MapData maskData = createMaskData();
+    valueAdapter.setMazeLayout(maskData, mazeProjector);
+    policyAdapter.setMazeLayout(maskData, mazeProjector);
+  }
+
+  public MapData createMaskData() {
+    MapData maskData = layoutData.copy();
+    for (int i = 0; i < endEpisodeData.length; i++)
+      for (int j = 0; j < endEpisodeData[i].length; j++)
+        if (endEpisodeData[i][j])
+          maskData.imageData()[i][j] = (float) 1.0;
+    return maskData;
   }
 
   private MapData createLayoutData(Maze maze) {
@@ -213,7 +227,8 @@ public class MazeView extends ForegroundCanvasView<Maze> {
 
   @Override
   protected boolean isInstanceSupported(Object instance) {
-    return (instance instanceof Maze) || (instance instanceof MazeFunction) || (instance instanceof MazePolicy);
+    return (instance instanceof Maze) || (instance instanceof MazeFunction) || (instance instanceof Policy)
+        || (instance instanceof RealVector);
   }
 
   @Override
@@ -246,9 +261,17 @@ public class MazeView extends ForegroundCanvasView<Maze> {
       super.drop(supported);
       return;
     }
-    if (instance instanceof MazeFunction)
+    if ((instance instanceof MazeFunction) || (instance instanceof RealVector))
       valueAdapter.setLayoutFunction(classNode);
-    if (instance instanceof MazePolicy)
+    if (instance instanceof Policy)
       policyAdapter.setLayoutFunction(classNode);
+  }
+
+  @Override
+  public MazeProjector toInstance(ClassNode node) {
+    Object o = node.instance();
+    if (o instanceof Maze)
+      return new MazeProjector((Maze) o);
+    return (MazeProjector) o;
   }
 }

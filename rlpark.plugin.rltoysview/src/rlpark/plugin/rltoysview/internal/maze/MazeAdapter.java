@@ -1,12 +1,14 @@
 package rlpark.plugin.rltoysview.internal.maze;
 
+import rlpark.plugin.rltoys.problems.mazes.MazeProjector;
 import rlpark.plugin.rltoysview.internal.adapters.FunctionAdapter;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
 import zephyr.plugin.plotting.internal.heatmap.Mask2D;
 
 @SuppressWarnings("restriction")
 public abstract class MazeAdapter<T> extends FunctionAdapter<T> implements Mask2D {
-  protected MapData layoutData;
+  protected MapData maskData;
+  protected MazeProjector mazeProjector;
 
   public MazeAdapter(String mementoLabel) {
     super(mementoLabel);
@@ -14,12 +16,12 @@ public abstract class MazeAdapter<T> extends FunctionAdapter<T> implements Mask2
 
   @Override
   public boolean isMasked(int x, int y) {
-    return layoutData.imageData()[x][y] != 0;
+    return maskData.imageData()[x][y] != 0;
   }
 
   public void synchronize() {
     T function = lockLayoutFunction();
-    if (function != null && layoutData != null)
+    if (function != null && maskData != null)
       synchronize(function);
     unlockLayoutFunction();
   }
@@ -28,11 +30,12 @@ public abstract class MazeAdapter<T> extends FunctionAdapter<T> implements Mask2
 
   @Override
   public boolean layoutFunctionIsSet() {
-    return layoutData != null && super.layoutFunctionIsSet();
+    return maskData != null && super.layoutFunctionIsSet();
   }
 
-  protected void setMazeLayout(MapData layoutData) {
-    this.layoutData = layoutData;
+  protected void setMazeLayout(MapData maskData, MazeProjector mazeProjector) {
+    this.maskData = maskData;
+    this.mazeProjector = mazeProjector;
     findLayoutFunctionNode();
   }
 }

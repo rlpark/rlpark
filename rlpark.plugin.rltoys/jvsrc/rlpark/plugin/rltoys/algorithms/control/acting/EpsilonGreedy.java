@@ -33,7 +33,7 @@ public class EpsilonGreedy extends Greedy {
   }
 
   @Override
-  public EpsilonGreedy clone() throws CloneNotSupportedException {
+  public EpsilonGreedy duplicate() {
     return new EpsilonGreedy(random, actions, Utils.clone(toStateAction), predictor, epsilon);
   }
 }

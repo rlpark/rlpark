@@ -14,7 +14,6 @@ import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
 import rlpark.plugin.rltoys.problems.mazes.Maze;
-import rlpark.plugin.rltoys.problems.mazes.MazePolicy;
 import rlpark.plugin.rltoys.problems.mazes.MazeValueFunction;
 import rlpark.plugin.rltoys.problems.mazes.Mazes;
 import zephyr.plugin.core.api.Zephyr;
@@ -25,7 +24,6 @@ import zephyr.plugin.core.api.synchronization.Clock;
 @Monitor
 public class QLearningMaze implements Runnable {
   final MazeValueFunction mazeValueFunction;
-  final MazePolicy mazePolicy;
   private final Maze problem = Mazes.createBookMaze();
   private final ControlLearner control;
   private final Clock clock = new Clock("QLearningMaze");
@@ -42,7 +40,6 @@ public class QLearningMaze implements Runnable {
     Policy acting = new EpsilonGreedy(new Random(0), problem.actions(), toStateAction, qlearning, epsilon);
     control = new QLearningControl(acting, qlearning);
     mazeValueFunction = new MazeValueFunction(problem, qlearning, toStateAction, qlearning.greedy());
-    mazePolicy = new MazePolicy(problem, projector, qlearning.greedy());
     Zephyr.advertise(clock, this);
   }
 

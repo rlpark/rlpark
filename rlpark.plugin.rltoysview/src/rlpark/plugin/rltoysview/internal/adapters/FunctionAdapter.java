@@ -9,6 +9,7 @@ import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.internal.ZephyrSync;
+import zephyr.plugin.core.internal.helpers.CodeNodeToInstance;
 import zephyr.plugin.core.utils.Eclipse;
 
 @SuppressWarnings("restriction")
@@ -17,6 +18,7 @@ abstract public class FunctionAdapter<T> {
   private T layoutFunction;
   private final Semaphore semaphore = new Semaphore(1);
   private ClassNode classNode;
+  private CodeNodeToInstance<T> toInstance = new CodeNodeToInstance.Default<T>();
   private final String mementoLabel;
   private String[] loadedPath;
 
@@ -38,15 +40,18 @@ abstract public class FunctionAdapter<T> {
     return layoutFunction;
   }
 
+  public void setCodeNodeToInstance(CodeNodeToInstance<T> toInstance) {
+    this.toInstance = toInstance;
+  }
+
   public void unlockLayoutFunction() {
     semaphore.release();
   }
 
-  @SuppressWarnings("unchecked")
   public void setLayoutFunction(ClassNode classNode) {
     this.classNode = classNode;
     lockLayoutFunction();
-    this.layoutFunction = (T) classNode.instance();
+    this.layoutFunction = toInstance.toInstance(classNode);
     layoutFunctionSet.fire(classNode);
     unlockLayoutFunction();
   }
