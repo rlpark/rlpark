@@ -1,6 +1,7 @@
 package rlpark.plugin.rltoys.math.normalization;
 
 import rlpark.plugin.rltoys.math.ranges.Range;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class MinMaxNormalizer implements Normalizer {
   private static final long serialVersionUID = 4495161964136798707L;
@@ -8,6 +9,7 @@ public class MinMaxNormalizer implements Normalizer {
   public final static double MAX = 1;
   private int nbUpdate = 0;
   private final Range targetRange;
+  @Monitor
   private final Range valueRange = new Range();
 
   public MinMaxNormalizer() {

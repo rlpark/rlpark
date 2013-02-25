@@ -9,9 +9,13 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
+import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.mazes.Maze;
 import rlpark.plugin.rltoys.problems.mazes.MazeFunction;
+import rlpark.plugin.rltoys.problems.mazes.MazePolicy;
+import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -39,9 +43,8 @@ public class MazeView extends ForegroundCanvasView<Maze> {
   }
 
   static class PosToPix {
-    final int size;
-    private final float pixelSizeX;
-    private final float pixelSizeY;
+    final float pixelSizeX;
+    final float pixelSizeY;
     private final int height;
 
     PosToPix(GC gc, MapData data) {
@@ -49,22 +52,34 @@ public class MazeView extends ForegroundCanvasView<Maze> {
       pixelSizeX = (float) clipping.width / data.resolutionX;
       height = clipping.height;
       pixelSizeY = (float) height / data.resolutionY;
-      size = (int) Math.max(1, Math.min(pixelSizeX / 2, pixelSizeY / 2));
     }
 
     int toX(int i) {
-      return (int) (i * pixelSizeX + (pixelSizeX - size) / 2);
+      return toX(i, 0);
+    }
+
+    int toX(int i, int offset) {
+      return (int) (i * pixelSizeX + (pixelSizeX - offset) / 2);
     }
 
     int toY(int j) {
-      return (int) (height - ((j + 1) * pixelSizeY - (pixelSizeY - size) / 2));
+      return toY(j, 0);
+    }
+
+    int toY(int j, int offset) {
+      return (int) (height - ((j + 1) * pixelSizeY - (pixelSizeY - offset) / 2));
+    }
+
+    int halfSize() {
+      return Math.max(1, (int) (Math.min(pixelSizeX, pixelSizeY) / 2));
     }
   }
 
   private final Colors colors = new Colors();
   private final Function2DBufferedDrawer mazeDrawer = new Function2DBufferedDrawer(colors);
   private final Function2DCanvasDrawer mazeFunctionDrawer = new Function2DCanvasDrawer(colors);
-  private final MazeFunctionAdapter adapter = new MazeFunctionAdapter();
+  private final MazeFunctionAdapter valueAdapter = new MazeFunctionAdapter();
+  private final MazePolicyAdapter policyAdapter = new MazePolicyAdapter();
   private MapData layoutData = null;
   private final DisplayGridAction gridAction = new DisplayGridAction();
   private double[] position;
@@ -83,7 +98,8 @@ public class MazeView extends ForegroundCanvasView<Maze> {
   @Override
   protected boolean synchronize(Maze maze) {
     position = maze.lastStep().o_tp1;
-    adapter.synchronize();
+    valueAdapter.synchronize();
+    policyAdapter.synchronize();
     return true;
   }
 
@@ -95,24 +111,64 @@ public class MazeView extends ForegroundCanvasView<Maze> {
     if (layoutData == null)
       return;
     mazeDrawer.paint(gc, canvas, layoutData, false);
-    if (adapter.layoutFunctionIsSet())
-      mazeFunctionDrawer.paint(gc, canvas, adapter.functionData(), adapter);
+    if (valueAdapter.layoutFunctionIsSet())
+      mazeFunctionDrawer.paint(gc, canvas, valueAdapter.functionData(), valueAdapter);
     if (gridAction.drawGrid())
       mazeDrawer.paintGrid(gc, canvas, layoutData);
+    PosToPix ptp = new PosToPix(gc, layoutData);
+    if (policyAdapter.layoutFunctionIsSet())
+      drawPolicy(gc, ptp);
     if (endEpisodeData != null)
-      drawEndPositions(gc);
+      drawEndPositions(gc, ptp);
     if (position != null)
       drawPosition(gc, position);
   }
 
-  private void drawEndPositions(GC gc) {
+  private void drawPolicy(GC gc, PosToPix ptp) {
+    gc.setForeground(colors.color(gc, Colors.COLOR_DARK_RED));
+    gc.setBackground(colors.color(gc, Colors.COLOR_DARK_RED));
+    int halfSize = ptp.halfSize();
+    gc.setLineWidth(Math.min(ZephyrPlotting.preferredLineWidth(), halfSize / 4));
+    PolicyData policyData = policyAdapter.policyData();
+    Action[] actions = policyData.actions();
+    for (int i = 0; i < policyData.resolutionX; i++)
+      for (int j = 0; j < policyData.resolutionY; j++) {
+        if (policyAdapter.isMasked(i, j))
+          continue;
+        double[] probs = policyData.probabilities(i, j);
+        for (int a = 0; a < probs.length; a++) {
+          double length = halfSize * probs[a];
+          drawAction(gc, ptp.toX(i, 0), ptp.toY(j, 0), length, ((ActionArray) actions[a]).actions);
+        }
+      }
+  }
+
+  private void drawAction(GC gc, int x, int y, double length, double[] action) {
+    if (((int) length) == 0)
+      return;
+    if (action[0] + action[1] == 0) {
+      gc.drawOval((int) (x - length / 2), (int) (y - length / 2), (int) length, (int) length);
+      return;
+    }
+    int tx = (int) (x + length * action[0]);
+    int ty = (int) (y + length * -action[1]);
+    gc.drawLine(x, y, tx, ty);
+    double arrowFactor = .2;
+    double arrowLength = length * arrowFactor;
+    gc.drawLine(tx, ty, (int) (action[1] * arrowLength + (x + tx) / 2.0),
+                (int) (action[0] * arrowLength + (y + ty) / 2.0));
+    gc.drawLine(tx, ty, (int) (-action[1] * arrowLength + (x + tx) / 2.0),
+                (int) (-action[0] * arrowLength + (y + ty) / 2.0));
+  }
+
+  private void drawEndPositions(GC gc, PosToPix ptp) {
     gc.setBackground(colors.color(gc, Colors.COLOR_LIGHT_BLUE));
-    PosToPix ptp = new PosToPix(gc, layoutData);
+    int offset = ptp.halfSize();
     for (int i = 0; i < endEpisodeData.length; i++) {
       for (int j = 0; j < endEpisodeData[i].length; j++) {
         if (!endEpisodeData[i][j])
           continue;
-        gc.fillRectangle(ptp.toX(i), ptp.toY(j), ptp.size, ptp.size);
+        gc.fillRectangle(ptp.toX(i, offset), ptp.toY(j, offset), offset, offset);
       }
     }
   }
@@ -120,7 +176,8 @@ public class MazeView extends ForegroundCanvasView<Maze> {
   private void drawPosition(GC gc, double[] position) {
     gc.setBackground(colors.color(gc, mazeDrawer.spriteColor()));
     PosToPix ptp = new PosToPix(gc, layoutData);
-    gc.fillOval(ptp.toX((int) position[0]), ptp.toY((int) position[1]), ptp.size, ptp.size);
+    int offset = ptp.halfSize();
+    gc.fillOval(ptp.toX((int) position[0], offset), ptp.toY((int) position[1], offset), offset, offset);
   }
 
   @Override
@@ -128,7 +185,8 @@ public class MazeView extends ForegroundCanvasView<Maze> {
     super.onInstanceSet(clock, maze);
     layoutData = createLayoutData(maze);
     endEpisodeData = maze.endEpisode();
-    adapter.setMazeLayout(layoutData);
+    valueAdapter.setMazeLayout(layoutData);
+    policyAdapter.setMazeLayout(layoutData, maze.actions());
   }
 
   private MapData createLayoutData(Maze maze) {
@@ -155,21 +213,23 @@ public class MazeView extends ForegroundCanvasView<Maze> {
 
   @Override
   protected boolean isInstanceSupported(Object instance) {
-    return (instance instanceof Maze) || (instance instanceof MazeFunction);
+    return (instance instanceof Maze) || (instance instanceof MazeFunction) || (instance instanceof MazePolicy);
   }
 
   @Override
   public void init(IViewSite site, IMemento memento) throws PartInitException {
     super.init(site, memento);
     gridAction.init(memento);
-    adapter.init(memento);
+    valueAdapter.init(memento);
+    policyAdapter.init(memento);
   }
 
   @Override
   public void saveState(IMemento memento) {
     super.saveState(memento);
     gridAction.saveState(memento);
-    adapter.saveState(memento);
+    valueAdapter.saveState(memento);
+    policyAdapter.saveState(memento);
   }
 
   @Override
@@ -187,6 +247,8 @@ public class MazeView extends ForegroundCanvasView<Maze> {
       return;
     }
     if (instance instanceof MazeFunction)
-      adapter.setLayoutFunction(classNode);
+      valueAdapter.setLayoutFunction(classNode);
+    if (instance instanceof MazePolicy)
+      policyAdapter.setLayoutFunction(classNode);
   }
 }

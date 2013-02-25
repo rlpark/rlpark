@@ -40,7 +40,7 @@ public class Runner implements Serializable, MonitorContainer {
   private final int nbEpisode;
 
   public Runner(RLProblem problem, RLAgent agent) {
-    this(problem, agent, 1, -1);
+    this(problem, agent, -1, -1);
   }
 
   public Runner(RLProblem environment, RLAgent agent, int nbEpisode, int maxEpisodeTimeSteps) {
