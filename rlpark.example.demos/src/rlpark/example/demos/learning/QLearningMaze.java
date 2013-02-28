@@ -13,6 +13,7 @@ import rlpark.plugin.rltoys.algorithms.traces.RTraces;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.problems.mazes.Maze;
 import rlpark.plugin.rltoys.problems.mazes.MazeValueFunction;
 import rlpark.plugin.rltoys.problems.mazes.Mazes;
@@ -28,24 +29,28 @@ public class QLearningMaze implements Runnable {
   private final ControlLearner control;
   private final Clock clock = new Clock("QLearningMaze");
   private final Projector projector;
+  private final PVector occupancy;
+  private final LearnerAgentFA agent;
 
   public QLearningMaze() {
     projector = problem.getMarkovProjector();
+    occupancy = new PVector(projector.vectorSize());
     TabularAction toStateAction = new TabularAction(problem.actions(), projector.vectorNorm(), projector.vectorSize());
     double alpha = .15 / projector.vectorNorm();
     double gamma = 1.0;
-    double lambda = 0;
+    double lambda = 0.6;
     QLearning qlearning = new QLearning(problem.actions(), alpha, gamma, lambda, toStateAction, new RTraces());
-    double epsilon = 0.01;
+    double epsilon = 0.3;
     Policy acting = new EpsilonGreedy(new Random(0), problem.actions(), toStateAction, qlearning, epsilon);
     control = new QLearningControl(acting, qlearning);
+    agent = new LearnerAgentFA(control, projector);
     mazeValueFunction = new MazeValueFunction(problem, qlearning, toStateAction, qlearning.greedy());
     Zephyr.advertise(clock, this);
   }
 
   @Override
   public void run() {
-    Runner runner = new Runner(problem, new LearnerAgentFA(control, projector));
+    Runner runner = new Runner(problem, agent);
     runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {
@@ -54,6 +59,7 @@ public class QLearningMaze implements Runnable {
     });
     while (clock.tick()) {
       runner.step();
+      occupancy.addToSelf(agent.lastState());
     }
   }
 
