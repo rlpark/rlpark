@@ -44,4 +44,12 @@ public class IDBD implements LearningAlgorithm {
   public double predict(RealVector x) {
     return weights.dotProduct(x);
   }
+
+  public RealVector alphas() {
+    return alphas;
+  }
+
+  public RealVector h() {
+    return hs;
+  }
 }

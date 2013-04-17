@@ -24,10 +24,10 @@ public class Actor implements Serializable {
   }
 
   public Actor(PolicyDistribution policyDistribution, double[] alpha_u, int nbFeatures) {
-    this(policyDistribution.createParameters(nbFeatures), policyDistribution, alpha_u, nbFeatures);
+    this(policyDistribution.createParameters(nbFeatures), policyDistribution, alpha_u);
   }
 
-  public Actor(PVector[] policyParameters, PolicyDistribution policyDistribution, double[] alpha_u, int nbFeatures) {
+  public Actor(PVector[] policyParameters, PolicyDistribution policyDistribution, double[] alpha_u) {
     this.policyDistribution = policyDistribution;
     this.alpha_u = alpha_u;
     u = policyParameters;
@@ -52,7 +52,7 @@ public class Actor implements Serializable {
     return result;
   }
 
-  public PVector[] parameters() {
+  public PVector[] actorParameters() {
     return u;
   }
 
