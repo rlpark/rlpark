@@ -52,7 +52,7 @@ public class GQ implements Predictor, LinearLearner, EligibilityTraceAlgorithm {
     delta_t = r_tp1 + beta_tp1 * z_tp1 + (1 - beta_tp1) * v.dotProduct(x_bar_tp1) - v.dotProduct(x_t);
     e.update((1 - beta_tp1) * lambda_t * rho_t, x_t);
     MutableVector delta_e = pool.newVector(e.vect()).mapMultiplyToSelf(delta_t);
-    MutableVector tdCorrection = pool.newVector(v.size);
+    MutableVector tdCorrection = pool.newVector();
     if (x_bar_tp1 != null)
       tdCorrection.set(x_bar_tp1).mapMultiplyToSelf((1 - beta_tp1) * (1 - lambda_t) * e.vect().dotProduct(w));
     v.addToSelf(alpha_v, pool.newVector(delta_e).subtractToSelf(tdCorrection));

@@ -20,11 +20,11 @@ public class ExpectedSarsaControl extends SarsaControl {
 
   @Override
   public Action step(RealVector x_t, Action a_t, RealVector x_tp1, double r_tp1) {
-    VectorPool pool = VectorPools.pool(x_tp1);
     acting.update(x_tp1);
     Action a_tp1 = acting.sampleAction();
     RealVector xa_tp1 = null;
-    MutableVector phi_bar_tp1 = pool.newVector(sarsa.theta.size);
+    VectorPool pool = VectorPools.pool(x_tp1, sarsa.theta.size);
+    MutableVector phi_bar_tp1 = pool.newVector();
     if (x_tp1 != null) {
       for (Action a : actions) {
         double pi = acting.pi(a);

@@ -40,7 +40,7 @@ public class Autostep implements LearningAlgorithm {
     MutableVector deltaXH = pool.newVector(deltaX).ebeMultiplyToSelf(h);
     MutableVector absDeltaXH = pool.newVector(deltaXH);
     Vectors.absToSelf(absDeltaXH);
-    MutableVector sparseV = pool.newVector(deltaX.getDimension());
+    MutableVector sparseV = pool.newVector();
     Vectors.toBinary(sparseV, deltaX).ebeMultiplyToSelf(v);
     MutableVector vUpdate = pool.newVector(absDeltaXH).subtractToSelf(sparseV).ebeMultiplyToSelf(x2)
         .ebeMultiplyToSelf(alphas);
