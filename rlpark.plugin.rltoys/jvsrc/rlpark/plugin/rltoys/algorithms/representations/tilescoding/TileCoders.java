@@ -116,4 +116,8 @@ public abstract class TileCoders implements Projector {
   public DiscretizerFactory discretizerFactory() {
     return discretizerFactory;
   }
+
+  public List<TileCoder> tileCoders() {
+    return tileCoders;
+  }
 }
