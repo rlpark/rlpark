@@ -16,10 +16,7 @@ public class BoundedPartitionFactory extends AbstractPartitionFactory {
     @Override
     public int discretize(double input) {
       double boundedInput = Math.min(Math.max(input, min), max);
-      double n = (boundedInput - min) / intervalWidth;
-      if (n < 0)
-        n += ((int) (-n / resolution) + 1) * resolution;
-      return (int) (n % resolution);
+      return (int) ((boundedInput - min) / intervalWidth % resolution);
     }
   }
 

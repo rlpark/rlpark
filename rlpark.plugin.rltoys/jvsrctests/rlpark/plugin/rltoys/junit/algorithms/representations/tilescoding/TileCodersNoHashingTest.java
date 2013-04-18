@@ -11,12 +11,31 @@ import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
 import rlpark.plugin.rltoys.junit.math.vector.testing.VectorsTestsUtils;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
+import rlpark.plugin.rltoys.math.vector.implementations.BVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 
 
 public class TileCodersNoHashingTest {
   interface TileCodersFactory {
     TileCoders create(int nbInputs, double min, double max);
+  }
+
+  static private BVector vect(int size, int... orderedIndexes) {
+    return BVector.toBVector(size, orderedIndexes);
+  }
+
+  @Test
+  public void testTileCodersDim1() {
+    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(-1, 1, 1), 1);
+    coders.addIndependentTilings(2, 3);
+    Assert.assertEquals(6, coders.vectorSize());
+    Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
+    VectorsTestsUtils.assertEquals(vect(6, 1, 2 + 0, 4 + 0), coders.project(new double[] { 0.0 }));
+    VectorsTestsUtils.assertEquals(vect(6, 0, 2 + 1, 4 + 1), coders.project(new double[] { -0.9 }));
+    VectorsTestsUtils.assertEquals(vect(6, 1, 2 + 1, 4 + 1), coders.project(new double[] { 0.9 }));
+    VectorsTestsUtils.assertEquals(vect(6, 0, 2 + 0, 4 + 0), coders.project(new double[] { -0.1 }));
+    VectorsTestsUtils.assertEquals(vect(6, 0, 2 + 0, 4 + 1), coders.project(new double[] { -0.5 }));
+    VectorsTestsUtils.assertEquals(vect(6, 1, 2 + 1, 4 + 0), coders.project(new double[] { 0.5 }));
   }
 
   @Test

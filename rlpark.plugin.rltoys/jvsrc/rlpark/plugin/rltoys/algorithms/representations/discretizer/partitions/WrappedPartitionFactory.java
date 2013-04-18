@@ -15,10 +15,11 @@ public class WrappedPartitionFactory extends AbstractPartitionFactory {
 
     @Override
     public int discretize(double input) {
-      double n = (input - min) / intervalWidth;
-      if (n < 0)
-        n += ((int) (-n / resolution) + 1) * resolution;
-      return (int) (n % resolution);
+      double diff = input - min;
+      if (diff < 0)
+        diff += (Math.ceil(diff / intervalWidth) + 1) * (max - min);
+      assert diff >= 0;
+      return (int) ((diff / intervalWidth) % resolution);
     }
   }
 
