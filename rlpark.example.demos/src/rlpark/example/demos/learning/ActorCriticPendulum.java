@@ -12,7 +12,7 @@ import rlpark.plugin.rltoys.algorithms.functions.policydistributions.helpers.Sca
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.structures.NormalDistributionScaled;
 import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
 import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambda;
-import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
@@ -37,7 +37,7 @@ public class ActorCriticPendulum implements Runnable {
     Random random = new Random(0);
     problem = new SwingPendulum(null, false);
     TileCodersNoHashing tileCoders = new TileCodersNoHashing(problem.getObservationRanges());
-    ((PartitionFactory) tileCoders.discretizerFactory()).setRandom(random, .2);
+    ((AbstractPartitionFactory) tileCoders.discretizerFactory()).setRandom(random, .2);
     tileCoders.addFullTilings(10, 10);
     double gamma = 1.0;
     double lambda = .5;

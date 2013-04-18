@@ -6,7 +6,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.WrappedPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersHashing;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.ColisionDetection;
@@ -44,7 +45,7 @@ public class TileCodersHashingTest {
     TileCodersNoHashingTest.checkFeatureActivationFrequency(new TileCodersFactory() {
       @Override
       public TileCoders create(int nbInputs, double min, double max) {
-        PartitionFactory discretizerFactory = new PartitionFactory(true, 0, 1, nbInputs);
+        AbstractPartitionFactory discretizerFactory = new WrappedPartitionFactory(0, 1, nbInputs);
         discretizerFactory.setRandom(new Random(0), 0.1);
         TileCoders coders = new TileCodersHashing(new UNH(new Random(0), memorySize), discretizerFactory, nbInputs);
         return coders;
@@ -55,7 +56,7 @@ public class TileCodersHashingTest {
   @Test
   public void testCollisionCounting() {
     final ColisionDetection hashing = new ColisionDetection(new UNH(new Random(0), 2));
-    TileCoders tileCoders = new TileCodersHashing(hashing, new PartitionFactory(true, 0, 1, 2), 2);
+    TileCoders tileCoders = new TileCodersHashing(hashing, new WrappedPartitionFactory(0, 1, 2), 2);
     tileCoders.addFullTilings(2, 1);
     int nbSamples = 10000;
     Random random = new Random(0);
@@ -70,7 +71,7 @@ public class TileCodersHashingTest {
     int missingTiles = TileCodersNoHashingTest.checkFeatureActivationFrequency(new TileCodersFactory() {
       @Override
       public TileCoders create(int nbInputs, double min, double max) {
-        PartitionFactory discretizerFactory = new PartitionFactory(true, 0, 1, nbInputs);
+        AbstractPartitionFactory discretizerFactory = new WrappedPartitionFactory(0, 1, nbInputs);
         discretizerFactory.setRandom(new Random(0), 0.1);
         TileCoders coders = new TileCodersHashing(hashing, discretizerFactory, nbInputs);
         return coders;
@@ -85,7 +86,7 @@ public class TileCodersHashingTest {
     int missingTiles = TileCodersNoHashingTest.checkFeatureActivationFrequency(new TileCodersFactory() {
       @Override
       public TileCoders create(int nbInputs, double min, double max) {
-        return new TileCodersHashing(hashing, new PartitionFactory(true, 0, 1, nbInputs), nbInputs);
+        return new TileCodersHashing(hashing, new WrappedPartitionFactory(0, 1, nbInputs), nbInputs);
       }
     });
     Assert.assertTrue(hashing.nbCollisions() >= missingTiles);
@@ -97,7 +98,7 @@ public class TileCodersHashingTest {
     int missingTiles = TileCodersNoHashingTest.checkFeatureActivationFrequency(new TileCodersFactory() {
       @Override
       public TileCoders create(int nbInputs, double min, double max) {
-        return new TileCodersHashing(hashing, new PartitionFactory(true, 0, 1, nbInputs), nbInputs);
+        return new TileCodersHashing(hashing, new WrappedPartitionFactory(0, 1, nbInputs), nbInputs);
       }
     });
     Assert.assertTrue(hashing.nbCollisions() >= missingTiles);
