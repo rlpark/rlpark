@@ -5,7 +5,7 @@ import rlpark.plugin.rltoys.math.vector.RealVector;
 
 
 public interface VectorPool {
-  MutableVector newVector(int size);
+  MutableVector newVector();
 
   MutableVector newVector(RealVector v);
 

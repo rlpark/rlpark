@@ -47,8 +47,8 @@ public class GreedyGQ implements OffPolicyLearner {
       rho_t = target.pi(a_t) / behaviour.pi(a_t);
     }
     assert Utils.checkValue(rho_t);
-    VectorPool pool = VectorPools.pool(prototype);
-    MutableVector sa_bar_tp1 = pool.newVector(gq.v.size);
+    VectorPool pool = VectorPools.pool(prototype, gq.v.size);
+    MutableVector sa_bar_tp1 = pool.newVector();
     if (x_t != null && x_tp1 != null) {
       target.update(x_tp1);
       for (Action a : actions) {

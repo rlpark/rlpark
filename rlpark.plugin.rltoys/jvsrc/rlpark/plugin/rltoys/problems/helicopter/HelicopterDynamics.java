@@ -94,12 +94,12 @@ public class HelicopterDynamics {
   // internally we integrate at 100Hz for simulating the
   // dynamics]
   @Monitor
-  final HeliVector velocity = new HeliVector(0.0d, 0.0d, 0.0d);
+  final public HeliVector velocity = new HeliVector(0.0d, 0.0d, 0.0d);
   @Monitor
-  final HeliVector position = new HeliVector(0.0d, 0.0d, 0.0d);
+  final public HeliVector position = new HeliVector(0.0d, 0.0d, 0.0d);
   @Monitor
-  final HeliVector angularRate = new HeliVector(0.0d, 0.0d, 0.0d);
-  Quaternion q = new Quaternion(0.0d, 0.0d, 0.0d, 1.0d);
+  final public HeliVector angularRate = new HeliVector(0.0d, 0.0d, 0.0d);
+  public Quaternion q = new Quaternion(0.0d, 0.0d, 0.0d, 1.0d);
   final private double noise[] = new double[6];
   final private Random random;
 

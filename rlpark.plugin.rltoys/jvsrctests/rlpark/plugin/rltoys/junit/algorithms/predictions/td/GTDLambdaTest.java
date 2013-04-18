@@ -1,40 +1,24 @@
 package rlpark.plugin.rltoys.junit.algorithms.predictions.td;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import rlpark.plugin.rltoys.algorithms.predictions.td.GTDLambda;
-import rlpark.plugin.rltoys.algorithms.predictions.td.OffPolicyTD;
+import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
 import rlpark.plugin.rltoys.algorithms.traces.AMaxTraces;
-import rlpark.plugin.rltoys.experiments.testing.predictions.RandomWalkOffPolicy;
-import rlpark.plugin.rltoys.experiments.testing.predictions.RandomWalkOffPolicy.OffPolicyTDFactory;
-import rlpark.plugin.rltoys.experiments.testing.results.TestingResult;
+import rlpark.plugin.rltoys.experiments.testing.predictions.OffPolicyTests;
 
+public class GTDLambdaTest extends OffPolicyTests {
 
-public class GTDLambdaTest {
-  @Test
-  public void testOffPolicyGTD() {
-    testOffPolicyGTD(0.0, 0.9, 0.01, 0.5, 0.2, 0.5);
-    testOffPolicyGTD(0.0, 0.9, 0.01, 0.5, 0.5, 0.2);
+  @Override
+  protected OnPolicyTD newOnPolicyTD(double lambda, double gamma, double vectorNorm, int vectorSize) {
+    return new GTDLambda(lambda, gamma, 0.01 / vectorNorm, 0.5 / vectorNorm, vectorSize, new AMaxTraces());
   }
 
-  @Test
-  public void testOffPolicyGTDWithEligibility() {
-    testOffPolicyGTD(0.1, 0.9, 0.01, 0.0, 0.2, 0.5);
-    testOffPolicyGTD(0.1, 0.9, 0.01, 0.5, 0.2, 0.5);
-    testOffPolicyGTD(0.1, 0.9, 0.01, 0.5, 0.5, 0.2);
+  @Override
+  protected double[] lambdaValues() {
+    return new double[] { .1, .2 };
   }
 
-  private void testOffPolicyGTD(double lambda, double gamma, final double alpha_v, final double alpha_w,
-      double targetLeftProbability, double behaviourLeftProbability) {
-    OffPolicyTDFactory tdFactory = new OffPolicyTDFactory() {
-      @Override
-      public OffPolicyTD newTD(double lambda, double gamma, int vectorSize) {
-        return new GTDLambda(lambda, gamma, alpha_v, alpha_w, vectorSize, new AMaxTraces());
-      }
-    };
-    TestingResult<OffPolicyTD> result = RandomWalkOffPolicy.testOffPolicyGTD(lambda, gamma, targetLeftProbability,
-                                                                             behaviourLeftProbability, tdFactory);
-    Assert.assertTrue(result.message, result.passed);
+  @Override
+  protected double precision() {
+    return 0.05;
   }
 }

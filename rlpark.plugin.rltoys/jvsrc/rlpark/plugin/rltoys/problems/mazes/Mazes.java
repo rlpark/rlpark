@@ -17,6 +17,16 @@ public class Mazes {
     return new Maze(layout, rewardFunction, endEpisodeFunction, start);
   }
 
+  static public Maze createBookMazePositiveReward() {
+    byte[][] layout = BookMaze;
+    double[][] rewardFunction = createDefaultRewardFunction(layout, 0);
+    rewardFunction[1][9] = 1;
+    boolean[][] endEpisodeFunction = createDefaultEndEpisode(layout);
+    endEpisodeFunction[1][9] = true;
+    Point start = new Point(3, 1);
+    return new Maze(layout, rewardFunction, endEpisodeFunction, start);
+  }
+
   private static double[][] createDefaultRewardFunction(byte[][] layout, double reward) {
     double[][] rewardFunction = new double[layout.length][];
     for (int i = 0; i < rewardFunction.length; i++) {

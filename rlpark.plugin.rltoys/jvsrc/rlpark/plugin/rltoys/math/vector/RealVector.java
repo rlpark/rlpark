@@ -24,4 +24,6 @@ public interface RealVector extends Serializable {
   RealVector copy();
 
   double[] accessData();
+
+  double sum();
 }

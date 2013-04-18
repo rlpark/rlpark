@@ -6,7 +6,8 @@ import java.util.Random;
 import junit.framework.Assert;
 import rlpark.plugin.rltoys.agents.representations.ProjectorFactory;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
-import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.WrappedPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersHashing;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
@@ -26,7 +27,7 @@ public abstract class MountainCarOnPolicyTest {
   private class PerformanceVerifier implements Listener<RunnerEvent> {
     @Override
     public void listen(RunnerEvent eventInfo) {
-      if (eventInfo.episode < 200)
+      if (eventInfo.nbEpisodeDone < 200)
         return;
       Assert.assertTrue(eventInfo.episodeReward > -300);
     }
@@ -50,7 +51,7 @@ public abstract class MountainCarOnPolicyTest {
     public Projector createProjector(long seed, RLProblem problem) {
       Random random = new Random(seed);
       Range[] ranges = ((ProblemBounded) problem).getObservationRanges();
-      PartitionFactory discretizerFactory = new PartitionFactory(true, ranges);
+      AbstractPartitionFactory discretizerFactory = new WrappedPartitionFactory(ranges);
       discretizerFactory.setRandom(random, 0.1);
       TileCoders tileCoders = new TileCodersHashing(new UNH(random, 10000), discretizerFactory, ranges.length);
       tileCoders.addFullTilings(9, 10);

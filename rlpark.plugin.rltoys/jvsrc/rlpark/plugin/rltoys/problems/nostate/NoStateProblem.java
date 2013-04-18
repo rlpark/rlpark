@@ -45,7 +45,7 @@ public class NoStateProblem implements RLProblem {
 
   @Override
   public TRStep initialize() {
-    step = new TRStep(state(), Double.NaN);
+    step = new TRStep(state(), 0);
     return step;
   }
 

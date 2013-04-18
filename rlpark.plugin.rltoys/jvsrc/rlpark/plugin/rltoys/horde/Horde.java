@@ -15,8 +15,9 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
 public class Horde {
-  final List<HordeUpdatable> functions = new ArrayList<HordeUpdatable>();
+  final List<HordeUpdatable> beforeFunctions = new ArrayList<HordeUpdatable>();
   final List<Demon> demons = new ArrayList<Demon>();
+  final List<HordeUpdatable> afterFunctions = new ArrayList<HordeUpdatable>();
   private final HordeScheduler scheduler;
 
   public Horde() {
@@ -24,18 +25,7 @@ public class Horde {
   }
 
   public Horde(HordeScheduler scheduler) {
-    this(scheduler, null, null);
-  }
-
-  public Horde(List<? extends Demon> demons, List<?> functions) {
-    this(new HordeScheduler(), demons, functions);
-  }
-
-  public Horde(HordeScheduler scheduler, List<? extends Demon> demons, List<?> functions) {
     this.scheduler = scheduler;
-    if (demons != null)
-      this.demons.addAll(demons);
-    addFunctions(functions);
   }
 
   @LabelProvider(ids = { "demons" })
@@ -43,28 +33,26 @@ public class Horde {
     return Labels.label(demons.get(i));
   }
 
-  @LabelProvider(ids = { "functions" })
-  public String functionLabel(int i) {
-    return Labels.label(functions.get(i));
+  @LabelProvider(ids = { "beforeFunctions" })
+  public String beforeFunctionLabel(int i) {
+    return Labels.label(beforeFunctions.get(i));
   }
 
-  private void addFunctions(List<?> functions) {
-    if (functions == null)
-      return;
-    for (Object function : functions)
-      this.functions.add((HordeUpdatable) function);
+  @LabelProvider(ids = { "afterFunctions" })
+  public String afterFunctionLabel(int i) {
+    return Labels.label(afterFunctions.get(i));
   }
 
   public void update(final Observation o_tp1, final RealVector x_t, final Action a_t, final RealVector x_tp1) {
     scheduler.update(new Context() {
       @Override
       public void updateElement(int index) {
-        functions.get(index).update(o_tp1, x_t, a_t, x_tp1);
+        beforeFunctions.get(index).update(o_tp1, x_t, a_t, x_tp1);
       }
 
       @Override
       public int nbElements() {
-        return functions.size();
+        return beforeFunctions.size();
       }
     });
     scheduler.update(new Context() {
@@ -78,28 +66,37 @@ public class Horde {
         return demons.size();
       }
     });
+    scheduler.update(new Context() {
+      @Override
+      public void updateElement(int index) {
+        afterFunctions.get(index).update(o_tp1, x_t, a_t, x_tp1);
+      }
+
+      @Override
+      public int nbElements() {
+        return afterFunctions.size();
+      }
+    });
   }
 
-  @LabelProvider(ids = { "functions" })
-  String functionsLabelOf(int index) {
-    return Labels.label(functions.get(index));
+  public List<HordeUpdatable> beforeFunctions() {
+    return beforeFunctions;
   }
 
-  @LabelProvider(ids = { "demons" })
-  String demonsLabelOf(int index) {
-    return Labels.label(demons.get(index));
-  }
-
-  public List<HordeUpdatable> functions() {
-    return functions;
+  public List<HordeUpdatable> afterFunctions() {
+    return afterFunctions;
   }
 
   public List<Demon> demons() {
     return demons;
   }
 
-  public boolean addFunction(HordeUpdatable function) {
-    return functions.add(function);
+  public boolean addBeforeFunction(HordeUpdatable function) {
+    return beforeFunctions.add(function);
+  }
+
+  public boolean addAfterFunction(HordeUpdatable function) {
+    return afterFunctions.add(function);
   }
 
   public boolean addDemon(Demon demon) {

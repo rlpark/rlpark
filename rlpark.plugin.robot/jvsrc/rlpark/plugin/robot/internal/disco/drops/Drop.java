@@ -6,7 +6,6 @@ import java.util.Arrays;
 import rlpark.plugin.robot.internal.sync.LiteByteBuffer;
 
 
-
 public class Drop {
   private final DropData[] dropDatas;
   private final DropString dropName;
@@ -81,5 +80,15 @@ public class Drop {
 
   public int packetSize() {
     return headerSize() + dataSize();
+  }
+
+  public int indexOf(String label) {
+    int index = 0;
+    for (DropData dropData : dropDatas) {
+      if (dropData.label.equals(label))
+        return index;
+      index += dropData.size();
+    }
+    return index;
   }
 }

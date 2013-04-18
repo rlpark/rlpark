@@ -72,6 +72,10 @@ public class ActionArray implements Action {
     return Arrays.toString(actions);
   }
 
+  public ActionArray copy() {
+    return new ActionArray(actions);
+  }
+
   static public double toDouble(Action a) {
     final ActionArray action = (ActionArray) a;
     assert action.actions.length == 1;

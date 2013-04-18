@@ -40,4 +40,8 @@ public class LearnerAgentFA implements RLAgent {
   public Projector projector() {
     return projector;
   }
+
+  public RealVector lastState() {
+    return x_t;
+  }
 }

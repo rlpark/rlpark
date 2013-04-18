@@ -7,7 +7,8 @@ import rlpark.plugin.rltoys.algorithms.functions.policydistributions.helpers.Ran
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.TabularActionDiscretizer;
-import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.PartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.StateActionCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersHashing;
@@ -36,7 +37,8 @@ public class MountainCarOffPolicyLearning {
     Runner learningRunner = new Runner(problem, agent, 100, 5000);
     learningRunner.run();
     Runner evaluationRunner = new Runner(problem, agent.createEvaluatedAgent(), 1, 5000);
-    return evaluationRunner.run().step.time;
+    evaluationRunner.run();
+    return evaluationRunner.runnerEvent().step.time;
   }
 
   private static final int MemorySize = 1000000;
@@ -50,8 +52,8 @@ public class MountainCarOffPolicyLearning {
     projector.includeActiveFeature();
   }
 
-  static private PartitionFactory createPartitionFactory(Random random, Range[] observationRanges) {
-    PartitionFactory partitionFactory = new PartitionFactory(false, observationRanges);
+  static private AbstractPartitionFactory createPartitionFactory(Random random, Range[] observationRanges) {
+    AbstractPartitionFactory partitionFactory = new BoundedPartitionFactory(observationRanges);
     partitionFactory.setRandom(random, .2);
     return partitionFactory;
   }
@@ -59,7 +61,7 @@ public class MountainCarOffPolicyLearning {
 
   static public Projector createProjector(Random random, MountainCar problem) {
     final Range[] observationRanges = ((ProblemBounded) problem).getObservationRanges();
-    final PartitionFactory discretizerFactory = createPartitionFactory(random, observationRanges);
+    final AbstractPartitionFactory discretizerFactory = createPartitionFactory(random, observationRanges);
     Hashing hashing = createHashing(random);
     TileCodersHashing projector = new TileCodersHashing(hashing, discretizerFactory, observationRanges.length);
     setTileCoders(projector);
@@ -68,7 +70,7 @@ public class MountainCarOffPolicyLearning {
 
   static public StateToStateAction createToStateAction(Random random, MountainCar problem) {
     final Range[] observationRanges = problem.getObservationRanges();
-    final PartitionFactory discretizerFactory = createPartitionFactory(random, observationRanges);
+    final AbstractPartitionFactory discretizerFactory = createPartitionFactory(random, observationRanges);
     TabularActionDiscretizer actionDiscretizer = new TabularActionDiscretizer(problem.actions());
     Hashing hashing = createHashing(random);
     StateActionCoders stateActionCoders = new StateActionCoders(actionDiscretizer, hashing, discretizerFactory,

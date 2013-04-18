@@ -4,10 +4,13 @@ import rlpark.plugin.rltoys.algorithms.functions.Predictor;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.DiscreteActionPolicy;
+import rlpark.plugin.rltoys.envio.policy.Policy;
+import rlpark.plugin.rltoys.envio.policy.PolicyPrototype;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class Greedy implements DiscreteActionPolicy {
+public class Greedy implements DiscreteActionPolicy, PolicyPrototype {
   private static final long serialVersionUID = 1675962692054005355L;
   protected final StateToStateAction toStateAction;
   protected final Predictor predictor;
@@ -80,5 +83,10 @@ public class Greedy implements DiscreteActionPolicy {
   @Override
   public Action[] actions() {
     return actions;
+  }
+
+  @Override
+  public Policy duplicate() {
+    return new Greedy(predictor, actions, Utils.clone(toStateAction));
   }
 }

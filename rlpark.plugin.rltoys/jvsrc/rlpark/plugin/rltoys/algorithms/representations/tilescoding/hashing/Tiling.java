@@ -26,7 +26,7 @@ public class Tiling implements Serializable {
     return coordinates;
   }
 
-  protected Discretizer[] discretizers() {
+  public Discretizer[] discretizers() {
     return discretizers;
   }
 

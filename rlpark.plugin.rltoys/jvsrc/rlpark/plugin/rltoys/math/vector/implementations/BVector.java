@@ -208,4 +208,9 @@ public class BVector extends AbstractVector implements BinaryVector {
   public int[] nonZeroIndexes() {
     return activeIndexes;
   }
+
+  @Override
+  public double sum() {
+    return nonZeroElements();
+  }
 }

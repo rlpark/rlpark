@@ -40,7 +40,7 @@ public class Autostep implements LearningAlgorithm {
     MutableVector deltaXH = pool.newVector(deltaX).ebeMultiplyToSelf(h);
     MutableVector absDeltaXH = pool.newVector(deltaXH);
     Vectors.absToSelf(absDeltaXH);
-    MutableVector sparseV = pool.newVector(deltaX.getDimension());
+    MutableVector sparseV = pool.newVector();
     Vectors.toBinary(sparseV, deltaX).ebeMultiplyToSelf(v);
     MutableVector vUpdate = pool.newVector(absDeltaXH).subtractToSelf(sparseV).ebeMultiplyToSelf(x2)
         .ebeMultiplyToSelf(alphas);
@@ -49,7 +49,7 @@ public class Autostep implements LearningAlgorithm {
     PVectors.multiplySelfByExponential(alphas, .01, deltaXH.ebeDivideToSelf(v), IDBD.MinimumStepsize);
     deltaXH = null;
     RealVector x2ByAlphas = pool.newVector(x2).ebeMultiplyToSelf(alphas);
-    double sum = Math.max(Vectors.sum(x2ByAlphas), 1);
+    double sum = Math.max(x2ByAlphas.sum(), 1);
     if (sum > 1)
       Filters.mapMultiplyToSelf(alphas, 1 / sum, x);
   }
@@ -78,5 +78,9 @@ public class Autostep implements LearningAlgorithm {
 
   public PVector weights() {
     return weights;
+  }
+
+  public PVector alphas() {
+    return alphas;
   }
 }

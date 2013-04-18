@@ -267,7 +267,7 @@ public class FSGAgentState implements StateToStateAction {
 
   @Override
   public int vectorSize() {
-    return graph.actions().length * nbNonAbsorbingState();
+    return size;
   }
 
   @Override

@@ -136,8 +136,11 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
 
   @Override
   public MutableVector ebeDivideToSelf(RealVector v) {
-    for (int i = 0; i < data.length; i++)
-      data[i] /= v.getEntry(i);
+    for (int i = 0; i < data.length; i++) {
+      double value = data[i];
+      if (value != 0)
+        data[i] = value / v.getEntry(i);
+    }
     return this;
   }
 
@@ -208,5 +211,21 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
         return Vectors.infNorm(PVector.this);
       }
     });
+  }
+
+  @Override
+  public double sum() {
+    double sum = 0;
+    for (double v : data)
+      sum += v;
+    return sum;
+  }
+
+  public double min() {
+    double min = Double.MAX_VALUE;
+    for (double v : data)
+      if (v < min)
+        min = v;
+    return min;
   }
 }

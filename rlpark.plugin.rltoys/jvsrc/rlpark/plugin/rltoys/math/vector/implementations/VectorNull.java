@@ -95,4 +95,9 @@ public class VectorNull implements SparseVector {
   public int[] nonZeroIndexes() {
     return activeIndexes;
   }
+
+  @Override
+  public double sum() {
+    return 0;
+  }
 }

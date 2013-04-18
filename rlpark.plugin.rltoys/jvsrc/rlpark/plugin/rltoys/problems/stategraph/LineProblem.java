@@ -6,6 +6,7 @@ import rlpark.plugin.rltoys.envio.policy.Policy;
 
 @SuppressWarnings("serial")
 public class LineProblem extends FiniteStateGraph {
+  static private final double Gamma = .9;
   static public final GraphState A = new GraphState("A", 0.0);
   static public final GraphState B = new GraphState("B", 0.0);
   static public final GraphState C = new GraphState("C", 0.0);
@@ -28,11 +29,16 @@ public class LineProblem extends FiniteStateGraph {
 
   @Override
   public double[] expectedDiscountedSolution() {
-    return new double[] { Math.pow(0.9, 2), Math.pow(0.9, 1), Math.pow(0.9, 0) };
+    return new double[] { Math.pow(Gamma, 2), Math.pow(Gamma, 1), Math.pow(Gamma, 0) };
   }
 
   @Override
   public Action[] actions() {
     return new Action[] { Move };
+  }
+
+  @Override
+  public double gamma() {
+    return Gamma;
   }
 }

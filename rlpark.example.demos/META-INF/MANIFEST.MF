@@ -10,4 +10,5 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",
  zephyr.plugin.core;bundle-version="1.0.0",
  zephyr.plugin.core.api;bundle-version="1.0.0",
  rlpark.example.javacv;bundle-version="1.0.0",
- rlpark.plugin.rltoys;bundle-version="1.0.0"
+ rlpark.plugin.rltoys;bundle-version="1.0.0",
+ rlpark.plugin.rltoysview;bundle-version="1.0.0"

@@ -33,7 +33,7 @@ public class CriticAdapterFA implements OffPolicyTD {
   }
 
   private RealVector projectIFN(RealVector o) {
-    return projector.project(o != null ? ((PVector) o).data : null);
+    return projector.project(o instanceof PVector ? ((PVector) o).data : null);
   }
 
   @Override

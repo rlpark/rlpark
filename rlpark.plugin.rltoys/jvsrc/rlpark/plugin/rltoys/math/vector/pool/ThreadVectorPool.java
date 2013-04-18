@@ -1,8 +1,6 @@
 package rlpark.plugin.rltoys.math.vector.pool;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 import rlpark.plugin.rltoys.math.vector.MutableVector;
@@ -24,50 +22,45 @@ public class ThreadVectorPool implements VectorPool {
 
   @Monitor
   int nbAllocation;
-  private RealVector prototype = null;
   private final Thread thread;
-  private final Map<Class<?>, Stack<MutableVector[]>> classToStacks = new HashMap<Class<?>, Stack<MutableVector[]>>();
+  private final Stack<MutableVector[]> stackedVectors = new Stack<MutableVector[]>();
   private final Stack<AllocatedBuffer> stackedBuffers = new Stack<AllocatedBuffer>();
   private MutableVector[] buffers;
   private int lastAllocation;
+  private final RealVector prototype;
+  private final int dimension;
 
-  public ThreadVectorPool() {
+  public ThreadVectorPool(RealVector prototype, int dimension) {
+    this.dimension = dimension;
     this.thread = Thread.currentThread();
+    this.prototype = prototype;
   }
 
-  public void setPrototype(RealVector x) {
+  public void allocate() {
     if (buffers != null) {
       stackedBuffers.push(new AllocatedBuffer(prototype, buffers, lastAllocation));
       buffers = null;
       lastAllocation = -2;
-      this.prototype = null;
     }
-    Class<?> vectorClass = x.getClass();
-    Stack<MutableVector[]> stack = classToStacks.get(vectorClass);
-    if (stack == null) {
-      stack = new Stack<MutableVector[]>();
-      classToStacks.put(vectorClass, stack);
-    }
-    buffers = stack.isEmpty() ? new MutableVector[1] : stack.pop();
-    this.prototype = x;
+    buffers = stackedVectors.isEmpty() ? new MutableVector[1] : stackedVectors.pop();
     lastAllocation = -1;
   }
 
   @Override
-  public MutableVector newVector(int size) {
-    return vectorCached(size).clear();
+  public MutableVector newVector() {
+    return vectorCached().clear();
   }
 
-  private MutableVector vectorCached(int size) {
+  private MutableVector vectorCached() {
     if (Thread.currentThread() != thread)
       throw new RuntimeException("Called from a wrong thread");
     lastAllocation++;
     if (lastAllocation == buffers.length)
       buffers = Arrays.copyOf(buffers, buffers.length * 2);
     MutableVector cached = buffers[lastAllocation];
-    if (cached == null || cached.getDimension() != size) {
+    if (cached == null) {
       nbAllocation++;
-      cached = prototype.newInstance(size);
+      cached = prototype.newInstance(dimension);
       buffers[lastAllocation] = cached;
     }
     return cached;
@@ -75,22 +68,19 @@ public class ThreadVectorPool implements VectorPool {
 
   @Override
   public MutableVector newVector(RealVector v) {
-    return vectorCached(v.getDimension()).set(v);
+    assert dimension == v.getDimension();
+    return vectorCached().set(v);
   }
 
   @Override
   public void releaseAll() {
-    Class<?> vectorClass = prototype.getClass();
-    Stack<MutableVector[]> stack = classToStacks.get(vectorClass);
-    stack.push(buffers);
+    stackedVectors.push(buffers);
     if (stackedBuffers.isEmpty()) {
       buffers = null;
-      prototype = null;
       lastAllocation = -2;
     } else {
       AllocatedBuffer allocated = stackedBuffers.pop();
       buffers = allocated.buffers;
-      prototype = allocated.prototype;
       lastAllocation = allocated.lastAllocation;
     }
   }

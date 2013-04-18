@@ -44,26 +44,19 @@ public class Vectors {
 
   static public MutableVector absToSelf(MutableVector v) {
     if (v instanceof SVector) {
-      absToSelf(((SVector) v).values);
+      absToSelf(((SVector) v).values, ((SVector) v).nbActive);
       return v;
     }
     if (v instanceof PVector) {
-      absToSelf(((PVector) v).data);
+      absToSelf(((PVector) v).data, v.getDimension());
       return v;
     }
     throw new NotImplemented();
   }
 
-  static public void absToSelf(double[] data) {
-    for (int i = 0; i < data.length; i++)
+  static public void absToSelf(double[] data, int length) {
+    for (int i = 0; i < length; i++)
       data[i] = Math.abs(data[i]);
-  }
-
-  static public double sum(RealVector v) {
-    double sum = 0.0;
-    for (int i = 0; i < v.getDimension(); i++)
-      sum += v.getEntry(i);
-    return sum;
   }
 
   static public double l1Norm(RealVector v) {

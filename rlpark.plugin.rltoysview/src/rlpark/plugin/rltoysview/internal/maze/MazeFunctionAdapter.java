@@ -1,34 +1,26 @@
 package rlpark.plugin.rltoysview.internal.maze;
 
+import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.math.ranges.Range;
+import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.problems.mazes.MazeFunction;
-import rlpark.plugin.rltoysview.internal.adapters.FunctionAdapter;
+import rlpark.plugin.rltoys.problems.mazes.MazeProjector;
+import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.internal.helpers.CodeNodeToInstance;
 import zephyr.plugin.plotting.internal.heatmap.Interval;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
-import zephyr.plugin.plotting.internal.heatmap.Mask2D;
 
 @SuppressWarnings("restriction")
-public class MazeFunctionAdapter extends FunctionAdapter<MazeFunction> implements Mask2D {
-  private MapData layoutData;
+public class MazeFunctionAdapter extends MazeAdapter<MazeFunction> implements CodeNodeToInstance<MazeFunction> {
   private MapData functionData;
 
   public MazeFunctionAdapter() {
     super("MazeFunctionAdapter");
+    setCodeNodeToInstance(this);
   }
 
   @Override
-  public boolean isMasked(int x, int y) {
-    return layoutData.imageData()[x][y] != 0;
-  }
-
-  public void synchronize() {
-    MazeFunction function = lockLayoutFunction();
-    if (function != null && layoutData != null)
-      synchronize(function);
-    unlockLayoutFunction();
-  }
-
-  private void synchronize(MazeFunction function) {
+  protected void synchronize(MazeFunction function) {
     Range range = new Range();
     for (int i = 0; i < functionData.resolutionX; i++)
       for (int j = 0; j < functionData.resolutionY; j++)
@@ -45,13 +37,45 @@ public class MazeFunctionAdapter extends FunctionAdapter<MazeFunction> implement
   }
 
   @Override
-  public boolean layoutFunctionIsSet() {
-    return layoutData != null && super.layoutFunctionIsSet();
+  public void setMazeLayout(MapData maskData, MazeProjector mazeProjector) {
+    super.setMazeLayout(maskData, mazeProjector);
+    functionData = new MapData(maskData.resolutionX, maskData.resolutionY);
   }
 
-  public void setMazeLayout(MapData layoutData) {
-    this.layoutData = layoutData;
-    functionData = new MapData(layoutData.resolutionX, layoutData.resolutionY);
-    findLayoutFunctionNode();
+  @Override
+  public MazeFunction toInstance(ClassNode codeNode) {
+    Object o = codeNode.instance();
+    if (o instanceof MazeFunction)
+      return (MazeFunction) o;
+    if (!(o instanceof RealVector))
+      return null;
+    RealVector v = (RealVector) o;
+    if (v.getDimension() == mazeProjector.projector().vectorSize())
+      return newStateVectorAdapter(v);
+    if (v.getDimension() == mazeProjector.toStateAction().vectorSize())
+      return newStateActionVectorAdapter(v);
+    return null;
+  }
+
+  private MazeFunction newStateActionVectorAdapter(final RealVector v) {
+    return new MazeFunction() {
+      @Override
+      public float value(int x, int y) {
+        double sum = 0.0;
+        RealVector state = mazeProjector.toState(x, y);
+        for (Action action : mazeProjector.maze().actions())
+          sum += v.dotProduct(mazeProjector.stateAction(state, action));
+        return (float) sum;
+      }
+    };
+  }
+
+  private MazeFunction newStateVectorAdapter(final RealVector v) {
+    return new MazeFunction() {
+      @Override
+      public float value(int x, int y) {
+        return (float) v.dotProduct(mazeProjector.toState(x, y));
+      }
+    };
   }
 }

@@ -97,9 +97,9 @@ public abstract class FiniteStateGraph implements Serializable {
     return new StepData(stepTime, s_tm1, a_tm1, s_t, r_t, a_t);
   }
 
-  public double[] expectedDiscountedSolution() {
-    return null;
-  }
+  abstract public double gamma();
+
+  abstract public double[] expectedDiscountedSolution();
 
   public GraphState[] states() {
     return states;

@@ -38,7 +38,7 @@ public class TRStep implements ObsAsDoubles, Serializable {
   }
 
   public TRStep createEndingStep() {
-    return new TRStep(time, o_t, a_t, null, 0);
+    return new TRStep(time, o_t, a_t, null, r_tp1);
   }
 
   @Override

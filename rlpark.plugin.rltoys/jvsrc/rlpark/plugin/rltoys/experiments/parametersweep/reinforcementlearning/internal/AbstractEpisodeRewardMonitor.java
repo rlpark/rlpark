@@ -11,6 +11,7 @@ public abstract class AbstractEpisodeRewardMonitor extends AbstractRewardMonitor
   }
 
   public void registerMeasurement(int episode, double episodeReward, long nbEpisodeTimeSteps) {
+    assert nbEpisodeTimeSteps > 0;
     super.registerMeasurement(episode, episodeReward);
     nbTimeSteps[currentSlice] += nbEpisodeTimeSteps;
   }

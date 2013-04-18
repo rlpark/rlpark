@@ -9,7 +9,7 @@ import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;
 
-public class TabularAction implements StateToStateAction {
+public class TabularAction implements StateToStateAction, Cloneable {
   private static final long serialVersionUID = 1705117400022134128L;
   private final Action[] actions;
   private final int stateVectorSize;
@@ -78,5 +78,10 @@ public class TabularAction implements StateToStateAction {
   @Override
   public double vectorNorm() {
     return vectorNorm;
+  }
+
+  @Override
+  public StateToStateAction clone() throws CloneNotSupportedException {
+    return new TabularAction(actions, vectorNorm - 1, stateVectorSize);
   }
 }

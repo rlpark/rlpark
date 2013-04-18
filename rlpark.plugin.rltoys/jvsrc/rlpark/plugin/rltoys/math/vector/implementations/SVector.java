@@ -316,4 +316,12 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
   public int[] nonZeroIndexes() {
     return activeIndexes;
   }
+
+  @Override
+  public double sum() {
+    double sum = 0;
+    for (int i = 0; i < nbActive; i++)
+      sum += values[i];
+    return sum;
+  }
 }
