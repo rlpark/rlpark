@@ -23,7 +23,7 @@ public abstract class AbstractPartitionFactory implements DiscretizerFactory {
 
     @Override
     public String toString() {
-      return String.format("%f:%d:%f", min, resolution, max);
+      return String.format("[%f:%f]/%d", min, max, resolution);
     }
 
     @Override

@@ -33,4 +33,12 @@ public class Tiling implements Serializable {
   public int[] inputIndexes() {
     return inputIndexes;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder result = new StringBuilder();
+    for (int i = 0; i < discretizers.length; i++)
+      result.append("i" + inputIndexes[i] + discretizers[i].toString() + "  ");
+    return result.toString();
+  }
 }

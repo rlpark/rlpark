@@ -21,9 +21,11 @@ public class Identity implements Hashing {
   public int hash(Tiling tiling, int[] inputs) {
     int activatedIndex = 0;
     Discretizer[] discretizers = tiling.discretizers();
+    int multiplier = 1;
     for (int i = 0; i < discretizers.length; i++) {
       Discretizer partition = discretizers[i];
-      activatedIndex += inputs[i] * Math.pow(partition.resolution(), i);
+      activatedIndex += inputs[i] * multiplier;
+      multiplier *= partition.resolution();
     }
     return activatedIndex;
   }

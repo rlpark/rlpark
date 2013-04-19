@@ -29,7 +29,10 @@ public abstract class MountainCarOnPolicyTest {
     public void listen(RunnerEvent eventInfo) {
       if (eventInfo.nbEpisodeDone < 200)
         return;
-      Assert.assertTrue(eventInfo.episodeReward > -300);
+      final double minEpisodeReward = -350;
+      if (eventInfo.episodeReward < minEpisodeReward) {
+        Assert.fail("Episode reward too low (=" + eventInfo.episodeReward + ")");
+      }
     }
   }
 

@@ -120,4 +120,12 @@ public abstract class TileCoders implements Projector {
   public List<TileCoder> tileCoders() {
     return tileCoders;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder result = new StringBuilder();
+    for (int i = 0; i < tileCoders.size(); i++)
+      result.append("TileCoder " + i + ":\n" + tileCoders.get(i).toString() + "\n");
+    return result.toString();
+  }
 }

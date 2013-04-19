@@ -39,15 +39,27 @@ public class TileCodersNoHashingTest {
   }
 
   @Test
+  public void testTileCodersDim1Res2Tiling4() {
+    TileCoders coders = new TileCodersNoHashing(1, -1, 1);
+    coders.addIndependentTilings(2, 4);
+    Assert.assertEquals(4 * 2, coders.vectorSize());
+    Assert.assertEquals(4, coders.vectorNorm(), 0.0);
+    VectorsTestsUtils.assertEquals(vect(8, 1, 2 + 1, 4 + 0, 6 + 0), coders.project(new double[] { 0.0 }));
+    VectorsTestsUtils.assertEquals(vect(8, 0, 2 + 0, 4 + 0, 6 + 0), coders.project(new double[] { -0.9 }));
+    VectorsTestsUtils.assertEquals(vect(8, 1, 2 + 1, 4 + 1, 6 + 1), coders.project(new double[] { 0.9 }));
+    VectorsTestsUtils.assertEquals(vect(8, 1, 2 + 0, 4 + 0, 6 + 0), coders.project(new double[] { -0.1 }));
+    VectorsTestsUtils.assertEquals(vect(8, 0, 2 + 0, 4 + 0, 6 + 0), coders.project(new double[] { -0.5 }));
+    VectorsTestsUtils.assertEquals(vect(8, 1, 2 + 1, 4 + 1, 6 + 1), coders.project(new double[] { 0.5 }));
+  }
+
+  @Test
   public void testTileCodersIndependentDim2() {
     TileCoders coders = new TileCodersNoHashing(2, -1, 1);
     coders.addIndependentTilings(2, 1);
     Assert.assertEquals(4, coders.vectorSize());
     Assert.assertEquals(2.0, coders.vectorNorm(), 0.0);
-    coders.project(new double[] { -0.5, 0.5 });
-    VectorsTestsUtils.assertEquals(new PVector(1, 0, 0, 1), coders.vector());
-    coders.project(new double[] { 0.5, -0.5 });
-    VectorsTestsUtils.assertEquals(new PVector(0, 1, 1, 0), coders.vector());
+    VectorsTestsUtils.assertEquals(vect(4, 0, 2 + 1), coders.project(new double[] { -0.5, 0.5 }));
+    VectorsTestsUtils.assertEquals(vect(4, 1, 2 + 0), coders.project(new double[] { 0.5, -0.5 }));
   }
 
   @Test
@@ -147,5 +159,11 @@ public class TileCodersNoHashingTest {
     assert nbTiles >= nbActivated;
     Assert.assertTrue(nbActivated > gridResolution * gridResolution);
     return nbTiles - nbActivated;
+  }
+
+  public static void main(String[] args) {
+    TileCoders coders = new TileCodersNoHashing(1, 0, 1);
+    coders.addFullTilings(2, 4);
+    System.out.println(coders.toString());
   }
 }

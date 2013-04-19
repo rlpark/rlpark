@@ -15,7 +15,7 @@ public class BoundedPartitionFactory extends AbstractPartitionFactory {
 
     @Override
     public int discretize(double input) {
-      double boundedInput = Math.min(Math.max(input, min), max);
+      double boundedInput = Math.min(Math.max(input, min), max - (intervalWidth * .001));
       return (int) ((boundedInput - min) / intervalWidth % resolution);
     }
   }
@@ -31,10 +31,11 @@ public class BoundedPartitionFactory extends AbstractPartitionFactory {
   @Override
   public Discretizer createDiscretizer(int inputIndex, int resolution, int tilingIndex, int nbTilings) {
     Range range = ranges[inputIndex];
-    double offset = range.length() / resolution / nbTilings;
+    double offset = range.length() / ((resolution + 1) * nbTilings - 1);
     double shift = computeShift(offset, tilingIndex, inputIndex);
-    double min = range.min() - shift;
-    double max = range.max() - shift + (range.length() / resolution);
+    double width = range.length() - offset * (nbTilings - 1);
+    double min = range.min() + shift;
+    double max = min + width;
     return new BoundedPartition(min, max, resolution);
   }
 }
