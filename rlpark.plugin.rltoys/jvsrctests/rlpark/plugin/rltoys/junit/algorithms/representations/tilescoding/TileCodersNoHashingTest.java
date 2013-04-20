@@ -1,11 +1,14 @@
 package rlpark.plugin.rltoys.junit.algorithms.representations.tilescoding;
 
+import static rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders.buildRanges;
+
 import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedBigPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.WrappedPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
@@ -26,7 +29,7 @@ public class TileCodersNoHashingTest {
 
   @Test
   public void testTileCodersDim1() {
-    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(-1, 1, 1), 1);
+    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(buildRanges(1, -1, 1)), 1);
     coders.addIndependentTilings(2, 3);
     Assert.assertEquals(6, coders.vectorSize());
     Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
@@ -39,20 +42,46 @@ public class TileCodersNoHashingTest {
   }
 
   @Test
+  public void testTileCodersDim1Res2Tiling4() {
+    TileCoders coders = new TileCodersNoHashing(1, -1, 1);
+    coders.addIndependentTilings(2, 4);
+    Assert.assertEquals(4 * 2, coders.vectorSize());
+    Assert.assertEquals(4, coders.vectorNorm(), 0.0);
+    VectorsTestsUtils.assertEquals(vect(8, 1, 2 + 1, 4 + 0, 6 + 0), coders.project(new double[] { 0.0 }));
+    VectorsTestsUtils.assertEquals(vect(8, 0, 2 + 0, 4 + 0, 6 + 0), coders.project(new double[] { -0.9 }));
+    VectorsTestsUtils.assertEquals(vect(8, 1, 2 + 1, 4 + 1, 6 + 1), coders.project(new double[] { 0.9 }));
+    VectorsTestsUtils.assertEquals(vect(8, 1, 2 + 0, 4 + 0, 6 + 0), coders.project(new double[] { -0.1 }));
+    VectorsTestsUtils.assertEquals(vect(8, 0, 2 + 0, 4 + 0, 6 + 0), coders.project(new double[] { -0.5 }));
+    VectorsTestsUtils.assertEquals(vect(8, 1, 2 + 1, 4 + 1, 6 + 1), coders.project(new double[] { 0.5 }));
+  }
+
+  @Test
+  public void testTileCodersDim1Res3Tiling4BigPartition() {
+    TileCoders coders = new TileCodersNoHashing(new BoundedBigPartitionFactory(buildRanges(1, 0, 1)), 1);
+    coders.addIndependentTilings(3, 4);
+    Assert.assertEquals(4 * 3, coders.vectorSize());
+    Assert.assertEquals(4, coders.vectorNorm(), 0.0);
+    VectorsTestsUtils.assertEquals(vect(12, 0, 3 + 0, 6 + 0, 9 + 0), coders.project(new double[] { 0.0 }));
+    VectorsTestsUtils.assertEquals(vect(12, 0, 3 + 0, 6 + 0, 9 + 0), coders.project(new double[] { 0.1 }));
+    VectorsTestsUtils.assertEquals(vect(12, 2, 3 + 2, 6 + 2, 9 + 2), coders.project(new double[] { 0.9 }));
+    VectorsTestsUtils.assertEquals(vect(12, 0, 3 + 0, 6 + 0, 9 + 1), coders.project(new double[] { 0.2 }));
+    VectorsTestsUtils.assertEquals(vect(12, 1, 3 + 2, 6 + 2, 9 + 2), coders.project(new double[] { 0.8 }));
+    VectorsTestsUtils.assertEquals(vect(12, 1, 3 + 1, 6 + 1, 9 + 1), coders.project(new double[] { 0.5 }));
+  }
+
+  @Test
   public void testTileCodersIndependentDim2() {
     TileCoders coders = new TileCodersNoHashing(2, -1, 1);
     coders.addIndependentTilings(2, 1);
     Assert.assertEquals(4, coders.vectorSize());
     Assert.assertEquals(2.0, coders.vectorNorm(), 0.0);
-    coders.project(new double[] { -0.5, 0.5 });
-    VectorsTestsUtils.assertEquals(new PVector(1, 0, 0, 1), coders.vector());
-    coders.project(new double[] { 0.5, -0.5 });
-    VectorsTestsUtils.assertEquals(new PVector(0, 1, 1, 0), coders.vector());
+    VectorsTestsUtils.assertEquals(vect(4, 0, 2 + 1), coders.project(new double[] { -0.5, 0.5 }));
+    VectorsTestsUtils.assertEquals(vect(4, 1, 2 + 0), coders.project(new double[] { 0.5, -0.5 }));
   }
 
   @Test
   public void testTileCodersIndependentDim3() {
-    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(-1, 1, 3), 3);
+    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(buildRanges(3, -1, 1)), 3);
     coders.addIndependentTilings(2, 1);
     Assert.assertEquals(6, coders.vectorSize());
     Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
@@ -64,7 +93,7 @@ public class TileCodersNoHashingTest {
 
   @Test
   public void testTileCodersFullDim2() {
-    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(-1, 1, 2), 2);
+    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(buildRanges(3, -1, 1)), 2);
     coders.addFullTilings(2, 3);
     Assert.assertEquals(2 * 2 * 3, coders.vectorSize());
     Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
@@ -82,7 +111,7 @@ public class TileCodersNoHashingTest {
 
   @Test
   public void testTileCodersFullDim2WithAlwaysActiveFeature() {
-    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(-1, 1, 2), 2);
+    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(buildRanges(2, -1, 1)), 2);
     coders.addFullTilings(2, 1);
     coders.includeActiveFeature();
     Assert.assertEquals(2 * 2 + 1, coders.vectorSize());
@@ -109,7 +138,7 @@ public class TileCodersNoHashingTest {
     int missingTiles = checkFeatureActivationFrequency(new TileCodersFactory() {
       @Override
       public TileCoders create(int nbInputs, double min, double max) {
-        AbstractPartitionFactory discretizerFactory = new WrappedPartitionFactory(0, 1, nbInputs);
+        AbstractPartitionFactory discretizerFactory = new WrappedPartitionFactory(buildRanges(nbInputs, min, max));
         discretizerFactory.setRandom(new Random(0), 0.1);
         TileCoders coders = new TileCodersNoHashing(discretizerFactory, nbInputs);
         return coders;
@@ -147,5 +176,11 @@ public class TileCodersNoHashingTest {
     assert nbTiles >= nbActivated;
     Assert.assertTrue(nbActivated > gridResolution * gridResolution);
     return nbTiles - nbActivated;
+  }
+
+  public static void main(String[] args) {
+    TileCoders coders = new TileCodersNoHashing(1, 0, 1);
+    coders.addFullTilings(2, 4);
+    System.out.println(coders.toString());
   }
 }

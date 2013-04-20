@@ -23,10 +23,6 @@ public class WrappedPartitionFactory extends AbstractPartitionFactory {
     }
   }
 
-  public WrappedPartitionFactory(double min, double max, int inputSize) {
-    super(min, max, inputSize);
-  }
-
   public WrappedPartitionFactory(Range... ranges) {
     super(ranges);
   }

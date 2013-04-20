@@ -16,8 +16,10 @@ import rlpark.plugin.rltoys.algorithms.functions.Predictor;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.TabularActionDiscretizer;
-import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedPartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedBigPartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedSmallPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.StateActionCoders;
+import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.Hashing;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.MurmurHashing;
 import rlpark.plugin.rltoys.algorithms.traces.ATraces;
@@ -79,12 +81,25 @@ public class SarsaTest extends MountainCarOnPolicyTest {
     runTestOnOnMountainCar(MountainCarOnPolicyTest.hashingTileCodersFactory, new SarsaControlFactory());
   }
 
+  @Test
+  public void testSarsaOnMountainCarTileCodingWithBigPartition() {
+    runTestOnOnMountainCar(new ProjectorFactory() {
+      @Override
+      public Projector createProjector(long seed, RLProblem problem) {
+        Range[] ranges = ((ProblemBounded) problem).getObservationRanges();
+        TileCodersNoHashing projector = new TileCodersNoHashing(new BoundedBigPartitionFactory(ranges), ranges.length);
+        projector.addFullTilings(9, 10);
+        return projector;
+      }
+    }, new SarsaControlFactory());
+  }
+
   StateActionCoders createStateToStateAction(MountainCar problem) {
     Range[] ranges = problem.getObservationRanges();
     TabularActionDiscretizer actionDiscretizer = new TabularActionDiscretizer(problem.actions());
     Hashing hashing = new MurmurHashing(new Random(0), 50000);
     StateActionCoders stateActionCoders = new StateActionCoders(actionDiscretizer, hashing,
-                                                                new BoundedPartitionFactory(ranges), ranges.length);
+                                                                new BoundedSmallPartitionFactory(ranges), ranges.length);
     stateActionCoders.tileCoders().addFullTilings(9, 10);
     return stateActionCoders;
   }

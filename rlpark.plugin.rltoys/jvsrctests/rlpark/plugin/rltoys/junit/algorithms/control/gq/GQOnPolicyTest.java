@@ -27,7 +27,7 @@ public class GQOnPolicyTest extends MountainCarOnPolicyTest {
       @Override
       protected Predictor createPredictor(Action[] actions, StateToStateAction toStateAction, double vectorNorm,
           int vectorSize) {
-        return new GQ(0.05 / vectorNorm, 0.0, 1 - 0.9, 0.1, vectorSize);
+        return new GQ(0.2 / vectorNorm, 0.0, 1 - 0.9, 0.1, vectorSize);
       }
     });
   }

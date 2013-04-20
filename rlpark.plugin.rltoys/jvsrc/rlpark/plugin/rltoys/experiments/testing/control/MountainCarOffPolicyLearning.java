@@ -8,7 +8,7 @@ import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.TabularActionDiscretizer;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;
-import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedPartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedSmallPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.StateActionCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersHashing;
@@ -53,7 +53,7 @@ public class MountainCarOffPolicyLearning {
   }
 
   static private AbstractPartitionFactory createPartitionFactory(Random random, Range[] observationRanges) {
-    AbstractPartitionFactory partitionFactory = new BoundedPartitionFactory(observationRanges);
+    AbstractPartitionFactory partitionFactory = new BoundedSmallPartitionFactory(observationRanges);
     partitionFactory.setRandom(random, .2);
     return partitionFactory;
   }

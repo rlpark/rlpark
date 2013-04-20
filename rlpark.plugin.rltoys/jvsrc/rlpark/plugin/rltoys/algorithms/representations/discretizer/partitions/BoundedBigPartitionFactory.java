@@ -3,38 +3,38 @@ package rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.Discretizer;
 import rlpark.plugin.rltoys.math.ranges.Range;
 
-public class BoundedPartitionFactory extends AbstractPartitionFactory {
+public class BoundedBigPartitionFactory extends AbstractPartitionFactory {
   private static final long serialVersionUID = 5982191647323647140L;
 
-  class BoundedPartition extends AbstractPartition {
+  class BoundedBigPartition extends AbstractPartition {
     private static final long serialVersionUID = 237927027724145937L;
 
-    public BoundedPartition(double min, double max, int resolution) {
+    public BoundedBigPartition(double min, double max, int resolution) {
       super(min, max, resolution);
     }
 
     @Override
     public int discretize(double input) {
-      double boundedInput = Math.min(Math.max(input, min), max);
-      return (int) ((boundedInput - min) / intervalWidth % resolution);
+      double margin = intervalWidth * .0001;
+      double boundedInput = Math.min(Math.max(input, min + margin), max - margin);
+      int result = (int) ((boundedInput - min) / intervalWidth);
+      assert result >= 0 && result < resolution;
+      return result;
     }
   }
 
-  public BoundedPartitionFactory(double min, double max, int inputSize) {
-    super(min, max, inputSize);
-  }
-
-  public BoundedPartitionFactory(Range... ranges) {
+  public BoundedBigPartitionFactory(Range... ranges) {
     super(ranges);
   }
 
   @Override
   public Discretizer createDiscretizer(int inputIndex, int resolution, int tilingIndex, int nbTilings) {
     Range range = ranges[inputIndex];
-    double offset = range.length() / resolution / nbTilings;
+    double offset = range.length() / (resolution * nbTilings - nbTilings + 1);
     double shift = computeShift(offset, tilingIndex, inputIndex);
+    double width = offset * nbTilings * resolution;
     double min = range.min() - shift;
-    double max = range.max() - shift + (range.length() / resolution);
-    return new BoundedPartition(min, max, resolution);
+    double max = min + width;
+    return new BoundedBigPartition(min, max, resolution);
   }
 }

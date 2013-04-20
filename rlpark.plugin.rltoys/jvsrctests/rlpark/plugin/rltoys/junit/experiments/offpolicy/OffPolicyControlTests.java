@@ -81,7 +81,7 @@ public class OffPolicyControlTests {
         return new OffPolicyAgentDirect(behaviour, learner);
       }
     };
-    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 150);
+    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 160);
   }
 
   @Test
@@ -107,7 +107,7 @@ public class OffPolicyControlTests {
         return new CriticAdapterFA(criticProjector, gtd);
       }
     };
-    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 115);
+    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 120);
   }
 
   public static void main(String[] args) {

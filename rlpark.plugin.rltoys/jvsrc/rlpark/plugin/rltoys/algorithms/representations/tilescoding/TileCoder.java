@@ -38,4 +38,12 @@ public class TileCoder implements Serializable {
   public Tiling[] tilings() {
     return tilings;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder result = new StringBuilder();
+    for (int i = 0; i < tilings.length; i++)
+      result.append("  Tiling " + i + ": " + tilings[i].toString() + "\n");
+    return result.toString();
+  }
 }
