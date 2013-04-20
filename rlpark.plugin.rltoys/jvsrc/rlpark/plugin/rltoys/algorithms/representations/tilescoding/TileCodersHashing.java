@@ -13,7 +13,7 @@ public class TileCodersHashing extends TileCoders {
   private final Hashing hashing;
 
   public TileCodersHashing(Hashing hashing, int inputSize, double min, double max) {
-    this(hashing, new BoundedSmallPartitionFactory(buildRanges(inputSize, min, max)), inputSize);
+    this(hashing, buildRanges(inputSize, min, max));
   }
 
   public TileCodersHashing(Hashing hashing, Range... ranges) {

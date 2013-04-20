@@ -14,7 +14,7 @@ public class TileCodersNoHashing extends TileCoders {
   private final List<Identity> identities = new ArrayList<Identity>();
 
   public TileCodersNoHashing(int inputSize, double min, double max) {
-    this(new BoundedSmallPartitionFactory(buildRanges(inputSize, min, max)), inputSize);
+    this(buildRanges(inputSize, min, max));
   }
 
   public TileCodersNoHashing(Range... ranges) {
