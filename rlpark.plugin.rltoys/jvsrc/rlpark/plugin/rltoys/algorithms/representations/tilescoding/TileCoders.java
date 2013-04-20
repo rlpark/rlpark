@@ -7,6 +7,7 @@ import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.Discretizer;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.DiscretizerFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.Tiling;
+import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;
@@ -128,4 +129,12 @@ public abstract class TileCoders implements Projector {
       result.append("TileCoder " + i + ":\n" + tileCoders.get(i).toString() + "\n");
     return result.toString();
   }
+
+  public static Range[] buildRanges(int inputSize, double min, double max) {
+    Range[] ranges = new Range[inputSize];
+    for (int i = 0; i < ranges.length; i++)
+      ranges[i] = new Range(min, max);
+    return ranges;
+  }
+
 }

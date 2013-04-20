@@ -3,7 +3,7 @@ package rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.Discretizer;
 import rlpark.plugin.rltoys.math.ranges.Range;
 
-public class BoundedPartitionFactory extends AbstractPartitionFactory {
+public class BoundedSmallPartitionFactory extends AbstractPartitionFactory {
   private static final long serialVersionUID = 5982191647323647140L;
 
   class BoundedPartition extends AbstractPartition {
@@ -15,16 +15,15 @@ public class BoundedPartitionFactory extends AbstractPartitionFactory {
 
     @Override
     public int discretize(double input) {
-      double boundedInput = Math.min(Math.max(input, min), max - (intervalWidth * .001));
-      return (int) ((boundedInput - min) / intervalWidth % resolution);
+      double margin = intervalWidth * .0001;
+      double boundedInput = Math.min(Math.max(input, min + margin), max - margin);
+      int result = (int) ((boundedInput - min) / intervalWidth);
+      assert result >= 0 && result < resolution;
+      return result;
     }
   }
 
-  public BoundedPartitionFactory(double min, double max, int inputSize) {
-    super(min, max, inputSize);
-  }
-
-  public BoundedPartitionFactory(Range... ranges) {
+  public BoundedSmallPartitionFactory(Range... ranges) {
     super(ranges);
   }
 

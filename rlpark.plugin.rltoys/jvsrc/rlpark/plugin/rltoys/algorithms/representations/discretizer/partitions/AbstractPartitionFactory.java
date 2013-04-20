@@ -44,20 +44,9 @@ public abstract class AbstractPartitionFactory implements DiscretizerFactory {
     this.ranges = ranges;
   }
 
-  public AbstractPartitionFactory(double min, double max, int inputSize) {
-    this(getRanges(min, max, inputSize));
-  }
-
   public void setRandom(Random random, double randomShiftRatio) {
     this.random = random;
     this.randomShiftRatio = randomShiftRatio;
-  }
-
-  public static Range[] getRanges(double min, double max, int stateSize) {
-    Range[] ranges = new Range[stateSize];
-    for (int i = 0; i < ranges.length; i++)
-      ranges[i] = new Range(min, max);
-    return ranges;
   }
 
   protected double computeShift(double offset, int tilingIndex, int inputIndex) {

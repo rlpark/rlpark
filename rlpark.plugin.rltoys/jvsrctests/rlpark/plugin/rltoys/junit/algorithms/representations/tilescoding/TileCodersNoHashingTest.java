@@ -1,5 +1,7 @@
 package rlpark.plugin.rltoys.junit.algorithms.representations.tilescoding;
 
+import static rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders.buildRanges;
+
 import java.util.Random;
 
 import org.junit.Assert;
@@ -26,7 +28,7 @@ public class TileCodersNoHashingTest {
 
   @Test
   public void testTileCodersDim1() {
-    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(-1, 1, 1), 1);
+    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(buildRanges(1, -1, 1)), 1);
     coders.addIndependentTilings(2, 3);
     Assert.assertEquals(6, coders.vectorSize());
     Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
@@ -64,7 +66,7 @@ public class TileCodersNoHashingTest {
 
   @Test
   public void testTileCodersIndependentDim3() {
-    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(-1, 1, 3), 3);
+    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(buildRanges(3, -1, 1)), 3);
     coders.addIndependentTilings(2, 1);
     Assert.assertEquals(6, coders.vectorSize());
     Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
@@ -76,7 +78,7 @@ public class TileCodersNoHashingTest {
 
   @Test
   public void testTileCodersFullDim2() {
-    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(-1, 1, 2), 2);
+    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(buildRanges(3, -1, 1)), 2);
     coders.addFullTilings(2, 3);
     Assert.assertEquals(2 * 2 * 3, coders.vectorSize());
     Assert.assertEquals(3.0, coders.vectorNorm(), 0.0);
@@ -94,7 +96,7 @@ public class TileCodersNoHashingTest {
 
   @Test
   public void testTileCodersFullDim2WithAlwaysActiveFeature() {
-    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(-1, 1, 2), 2);
+    TileCoders coders = new TileCodersNoHashing(new WrappedPartitionFactory(buildRanges(2, -1, 1)), 2);
     coders.addFullTilings(2, 1);
     coders.includeActiveFeature();
     Assert.assertEquals(2 * 2 + 1, coders.vectorSize());
@@ -121,7 +123,7 @@ public class TileCodersNoHashingTest {
     int missingTiles = checkFeatureActivationFrequency(new TileCodersFactory() {
       @Override
       public TileCoders create(int nbInputs, double min, double max) {
-        AbstractPartitionFactory discretizerFactory = new WrappedPartitionFactory(0, 1, nbInputs);
+        AbstractPartitionFactory discretizerFactory = new WrappedPartitionFactory(buildRanges(nbInputs, min, max));
         discretizerFactory.setRandom(new Random(0), 0.1);
         TileCoders coders = new TileCodersNoHashing(discretizerFactory, nbInputs);
         return coders;
