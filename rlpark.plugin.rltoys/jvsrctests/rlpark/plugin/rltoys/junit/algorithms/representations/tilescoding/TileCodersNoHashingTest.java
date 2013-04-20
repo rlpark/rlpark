@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedBigPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.WrappedPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
@@ -52,6 +53,20 @@ public class TileCodersNoHashingTest {
     VectorsTestsUtils.assertEquals(vect(8, 1, 2 + 0, 4 + 0, 6 + 0), coders.project(new double[] { -0.1 }));
     VectorsTestsUtils.assertEquals(vect(8, 0, 2 + 0, 4 + 0, 6 + 0), coders.project(new double[] { -0.5 }));
     VectorsTestsUtils.assertEquals(vect(8, 1, 2 + 1, 4 + 1, 6 + 1), coders.project(new double[] { 0.5 }));
+  }
+
+  @Test
+  public void testTileCodersDim1Res3Tiling4BigPartition() {
+    TileCoders coders = new TileCodersNoHashing(new BoundedBigPartitionFactory(buildRanges(1, 0, 1)), 1);
+    coders.addIndependentTilings(3, 4);
+    Assert.assertEquals(4 * 3, coders.vectorSize());
+    Assert.assertEquals(4, coders.vectorNorm(), 0.0);
+    VectorsTestsUtils.assertEquals(vect(12, 0, 3 + 0, 6 + 0, 9 + 0), coders.project(new double[] { 0.0 }));
+    VectorsTestsUtils.assertEquals(vect(12, 0, 3 + 0, 6 + 0, 9 + 0), coders.project(new double[] { 0.1 }));
+    VectorsTestsUtils.assertEquals(vect(12, 2, 3 + 2, 6 + 2, 9 + 2), coders.project(new double[] { 0.9 }));
+    VectorsTestsUtils.assertEquals(vect(12, 0, 3 + 0, 6 + 0, 9 + 1), coders.project(new double[] { 0.2 }));
+    VectorsTestsUtils.assertEquals(vect(12, 1, 3 + 2, 6 + 2, 9 + 2), coders.project(new double[] { 0.8 }));
+    VectorsTestsUtils.assertEquals(vect(12, 1, 3 + 1, 6 + 1, 9 + 1), coders.project(new double[] { 0.5 }));
   }
 
   @Test
