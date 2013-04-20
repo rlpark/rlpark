@@ -6,6 +6,7 @@ import rlpark.plugin.rltoys.math.ranges.Range;
 public class BoundedSmallPartitionFactory extends AbstractPartitionFactory {
   private static final long serialVersionUID = 5982191647323647140L;
 
+
   class BoundedPartition extends AbstractPartition {
     private static final long serialVersionUID = 237927027724145937L;
 
