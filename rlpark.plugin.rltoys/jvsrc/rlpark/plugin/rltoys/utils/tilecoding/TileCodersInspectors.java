@@ -24,7 +24,7 @@ public class TileCodersInspectors {
     this(tc, ranges, null);
   }
 
-  public List<Tiling> getTilings(TileCoders tc) {
+  public List<Tiling> getTilings() {
     List<Tiling> list = new ArrayList<Tiling>();
     for (TileCoder tt : tc.tileCoders()) {
       for (Tiling t : tt.tilings()) {
@@ -38,12 +38,15 @@ public class TileCodersInspectors {
     HashSet<Double> breaks = new HashSet<Double>();
     for (Tiling t : tilings) {
       AbstractPartition q;
-      for (int j : t.inputIndexes())
+      int val = 0;
+      for (int j : t.inputIndexes()) {
         if (j == inputIndex) {
-          q = (AbstractPartition) t.discretizers()[j];
+          q = (AbstractPartition) t.discretizers()[val];
           for (int i = 0; i <= q.resolution; i++)
             breaks.add(q.min + i * q.intervalWidth);
         }
+        val++;
+      }
     }
     double[] ds = new double[breaks.size()];
     int i = 0;
@@ -60,6 +63,8 @@ public class TileCodersInspectors {
 
   public void printIntegerTileBoundaries(double[] breaks) {
     int b = breaks.length;
+    if (b <= 0)
+      return;
     int[] vals = new int[b];
     for (int i = 0; i < b; i++)
       vals[i] = (int) breaks[i];
@@ -90,6 +95,15 @@ public class TileCodersInspectors {
         System.out.print(" (gap=" + i + (i == histogram.length - 1 ? "+" : "") + " count=" + histogram[i] + ")");
     }
     System.out.println();
+  }
+
+  public void examineAllIntegerTileBoundaries() {
+    List<Tiling> q = getTilings();
+    for (int i = 0; i < ranges.length; i++) {
+      double[] tileBoundaries = getAllTileBoundaries(q, i, null, null);
+      System.out.println("Index: " + i + " " + identifier(i));
+      printIntegerTileBoundaries(tileBoundaries);
+    }
   }
 
   public TileCodersInspectors(TileCoders tc, Range[] ranges, String[] inputNames) {
