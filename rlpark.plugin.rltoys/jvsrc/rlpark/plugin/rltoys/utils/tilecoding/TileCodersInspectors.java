@@ -34,7 +34,7 @@ public class TileCodersInspectors {
     return list;
   }
 
-  double[] getAllTileBoundaries(List<Tiling> tilings, int inputIndex, Double min, Double max) {
+  public double[] getAllTileBoundaries(List<Tiling> tilings, int inputIndex, Double min, Double max) {
     HashSet<Double> breaks = new HashSet<Double>();
     for (Tiling t : tilings) {
       AbstractPartition q;
@@ -56,6 +56,40 @@ public class TileCodersInspectors {
     }
     Arrays.sort(ds);
     return ds;
+  }
+
+  public static void printIntegerTileBoundaries(double[] breaks) {
+    int b = breaks.length;
+    int[] vals = new int[b];
+    for (int i = 0; i < b; i++)
+      vals[i] = (int) breaks[i];
+    Arrays.sort(vals);
+    int maxgap = -1;
+    int mingap = vals[b - 1] - vals[0];
+    System.out.print(" Checking integer coverage \n breaks: ");
+    int last = vals[0];
+    int histogram[] = new int[vals[b - 1] - vals[0]];
+    for (int i = 1; i < b; i++) {
+      if (i == 0 || vals[i] != last) {
+        System.out.print(vals[i] + " ");
+        int delta = vals[i] - last;
+        maxgap = delta > maxgap ? delta : maxgap;
+        mingap = delta < mingap ? delta : mingap;
+        last = vals[i];
+        if (delta < histogram.length - 1)
+          histogram[delta] += 1;
+        else
+          histogram[histogram.length - 1] += 1;
+      }
+    }
+    System.out.println();
+    System.out.print(" Gaps: max: " + maxgap + " min: " + mingap + "\n Histogram: ");
+
+    for (int i = 0; i < histogram.length; i++) {
+      if (histogram[i] > 0)
+        System.out.print(" (gap=" + i + (i == histogram.length - 1 ? "+" : "") + " count=" + histogram[i] + ")");
+    }
+    System.out.println();
   }
 
   public TileCodersInspectors(TileCoders tc, Range[] ranges, String[] inputNames) {
@@ -193,38 +227,5 @@ public class TileCodersInspectors {
     return output;
   }
 
-  static void printIntCoverage(double[] breaks) {
-    int b = breaks.length;
-    int[] vals = new int[b];
-    for (int i = 0; i < b; i++)
-      vals[i] = (int) breaks[i];
-    Arrays.sort(vals);
-    int maxgap = -1;
-    int mingap = vals[b - 1] - vals[0];
-    System.out.print(" Checking integer coverage \n breaks: ");
-    int last = vals[0];
-    int histogram[] = new int[vals[b - 1] - vals[0]];
-    for (int i = 1; i < b; i++) {
-      if (i == 0 || vals[i] != last) {
-        System.out.print(vals[i] + " ");
-        int delta = vals[i] - last;
-        maxgap = delta > maxgap ? delta : maxgap;
-        mingap = delta < mingap ? delta : mingap;
-        last = vals[i];
-        if (delta < histogram.length - 1)
-          histogram[delta] += 1;
-        else
-          histogram[histogram.length - 1] += 1;
-      }
-    }
-    System.out.println();
-    System.out.print(" Gaps: max: " + maxgap + " min: " + mingap + "\n Histogram: ");
-
-    for (int i = 0; i < histogram.length; i++) {
-      if (histogram[i] > 0)
-        System.out.print(" (gap=" + i + (i == histogram.length - 1 ? "+" : "") + " count=" + histogram[i] + ")");
-    }
-    System.out.println();
-  }
 
 }

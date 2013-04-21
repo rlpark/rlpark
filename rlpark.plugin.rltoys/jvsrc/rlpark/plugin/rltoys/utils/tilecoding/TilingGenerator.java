@@ -8,6 +8,7 @@ import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.Wr
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoder;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.Tiling;
+import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.UNH;
 
 public class TilingGenerator {
 
@@ -29,6 +30,16 @@ public class TilingGenerator {
     tc.tileCoders().add(new TileCoder(new Tiling[] { tiling }, 0));
   }
 
+
+  static void addUNHTiling(TileCoders tc, UNH Hasher, int[] inputIndexes, double[] offsets, double[] widths,
+      int resolution) {
+    Discretizer[] discretizers = new Discretizer[inputIndexes.length];
+    for (int i = 0; i < discretizers.length; i++) {
+      discretizers[i] = new WrappedPartition(offsets[i], offsets[i] + widths[i] * resolution, resolution);
+    }
+    Tiling tiling = new Tiling(0, discretizers, inputIndexes);
+    tc.tileCoders().add(new TileCoder(new Tiling[] { tiling }, 0));
+  }
 
   static void addRandomOffsetWrappingTiling(TileCoders tc, int[] inputIndexes, Random random, double[] widths,
       int resolution) {
