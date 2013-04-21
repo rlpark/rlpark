@@ -58,7 +58,7 @@ public class TileCodersInspectors {
     return ds;
   }
 
-  public static void printIntegerTileBoundaries(double[] breaks) {
+  public void printIntegerTileBoundaries(double[] breaks) {
     int b = breaks.length;
     int[] vals = new int[b];
     for (int i = 0; i < b; i++)
@@ -100,7 +100,7 @@ public class TileCodersInspectors {
     // .rangesClone();
   }
 
-  public String Description(boolean full) {
+  public String description(boolean full) {
     String output = "";
     String tileDescriptions = "";
     output += "Inputs: " + tc.nbInputs();

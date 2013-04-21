@@ -6,3 +6,5 @@ private
 zephyr.jar
 .junittests_*
 .junitdiscofile.bin
+localmods
+vestigal
