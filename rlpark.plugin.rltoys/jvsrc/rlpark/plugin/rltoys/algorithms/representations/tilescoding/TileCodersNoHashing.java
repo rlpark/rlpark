@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.DiscretizerFactory;
-import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedSmallPartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedBigPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.Identity;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
@@ -18,7 +18,7 @@ public class TileCodersNoHashing extends TileCoders {
   }
 
   public TileCodersNoHashing(Range... ranges) {
-    this(new BoundedSmallPartitionFactory(ranges), ranges.length);
+    this(new BoundedBigPartitionFactory(ranges), ranges.length);
   }
 
   public TileCodersNoHashing(DiscretizerFactory discretizerFactory, int nbInputs) {

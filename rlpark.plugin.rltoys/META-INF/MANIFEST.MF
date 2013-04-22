@@ -85,4 +85,5 @@ Export-Package: rlpark.plugin.rltoys.agents,
  rlpark.plugin.rltoys.problems.nostate;x-internal:=true,
  rlpark.plugin.rltoys.problems.pendulum,
  rlpark.plugin.rltoys.problems.puddleworld;x-internal:=true,
- rlpark.plugin.rltoys.utils
+ rlpark.plugin.rltoys.utils,
+ rlpark.plugin.rltoys.utils.tilecoding

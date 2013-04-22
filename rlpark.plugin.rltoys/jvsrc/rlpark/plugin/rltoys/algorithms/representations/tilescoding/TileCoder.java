@@ -10,11 +10,12 @@ public class TileCoder implements Serializable {
   private static final long serialVersionUID = 2546756615574797245L;
   private final Tiling[] tilings;
   private final int[] activeTiles;
-  public final int resolution;
+
+  // public final int resolution;
 
   public TileCoder(Tiling[] tilings, int resolution) {
     this.tilings = tilings;
-    this.resolution = resolution;
+    // this.resolution = resolution;
     activeTiles = new int[tilings.length];
   }
 
