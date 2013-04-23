@@ -7,7 +7,7 @@ import rlpark.plugin.rltoys.algorithms.representations.discretizer.DiscretizerFa
 import rlpark.plugin.rltoys.math.ranges.Range;
 
 public abstract class AbstractPartitionFactory implements DiscretizerFactory {
-  public abstract class AbstractPartition implements Discretizer {
+  static public abstract class AbstractPartition implements Discretizer {
     private static final long serialVersionUID = 5477929434176764517L;
     public final int resolution;
     public final double intervalWidth;
