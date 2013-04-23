@@ -6,6 +6,7 @@ import java.util.List;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.Discretizer;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.DiscretizerFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedBigPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.Tiling;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
@@ -135,6 +136,10 @@ public abstract class TileCoders implements Projector {
     for (int i = 0; i < ranges.length; i++)
       ranges[i] = new Range(min, max);
     return ranges;
+  }
+
+  public static DiscretizerFactory createDefaultDiscretizer(Range... ranges) {
+    return new BoundedBigPartitionFactory(ranges);
   }
 
 }

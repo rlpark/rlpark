@@ -50,17 +50,19 @@ public class TileCodersUniformityTest {
   }
 
   private static void projectSamples(Range range, DiscretizerFactory partitionFactory, int nbSamples) {
-    int gridResolution = 3;
+    int gridResolution = 5;
     int nbTilings = 5;
     Random random = new Random(0);
+    System.out.println("^^^^" + partitionFactory.getClass().getSimpleName() + "^^^^");
     TileCodersNoHashing coders = new TileCodersNoHashing(partitionFactory, 1);
     coders.addFullTilings(gridResolution, nbTilings);
+    System.out.println(coders.toString());
     PVector stats = computeStats(random, range, coders, gridResolution, nbTilings, nbSamples);
-    System.out.println(stats.toString());
+    System.out.println("Nb On: " + stats.toString());
     int expectedAverage = nbSamples / coders.vectorSize() * nbTilings;
     for (int i = 0; i < stats.data.length; i++)
       stats.data[i] = stats.data[i] / expectedAverage;
-    System.out.println(stats.toString());
+    System.out.println("Nb On (relative to average): " + stats.toString());
     StringBuilder info = new StringBuilder();
     double min = Double.MAX_VALUE, max = 0;
     double stddev = 0;
@@ -73,6 +75,7 @@ public class TileCodersUniformityTest {
     }
     stddev = Math.sqrt(stddev / stats.data.length);
     System.out.println(String.format("[%.2f,%.2f] range=%.2f stddev=%.2f", min, max, max - min, stddev));
+    System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
   }
 
   public static void main(String[] args) {

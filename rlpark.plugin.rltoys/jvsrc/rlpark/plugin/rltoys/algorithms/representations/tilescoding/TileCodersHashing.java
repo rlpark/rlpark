@@ -1,7 +1,6 @@
 package rlpark.plugin.rltoys.algorithms.representations.tilescoding;
 
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.DiscretizerFactory;
-import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedSmallPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.Hashing;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
@@ -17,7 +16,7 @@ public class TileCodersHashing extends TileCoders {
   }
 
   public TileCodersHashing(Hashing hashing, Range... ranges) {
-    this(hashing, new BoundedSmallPartitionFactory(ranges), ranges.length);
+    this(hashing, createDefaultDiscretizer(ranges), ranges.length);
   }
 
   public TileCodersHashing(Hashing hashing, DiscretizerFactory discretizerFactory, int nbInputs) {

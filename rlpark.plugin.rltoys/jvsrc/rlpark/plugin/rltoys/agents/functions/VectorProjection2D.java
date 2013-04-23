@@ -4,23 +4,22 @@ package rlpark.plugin.rltoys.agents.functions;
 import rlpark.plugin.rltoys.algorithms.functions.stateactions.StateToStateAction;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.envio.actions.Action;
+import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.math.vector.RealVector;
-import rlpark.plugin.rltoys.problems.ProblemBounded;
-import rlpark.plugin.rltoys.problems.ProblemDiscreteAction;
 
 public class VectorProjection2D extends FunctionProjected2D {
   private final StateToStateAction toStateAction;
   private final Action[] actions;
 
-  public VectorProjection2D(ProblemBounded problem, Projector projector) {
-    this(problem, projector, null);
+  public VectorProjection2D(Range xRange, Range yRange, Projector projector) {
+    this(xRange, yRange, projector, null, null);
   }
 
-  public VectorProjection2D(ProblemBounded problem, Projector projector, StateToStateAction toStateAction) {
-    super(projector, problem.getObservationRanges()[0], problem.getObservationRanges()[1]);
-    assert problem.getObservationRanges().length == 2;
+  public VectorProjection2D(Range xRange, Range yRange, Projector projector, StateToStateAction toStateAction,
+      Action[] actions) {
+    super(projector, xRange, yRange);
     this.toStateAction = toStateAction;
-    actions = toStateAction != null ? ((ProblemDiscreteAction) problem).actions() : null;
+    this.actions = actions;
   }
 
   public double value(RealVector vector, double x, double y) {

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedBigPartitionFactory;
+import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.BoundedSmallPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.WrappedPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
@@ -43,7 +44,7 @@ public class TileCodersNoHashingTest {
 
   @Test
   public void testTileCodersDim1Res2Tiling4() {
-    TileCoders coders = new TileCodersNoHashing(1, -1, 1);
+    TileCoders coders = new TileCodersNoHashing(new BoundedSmallPartitionFactory(buildRanges(1, -1, 1)), 1);
     coders.addIndependentTilings(2, 4);
     Assert.assertEquals(4 * 2, coders.vectorSize());
     Assert.assertEquals(4, coders.vectorNorm(), 0.0);

@@ -1,6 +1,7 @@
 package rlpark.plugin.rltoys.problems.puddleworld;
 
 import rlpark.plugin.rltoys.algorithms.functions.ContinuousFunction;
+import rlpark.plugin.rltoys.utils.Utils;
 
 
 public class SmoothPuddle implements ContinuousFunction {
@@ -12,8 +13,10 @@ public class SmoothPuddle implements ContinuousFunction {
     this.patternIndexes = patternIndexes;
     this.meanValues = meanValues;
     varianceValues = new double[patternIndexes.length];
-    for (int i = 0; i < stddevValues.length; i++)
+    for (int i = 0; i < stddevValues.length; i++) {
       varianceValues[i] = stddevValues[i] * stddevValues[i];
+      assert varianceValues[i] > 0;
+    }
   }
 
   @Override
@@ -21,6 +24,7 @@ public class SmoothPuddle implements ContinuousFunction {
     double result = 1.0;
     for (int i = 0; i < patternIndexes.length; i++)
       result *= normalDistribution(input[patternIndexes[i]], meanValues[i], varianceValues[i]);
+    assert Utils.checkValue(result);
     return result;
   }
 

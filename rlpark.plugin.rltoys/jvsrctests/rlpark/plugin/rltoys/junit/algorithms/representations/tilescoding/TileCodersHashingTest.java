@@ -36,8 +36,7 @@ public class TileCodersHashingTest {
     TileCodersNoHashingTest.checkFeatureActivationFrequency(new TileCodersFactory() {
       @Override
       public TileCoders create(int nbInputs, double min, double max) {
-        TileCoders coders = new TileCodersHashing(new UNH(new Random(0), memorySize), nbInputs, 0, 1);
-        return coders;
+        return new TileCodersHashing(new UNH(new Random(0), memorySize * 10), nbInputs, 0, 1);
       }
     });
   }
