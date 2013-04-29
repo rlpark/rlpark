@@ -6,6 +6,7 @@ import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.SparseRealVector;
+import rlpark.plugin.rltoys.math.vector.SparseVector;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
@@ -225,6 +226,8 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
 
   @Override
   public double dotProduct(RealVector other) {
+    if (other instanceof SparseVector && ((SparseVector) other).nonZeroElements() < nonZeroElements())
+      return other.dotProduct(this);
     double result = 0.0;
     for (int position = 0; position < nbActive; position++)
       result += other.getEntry(activeIndexes[position]) * values[position];

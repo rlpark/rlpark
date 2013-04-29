@@ -10,6 +10,7 @@ public class ActorLambdaOffPolicy extends AbstractActorOffPolicy {
   final protected Traces[] e_u;
   final public double lambda;
   final protected double alpha_u;
+  private double rho_t;
 
   public ActorLambdaOffPolicy(double lambda, double gamma, PolicyDistribution policyDistribution, double alpha_u,
       int nbFeatures, Traces prototype) {
@@ -40,8 +41,9 @@ public class ActorLambdaOffPolicy extends AbstractActorOffPolicy {
   }
 
   @Override
-  protected void updateParameters(double rho_t, RealVector x_t, Action a_t, double delta) {
+  protected void updateParameters(double pi_t, double b_t, RealVector x_t, Action a_t, double delta) {
     targetPolicy.update(x_t);
+    rho_t = pi_t / b_t;
     updateEligibilityTraces(rho_t, a_t, delta);
     updatePolicyParameters(rho_t, a_t, delta);
   }

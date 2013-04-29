@@ -30,6 +30,7 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
   @Monitor(wrappers = { Squared.ID, Abs.ID })
   protected double delta_t;
   private double correction;
+  private double rho_t;
 
   public GTDLambda(double lambda, double gamma, double alpha_v, double alpha_w, int nbFeatures) {
     this(lambda, gamma, alpha_v, alpha_w, nbFeatures, new ATraces());
@@ -46,7 +47,8 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
   }
 
   @Override
-  public double update(double rho_t, RealVector x_t, RealVector x_tp1, double r_tp1, double gamma_tp1, double z_tp1) {
+  public double update(double pi_t, double b_t, RealVector x_t, RealVector x_tp1, double r_tp1, double gamma_tp1,
+      double z_tp1) {
     if (x_t == null)
       return initEpisode(gamma_tp1);
     VectorPool pool = VectorPools.pool(e.vect());
@@ -54,6 +56,7 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
     delta_t = r_tp1 + (1 - gamma_tp1) * z_tp1 + gamma_tp1 * v.dotProduct(x_tp1) - v_t;
     // Update traces
     e.update(gamma_t * lambda, x_t);
+    rho_t = pi_t / b_t;
     e.vect().mapMultiplyToSelf(rho_t);
     // Compute correction
     MutableVector correctionVector = pool.newVector();
@@ -86,16 +89,16 @@ public class GTDLambda implements OnPolicyTD, GVF, EligibilityTraceAlgorithm {
 
   @Override
   public double update(RealVector x_t, RealVector x_tp1, double r_tp1) {
-    return update(1.0, x_t, x_tp1, r_tp1, gamma, 0);
+    return update(1, 1, x_t, x_tp1, r_tp1, gamma, 0);
   }
 
   @Override
-  public double update(double rho_t, RealVector x_t, RealVector x_tp1, double r_tp1) {
-    return update(rho_t, x_t, x_tp1, r_tp1, gamma, 0);
+  public double update(double pi_t, double b_t, RealVector x_t, RealVector x_tp1, double r_tp1) {
+    return update(pi_t, b_t, x_t, x_tp1, r_tp1, gamma, 0);
   }
 
-  public double update(double rho_t, RealVector x_t, RealVector x_tp1, double r_tp1, double gamma_tp1) {
-    return update(rho_t, x_t, x_tp1, r_tp1, gamma_tp1, 0);
+  public double update(double pi_t, double b_t, RealVector x_t, RealVector x_tp1, double r_tp1, double gamma_tp1) {
+    return update(pi_t, b_t, x_t, x_tp1, r_tp1, gamma_tp1, 0);
   }
 
   @Override

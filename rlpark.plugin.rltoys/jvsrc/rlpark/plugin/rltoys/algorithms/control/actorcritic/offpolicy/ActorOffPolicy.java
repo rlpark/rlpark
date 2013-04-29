@@ -6,7 +6,7 @@ import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 
 public interface ActorOffPolicy {
-  void update(double rho_t, RealVector x_t, Action a_t, double delta);
+  void update(double pi_t, double b_t, RealVector x_t, Action a_t, double delta);
 
   PolicyDistribution policy();
 

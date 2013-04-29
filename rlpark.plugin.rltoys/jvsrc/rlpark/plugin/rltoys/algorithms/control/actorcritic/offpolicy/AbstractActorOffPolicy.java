@@ -24,12 +24,12 @@ public abstract class AbstractActorOffPolicy implements ActorOffPolicy {
   }
 
   @Override
-  public void update(double rho_t, RealVector x_t, Action a_t, double delta) {
+  public void update(double pi_t, double b_t, RealVector x_t, Action a_t, double delta) {
     if (x_t == null) {
       initEpisode();
       return;
     }
-    updateParameters(rho_t, x_t, a_t, delta);
+    updateParameters(pi_t, b_t, x_t, a_t, delta);
   }
 
   @Override
@@ -44,5 +44,5 @@ public abstract class AbstractActorOffPolicy implements ActorOffPolicy {
 
   abstract protected void initEpisode();
 
-  abstract protected void updateParameters(double rho_t, RealVector x_t, Action a_t, double delta);
+  abstract protected void updateParameters(double pi_t, double b_t, RealVector x_t, Action a_t, double delta);
 }

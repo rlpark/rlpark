@@ -19,6 +19,7 @@ import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.core.internal.views.helpers.ScreenShotAction;
+import zephyr.plugin.plotting.internal.actions.EnableScaleAction;
 import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.axes.Axes;
 import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
@@ -34,6 +35,7 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
     }
   }
 
+  protected final EnableScaleAction centerAction = new EnableScaleAction();
   private final Colors colors = new Colors();
   private final Function2DBufferedDrawer valueFunctionDrawer = new Function2DBufferedDrawer(colors);
   private final Axes axes = new Axes();
@@ -72,6 +74,8 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
 
   @Override
   protected boolean synchronize(VectorProjection2D projection) {
+    if (centerAction.scaleEnabled())
+      functionSampler.resetRange();
     if (!synchronizeAction.synchronizedData())
       return false;
     RealVector projected = adapter.lockLayoutFunction();
@@ -107,6 +111,7 @@ public class VectorProjectedView extends ForegroundCanvasView<VectorProjection2D
 
   @Override
   protected void setToolbar(IToolBarManager toolbarManager) {
+    toolbarManager.add(centerAction);
     toolbarManager.add(new ScreenShotAction(this));
     toolbarManager.add(colorMapAction);
     toolbarManager.add(synchronizeAction);

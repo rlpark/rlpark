@@ -9,19 +9,19 @@ import rlpark.plugin.rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.views.helpers.BackgroundCanvasView;
-import zephyr.plugin.plotting.internal.actions.CenterPlotAction;
-import zephyr.plugin.plotting.internal.actions.CenterPlotAction.ViewCenterable;
+import zephyr.plugin.plotting.internal.actions.EnableScaleAction;
 import zephyr.plugin.plotting.internal.bar2d.Bar2D;
 import zephyr.plugin.plotting.internal.mousesearch.MouseSearch;
 
 @SuppressWarnings("restriction")
-public class RealVectorBarView extends BackgroundCanvasView<RealVector> implements ViewCenterable {
+public class RealVectorBarView extends BackgroundCanvasView<RealVector> {
   public static class Provider extends ClassViewProvider {
     public Provider() {
       super(RealVector.class);
     }
   }
 
+  protected final EnableScaleAction centerAction = new EnableScaleAction();
   protected double[] data;
   private final Bar2D bar = new Bar2D();
   private MouseSearch mouseSearch;
@@ -35,11 +35,15 @@ public class RealVectorBarView extends BackgroundCanvasView<RealVector> implemen
 
   @Override
   protected void setToolbar(IToolBarManager toolBarManager) {
-    toolBarManager.add(new CenterPlotAction(this));
+    toolBarManager.add(centerAction);
   }
 
   @Override
   public boolean synchronize(RealVector vector) {
+    if (centerAction.scaleEnabled()) {
+      bar.axes().x.reset();
+      bar.axes().y.reset();
+    }
     data = vector.accessData();
     return true;
   }
@@ -56,12 +60,6 @@ public class RealVectorBarView extends BackgroundCanvasView<RealVector> implemen
   public void dispose() {
     super.dispose();
     bar.dispose();
-  }
-
-  @Override
-  public void center() {
-    bar.axes().x.reset();
-    bar.axes().y.reset();
   }
 
   @Override

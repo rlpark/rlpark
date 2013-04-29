@@ -88,4 +88,8 @@ public class History {
   public int nbAdded() {
     return shift;
   }
+
+  public float[] data() {
+    return history;
+  }
 }

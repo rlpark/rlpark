@@ -27,6 +27,8 @@ public class VectorProjection2D extends FunctionProjected2D {
     if (projected.getDimension() == vector.getDimension())
       return vector.dotProduct(projected);
     double sum = 0.0;
+    if (toStateAction == null)
+      return sum;
     for (Action a : actions)
       sum += vector.dotProduct(toStateAction.stateAction(projected, a));
     return sum;

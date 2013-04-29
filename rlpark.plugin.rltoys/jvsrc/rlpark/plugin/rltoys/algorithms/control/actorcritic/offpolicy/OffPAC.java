@@ -16,7 +16,8 @@ public class OffPAC implements OffPolicyLearner {
   public final Policy behavior;
   public final OffPolicyTD critic;
   public final ActorOffPolicy actor;
-  protected double rho_t;
+  protected double pi_t;
+  protected double b_t;
 
   public OffPAC(Policy behavior, OffPolicyTD critic, ActorOffPolicy actor) {
     this.critic = critic;
@@ -26,20 +27,15 @@ public class OffPAC implements OffPolicyLearner {
 
   @Override
   public void learn(RealVector x_t, Action a_t, RealVector x_tp1, Action a_tp1, double r_tp1) {
-    rho_t = 0.0;
     if (x_t != null) {
       actor.policy().update(x_t);
+      pi_t = actor.policy().pi(a_t);
       behavior.update(x_t);
-      rho_t = computeRho(a_t);
+      b_t = behavior.pi(a_t);
     }
-    assert Utils.checkValue(rho_t);
-    double delta = critic.update(rho_t, x_t, x_tp1, r_tp1);
+    double delta = critic.update(pi_t, b_t, x_t, x_tp1, r_tp1);
     assert Utils.checkValue(delta);
-    actor.update(rho_t, x_t, a_t, delta);
-  }
-
-  protected double computeRho(Action a_t) {
-    return actor.policy().pi(a_t) / behavior.pi(a_t);
+    actor.update(pi_t, b_t, x_t, a_t, delta);
   }
 
   @Override
@@ -57,9 +53,5 @@ public class OffPAC implements OffPolicyLearner {
   @Override
   public Predictor predictor() {
     return critic;
-  }
-
-  public double rho() {
-    return rho_t;
   }
 }

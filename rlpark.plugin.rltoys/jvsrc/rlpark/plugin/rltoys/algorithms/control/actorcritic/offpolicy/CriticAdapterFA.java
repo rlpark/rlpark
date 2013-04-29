@@ -47,13 +47,13 @@ public class CriticAdapterFA implements OffPolicyTD {
   }
 
   @Override
-  public double update(double rho_t, RealVector o_t, RealVector o_tp1, double r_tp1) {
+  public double update(double pi_t, double b_t, RealVector o_t, RealVector o_tp1, double r_tp1) {
     if (o_t != this.o_t) {
       x_t = Vectors.bufferedCopy(projectIFN(o_t), x_t);
       this.o_t = o_t;
     }
     RealVector x_tp1 = projectIFN(o_tp1);
-    double delta = offPolicyTD.update(rho_t, x_t, x_tp1, r_tp1);
+    double delta = offPolicyTD.update(pi_t, b_t, x_t, x_tp1, r_tp1);
     x_t = Vectors.bufferedCopy(x_tp1, x_t);
     this.o_t = o_tp1;
     return delta;

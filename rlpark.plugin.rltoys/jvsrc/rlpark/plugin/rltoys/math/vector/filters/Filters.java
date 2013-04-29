@@ -4,6 +4,7 @@ import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.SparseVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.utils.NotImplemented;
 
 public class Filters {
   interface FilteredOperation {
@@ -148,7 +149,7 @@ public class Filters {
       public MutableVector sparseOperate(int[] indexes, int nbActive) {
         for (int i = 0; i < nbActive; i++) {
           int entryIndex = indexes[i];
-          result.setEntry(indexes[entryIndex], result.getEntry(entryIndex) / arg.getEntry(entryIndex));
+          result.setEntry(entryIndex, result.getEntry(entryIndex) / arg.getEntry(entryIndex));
         }
         return result;
       }
@@ -159,5 +160,26 @@ public class Filters {
       }
     };
     return operate(mapDivideSelfOperation, filter);
+  }
+
+  public static MutableVector powToSelf(final PVector result, final double b, RealVector filter) {
+    FilteredOperation powSelfOperation = new FilteredOperation() {
+      @Override
+      public MutableVector sparseOperate(int[] indexes, int nbActive) {
+        for (int i = 0; i < nbActive; i++) {
+          int entryIndex = indexes[i];
+          double previousValue = result.getEntry(entryIndex);
+          double resultValue = Math.pow(previousValue, b);
+          result.setEntry(entryIndex, resultValue);
+        }
+        return result;
+      }
+
+      @Override
+      public MutableVector operate() {
+        throw new NotImplemented();
+      }
+    };
+    return operate(powSelfOperation, filter);
   }
 }

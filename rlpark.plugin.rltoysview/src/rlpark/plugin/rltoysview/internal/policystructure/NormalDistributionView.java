@@ -96,6 +96,8 @@ public class NormalDistributionView extends Plot2DView<AbstractNormalDistributio
 
   @Override
   synchronized public boolean synchronize(AbstractNormalDistribution current) {
+    if (centerAction.scaleEnabled())
+      plot.resetAxes();
     if (plot.axes().y.transformationValid) {
       actionHistory.toArray(data.xdata);
       tdErrorHistory.toArray(data.ydata);

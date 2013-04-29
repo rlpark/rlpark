@@ -31,11 +31,10 @@ public class RandomWalkOffPolicy {
       return new TestingResult<OffPolicyTD>(false, "Precision is incorrect!", gtd);
     while (FiniteStateGraphOnPolicy.distanceToSolution(solution, gtd.weights()) > precision) {
       StepData stepData = agentState.step();
-      double rho = 0.0;
-      if (stepData.a_t != null)
-        rho = targetPolicy.pi(stepData.a_t) / behaviourPolicy.pi(stepData.a_t);
       PVector phi_tp1 = agentState.currentFeatureState();
-      gtd.update(rho, phi_t, phi_tp1, stepData.r_tp1);
+      double pi_t = stepData.a_t != null ? targetPolicy.pi(stepData.a_t) : 0;
+      double b_t = stepData.a_t != null ? behaviourPolicy.pi(stepData.a_t) : 1;
+      gtd.update(pi_t, b_t, phi_t, phi_tp1, stepData.r_tp1);
       if (stepData.s_tp1 == null) {
         nbEpisode += 1;
         if (nbEpisode > nbEpisodeMax)

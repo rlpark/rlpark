@@ -26,4 +26,12 @@ public class LocalFeatureSumFunction implements ContinuousFunction {
   public double[] weights() {
     return weights;
   }
+
+  public ContinuousFunction[] features() {
+    return features;
+  }
+
+  public int size() {
+    return features.length;
+  }
 }
