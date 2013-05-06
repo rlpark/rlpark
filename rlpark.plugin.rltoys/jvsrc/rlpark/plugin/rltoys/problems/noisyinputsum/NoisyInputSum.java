@@ -4,9 +4,10 @@ import java.util.Random;
 
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.problems.SupervisedProblem;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class NoisyInputSum {
+public class NoisyInputSum implements SupervisedProblem {
   private final Random random;
   private int nbSteps = 0;
   @Monitor(level = 4)
@@ -43,7 +44,8 @@ public class NoisyInputSum {
     weights.data[random.nextInt(nbChangingWeights)] *= -1;
   }
 
-  public void step() {
+  @Override
+  public void update() {
     nbSteps++;
     if (nbSteps % changePeriod == 0)
       changeWeight();
@@ -52,10 +54,12 @@ public class NoisyInputSum {
     target = weights.dotProduct(inputs);
   }
 
-  public RealVector inputs() {
+  @Override
+  public RealVector input() {
     return inputs;
   }
 
+  @Override
   public double target() {
     return target;
   }

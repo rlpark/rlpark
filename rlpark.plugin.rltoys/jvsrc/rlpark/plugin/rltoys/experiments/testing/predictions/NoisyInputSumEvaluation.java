@@ -17,13 +17,13 @@ public class NoisyInputSumEvaluation {
   static public double evaluateLearner(LearningAlgorithm algorithm, int learningEpisodes, int evaluationEpisodes) {
     NoisyInputSum noisyInputSum = new NoisyInputSum(new Random(0), NbNonZeroWeights, NbInputs);
     for (int i = 0; i < learningEpisodes; i++) {
-      noisyInputSum.step();
-      algorithm.learn(noisyInputSum.inputs(), noisyInputSum.target());
+      noisyInputSum.update();
+      algorithm.learn(noisyInputSum.input(), noisyInputSum.target());
     }
     PVector errors = new PVector(evaluationEpisodes);
     for (int i = 0; i < evaluationEpisodes; i++) {
-      noisyInputSum.step();
-      errors.data[i] = algorithm.learn(noisyInputSum.inputs(), noisyInputSum.target());
+      noisyInputSum.update();
+      errors.data[i] = algorithm.learn(noisyInputSum.input(), noisyInputSum.target());
       assert Utils.checkValue(errors.data[i]);
     }
     double mse = errors.dotProduct(errors) / errors.size;
