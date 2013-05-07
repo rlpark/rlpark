@@ -67,4 +67,9 @@ public class NoisyInputSum implements SupervisedProblem {
   public void setChangePeriod(int changePeriod) {
     this.changePeriod = changePeriod;
   }
+
+  @Override
+  public int inputDimension() {
+    return inputs.getDimension();
+  }
 }

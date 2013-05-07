@@ -7,6 +7,7 @@ import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.ParametersProvider;
 import rlpark.plugin.rltoys.experiments.parametersweep.supervised.SupervisedLearnerFactory;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.problems.SupervisedProblem;
 
 public class SupervisedLearnerFactoryJUnit implements SupervisedLearnerFactory, ParametersProvider {
   private static final long serialVersionUID = 6310797873611293280L;
@@ -20,7 +21,7 @@ public class SupervisedLearnerFactoryJUnit implements SupervisedLearnerFactory, 
   }
 
   @Override
-  public LearningAlgorithm createLearner(int counter, Parameters parameters) {
+  public LearningAlgorithm createLearner(int counter, SupervisedProblem problem, Parameters parameters) {
     final double value = parameters.get(Parameter);
     final double localDivergeAt = divergeAt;
     final boolean divergeAtLearning = parameters.get(Divergence) < 0;

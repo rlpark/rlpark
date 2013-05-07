@@ -43,8 +43,8 @@ public class SupervisedSweepContext implements SupervisedContext {
   }
 
   @Override
-  public LearningAlgorithm createLearner(int counter, Parameters parameters) {
-    return learnerFactory.createLearner(counter, parameters);
+  public LearningAlgorithm createLearner(int counter, SupervisedProblem problem, Parameters parameters) {
+    return learnerFactory.createLearner(counter, problem, parameters);
   }
 
   public List<Parameters> provideParameters() {

@@ -8,5 +8,5 @@ import rlpark.plugin.rltoys.problems.SupervisedProblem;
 public interface SupervisedContext extends Context {
   SupervisedProblem createProblem(int counter, Parameters parameters);
 
-  LearningAlgorithm createLearner(int counter, Parameters parameters);
+  LearningAlgorithm createLearner(int counter, SupervisedProblem problem, Parameters parameters);
 }

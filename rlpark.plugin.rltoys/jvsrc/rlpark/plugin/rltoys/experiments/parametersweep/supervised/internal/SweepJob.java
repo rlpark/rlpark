@@ -28,7 +28,7 @@ public class SweepJob implements JobWithParameters, TimedJob {
     Chrono chrono = new Chrono();
     ErrorMonitor errorMonitor = new ErrorMonitor();
     SupervisedProblem problem = context.createProblem(counter, parameters);
-    LearningAlgorithm learner = context.createLearner(counter, parameters);
+    LearningAlgorithm learner = context.createLearner(counter, problem, parameters);
     long nbLearningSteps = (long) ((double) parameters.infos().get(NbLearningSteps));
     long nbEvaluationSteps = (long) ((double) parameters.infos().get(NbEvaluationSteps));
     try {

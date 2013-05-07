@@ -45,6 +45,11 @@ final class SupervisedProblemFactoryJUnit implements SupervisedProblemFactory, P
       public RealVector input() {
         return input;
       }
+
+      @Override
+      public int inputDimension() {
+        return input.getDimension();
+      }
     };
   }
 

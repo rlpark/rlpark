@@ -12,6 +12,7 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class Autostep implements LearningAlgorithm {
   private static final long serialVersionUID = -3311074550497156281L;
+  private static final double DefaultMetaStepSize = 0.1;
   private final double Tau = 1000;
   @Monitor(level = 4)
   protected final PVector alphas;
@@ -19,15 +20,21 @@ public class Autostep implements LearningAlgorithm {
   protected final PVector weights;
   @Monitor(level = 4)
   protected final PVector h;
+  private final double kappa;
   private final PVector v;
   private double delta;
 
   public Autostep(int vectorSize) {
-    this(.1 / vectorSize, new PVector(vectorSize));
+    this(new PVector(vectorSize), DefaultMetaStepSize, 1.0);
   }
 
-  public Autostep(double initStepsize, PVector weights) {
+  public Autostep(int vectorSize, double kappa, double initStepsize) {
+    this(new PVector(vectorSize), kappa, initStepsize);
+  }
+
+  public Autostep(PVector weights, double kappa, double initStepsize) {
     this.weights = weights;
+    this.kappa = kappa;
     int nbFeatures = weights.size;
     alphas = new PVector(nbFeatures);
     alphas.set(initStepsize);
@@ -46,7 +53,7 @@ public class Autostep implements LearningAlgorithm {
         .ebeMultiplyToSelf(alphas);
     v.addToSelf(1.0 / Tau, vUpdate);
     Vectors.positiveMaxToSelf(v, absDeltaXH);
-    PVectors.multiplySelfByExponential(alphas, .01, deltaXH.ebeDivideToSelf(v), IDBD.MinimumStepsize);
+    PVectors.multiplySelfByExponential(alphas, kappa, deltaXH.ebeDivideToSelf(v), IDBD.MinimumStepsize);
     deltaXH = null;
     RealVector x2ByAlphas = pool.newVector(x2).ebeMultiplyToSelf(alphas);
     double sum = Math.max(x2ByAlphas.sum(), 1);

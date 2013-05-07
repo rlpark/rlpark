@@ -16,10 +16,14 @@ public class IDBD implements LearningAlgorithm {
   private final PVector hs;
 
   public IDBD(int size, double theta) {
+    this(size, theta, .1 / size);
+  }
+
+  public IDBD(int size, double theta, double alphaInit) {
     this.theta = theta;
     weights = new PVector(size);
     alphas = new PVector(size);
-    alphas.set(0.1 / size);
+    alphas.set(alphaInit);
     hs = new PVector(size);
   }
 
