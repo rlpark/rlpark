@@ -3,11 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: rlpark.plugin.apache
 Bundle-SymbolicName: rlpark.plugin.apache
 Bundle-Version: 1.0.0
-Bundle-ClassPath: commons-math-2.0-sources.jar,
- commons-math-2.0.jar,
- commons-io-2.0.1-javadoc.jar,
- commons-io-2.0.1-sources.jar,
- commons-io-2.0.1.jar
+Bundle-ClassPath: apache/commons-math-2.0-sources.jar,
+ apache/commons-math-2.0.jar,
+ apache/commons-io-2.0.1-javadoc.jar,
+ apache/commons-io-2.0.1-sources.jar,
+ apache/commons-io-2.0.1.jar
 Bundle-Vendor: Thomas
 Export-Package: org.apache.commons.math,
  org.apache.commons.math.analysis,
