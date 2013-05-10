@@ -33,7 +33,8 @@ final class SupervisedProblemFactoryJUnit implements SupervisedProblemFactory, P
       private final PVector input = new PVector(1.0);
 
       @Override
-      public void update() {
+      public boolean update() {
+        return true;
       }
 
       @Override

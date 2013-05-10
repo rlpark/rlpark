@@ -46,7 +46,9 @@ public class SweepJob implements JobWithParameters, TimedJob {
 
   private boolean run(ErrorMonitor errorMonitor, SupervisedProblem problem, LearningAlgorithm learner, long nbSteps) {
     for (int t = 0; t < nbSteps; t++) {
-      problem.update();
+      boolean update = problem.update();
+      if (!update)
+        return true;
       if (errorMonitor != null) {
         double prediction = learner.predict(problem.input());
         errorMonitor.registerPrediction(problem.target(), prediction);

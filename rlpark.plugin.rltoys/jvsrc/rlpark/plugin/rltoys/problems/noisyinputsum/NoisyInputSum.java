@@ -45,13 +45,14 @@ public class NoisyInputSum implements SupervisedProblem {
   }
 
   @Override
-  public void update() {
+  public boolean update() {
     nbSteps++;
     if (nbSteps % changePeriod == 0)
       changeWeight();
     for (int i = 0; i < inputs.size; i++)
       inputs.data[i] = random.nextGaussian();
     target = weights.dotProduct(inputs);
+    return true;
   }
 
   @Override
@@ -71,5 +72,9 @@ public class NoisyInputSum implements SupervisedProblem {
   @Override
   public int inputDimension() {
     return inputs.getDimension();
+  }
+
+  public PVector weights() {
+    return weights;
   }
 }
