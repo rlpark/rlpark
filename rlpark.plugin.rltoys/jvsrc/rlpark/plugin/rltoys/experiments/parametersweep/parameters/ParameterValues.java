@@ -27,7 +27,7 @@ public class ParameterValues {
   }
 
   public static double[] getFewStepSizeValues(boolean withZero) {
-    double[] values = new double[] { 1e-8, 1e-4, 1e0 };
+    double[] values = new double[] { 1e-8, 1e-4, 1 };
     if (withZero)
       values = ParameterValues.addZero(values);
     return values;
