@@ -17,17 +17,18 @@ import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.SweepDescripto
 import rlpark.plugin.rltoys.experiments.parametersweep.internal.ParametersLogFileReader;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.FrozenParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
-import rlpark.plugin.rltoys.experiments.parametersweep.supervised.SupervisedLearnerFactory;
-import rlpark.plugin.rltoys.experiments.parametersweep.supervised.SupervisedParameters;
-import rlpark.plugin.rltoys.experiments.parametersweep.supervised.SupervisedProblemFactory;
-import rlpark.plugin.rltoys.experiments.parametersweep.supervised.SupervisedSweepDescriptor;
+import rlpark.plugin.rltoys.experiments.parametersweep.prediction.PredictionLearnerFactory;
+import rlpark.plugin.rltoys.experiments.parametersweep.prediction.PredictionParameters;
+import rlpark.plugin.rltoys.experiments.parametersweep.prediction.PredictionProblemFactory;
+import rlpark.plugin.rltoys.experiments.parametersweep.prediction.PredictionSweepDescriptor;
+import rlpark.plugin.rltoys.experiments.parametersweep.prediction.supervised.SupervisedSweepDescriptor;
 import rlpark.plugin.rltoys.experiments.scheduling.schedulers.LocalScheduler;
 import rlpark.plugin.rltoys.junit.experiments.scheduling.SchedulerTest;
 
 public class SupervisedSweepTest {
-  static private final SupervisedProblemFactory[] problemFactories = new SupervisedProblemFactory[] {
+  static private final PredictionProblemFactory[] problemFactories = new PredictionProblemFactory[] {
       new SupervisedProblemFactoryJUnit(10.0), new SupervisedProblemFactoryJUnit(100.0) };
-  static private final SupervisedLearnerFactory[] learnerFactories = new SupervisedLearnerFactory[] { new SupervisedLearnerFactoryJUnit() };
+  static private final PredictionLearnerFactory[] learnerFactories = new PredictionLearnerFactory[] { new SupervisedLearnerFactoryJUnit() };
   protected static final String JUnitFolder = ".junittests_supervisedsweep";
   protected static final int NbRun = 4;
   protected SweepAll sweep = null;
@@ -57,7 +58,7 @@ public class SupervisedSweepTest {
       Assert.assertEquals(expected, value, 0.0);
   }
 
-  protected void checkFile(SupervisedSweepDescriptor descriptor, boolean diverged) {
+  protected void checkFile(PredictionSweepDescriptor descriptor, boolean diverged) {
     List<? extends Context> contexts = descriptor.provideContexts();
     for (Context context : contexts) {
       String testFolder = context.folderPath();
@@ -82,8 +83,8 @@ public class SupervisedSweepTest {
   }
 
   protected void checkParameters(FrozenParameters parameters, boolean diverged) {
-    for (int i = 0; i < SupervisedParameters.nbPerformanceCheckpoint(parameters); i++) {
-      double mse = parameters.get(String.format("%s%s%02d", SupervisedParameters.MSE,
+    for (int i = 0; i < PredictionParameters.nbPerformanceCheckpoint(parameters); i++) {
+      double mse = parameters.get(String.format("%s%s%02d", PredictionParameters.MSE,
                                                 Parameters.PerformanceCumulatedMeasured, i));
       if (diverged) {
         Assert.assertEquals(Float.MAX_VALUE, mse, 0);
@@ -98,15 +99,15 @@ public class SupervisedSweepTest {
 
   @Test
   public void testLearner() {
-    SupervisedSweepDescriptor descriptor = new SupervisedSweepDescriptor(problemFactories, learnerFactories);
+    PredictionSweepDescriptor descriptor = new SupervisedSweepDescriptor(problemFactories, learnerFactories);
     testSweep(descriptor);
     checkFile(descriptor, false);
   }
 
   @Test
   public void testBadLearner01() {
-    SupervisedSweepDescriptor descriptor = new SupervisedSweepDescriptor(problemFactories, learnerFactories);
-    for (SupervisedLearnerFactory learnerFactory : learnerFactories)
+    PredictionSweepDescriptor descriptor = new SupervisedSweepDescriptor(problemFactories, learnerFactories);
+    for (PredictionLearnerFactory learnerFactory : learnerFactories)
       ((SupervisedLearnerFactoryJUnit) learnerFactory)
           .divergeAt((int) (SupervisedProblemFactoryJUnit.NbLearningSteps / 2));
     testSweep(descriptor);
@@ -115,8 +116,8 @@ public class SupervisedSweepTest {
 
   @Test
   public void testBadLearner02() {
-    SupervisedSweepDescriptor descriptor = new SupervisedSweepDescriptor(problemFactories, learnerFactories);
-    for (SupervisedLearnerFactory learnerFactory : learnerFactories)
+    PredictionSweepDescriptor descriptor = new SupervisedSweepDescriptor(problemFactories, learnerFactories);
+    for (PredictionLearnerFactory learnerFactory : learnerFactories)
       ((SupervisedLearnerFactoryJUnit) learnerFactory)
           .divergeAt((int) (SupervisedProblemFactoryJUnit.NbLearningSteps + SupervisedProblemFactoryJUnit.NbEvaluationSteps / 2));
     testSweep(descriptor);

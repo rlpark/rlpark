@@ -4,10 +4,10 @@ import java.util.Random;
 
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
-import rlpark.plugin.rltoys.problems.SupervisedProblem;
+import rlpark.plugin.rltoys.problems.PredictionProblem;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class NoisyInputSum implements SupervisedProblem {
+public class NoisyInputSum implements PredictionProblem {
   private final Random random;
   private int nbSteps = 0;
   @Monitor(level = 4)

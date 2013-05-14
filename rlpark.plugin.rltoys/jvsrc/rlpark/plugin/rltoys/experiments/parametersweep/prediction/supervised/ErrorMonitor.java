@@ -1,12 +1,11 @@
-package rlpark.plugin.rltoys.experiments.parametersweep.supervised.internal;
+package rlpark.plugin.rltoys.experiments.parametersweep.prediction.supervised;
 
 import rlpark.plugin.rltoys.experiments.parametersweep.internal.AbstractPerformanceMonitor;
+import rlpark.plugin.rltoys.experiments.parametersweep.prediction.PredictionParameters;
 
 public class ErrorMonitor extends AbstractPerformanceMonitor {
-  public static final String MSE = "MSE";
-
   public ErrorMonitor(int nbBins, int nbEvaluationSteps) {
-    super("", MSE, createStartingPoints(nbBins, nbEvaluationSteps));
+    super("", PredictionParameters.MSE, createStartingPoints(nbBins, nbEvaluationSteps));
   }
 
   public void registerPrediction(int time, double target, double prediction) {

@@ -5,11 +5,11 @@ import java.util.List;
 import rlpark.plugin.rltoys.algorithms.predictions.supervised.LearningAlgorithm;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.ParametersProvider;
-import rlpark.plugin.rltoys.experiments.parametersweep.supervised.SupervisedLearnerFactory;
+import rlpark.plugin.rltoys.experiments.parametersweep.prediction.PredictionLearnerFactory;
 import rlpark.plugin.rltoys.math.vector.RealVector;
-import rlpark.plugin.rltoys.problems.SupervisedProblem;
+import rlpark.plugin.rltoys.problems.PredictionProblem;
 
-public class SupervisedLearnerFactoryJUnit implements SupervisedLearnerFactory, ParametersProvider {
+public class SupervisedLearnerFactoryJUnit implements PredictionLearnerFactory, ParametersProvider {
   private static final long serialVersionUID = 6310797873611293280L;
   public static final String Parameter = "Value";
   public static final String Divergence = "Divergence";
@@ -21,7 +21,7 @@ public class SupervisedLearnerFactoryJUnit implements SupervisedLearnerFactory, 
   }
 
   @Override
-  public LearningAlgorithm createLearner(int counter, SupervisedProblem problem, Parameters parameters) {
+  public LearningAlgorithm createLearner(int counter, PredictionProblem problem, Parameters parameters) {
     final double value = parameters.get(Parameter);
     final double localDivergeAt = divergeAt;
     final boolean divergeAtLearning = parameters.get(Divergence) < 0;
