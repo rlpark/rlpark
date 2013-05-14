@@ -51,6 +51,7 @@ public class SupervisedSweepContext implements SupervisedContext {
     RunInfo infos = new RunInfo();
     infos.enableFlag(problemFactory.label());
     infos.enableFlag(learnerFactory.label());
+    infos.put(Parameters.PerformanceNbCheckPoint, Parameters.DefaultNbPerformanceCheckpoints);
     List<Parameters> parameters = Utils.asList(new Parameters(infos));
     if (problemFactory instanceof ParametersProvider)
       parameters = ((ParametersProvider) problemFactory).provideParameters(parameters);

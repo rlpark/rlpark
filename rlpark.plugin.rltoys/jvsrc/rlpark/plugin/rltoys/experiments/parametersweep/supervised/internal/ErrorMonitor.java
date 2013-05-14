@@ -1,23 +1,21 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.supervised.internal;
 
-import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
-import rlpark.plugin.rltoys.math.averages.IncrementalAverage;
+import rlpark.plugin.rltoys.experiments.parametersweep.internal.AbstractPerformanceMonitor;
 
-public class ErrorMonitor {
+public class ErrorMonitor extends AbstractPerformanceMonitor {
   public static final String MSE = "MSE";
-  private final IncrementalAverage average = new IncrementalAverage();
-  private boolean resultEnabled = true;
 
-  public void disableResult() {
-    resultEnabled = false;
+  public ErrorMonitor(int nbBins, int nbEvaluationSteps) {
+    super("", MSE, createStartingPoints(nbBins, nbEvaluationSteps));
   }
 
-  public void putResult(Parameters parameters) {
-    parameters.putResult(MSE, resultEnabled ? average.mean() : Float.MAX_VALUE);
-  }
-
-  public void registerPrediction(double target, double prediction) {
+  public void registerPrediction(int time, double target, double prediction) {
     double diff = target - prediction;
-    average.update(diff * diff);
+    registerMeasurement(time, diff * diff);
+  }
+
+  @Override
+  protected double worstValue() {
+    return Float.MAX_VALUE;
   }
 }

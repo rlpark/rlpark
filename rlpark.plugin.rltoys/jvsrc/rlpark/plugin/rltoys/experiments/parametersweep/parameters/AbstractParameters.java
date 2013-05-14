@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
-
 public abstract class AbstractParameters implements Comparable<AbstractParameters>, Serializable {
   private static final long serialVersionUID = 8135997315567194984L;
   protected final Map<String, Double> parameters = new LinkedHashMap<String, Double>();
@@ -72,14 +70,6 @@ public abstract class AbstractParameters implements Comparable<AbstractParameter
       index++;
     }
     return result;
-  }
-
-  public int maxEpisodeTimeSteps() {
-    return (int) get(RLParameters.MaxEpisodeTimeSteps);
-  }
-
-  public int nbEpisode() {
-    return (int) get(RLParameters.NbEpisode);
   }
 
   @Override

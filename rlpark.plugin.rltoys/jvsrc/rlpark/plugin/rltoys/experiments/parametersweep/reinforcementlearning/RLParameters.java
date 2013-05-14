@@ -1,5 +1,7 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning;
 
+import rlpark.plugin.rltoys.experiments.parametersweep.parameters.AbstractParameters;
+
 public class RLParameters {
   public static final String OnPolicyTimeStepsEvaluationFlag = "onPolicyTimeStepsEvaluationFlag";
   public static final String MaxEpisodeTimeSteps = "maxEpisodeTimeSteps";
@@ -20,5 +22,13 @@ public class RLParameters {
 
   final static public double[] getTauValues() {
     return new double[] { 1, 2, 4, 8, 16, 32 };
+  }
+
+  static public int maxEpisodeTimeSteps(AbstractParameters parameters) {
+    return (int) parameters.get(MaxEpisodeTimeSteps);
+  }
+
+  static public int nbEpisode(AbstractParameters parameters) {
+    return (int) parameters.get(NbEpisode);
   }
 }

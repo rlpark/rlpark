@@ -3,6 +3,7 @@ package rlpark.plugin.rltoys.experiments.parametersweep.supervised.internal;
 import rlpark.plugin.rltoys.algorithms.predictions.supervised.LearningAlgorithm;
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.JobWithParameters;
+import rlpark.plugin.rltoys.experiments.parametersweep.parameters.AbstractParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.TimedJob;
 import rlpark.plugin.rltoys.problems.SupervisedProblem;
@@ -10,9 +11,9 @@ import rlpark.plugin.rltoys.utils.Utils;
 import zephyr.plugin.core.api.synchronization.Chrono;
 
 public class SweepJob implements JobWithParameters, TimedJob {
+  private static final long serialVersionUID = -1601304080766261525L;
   public static final String NbLearningSteps = "NbLearningSteps";
   public static final String NbEvaluationSteps = "NbEvaluationSteps";
-  private static final long serialVersionUID = -1601304080766261525L;
   private final SupervisedContext context;
   private final Parameters parameters;
   private final int counter;
@@ -26,22 +27,35 @@ public class SweepJob implements JobWithParameters, TimedJob {
   @Override
   public void run() {
     Chrono chrono = new Chrono();
-    ErrorMonitor errorMonitor = new ErrorMonitor();
     SupervisedProblem problem = context.createProblem(counter, parameters);
     LearningAlgorithm learner = context.createLearner(counter, problem, parameters);
-    long nbLearningSteps = (long) ((double) parameters.infos().get(NbLearningSteps));
-    long nbEvaluationSteps = (long) ((double) parameters.infos().get(NbEvaluationSteps));
+    int nbLearningSteps = nbLearningSteps(parameters);
+    int nbEvaluationSteps = nbEvaluationSteps(parameters);
+    int nbPerformanceCheckpoints = nbPerformanceCheckpoint(parameters);
+    ErrorMonitor errorMonitor = new ErrorMonitor(nbPerformanceCheckpoints, nbEvaluationSteps);
     try {
-      run(null, problem, learner, nbLearningSteps);
-      boolean resultEnabled = run(errorMonitor, problem, learner, nbEvaluationSteps);
+      boolean resultEnabled = run(null, problem, learner, nbLearningSteps)
+          && run(errorMonitor, problem, learner, nbEvaluationSteps);
       if (!resultEnabled)
-        errorMonitor.disableResult();
+        errorMonitor.worstResultUntilEnd();
     } catch (Throwable e) {
       e.printStackTrace(System.err);
-      errorMonitor.disableResult();
+      errorMonitor.worstResultUntilEnd();
     }
     errorMonitor.putResult(parameters);
     parameters.setComputationTimeMillis(chrono.getCurrentMillis());
+  }
+
+  static public int nbPerformanceCheckpoint(AbstractParameters parameters) {
+    return (int) ((double) parameters.infos().get(Parameters.PerformanceNbCheckPoint));
+  }
+
+  static public int nbEvaluationSteps(AbstractParameters parameters) {
+    return (int) ((double) parameters.infos().get(NbEvaluationSteps));
+  }
+
+  static public int nbLearningSteps(AbstractParameters parameters) {
+    return (int) ((double) parameters.infos().get(NbLearningSteps));
   }
 
   private boolean run(ErrorMonitor errorMonitor, SupervisedProblem problem, LearningAlgorithm learner, long nbSteps) {
@@ -51,7 +65,7 @@ public class SweepJob implements JobWithParameters, TimedJob {
         return true;
       if (errorMonitor != null) {
         double prediction = learner.predict(problem.input());
-        errorMonitor.registerPrediction(problem.target(), prediction);
+        errorMonitor.registerPrediction(t, problem.target(), prediction);
         if (!Utils.checkValue(prediction))
           return false;
       }

@@ -30,8 +30,6 @@ public class SupervisedSweepTest {
   static private final SupervisedLearnerFactory[] learnerFactories = new SupervisedLearnerFactory[] { new SupervisedLearnerFactoryJUnit() };
   protected static final String JUnitFolder = ".junittests_supervisedsweep";
   protected static final int NbRun = 4;
-  protected static final int NbTimeSteps = 100;
-  protected static final int NbEpisode = 100;
   protected SweepAll sweep = null;
 
   @Before
@@ -84,15 +82,18 @@ public class SupervisedSweepTest {
   }
 
   protected void checkParameters(FrozenParameters parameters, boolean diverged) {
-    double mse = parameters.get(SupervisedParameters.MSE);
-    if (diverged) {
-      Assert.assertEquals(Float.MAX_VALUE, mse, 0);
-      return;
+    for (int i = 0; i < SupervisedParameters.nbPerformanceCheckpoint(parameters); i++) {
+      double mse = parameters.get(String.format("%s%s%02d", SupervisedParameters.MSE,
+                                                Parameters.PerformanceCumulatedMeasured, i));
+      if (diverged) {
+        Assert.assertEquals(Float.MAX_VALUE, mse, 0);
+        return;
+      }
+      double targetValue = parameters.infos().get(SupervisedProblemFactoryJUnit.Target);
+      double predictionValue = parameters.get(SupervisedLearnerFactoryJUnit.Parameter);
+      double expectedMSE = (targetValue - predictionValue) * (targetValue - predictionValue);
+      Assert.assertEquals(expectedMSE, mse, 0);
     }
-    double targetValue = parameters.infos().get(SupervisedProblemFactoryJUnit.Target);
-    double predictionValue = parameters.get(SupervisedLearnerFactoryJUnit.Parameter);
-    double expectedMSE = (targetValue - predictionValue) * (targetValue - predictionValue);
-    Assert.assertEquals(expectedMSE, mse, 0);
   }
 
   @Test

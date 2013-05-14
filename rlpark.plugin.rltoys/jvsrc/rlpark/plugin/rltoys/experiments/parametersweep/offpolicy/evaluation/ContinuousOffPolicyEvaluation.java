@@ -11,6 +11,7 @@ import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.RewardM
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
+import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.signals.Listener;
 
@@ -36,12 +37,12 @@ public class ContinuousOffPolicyEvaluation extends AbstractOffPolicyEvaluation {
   @Override
   public AgentEvaluator connectEvaluator(int counter, Runner behaviourRunner, OffPolicyProblemFactory problemFactory,
       RepresentationFactory projectorFactory, OffPolicyAgentEvaluable learningAgent, Parameters parameters) {
-    if (parameters.nbEpisode() != 1)
+    if (RLParameters.nbEpisode(parameters) != 1)
       throw new RuntimeException("This evaluation does not support multiple episode for the behaviour");
     RLProblem problem = createEvaluationProblem(counter, problemFactory);
     RLAgent evaluatedAgent = learningAgent.createEvaluatedAgent();
-    int nbEpisode = resetPeriod > 0 ? parameters.maxEpisodeTimeSteps() / nbRewardCheckpoint : 1;
-    int nbTimeSteps = resetPeriod > 0 ? resetPeriod : parameters.maxEpisodeTimeSteps();
+    int nbEpisode = resetPeriod > 0 ? RLParameters.maxEpisodeTimeSteps(parameters) / nbRewardCheckpoint : 1;
+    int nbTimeSteps = resetPeriod > 0 ? resetPeriod : RLParameters.maxEpisodeTimeSteps(parameters);
     final Runner runner = new Runner(problem, evaluatedAgent, nbEpisode, resetPeriod);
     OnPolicyRewardMonitor monitor = createRewardMonitor("Target", nbRewardCheckpoint, nbTimeSteps, nbEpisode);
     monitor.connect(runner);

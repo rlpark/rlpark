@@ -15,7 +15,7 @@ final class SupervisedProblemFactoryJUnit implements SupervisedProblemFactory, P
   private static final long serialVersionUID = 8772273496069908596L;
   public static final String Target = "Target";
   static final double NbLearningSteps = 10;
-  static final double NbEvaluationSteps = 10;
+  static final double NbEvaluationSteps = 100;
   final double targetValue;
 
   public SupervisedProblemFactoryJUnit(double targetValue) {

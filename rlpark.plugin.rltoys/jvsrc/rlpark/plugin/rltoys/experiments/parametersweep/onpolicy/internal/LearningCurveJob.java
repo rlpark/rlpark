@@ -7,6 +7,7 @@ import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
+import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ReinforcementLearningContext;
 import zephyr.plugin.core.api.internal.monitoring.fileloggers.LoggerRow;
 import zephyr.plugin.core.api.signals.Listener;
@@ -64,7 +65,7 @@ public class LearningCurveJob implements Runnable, Serializable {
       e.printStackTrace();
       return;
     }
-    if (parameters.nbEpisode() == 1)
+    if (RLParameters.nbEpisode(parameters) == 1)
       setupRewardListener(runner, loggerRow);
     else
       setupEpisodeListener(runner, loggerRow);

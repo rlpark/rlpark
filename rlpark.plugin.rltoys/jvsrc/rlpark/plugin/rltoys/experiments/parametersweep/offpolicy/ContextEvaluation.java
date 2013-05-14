@@ -14,6 +14,7 @@ import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
+import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 
 public class ContextEvaluation extends AbstractContextOffPolicy implements OffPolicyEvaluationContext {
   private static final long serialVersionUID = -593900122821568271L;
@@ -29,8 +30,8 @@ public class ContextEvaluation extends AbstractContextOffPolicy implements OffPo
   }
 
   private OnPolicyRewardMonitor createRewardMonitor(String prefix, int nbBins, Parameters parameters) {
-    int nbEpisode = parameters.nbEpisode();
-    int maxEpisodeTimeSteps = parameters.maxEpisodeTimeSteps();
+    int nbEpisode = RLParameters.nbEpisode(parameters);
+    int maxEpisodeTimeSteps = RLParameters.maxEpisodeTimeSteps(parameters);
     if (nbEpisode == 1)
       return new RewardMonitorAverage(prefix, nbBins, maxEpisodeTimeSteps);
     return new RewardMonitorEpisode(prefix, nbBins, nbEpisode);

@@ -8,6 +8,11 @@ import java.util.Map;
 public class Parameters extends AbstractParameters {
   private static final long serialVersionUID = -3022547944186532000L;
   public static final String ComputationTime = "ComputationTime";
+  public static final String PerformanceCumulatedMeasured = "CumulatedMeasured";
+  public static final String PerformanceSliceMeasured = "SliceMeasured";
+  public static final String PerformanceStart = "Start";
+  public static final String PerformanceNbCheckPoint = "NbCheckPoint";
+  public static final int DefaultNbPerformanceCheckpoints = 20;
 
   public Parameters(RunInfo infos) {
     super(infos);

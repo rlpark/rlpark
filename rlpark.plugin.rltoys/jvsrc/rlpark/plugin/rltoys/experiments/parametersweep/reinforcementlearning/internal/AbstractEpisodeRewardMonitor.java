@@ -1,12 +1,13 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.internal;
 
+import rlpark.plugin.rltoys.experiments.parametersweep.internal.AbstractPerformanceMonitor;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 
-public abstract class AbstractEpisodeRewardMonitor extends AbstractRewardMonitor {
+public abstract class AbstractEpisodeRewardMonitor extends AbstractPerformanceMonitor {
   private final int[] nbTimeSteps;
 
   public AbstractEpisodeRewardMonitor(String prefix, int[] starts) {
-    super(prefix, starts);
+    super(prefix, "Reward", starts);
     nbTimeSteps = new int[starts.length];
   }
 
@@ -34,5 +35,10 @@ public abstract class AbstractEpisodeRewardMonitor extends AbstractRewardMonitor
     super.worstResultUntilEnd();
     for (int i = currentSlice; i < starts.length; i++)
       nbTimeSteps[i] = Integer.MAX_VALUE;
+  }
+
+  @Override
+  protected double worstValue() {
+    return -Float.MAX_VALUE;
   }
 }

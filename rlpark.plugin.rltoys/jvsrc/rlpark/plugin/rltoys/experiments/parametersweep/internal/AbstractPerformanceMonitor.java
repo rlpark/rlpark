@@ -1,18 +1,20 @@
-package rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.internal;
+package rlpark.plugin.rltoys.experiments.parametersweep.internal;
 
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.RunInfo;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 
-public abstract class AbstractRewardMonitor implements AgentEvaluator {
+public abstract class AbstractPerformanceMonitor implements AgentEvaluator {
   protected int currentSlice;
   protected final int[] starts;
   protected final int[] sizes;
   private final double[] slices;
   private final String prefix;
+  private final String performanceLabel;
 
-  public AbstractRewardMonitor(String prefix, int[] starts) {
+  public AbstractPerformanceMonitor(String prefix, String performanceLabel, int[] starts) {
     this.prefix = prefix;
+    this.performanceLabel = performanceLabel;
     this.starts = starts;
     slices = new double[starts.length];
     sizes = new int[starts.length];
@@ -27,7 +29,7 @@ public abstract class AbstractRewardMonitor implements AgentEvaluator {
   }
 
   private double divideBySize(double value, int size) {
-    return value != -Float.MAX_VALUE ? value / size : -Float.MAX_VALUE;
+    return value != worstValue() ? value / size : worstValue();
   }
 
   protected String criterionLabel(String label, int sliceIndex) {
@@ -37,27 +39,27 @@ public abstract class AbstractRewardMonitor implements AgentEvaluator {
   @Override
   public void putResult(Parameters parameters) {
     RunInfo infos = parameters.infos();
-    infos.put(prefix + "RewardNbCheckPoint", starts.length);
+    infos.put(prefix + performanceLabel + Parameters.PerformanceNbCheckPoint, starts.length);
     for (int i = 0; i < starts.length; i++) {
-      String startLabel = criterionLabel("RewardStart", i);
+      String startLabel = criterionLabel(performanceLabel + Parameters.PerformanceStart, i);
       infos.put(startLabel, starts[i]);
-      String sliceLabel = criterionLabel("RewardSliceMeasured", i);
+      String sliceLabel = criterionLabel(performanceLabel + Parameters.PerformanceSliceMeasured, i);
       parameters.putResult(sliceLabel, divideBySize(slices[i], sizes[i]));
     }
     double cumulatedReward = 0.0;
     int cumulatedSize = 0;
     for (int i = starts.length - 1; i >= 0; i--) {
       cumulatedSize += sizes[i];
-      if (slices[i] != -Float.MAX_VALUE)
+      if (slices[i] != worstValue())
         cumulatedReward += slices[i];
       else
-        cumulatedReward = -Float.MAX_VALUE;
-      String rewardLabel = criterionLabel("RewardCumulatedMeasured", i);
+        cumulatedReward = worstValue();
+      String rewardLabel = criterionLabel(performanceLabel + Parameters.PerformanceCumulatedMeasured, i);
       parameters.putResult(rewardLabel, divideBySize(cumulatedReward, cumulatedSize));
     }
   }
 
-  public void registerMeasurement(long measurementIndex, double reward) {
+  protected void registerMeasurement(long measurementIndex, double reward) {
     updateCurrentSlice(measurementIndex);
     slices[currentSlice] += reward;
     sizes[currentSlice]++;
@@ -71,8 +73,10 @@ public abstract class AbstractRewardMonitor implements AgentEvaluator {
   @Override
   public void worstResultUntilEnd() {
     for (int i = currentSlice; i < starts.length; i++) {
-      slices[i] = -Float.MAX_VALUE;
+      slices[i] = worstValue();
       sizes[i] = 1;
     }
   }
+
+  abstract protected double worstValue();
 }

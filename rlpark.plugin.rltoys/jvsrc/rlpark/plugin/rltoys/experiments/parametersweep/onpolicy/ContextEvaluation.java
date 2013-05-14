@@ -16,7 +16,8 @@ public class ContextEvaluation extends AbstractContextOnPolicy implements OnPoli
   private static final long serialVersionUID = -5926779335932073094L;
   private final int nbRewardCheckpoint;
 
-  public ContextEvaluation(ProblemFactory environmentFactory, RepresentationFactory representationFactory, AgentFactory agentFactory, int nbRewardCheckpoint) {
+  public ContextEvaluation(ProblemFactory environmentFactory, RepresentationFactory representationFactory,
+      AgentFactory agentFactory, int nbRewardCheckpoint) {
     super(environmentFactory, representationFactory, agentFactory);
     this.nbRewardCheckpoint = nbRewardCheckpoint;
   }
@@ -27,8 +28,8 @@ public class ContextEvaluation extends AbstractContextOnPolicy implements OnPoli
   }
 
   private OnPolicyRewardMonitor createRewardMonitor(String prefix, int nbBins, Parameters parameters) {
-    int nbEpisode = parameters.nbEpisode();
-    int maxEpisodeTimeSteps = parameters.maxEpisodeTimeSteps();
+    int nbEpisode = RLParameters.nbEpisode(parameters);
+    int maxEpisodeTimeSteps = RLParameters.maxEpisodeTimeSteps(parameters);
     if (nbEpisode == 1 || parameters.hasFlag(RLParameters.OnPolicyTimeStepsEvaluationFlag))
       return new RewardMonitorAverage(prefix, nbBins, maxEpisodeTimeSteps);
     return new RewardMonitorEpisode(prefix, nbBins, nbEpisode);
