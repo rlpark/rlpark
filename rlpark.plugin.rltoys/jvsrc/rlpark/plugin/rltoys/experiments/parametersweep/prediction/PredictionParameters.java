@@ -7,7 +7,7 @@ public class PredictionParameters {
   public static final String NbLearningSteps = "NbLearningSteps";
   public static final String NbEvaluationSteps = "NbEvaluationSteps";
   public static final String MSE = "MSE";
-
+  public static final String Gamma = "gamma";
 
   static public int nbPerformanceCheckpoint(AbstractParameters parameters) {
     return (int) ((double) parameters.infos().get(Parameters.PerformanceNbCheckPoint));

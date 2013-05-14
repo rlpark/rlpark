@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoys.junit.experiments.supervised;
+package rlpark.plugin.rltoys.junit.experiments.predictions.supervised;
 
 import java.util.List;
 

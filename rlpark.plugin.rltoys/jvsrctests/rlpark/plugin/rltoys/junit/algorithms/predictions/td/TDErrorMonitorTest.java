@@ -63,7 +63,7 @@ public class TDErrorMonitorTest {
         Assert.assertEquals(0, monitor.error(), precision);
         nbPredictionChecked++;
       } else
-        Assert.assertTrue(Math.abs(monitor.error()) > 0);
+        Assert.assertTrue(monitor.error() > 0);
     }
     Assert.assertEquals(problemSize, nbPredictionChecked);
   }

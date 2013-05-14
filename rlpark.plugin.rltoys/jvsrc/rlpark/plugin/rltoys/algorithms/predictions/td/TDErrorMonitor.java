@@ -26,7 +26,7 @@ public class TDErrorMonitor implements Serializable {
   public TDErrorMonitor(double gamma, double precision) {
     this.gamma = gamma;
     this.precision = precision;
-    bufferSize = gamma > 0 ? (int) Math.ceil(Math.log(precision) / Math.log(gamma)) : 1;
+    bufferSize = computeBufferSize(gamma, precision);
     predictionHistory = new double[bufferSize];
     observedHistory = new double[bufferSize];
     gammas = new double[bufferSize];
@@ -34,6 +34,10 @@ public class TDErrorMonitor implements Serializable {
       gammas[i] = Math.pow(gamma, i);
     current = 0;
     cacheFilled = false;
+  }
+
+  static public int computeBufferSize(double gamma, double precision) {
+    return gamma > 0 ? (int) Math.ceil(Math.log(precision) / Math.log(gamma)) : 1;
   }
 
   private void reset() {
@@ -54,7 +58,7 @@ public class TDErrorMonitor implements Serializable {
       errorComputed = true;
       prediction = predictionHistory[current];
       observed = observedHistory[current];
-      error = prediction - observed;
+      error = observed - prediction;
     }
     observedHistory[current] = 0;
     for (int i = 0; i < bufferSize; i++)

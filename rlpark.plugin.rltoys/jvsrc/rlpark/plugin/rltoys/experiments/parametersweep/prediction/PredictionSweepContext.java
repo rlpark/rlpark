@@ -28,6 +28,11 @@ public abstract class PredictionSweepContext implements PredictionContext {
     return ExperimentCounter.DefaultFileName;
   }
 
+  @Override
+  public Runnable createJob(Parameters parameters, ExperimentCounter counter) {
+    return new PredictionSweepJob(this, parameters, counter);
+  }
+
   public List<Parameters> provideParameters() {
     RunInfo infos = new RunInfo();
     infos.enableFlag(problemFactory.label());

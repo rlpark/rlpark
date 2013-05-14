@@ -6,7 +6,6 @@ public class RLParameters {
   public static final String OnPolicyTimeStepsEvaluationFlag = "onPolicyTimeStepsEvaluationFlag";
   public static final String MaxEpisodeTimeSteps = "maxEpisodeTimeSteps";
   public static final String NbEpisode = "nbEpisode";
-  public static final String Gamma = "gamma";
   public static final String AverageReward = "averageReward";
   public static final String Lambda = "Lambda";
   public static final String Tau = "Tau";
