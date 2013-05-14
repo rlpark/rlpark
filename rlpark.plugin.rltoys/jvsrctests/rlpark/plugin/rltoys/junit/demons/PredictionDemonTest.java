@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.algorithms.predictions.td.TD;
+import rlpark.plugin.rltoys.algorithms.predictions.td.TDErrorMonitor;
 import rlpark.plugin.rltoys.horde.demons.PredictionDemon;
 import rlpark.plugin.rltoys.horde.demons.PredictionDemonVerifier;
 import rlpark.plugin.rltoys.horde.functions.RewardFunction;
@@ -72,15 +73,16 @@ public class PredictionDemonTest {
     runExperiment(predictionDemon, verifier, noState, 1000);
   }
 
-  protected void runExperiment(PredictionDemon predictionDemon, PredictionDemonVerifier verifier,
+  protected void runExperiment(PredictionDemon predictionDemon, PredictionDemonVerifier demonVerifier,
       TimeToState timeToState, int maxStep) {
     RealVector x_t = null;
     int time = 0;
+    TDErrorMonitor verifier = demonVerifier.errorMonitor();
     while (!verifier.errorComputed() || Math.abs(verifier.error()) >= verifier.precision()) {
       RealVector x_tp1 = timeToState.get(time);
       ((RewardFunctionTest) predictionDemon.rewardFunction()).update(time);
       predictionDemon.update(x_t, null, x_tp1);
-      verifier.update(false);
+      demonVerifier.update(false);
       x_t = x_tp1;
       time++;
       Assert.assertTrue(time < maxStep);
