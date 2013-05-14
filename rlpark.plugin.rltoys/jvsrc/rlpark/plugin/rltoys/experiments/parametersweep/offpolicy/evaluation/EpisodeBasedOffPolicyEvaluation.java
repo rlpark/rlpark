@@ -5,9 +5,9 @@ import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal.OffPolicyEpisodeRewardMonitor;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
-import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.problems.RLProblem;
@@ -25,7 +25,7 @@ public class EpisodeBasedOffPolicyEvaluation extends AbstractOffPolicyEvaluation
   }
 
   @Override
-  public AgentEvaluator connectEvaluator(final int counter, Runner behaviourRunner,
+  public PerformanceEvaluator connectEvaluator(final int counter, Runner behaviourRunner,
       final OffPolicyProblemFactory problemFactory, final RepresentationFactory projectorFactory,
       final OffPolicyAgentEvaluable learningAgent, final Parameters parameters) {
     RLProblem problem = createEvaluationProblem(counter, problemFactory);

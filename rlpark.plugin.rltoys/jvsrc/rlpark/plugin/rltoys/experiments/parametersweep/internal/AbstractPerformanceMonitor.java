@@ -1,10 +1,10 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.internal;
 
+import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.RunInfo;
-import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 
-public abstract class AbstractPerformanceMonitor implements AgentEvaluator {
+public abstract class AbstractPerformanceMonitor implements PerformanceEvaluator {
   protected int currentSlice;
   protected final int[] starts;
   protected final int[] sizes;

@@ -1,12 +1,12 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal;
 
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
+import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
-import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ReinforcementLearningContext;
 
 public interface OffPolicyEvaluationContext extends ReinforcementLearningContext {
-  AgentEvaluator connectBehaviourRewardMonitor(Runner runner, Parameters parameters);
+  PerformanceEvaluator connectBehaviourRewardMonitor(Runner runner, Parameters parameters);
 
-  AgentEvaluator connectTargetRewardMonitor(int counter, Runner runner, Parameters parameters);
+  PerformanceEvaluator connectTargetRewardMonitor(int counter, Runner runner, Parameters parameters);
 }

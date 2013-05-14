@@ -5,11 +5,11 @@ import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyRewardMonitor;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorAverage;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorEpisode;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
-import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.problems.RLProblem;
@@ -35,7 +35,7 @@ public class ContinuousOffPolicyEvaluation extends AbstractOffPolicyEvaluation {
   }
 
   @Override
-  public AgentEvaluator connectEvaluator(int counter, Runner behaviourRunner, OffPolicyProblemFactory problemFactory,
+  public PerformanceEvaluator connectEvaluator(int counter, Runner behaviourRunner, OffPolicyProblemFactory problemFactory,
       RepresentationFactory projectorFactory, OffPolicyAgentEvaluable learningAgent, Parameters parameters) {
     if (RLParameters.nbEpisode(parameters) != 1)
       throw new RuntimeException("This evaluation does not support multiple episode for the behaviour");

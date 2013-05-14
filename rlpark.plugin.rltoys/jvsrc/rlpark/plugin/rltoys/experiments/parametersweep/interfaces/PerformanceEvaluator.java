@@ -1,9 +1,9 @@
-package rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning;
+package rlpark.plugin.rltoys.experiments.parametersweep.interfaces;
 
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 
 
-public interface AgentEvaluator {
+public interface PerformanceEvaluator {
   void worstResultUntilEnd();
 
   void putResult(Parameters parameters);

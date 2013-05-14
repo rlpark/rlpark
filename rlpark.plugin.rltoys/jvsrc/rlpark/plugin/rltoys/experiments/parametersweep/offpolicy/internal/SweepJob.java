@@ -3,8 +3,8 @@ package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal;
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.JobWithParameters;
+import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
-import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.AgentEvaluator;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.TimedJob;
 import zephyr.plugin.core.api.synchronization.Chrono;
 
@@ -23,8 +23,8 @@ public class SweepJob implements JobWithParameters, TimedJob {
   @Override
   public void run() {
     Runner runner = context.createRunner(counter, parameters);
-    AgentEvaluator behaviourRewardMonitor = context.connectBehaviourRewardMonitor(runner, parameters);
-    AgentEvaluator targetRewardMonitor = context.connectTargetRewardMonitor(counter, runner, parameters);
+    PerformanceEvaluator behaviourRewardMonitor = context.connectBehaviourRewardMonitor(runner, parameters);
+    PerformanceEvaluator targetRewardMonitor = context.connectTargetRewardMonitor(counter, runner, parameters);
     Chrono chrono = new Chrono();
     try {
       runner.run();
