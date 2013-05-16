@@ -28,16 +28,16 @@ public class IDBD implements LearningAlgorithm {
   }
 
   @Override
-  public double learn(RealVector x, double y) {
-    VectorPool pool = VectorPools.pool(x);
-    double delta = y - predict(x);
-    MutableVector deltaX = pool.newVector(x).mapMultiplyToSelf(delta);
+  public double learn(RealVector x_t, double y_tp1) {
+    VectorPool pool = VectorPools.pool(x_t);
+    double delta = y_tp1 - predict(x_t);
+    MutableVector deltaX = pool.newVector(x_t).mapMultiplyToSelf(delta);
     RealVector deltaXH = pool.newVector(deltaX).ebeMultiplyToSelf(hs);
     PVectors.multiplySelfByExponential(alphas, theta, deltaXH, MinimumStepsize);
     RealVector alphaDeltaX = deltaX.ebeMultiplyToSelf(alphas);
     deltaX = null;
     weights.addToSelf(alphaDeltaX);
-    RealVector alphaX2 = pool.newVector(x).ebeMultiplyToSelf(x).ebeMultiplyToSelf(alphas).ebeMultiplyToSelf(hs);
+    RealVector alphaX2 = pool.newVector(x_t).ebeMultiplyToSelf(x_t).ebeMultiplyToSelf(alphas).ebeMultiplyToSelf(hs);
     hs.addToSelf(-1, alphaX2);
     hs.addToSelf(alphaDeltaX);
     pool.releaseAll();

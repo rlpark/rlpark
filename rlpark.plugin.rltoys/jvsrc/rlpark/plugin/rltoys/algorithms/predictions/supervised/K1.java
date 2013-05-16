@@ -26,10 +26,10 @@ public class K1 implements LearningAlgorithm {
   }
 
   @Override
-  public double learn(RealVector rx, double y) {
+  public double learn(RealVector rx, double y_tp1) {
     PVector x = (PVector) rx;
     prediction = predict(x);
-    delta = y - prediction;
+    delta = y_tp1 - prediction;
     double pnorm = 0.0;
     for (int i = 0; i < weights.size; i++) {
       betas.data[i] += theta * delta * x.data[i] * hs.data[i];

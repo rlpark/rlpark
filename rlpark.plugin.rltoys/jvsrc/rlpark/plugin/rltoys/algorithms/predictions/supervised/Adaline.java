@@ -25,11 +25,11 @@ public class Adaline implements LearningAlgorithm, LinearLearner {
   }
 
   @Override
-  public double learn(RealVector x, double y) {
-    prediction = predict(x);
-    target = y;
+  public double learn(RealVector x_t, double y_tp1) {
+    prediction = predict(x_t);
+    target = y_tp1;
     error = target - prediction;
-    weights.addToSelf(x.mapMultiply(alpha * error));
+    weights.addToSelf(x_t.mapMultiply(alpha * error));
     return error;
   }
 

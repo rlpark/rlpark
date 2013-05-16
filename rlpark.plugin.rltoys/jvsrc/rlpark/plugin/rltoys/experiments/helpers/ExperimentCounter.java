@@ -42,6 +42,10 @@ public class ExperimentCounter implements Cloneable, Serializable {
     return folder;
   }
 
+  public void reset() {
+    counter = -1;
+  }
+
   public boolean hasNext() {
     return counter < counterMax;
   }

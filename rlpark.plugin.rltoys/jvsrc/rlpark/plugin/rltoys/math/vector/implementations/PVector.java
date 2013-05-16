@@ -49,7 +49,7 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
   }
 
   public PVector set(double[] v) {
-    System.arraycopy(v, 0, data, 0, size);
+    System.arraycopy(v, 0, data, 0, v.length);
     return this;
   }
 

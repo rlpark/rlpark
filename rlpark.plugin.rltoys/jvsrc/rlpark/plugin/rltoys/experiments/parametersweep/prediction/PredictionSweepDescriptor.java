@@ -8,6 +8,7 @@ import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.SweepDescripto
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 
 public abstract class PredictionSweepDescriptor implements SweepDescriptor {
+  private static boolean testingMode = false;
   private final PredictionProblemFactory[] problemFactories;
   private final PredictionLearnerFactory[] learnerFactories;
 
@@ -29,9 +30,16 @@ public abstract class PredictionSweepDescriptor implements SweepDescriptor {
 
   @Override
   public List<Parameters> provideParameters(Context context) {
-    return ((PredictionSweepContext) context).provideParameters();
+    List<Parameters> parameters = ((PredictionSweepContext) context).provideParameters();
+    if (testingMode)
+      return PredictionParameters.adjustForLocalTesting(parameters);
+    return parameters;
   }
 
   abstract protected PredictionSweepContext createContext(PredictionProblemFactory problemFactory,
       PredictionLearnerFactory learnerFactory);
+
+  static public void setupTestingMode() {
+    testingMode = true;
+  }
 }

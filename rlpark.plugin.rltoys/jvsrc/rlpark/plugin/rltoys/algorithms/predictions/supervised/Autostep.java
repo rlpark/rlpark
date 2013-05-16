@@ -62,12 +62,12 @@ public class Autostep implements LearningAlgorithm {
   }
 
   @Override
-  public double learn(RealVector x, double y) {
-    VectorPool pool = VectorPools.pool(x);
-    delta = y - predict(x);
-    MutableVector deltaX = pool.newVector(x).mapMultiplyToSelf(delta);
-    MutableVector x2 = pool.newVector(x).ebeMultiplyToSelf(x);
-    updateAlphas(pool, x, x2, deltaX);
+  public double learn(RealVector x_t, double y_tp1) {
+    VectorPool pool = VectorPools.pool(x_t);
+    delta = y_tp1 - predict(x_t);
+    MutableVector deltaX = pool.newVector(x_t).mapMultiplyToSelf(delta);
+    MutableVector x2 = pool.newVector(x_t).ebeMultiplyToSelf(x_t);
+    updateAlphas(pool, x_t, x2, deltaX);
     RealVector alphasDeltaX = deltaX.ebeMultiplyToSelf(alphas);
     deltaX = null;
     weights.addToSelf(alphasDeltaX);

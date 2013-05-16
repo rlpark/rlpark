@@ -132,6 +132,7 @@ public class SweepAll {
 
   public void submitSweep(SweepDescriptor sweepDescriptor, ExperimentCounter counter) {
     println(String.format("Submitting sweep in %s...", counter.folder.getPath()));
+    counter.reset();
     while (counter.hasNext()) {
       counter.nextExperiment();
       submitOneSweep(sweepDescriptor, counter);

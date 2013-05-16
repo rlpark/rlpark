@@ -19,7 +19,7 @@ public abstract class OnPolicyTests {
   protected OnPolicyTDFactory[] onPolicyFactories() {
     return new OnPolicyTDFactory[] { new OnPolicyTDFactory() {
       @Override
-      public OnPolicyTD create(double gamma, double lambda, double vectorNorm, int vectorSize) {
+      public OnPolicyTD create(double lambda, double gamma, double vectorNorm, int vectorSize) {
         return newOnPolicyTD(lambda, gamma, vectorNorm, vectorSize);
       }
     } };

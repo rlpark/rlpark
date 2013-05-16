@@ -12,7 +12,7 @@ import rlpark.plugin.rltoys.problems.stategraph.FiniteStateGraph.StepData;
 public class FiniteStateGraphOnPolicy {
 
   static public interface OnPolicyTDFactory {
-    OnPolicyTD create(double gamma, double lambda, double vectorNorm, int vectorSize);
+    OnPolicyTD create(double lambda, double gamma, double vectorNorm, int vectorSize);
   }
 
   static public double distanceToSolution(double[] solution, PVector theta) {
@@ -25,7 +25,7 @@ public class FiniteStateGraphOnPolicy {
   public static TestingResult<OnPolicyTD> testTD(double lambda, FiniteStateGraph problem,
       FiniteStateGraphOnPolicy.OnPolicyTDFactory tdFactory, int nbEpisodeMax, double precision) {
     FSGAgentState agentState = new FSGAgentState(problem);
-    OnPolicyTD td = tdFactory.create(problem.gamma(), lambda, agentState.vectorNorm(), agentState.vectorSize());
+    OnPolicyTD td = tdFactory.create(lambda, problem.gamma(), agentState.vectorNorm(), agentState.vectorSize());
     int nbEpisode = 0;
     double[] solution = problem.expectedDiscountedSolution();
     RealVector x_t = null;

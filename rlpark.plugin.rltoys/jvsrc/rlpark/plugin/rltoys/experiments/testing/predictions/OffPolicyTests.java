@@ -37,7 +37,7 @@ public abstract class OffPolicyTests extends OnPolicyTests {
       offPolicyTDFactories[i] = new OffPolicyTDFactory() {
         @Override
         public OffPolicyTD newTD(double lambda, double gamma, double vectorNorm, int vectorSize) {
-          return (OffPolicyTD) onPolicyFactory.create(gamma, lambda, vectorNorm, vectorSize);
+          return (OffPolicyTD) onPolicyFactory.create(lambda, gamma, vectorNorm, vectorSize);
         }
       };
     }

@@ -37,7 +37,7 @@ public class SupervisedLearnerFactoryJUnit implements PredictionLearnerFactory, 
       }
 
       @Override
-      public double learn(RealVector x, double y) {
+      public double learn(RealVector x_t, double y_tp1) {
         nbUpdate++;
         if (nbUpdate <= localDivergeAt)
           return 0;

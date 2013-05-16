@@ -50,7 +50,7 @@ public class RandomNetworkTest {
       }
 
       @Override
-      public double learn(RealVector x, double y) {
+      public double learn(RealVector x_t, double y_tp1) {
         return 0;
       }
     });
@@ -83,8 +83,8 @@ public class RandomNetworkTest {
       }
 
       @Override
-      public double learn(RealVector x, double y) {
-        return learner.learn(extend(x), y);
+      public double learn(RealVector x_t, double y_tp1) {
+        return learner.learn(extend(x_t), y_tp1);
       }
     };
   }

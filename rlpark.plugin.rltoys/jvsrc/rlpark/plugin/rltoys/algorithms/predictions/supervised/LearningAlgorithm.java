@@ -4,5 +4,5 @@ import rlpark.plugin.rltoys.algorithms.functions.Predictor;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 
 public interface LearningAlgorithm extends Predictor {
-  double learn(RealVector x, double y);
+  double learn(RealVector x_t, double y_tp1);
 }
