@@ -28,4 +28,12 @@ public class ControlAgentFA implements RLAgent {
       return null;
     return control.proposeAction(projector.project(step.o_tp1));
   }
+
+  public Control control() {
+    return control;
+  }
+
+  public Projector projector() {
+    return projector;
+  }
 }

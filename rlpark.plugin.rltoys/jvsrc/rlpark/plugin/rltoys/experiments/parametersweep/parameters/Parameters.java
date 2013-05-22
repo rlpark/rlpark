@@ -22,8 +22,8 @@ public class Parameters extends AbstractParameters {
     super(parameters.infos(), parameters.parameters, parameters.results);
   }
 
-  public void putSweepParam(String label, double value) {
-    parameters.put(label, value);
+  public boolean putSweepParam(String label, double value) {
+    return parameters.put(label, value) != null;
   }
 
   public static List<Parameters> combine(List<Parameters> existing, String label, double[] values) {
@@ -32,7 +32,8 @@ public class Parameters extends AbstractParameters {
     for (Parameters parameters : existing) {
       for (double value : values) {
         Parameters combinedParameters = new Parameters(parameters);
-        combinedParameters.putSweepParam(label, value);
+        if (combinedParameters.putSweepParam(label, value))
+          throw new RuntimeException(label + " already set");
         combination.add(combinedParameters);
       }
     }

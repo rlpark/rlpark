@@ -1,6 +1,7 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning;
 
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.AbstractParameters;
+import rlpark.plugin.rltoys.experiments.parametersweep.prediction.PredictionParameters;
 
 public class RLParameters {
   public static final String OnPolicyTimeStepsEvaluationFlag = "onPolicyTimeStepsEvaluationFlag";
@@ -8,8 +9,13 @@ public class RLParameters {
   public static final String NbEpisode = "nbEpisode";
   public static final String AverageReward = "averageReward";
   public static final String AveRewardStepSize = "AveRewardStepSize";
-  public static final String ActorStepSize = "ActorStepSize";
-  public static final String ValueFunctionStepSize = "ValueFunctionStepSize";
+
+  public static final String ActorPrefix = "Actor";
+  public static final String CriticPrefix = "Critic";
+
+  public static final String ActorStepSize = ActorPrefix + PredictionParameters.StepSize;
+  public static final String CriticStepSize = CriticPrefix + PredictionParameters.StepSize;
+
   public static final String ValueFunctionSecondStepSize = "ValueFunctionSecondStepSize";
   public static final String Temperature = "Temperature";
 

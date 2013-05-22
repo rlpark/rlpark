@@ -63,7 +63,11 @@ public class PredictionParameters {
   }
 
   static public List<Parameters> provideLambdaParameters(List<Parameters> parameters) {
-    List<Parameters> result = Parameters.combine(parameters, Tau, getTauValues());
+    return provideLambdaParameters(parameters, getTauValues());
+  }
+
+  public static List<Parameters> provideLambdaParameters(List<Parameters> parameters, double... tauValues) {
+    List<Parameters> result = Parameters.combine(parameters, Tau, tauValues);
     for (Parameters p : result)
       p.putSweepParam(Lambda, Utils.timeStepsToDiscount((int) p.get(Tau)));
     return result;
