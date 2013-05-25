@@ -39,17 +39,23 @@ public class PVector extends AbstractVector implements DenseVector, MonitorConta
       data[i] = v.getEntry(i);
   }
 
+
   @Override
-  public MutableVector set(RealVector other) {
+  public MutableVector set(RealVector other, int start) {
     if (other instanceof DenseVector)
-      return set(((DenseVector) other).accessData());
+      return set(((DenseVector) other).accessData(), start);
     for (int i = 0; i < other.getDimension(); i++)
       data[i] = other.getEntry(i);
     return this;
   }
 
-  public PVector set(double[] v) {
-    System.arraycopy(v, 0, data, 0, v.length);
+  @Override
+  public MutableVector set(RealVector other) {
+    return set(other, 0);
+  }
+
+  public PVector set(double[] v, int start) {
+    System.arraycopy(v, 0, data, start, v.length);
     return this;
   }
 

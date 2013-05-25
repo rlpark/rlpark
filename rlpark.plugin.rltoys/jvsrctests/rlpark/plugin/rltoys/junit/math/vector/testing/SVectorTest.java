@@ -78,8 +78,14 @@ public class SVectorTest extends VectorTest {
 
   @Test
   public void testSVectorSet() {
-    SVector s = newSVector(new double[] { 1.0, 2.0, 3.0, 4.0 });
-    s.set(newSVector(new double[] { 0.0, 1.0, 0.0, 0.0 }));
+    final double[] a = new double[] { 1.0, 2.0, 3.0, 4.0 };
+    SVector s = newSVector(a);
+    final double[] b = new double[] { 0.0, 1.0, 0.0, 0.0 };
+    s.set(newSVector(b));
     Assert.assertTrue(VectorsTestsUtils.checkConsistency(s));
+    VectorsTestsUtils.assertEquals(new PVector(b), s);
+    s.set(new PVector(3, 4), 1);
+    Assert.assertTrue(VectorsTestsUtils.checkConsistency(s));
+    VectorsTestsUtils.assertEquals(new PVector(new double[] { 0.0, 3.0, 4.0, 0.0 }), s);
   }
 }

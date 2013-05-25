@@ -33,8 +33,10 @@ public class PVectorTest extends VectorTest {
   @Test
   public void testSetDoubleArray() {
     PVector v = newPrototypeVector(a.getDimension());
-    v.set(new double[] { 0.0, 3.0, 2.0, 0.0, 1.0 });
-    VectorsTestsUtils.assertEquals(v, a);
+    v.set(new double[] { 0.0, 3.0, 2.0, 0.0, 1.0 }, 0);
+    VectorsTestsUtils.assertEquals(a, v);
+    v.set(new double[] { -1.0, -1.0 }, 2);
+    VectorsTestsUtils.assertEquals(new PVector(0.0, 3.0, -1.0, -1.0, 1.0), v);
   }
 
   @Test

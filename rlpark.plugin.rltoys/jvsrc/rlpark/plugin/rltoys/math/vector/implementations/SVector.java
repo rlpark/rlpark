@@ -37,7 +37,7 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
     this(other.size);
     if (value == 0)
       return;
-    set(other, value);
+    setFromBVector(other, value);
   }
 
   @Override
@@ -279,7 +279,7 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
     if (other instanceof SVector)
       return set((SVector) other);
     if (other instanceof BVector)
-      return set((BVector) other, 1);
+      return setFromBVector((BVector) other, 1.0);
     clear();
     for (int i = 0; i < other.getDimension(); i++)
       setEntry(i, other.getEntry(i));
@@ -297,7 +297,15 @@ public class SVector extends AbstractVector implements SparseRealVector, Monitor
     return this;
   }
 
-  private SVector set(BVector other, double value) {
+
+  @Override
+  public MutableVector set(RealVector other, int start) {
+    for (int i = 0; i < other.getDimension(); i++)
+      setEntry(start + i, other.getEntry(i));
+    return this;
+  }
+
+  private SVector setFromBVector(BVector other, double value) {
     clear();
     allocate(other.nonZeroElements());
     for (int i = 0; i < other.nonZeroElements(); i++)

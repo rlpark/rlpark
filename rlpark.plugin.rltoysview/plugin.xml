@@ -44,6 +44,7 @@
             restorable="true">
       </view>
       <view
+            allowMultiple="true"
             class="rlpark.plugin.rltoysview.internal.mountaincar.MountainCarView"
             icon="icons/environmentview.png"
             id="zephyr.rlpark.plugin.rltoysview.mountaincarview"

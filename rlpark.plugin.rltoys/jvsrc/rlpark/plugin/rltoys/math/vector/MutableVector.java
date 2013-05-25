@@ -21,5 +21,7 @@ public interface MutableVector extends RealVector {
 
   MutableVector set(RealVector other);
 
+  MutableVector set(RealVector other, int start);
+
   MutableVector ebeDivideToSelf(RealVector other);
 }
