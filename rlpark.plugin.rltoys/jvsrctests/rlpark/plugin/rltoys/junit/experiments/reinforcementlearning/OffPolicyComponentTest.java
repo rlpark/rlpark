@@ -89,8 +89,7 @@ public class OffPolicyComponentTest {
       this.label = label;
     }
 
-    @Override
-    public Policy createBehaviourPolicy(long seed, RLProblem problem) {
+    private Policy createBehaviourPolicy(long seed, RLProblem problem) {
       final Random random = new Random(seed);
       return new Policy() {
         @Override
@@ -115,8 +114,9 @@ public class OffPolicyComponentTest {
     }
 
     @Override
-    public OffPolicyAgent createAgent(RLProblem problem, RepresentationFactory projectorFactory, Parameters parameters,
-        Policy behaviourPolicy, final long seed) {
+    public OffPolicyAgent createAgent(final long seed, RLProblem problem, Parameters parameters,
+        RepresentationFactory projectorFactory) {
+      Policy behaviourPolicy = createBehaviourPolicy(seed, problem);
       OffPolicyLearner learner = new OffPolicyLearnerTest(action);
       return new OffPolicyAgentDirect(behaviourPolicy, learner);
     }

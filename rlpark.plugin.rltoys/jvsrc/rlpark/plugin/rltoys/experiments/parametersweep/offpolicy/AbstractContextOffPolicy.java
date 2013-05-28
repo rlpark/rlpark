@@ -1,8 +1,7 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy;
 
+import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgent;
 import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
-import rlpark.plugin.rltoys.envio.policy.Policy;
-import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluation;
@@ -33,8 +32,7 @@ public abstract class AbstractContextOffPolicy implements ReinforcementLearningC
   @Override
   public Runner createRunner(int seed, Parameters parameters) {
     RLProblem problem = environmentFactory.createEnvironment(ExperimentCounter.newRandom(seed));
-    Policy behaviourPolicy = agentFactory.createBehaviourPolicy(seed, problem);
-    RLAgent agent = agentFactory.createAgent(problem, projectorFactory, parameters, behaviourPolicy, seed);
+    OffPolicyAgent agent = agentFactory.createAgent(seed, problem, parameters, projectorFactory);
     int nbEpisode = RLParameters.nbEpisode(parameters);
     int maxEpisodeTimeSteps = RLParameters.maxEpisodeTimeSteps(parameters);
     return new Runner(problem, agent, nbEpisode, maxEpisodeTimeSteps);
