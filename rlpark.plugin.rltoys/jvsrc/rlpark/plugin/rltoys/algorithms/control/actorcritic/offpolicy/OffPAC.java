@@ -13,7 +13,7 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 @Monitor
 public class OffPAC implements OffPolicyLearner {
   private static final long serialVersionUID = -3586849056133550941L;
-  public final Policy behavior;
+  public final Policy behaviour;
   public final OffPolicyTD critic;
   public final ActorOffPolicy actor;
   protected double pi_t;
@@ -22,7 +22,7 @@ public class OffPAC implements OffPolicyLearner {
   public OffPAC(Policy behavior, OffPolicyTD critic, ActorOffPolicy actor) {
     this.critic = critic;
     this.actor = actor;
-    this.behavior = behavior;
+    this.behaviour = behavior;
   }
 
   @Override
@@ -30,8 +30,8 @@ public class OffPAC implements OffPolicyLearner {
     if (x_t != null) {
       actor.policy().update(x_t);
       pi_t = actor.policy().pi(a_t);
-      behavior.update(x_t);
-      b_t = behavior.pi(a_t);
+      behaviour.update(x_t);
+      b_t = behaviour.pi(a_t);
     }
     double delta = critic.update(pi_t, b_t, x_t, x_tp1, r_tp1);
     assert Utils.checkValue(delta);
