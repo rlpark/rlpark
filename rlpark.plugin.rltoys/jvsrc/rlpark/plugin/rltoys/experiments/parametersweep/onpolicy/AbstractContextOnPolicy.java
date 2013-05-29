@@ -28,7 +28,7 @@ public abstract class AbstractContextOnPolicy implements ReinforcementLearningCo
   @Override
   public Runner createRunner(int counter, Parameters parameters) {
     RLProblem problem = environmentFactory.createEnvironment(ExperimentCounter.newRandom(counter));
-    RLAgent agent = agentFactory.createAgent(problem, representationFactory, parameters, counter);
+    RLAgent agent = agentFactory.createAgent(counter, problem, parameters, representationFactory);
     int nbEpisode = RLParameters.nbEpisode(parameters);
     int maxEpisodeTimeSteps = RLParameters.maxEpisodeTimeSteps(parameters);
     return new Runner(problem, agent, nbEpisode, maxEpisodeTimeSteps);

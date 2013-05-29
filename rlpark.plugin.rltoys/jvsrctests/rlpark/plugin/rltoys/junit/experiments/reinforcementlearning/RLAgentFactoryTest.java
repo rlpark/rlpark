@@ -26,7 +26,7 @@ class RLAgentFactoryTest implements AgentFactory {
   }
 
   @Override
-  public RLAgent createAgent(RLProblem problem, RepresentationFactory representationFactory, Parameters parameters, long seed) {
+  public RLAgent createAgent(long seed, RLProblem problem, Parameters parameters, RepresentationFactory representationFactory) {
     return new RLAgent() {
       @Override
       public Action getAtp1(TRStep step) {

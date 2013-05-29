@@ -37,12 +37,10 @@ public class OffPolicyAgentFA implements OffPolicyAgentEvaluable {
     return a_tp1;
   }
 
-  @Override
   public OffPolicyLearner learner() {
     return learner;
   }
 
-  @Override
   public Policy behaviour() {
     return behaviour;
   }

@@ -9,5 +9,5 @@ import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.labels.Labeled;
 
 public interface AgentFactory extends Labeled, Serializable {
-  public RLAgent createAgent(RLProblem problem, RepresentationFactory representationFactory, Parameters parameters, long seed);
+  public RLAgent createAgent(long seed, RLProblem problem, Parameters parameters, RepresentationFactory representationFactory);
 }
