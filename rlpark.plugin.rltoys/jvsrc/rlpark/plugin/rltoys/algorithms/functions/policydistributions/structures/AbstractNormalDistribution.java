@@ -3,7 +3,7 @@ package rlpark.plugin.rltoys.algorithms.functions.policydistributions.structures
 import java.util.Random;
 
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.BoundedPdf;
-import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistribution;
+import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyParameterized;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.actions.Actions;
@@ -17,7 +17,7 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
 @SuppressWarnings("restriction")
-public abstract class AbstractNormalDistribution implements PolicyDistribution, LabeledCollection, BoundedPdf {
+public abstract class AbstractNormalDistribution implements PolicyParameterized, LabeledCollection, BoundedPdf {
   private static final long serialVersionUID = -6707070542157254303L;
   @Monitor(level = 4)
   protected PVector u_mean;
@@ -43,8 +43,19 @@ public abstract class AbstractNormalDistribution implements PolicyDistribution, 
 
   @Override
   public PVector[] createParameters(int nbFeatures) {
-    u_mean = new PVector(nbFeatures);
-    u_stddev = new PVector(nbFeatures);
+    setParameters(new PVector(nbFeatures), new PVector(nbFeatures));
+    return new PVector[] { u_mean, u_stddev };
+  }
+
+  @Override
+  public void setParameters(PVector... u) {
+    assert u.length == 2;
+    u_mean = u[0];
+    u_stddev = u[1];
+  }
+
+  @Override
+  public PVector[] parameters() {
     return new PVector[] { u_mean, u_stddev };
   }
 

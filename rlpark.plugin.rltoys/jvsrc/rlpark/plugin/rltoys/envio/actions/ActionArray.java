@@ -89,4 +89,8 @@ public class ActionArray implements Action {
   public static boolean checkAction(Action a) {
     return ((ActionArray) a).actions != null;
   }
+
+  public static Action toAction(double a) {
+    return new ActionArray(a);
+  }
 }

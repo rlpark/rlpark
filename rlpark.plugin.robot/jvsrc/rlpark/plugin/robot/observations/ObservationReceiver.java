@@ -9,4 +9,6 @@ public interface ObservationReceiver {
   ObservationVersatile waitForData();
 
   boolean isClosed();
+
+  void close();
 }

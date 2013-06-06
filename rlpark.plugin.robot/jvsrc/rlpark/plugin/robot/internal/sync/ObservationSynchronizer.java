@@ -97,6 +97,7 @@ public class ObservationSynchronizer {
   }
 
   synchronized public void terminate() {
+    receiver.close();
     terminated = true;
     notifyAll();
   }

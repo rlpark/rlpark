@@ -54,4 +54,8 @@ public class OffPAC implements OffPolicyLearner {
   public Predictor predictor() {
     return critic;
   }
+
+  public ActorOffPolicy actor() {
+    return actor;
+  }
 }

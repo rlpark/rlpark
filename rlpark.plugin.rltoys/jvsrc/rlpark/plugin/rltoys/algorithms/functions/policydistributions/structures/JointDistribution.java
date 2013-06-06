@@ -5,6 +5,7 @@ import java.util.List;
 
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.BoundedPdf;
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistribution;
+import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyParameterized;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.math.vector.RealVector;
@@ -13,7 +14,7 @@ import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
-public class JointDistribution implements PolicyDistribution, BoundedPdf {
+public class JointDistribution implements PolicyParameterized, BoundedPdf {
   private static final long serialVersionUID = -7545331400083047916L;
   protected final PolicyDistribution[] distributions;
   @IgnoreMonitor
@@ -112,5 +113,28 @@ public class JointDistribution implements PolicyDistribution, BoundedPdf {
 
   public PolicyDistribution[] policies() {
     return distributions;
+  }
+
+  @Override
+  public void setParameters(PVector... parameters) {
+    int index = 0;
+    for (PolicyDistribution distribution : distributions) {
+      PVector[] u = new PVector[distribution.nbParameterVectors()];
+      System.arraycopy(parameters, index, u, 0, u.length);
+      ((PolicyParameterized) distribution).setParameters(u);
+      index += u.length;
+    }
+  }
+
+  @Override
+  public PVector[] parameters() {
+    PVector[] parameters = new PVector[nbParameterVectors()];
+    int index = 0;
+    for (PolicyDistribution distribution : distributions) {
+      System.arraycopy(((PolicyParameterized) distribution).parameters(), 0, parameters, index,
+                       distribution.nbParameterVectors());
+      index += distribution.nbParameterVectors();
+    }
+    return parameters;
   }
 }

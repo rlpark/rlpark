@@ -1,7 +1,6 @@
 package rlpark.plugin.robot.helpers;
 
 
-import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.robot.interfaces.RobotLive;
 import rlpark.plugin.robot.internal.sync.ObservationSynchronizer;
 import rlpark.plugin.robot.observations.ObservationReceiver;
@@ -82,6 +81,4 @@ public abstract class RobotEnvironment implements RobotLive, Labeled {
   public boolean isClosed() {
     return obsSync.isTerminated();
   }
-
-  abstract public void sendAction(Action a);
 }

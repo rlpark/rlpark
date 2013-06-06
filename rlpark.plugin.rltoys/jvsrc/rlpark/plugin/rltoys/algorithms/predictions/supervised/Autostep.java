@@ -10,6 +10,7 @@ import rlpark.plugin.rltoys.math.vector.pool.VectorPool;
 import rlpark.plugin.rltoys.math.vector.pool.VectorPools;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
+@Monitor
 public class Autostep implements LearningAlgorithm {
   private static final long serialVersionUID = -3311074550497156281L;
   private static final double DefaultMetaStepSize = 0.1;
@@ -21,8 +22,10 @@ public class Autostep implements LearningAlgorithm {
   @Monitor(level = 4)
   protected final PVector h;
   private final double kappa;
+  @Monitor(level = 4)
   private final PVector v;
   private double delta;
+  private double prediction;
 
   public Autostep(int vectorSize) {
     this(new PVector(vectorSize), DefaultMetaStepSize, 1.0);
@@ -64,7 +67,8 @@ public class Autostep implements LearningAlgorithm {
   @Override
   public double learn(RealVector x_t, double y_tp1) {
     VectorPool pool = VectorPools.pool(x_t);
-    delta = y_tp1 - predict(x_t);
+    prediction = predict(x_t);
+    delta = y_tp1 - prediction;
     MutableVector deltaX = pool.newVector(x_t).mapMultiplyToSelf(delta);
     MutableVector x2 = pool.newVector(x_t).ebeMultiplyToSelf(x_t);
     updateAlphas(pool, x_t, x2, deltaX);

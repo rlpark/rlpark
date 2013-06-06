@@ -2,6 +2,7 @@ package rlpark.plugin.rltoys.algorithms.functions.policydistributions.helpers;
 
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.BoundedPdf;
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistribution;
+import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyParameterized;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.policy.BoundedPolicy;
@@ -10,7 +11,7 @@ import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class ScaledPolicyDistribution implements PolicyDistribution, BoundedPdf {
+public class ScaledPolicyDistribution implements BoundedPdf, PolicyParameterized {
   private static final long serialVersionUID = -7521424991872961399L;
   @Monitor
   protected final PolicyDistribution policy;
@@ -81,5 +82,16 @@ public class ScaledPolicyDistribution implements PolicyDistribution, BoundedPdf 
   @Override
   public void update(RealVector x) {
     policy.update(x);
+  }
+
+  @Override
+  public void setParameters(PVector... parameters) {
+    ((PolicyParameterized) policy).setParameters(parameters);
+  }
+
+
+  @Override
+  public PVector[] parameters() {
+    return ((PolicyParameterized) policy).parameters();
   }
 }

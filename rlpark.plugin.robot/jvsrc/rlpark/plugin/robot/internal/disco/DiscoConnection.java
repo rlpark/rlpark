@@ -81,6 +81,7 @@ public class DiscoConnection implements ObservationReceiver {
     return socket;
   }
 
+  @Override
   synchronized public void close() {
     socket.close();
     notifyAll();

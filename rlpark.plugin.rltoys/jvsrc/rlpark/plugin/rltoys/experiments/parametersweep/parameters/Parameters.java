@@ -75,4 +75,9 @@ public class Parameters extends AbstractParameters {
   public long getComputationTimeMillis() {
     return (long) get(ComputationTime);
   }
+
+  public static void set(List<Parameters> parameters, String label, double value) {
+    for (Parameters p : parameters)
+      p.putSweepParam(label, value);
+  }
 }
