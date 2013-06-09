@@ -13,8 +13,8 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 @Monitor
 public class Autostep implements LearningAlgorithm {
   private static final long serialVersionUID = -3311074550497156281L;
-  private static final double DefaultMetaStepSize = 0.1;
-  private final double Tau = 1000;
+  private static final double DefaultMetaStepSize = 0.01;
+  private final double Tau = 10000;
   @Monitor(level = 4)
   protected final PVector alphas;
   @Monitor(level = 4)
@@ -27,8 +27,13 @@ public class Autostep implements LearningAlgorithm {
   private double delta;
   private double prediction;
 
+  public Autostep(PVector weights) {
+    this(weights, DefaultMetaStepSize, 1.0);
+  }
+
+
   public Autostep(int vectorSize) {
-    this(new PVector(vectorSize), DefaultMetaStepSize, 1.0);
+    this(new PVector(vectorSize));
   }
 
   public Autostep(int vectorSize, double kappa, double initStepsize) {
@@ -48,8 +53,7 @@ public class Autostep implements LearningAlgorithm {
 
   protected void updateAlphas(VectorPool pool, RealVector x, RealVector x2, RealVector deltaX) {
     MutableVector deltaXH = pool.newVector(deltaX).ebeMultiplyToSelf(h);
-    MutableVector absDeltaXH = pool.newVector(deltaXH);
-    Vectors.absToSelf(absDeltaXH);
+    MutableVector absDeltaXH = Vectors.absToSelf(pool.newVector(deltaXH));
     MutableVector sparseV = pool.newVector();
     Vectors.toBinary(sparseV, deltaX).ebeMultiplyToSelf(v);
     MutableVector vUpdate = pool.newVector(absDeltaXH).subtractToSelf(sparseV).ebeMultiplyToSelf(x2)
@@ -59,7 +63,7 @@ public class Autostep implements LearningAlgorithm {
     PVectors.multiplySelfByExponential(alphas, kappa, deltaXH.ebeDivideToSelf(v), IDBD.MinimumStepsize);
     deltaXH = null;
     RealVector x2ByAlphas = pool.newVector(x2).ebeMultiplyToSelf(alphas);
-    double sum = Math.max(x2ByAlphas.sum(), 1);
+    double sum = x2ByAlphas.sum();
     if (sum > 1)
       Filters.mapMultiplyToSelf(alphas, 1 / sum, x);
   }
@@ -75,9 +79,9 @@ public class Autostep implements LearningAlgorithm {
     RealVector alphasDeltaX = deltaX.ebeMultiplyToSelf(alphas);
     deltaX = null;
     weights.addToSelf(alphasDeltaX);
-    MutableVector minusX2AlphasH = x2.ebeMultiplyToSelf(alphas).ebeMultiplyToSelf(h);
+    MutableVector x2AlphasH = x2.ebeMultiplyToSelf(alphas).ebeMultiplyToSelf(h);
     x2 = null;
-    h.addToSelf(minusX2AlphasH.mapMultiplyToSelf(-1)).addToSelf(alphasDeltaX);
+    h.addToSelf(-1, x2AlphasH).addToSelf(alphasDeltaX);
     pool.releaseAll();
     return delta;
   }

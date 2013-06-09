@@ -29,6 +29,7 @@ public class BoltzmannDistribution extends StochasticPolicy implements PolicyDis
 
   public BoltzmannDistribution(Random random, Action[] actions, StateToStateAction toStateAction) {
     super(random, actions);
+    assert toStateAction != null;
     this.toStateAction = toStateAction;
     distribution = new double[actions.length];
     xa = new MutableVector[actions.length];

@@ -30,7 +30,16 @@ public abstract class AbstractParameters implements Comparable<AbstractParameter
     return parameters.containsKey(key) || infos.hasKey(key);
   }
 
+  public double get(String name, double defaultValue) {
+    Double value = getDouble(name);
+    return value != null ? value : defaultValue;
+  }
+
   public double get(String name) {
+    return getDouble(name);
+  }
+
+  public Double getDouble(String name) {
     Double parameterValue = parameters.get(name);
     if (parameterValue != null)
       return parameterValue;
