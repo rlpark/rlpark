@@ -1,5 +1,6 @@
 package rlpark.plugin.rltoys.algorithms.predictions.supervised;
 
+import rlpark.plugin.rltoys.algorithms.LinearLearner;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.filters.Filters;
@@ -11,7 +12,7 @@ import rlpark.plugin.rltoys.math.vector.pool.VectorPools;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
-public class Autostep implements LearningAlgorithm {
+public class Autostep implements LearningAlgorithm, LinearLearner {
   private static final long serialVersionUID = -3311074550497156281L;
   private static final double DefaultMetaStepSize = 0.01;
   private final double Tau = 10000;
@@ -91,11 +92,24 @@ public class Autostep implements LearningAlgorithm {
     return weights.dotProduct(x);
   }
 
+  @Override
   public PVector weights() {
     return weights;
   }
 
   public PVector alphas() {
     return alphas;
+  }
+
+
+  @Override
+  public void resetWeight(int index) {
+    weights.setEntry(index, 0);
+  }
+
+
+  @Override
+  public double error() {
+    return delta;
   }
 }

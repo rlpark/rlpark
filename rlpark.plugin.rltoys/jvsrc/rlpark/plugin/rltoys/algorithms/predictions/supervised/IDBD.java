@@ -9,7 +9,7 @@ import rlpark.plugin.rltoys.math.vector.pool.VectorPools;
 
 public class IDBD implements LearningAlgorithm {
   private static final long serialVersionUID = 6961877310325699208L;
-  public final static double MinimumStepsize = 10e-7;
+  public final static double MinimumStepsize = 1e-6;
   private final double theta;
   private final PVector weights;
   private final PVector alphas;
