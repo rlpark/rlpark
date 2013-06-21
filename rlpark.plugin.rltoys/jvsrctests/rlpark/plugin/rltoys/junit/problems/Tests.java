@@ -12,9 +12,10 @@ import rlpark.plugin.rltoys.junit.problems.mountaincar.MountainCarTest;
 import rlpark.plugin.rltoys.junit.problems.pendulum.SwingPendulumTest;
 import rlpark.plugin.rltoys.junit.problems.puddleworld.PuddleWorldTest;
 import rlpark.plugin.rltoys.junit.problems.stategraph.FiniteStateGraphTest;
+import rlpark.plugin.rltoys.junit.problems.stategraph02.GraphProblemTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ FiniteStateGraphTest.class, ActionArrayTest.class, ObsFilterTest.class, MountainCarTest.class,
-    SwingPendulumTest.class, PuddleWorldTest.class, MazeTest.class, HelicopterTest.class })
+@Suite.SuiteClasses({ FiniteStateGraphTest.class, GraphProblemTest.class, ActionArrayTest.class, ObsFilterTest.class,
+    MountainCarTest.class, SwingPendulumTest.class, PuddleWorldTest.class, MazeTest.class, HelicopterTest.class })
 public class Tests {
 }
