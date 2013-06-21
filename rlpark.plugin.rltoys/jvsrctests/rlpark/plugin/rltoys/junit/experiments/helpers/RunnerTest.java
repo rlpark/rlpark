@@ -81,7 +81,7 @@ public class RunnerTest {
 
     @Override
     public TRStep forceEndEpisode() {
-      step = new TRStep(step.time, step.o_t, step.a_t, null, Reward);
+      step = new TRStep(step.time, step.o_t, step.a_t, step.o_tp1, Reward, true);
       return step;
     }
 

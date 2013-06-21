@@ -34,7 +34,7 @@ public class MazeTest {
     step = maze.step(Maze.Right);
     assertEquals(new Point(2, 2), step);
     step = maze.step(new ActionArray(1 - 2, 9 - 2));
-    Assert.assertNull(step.o_tp1);
+    Assert.assertTrue(step.isEpisodeEnding());
   }
 
   private void assertEquals(Point point, TRStep step) {
