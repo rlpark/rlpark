@@ -1,8 +1,8 @@
 package rlpark.plugin.rltoys.problems.stategraph;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
-import rlpark.plugin.rltoys.envio.policy.ActionPolicy;
 import rlpark.plugin.rltoys.envio.policy.Policy;
+import rlpark.plugin.rltoys.envio.policy.SingleActionPolicy;
 
 @SuppressWarnings("serial")
 public class LineProblem extends FiniteStateGraph {
@@ -14,7 +14,7 @@ public class LineProblem extends FiniteStateGraph {
   static private final GraphState[] states = { A, B, C, D };
   static public Action Move = new Action() {
   };
-  static private final Policy acting = new ActionPolicy(Move);
+  static private final Policy acting = new SingleActionPolicy(Move);
 
   static {
     A.connect(Move, B);

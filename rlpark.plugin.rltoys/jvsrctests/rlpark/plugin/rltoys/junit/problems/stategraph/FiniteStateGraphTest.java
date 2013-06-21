@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import rlpark.plugin.rltoys.envio.policy.ActionPolicy;
+import rlpark.plugin.rltoys.envio.policy.SingleActionPolicy;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.problems.stategraph.FSGAgentState;
 import rlpark.plugin.rltoys.problems.stategraph.FiniteStateGraph.StepData;
@@ -14,8 +14,8 @@ import rlpark.plugin.rltoys.problems.stategraph.LineProblem;
 import rlpark.plugin.rltoys.problems.stategraph.RandomWalk;
 
 public class FiniteStateGraphTest {
-  static private final Policy leftPolicy = new ActionPolicy(RandomWalk.Left);
-  static private final Policy rightPolicy = new ActionPolicy(RandomWalk.Right);
+  static private final Policy leftPolicy = new SingleActionPolicy(RandomWalk.Left);
+  static private final Policy rightPolicy = new SingleActionPolicy(RandomWalk.Right);
 
   @Test
   public void testSimpleProblemTrajectory() {
