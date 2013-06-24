@@ -1,30 +1,30 @@
 package rlpark.plugin.rltoys.problems.stategraph02;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
-import rlpark.plugin.rltoys.math.vector.RealVector;
-import rlpark.plugin.rltoys.math.vector.implementations.BVector;
 import rlpark.plugin.rltoys.problems.RLProblem;
 
-public class GraphProblem implements Projector, RLProblem {
+public class GraphProblem implements Serializable, RLProblem {
   private static final long serialVersionUID = 6251650836939403789L;
   private final State s0;
   private State currentState;
-  private final BVector stateVector;
   private TRStep step;
   private final Legend legend = new Legend("stateIndex");
   private final StateGraph stateGraph;
   private final Random random;
+  private final Projector projector;
 
-  public GraphProblem(Random random, State s0, StateGraph stateGraph) {
+  public GraphProblem(Random random, State s0, StateGraph stateGraph, Projector projector) {
     this.random = random;
     this.stateGraph = stateGraph;
-    stateVector = new BVector(stateGraph.nbStates());
     this.s0 = s0;
+    this.projector = projector;
+    assert stateGraph.checkDistribution();
   }
 
   @Override
@@ -63,24 +63,11 @@ public class GraphProblem implements Projector, RLProblem {
     return legend;
   }
 
-  @Override
-  public RealVector project(double[] obs) {
-    stateVector.clear();
-    stateVector.setOn((int) obs[0]);
-    return stateVector;
-  }
-
-  @Override
-  public int vectorSize() {
-    return stateVector.getDimension();
-  }
-
-  @Override
-  public double vectorNorm() {
-    return 1;
-  }
-
   public StateGraph stateGraph() {
     return stateGraph;
+  }
+
+  public Projector projector() {
+    return projector;
   }
 }

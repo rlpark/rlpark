@@ -50,18 +50,33 @@ public class StateGraph implements Serializable {
   }
 
   public boolean isTerminal(State s) {
-    double sum = 0;
     int s_i = stateToIndex.get(s);
     for (double[][] ps : transitions.values()) {
-      for (double p : ps[s_i])
-        sum += p;
-      if (sum == 0)
+      if (sum(ps[s_i]) == 0)
         return true;
     }
     return false;
   }
 
+  private double sum(double[] ds) {
+    double sum = 0;
+    for (double p : ds)
+      sum += p;
+    return sum;
+  }
+
   public void addTransition(State s_t, Action a_t, State s_tp1, double prob) {
     transitions.get(a_t)[stateToIndex.get(s_t)][stateToIndex.get(s_tp1)] = prob;
+  }
+
+  public boolean checkDistribution() {
+    for (double[][] psa : transitions.values()) {
+      for (double[] ps : psa) {
+        double sum = sum(ps);
+        if (sum != 0 && sum != 1.0)
+          return false;
+      }
+    }
+    return true;
   }
 }

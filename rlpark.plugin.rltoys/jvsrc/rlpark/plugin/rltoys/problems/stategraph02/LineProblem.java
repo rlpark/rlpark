@@ -23,6 +23,6 @@ public class LineProblem {
     stateGraph.addTransition(A, Move, B, 1.0);
     stateGraph.addTransition(B, Move, C, 1.0);
     stateGraph.addTransition(C, Move, D, 1.0);
-    return new GraphProblem(random, A, stateGraph);
+    return new GraphProblem(random, A, stateGraph, new MarkovProjector(stateGraph));
   }
 }

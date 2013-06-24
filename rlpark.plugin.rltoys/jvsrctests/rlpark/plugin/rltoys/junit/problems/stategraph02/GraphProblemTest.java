@@ -6,16 +6,20 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.envio.policy.SingleActionPolicy;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
 import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.math.vector.implementations.BVector;
 import rlpark.plugin.rltoys.problems.stategraph02.GraphProblem;
 import rlpark.plugin.rltoys.problems.stategraph02.LineProblem;
+import rlpark.plugin.rltoys.problems.stategraph02.MarkovProjector;
 import rlpark.plugin.rltoys.problems.stategraph02.State;
 import rlpark.plugin.rltoys.problems.stategraph02.StateGraph;
+import rlpark.plugin.rltoys.problems.stategraph02.TrackingProblem;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class GraphProblemTest {
@@ -36,7 +40,7 @@ public class GraphProblemTest {
     stateGraph.addTransition(A, Move, B, atob);
     stateGraph.addTransition(A, Move, C, atoc);
     stateGraph.addTransition(A, Move, D, atod);
-    return new GraphProblem(random, A, stateGraph);
+    return new GraphProblem(random, A, stateGraph, new MarkovProjector(stateGraph));
   }
 
   @Test
@@ -54,12 +58,25 @@ public class GraphProblemTest {
       }
     });
     runner.run();
-    int total = 0;
+    double[] d = toDistribution(count);
+    Assert.assertEquals(atob, d[0], 0.01);
+    Assert.assertEquals(atoc, d[1], 0.01);
+    Assert.assertEquals(atod, d[2], 0.01);
+  }
+
+  private double[] toDistribution(int[] count) {
+    return toDistribution(count, 1.0);
+  }
+
+  private double[] toDistribution(int[] count, double vectorNorm) {
+    double total = 0;
     for (int i : count)
       total += i;
-    Assert.assertEquals(atob, count[0] / (double) total, 0.01);
-    Assert.assertEquals(atoc, count[1] / (double) total, 0.01);
-    Assert.assertEquals(atod, count[2] / (double) total, 0.01);
+    double[] distribution = new double[count.length];
+    total *= vectorNorm;
+    for (int i = 0; i < distribution.length; i++)
+      distribution[i] = count[i] / total;
+    return distribution;
   }
 
   @Test
@@ -78,5 +95,30 @@ public class GraphProblemTest {
       Assert.assertEquals(LineProblem.Reward, problem.lastStep().r_tp1, 0);
       Assert.assertTrue(problem.lastStep().isEpisodeEnding());
     }
+  }
+
+  @Test
+  public void trackingProblemTest() {
+    GraphProblem problem = TrackingProblem.create(new Random(0));
+    int[] stateVisits = new int[problem.stateGraph().nbStates()];
+    Projector projector = problem.projector();
+    int[] featureVisits = new int[projector.vectorSize()];
+    TRStep step = problem.initialize();
+    for (int i = 0; i < 1000000; i++) {
+      stateVisits[(int) step.o_tp1[0]]++;
+      BVector s = (BVector) projector.project(step.o_tp1);
+      Assert.assertTrue(s.getEntry(s.getDimension() - 1) == 1.0);
+      for (int j = 0; j < s.nonZeroElements(); j++)
+        featureVisits[s.activeIndexes[j]]++;
+      step = problem.step(TrackingProblem.Move);
+    }
+    double[] distribution = toDistribution(stateVisits);
+    Assert.assertEquals(.5, distribution[0], 0.01);
+    Assert.assertEquals(.25, distribution[1], 0.01);
+    Assert.assertEquals(.25, distribution[2], 0.01);
+    distribution = toDistribution(featureVisits, 1.0 / projector.vectorNorm());
+    Assert.assertEquals(.5, distribution[0], 0.01);
+    Assert.assertEquals(.5, distribution[1], 0.01);
+    Assert.assertEquals(1.0, distribution[2], 0.01);
   }
 }
