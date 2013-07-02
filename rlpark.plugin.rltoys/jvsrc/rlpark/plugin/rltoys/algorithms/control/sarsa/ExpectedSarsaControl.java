@@ -23,7 +23,7 @@ public class ExpectedSarsaControl extends SarsaControl {
     acting.update(x_tp1);
     Action a_tp1 = acting.sampleAction();
     RealVector xa_tp1 = null;
-    VectorPool pool = VectorPools.pool(x_tp1, sarsa.theta.size);
+    VectorPool pool = VectorPools.pool(x_tp1, sarsa.q.size);
     MutableVector phi_bar_tp1 = pool.newVector();
     if (x_tp1 != null) {
       for (Action a : actions) {

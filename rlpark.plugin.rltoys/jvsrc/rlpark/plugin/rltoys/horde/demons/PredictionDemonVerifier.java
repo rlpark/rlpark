@@ -8,11 +8,13 @@ import rlpark.plugin.rltoys.algorithms.predictions.td.TDErrorMonitor;
 import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambdaAutostep;
 import rlpark.plugin.rltoys.horde.functions.RewardFunction;
 import rlpark.plugin.rltoys.utils.NotImplemented;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class PredictionDemonVerifier implements Serializable {
   private static final long serialVersionUID = 6127406364376542150L;
   private final PredictionDemon predictionDemon;
   private final RewardFunction rewardFunction;
+  @Monitor
   private final TDErrorMonitor errorMonitor;
 
   public PredictionDemonVerifier(PredictionDemon predictionDemon) {

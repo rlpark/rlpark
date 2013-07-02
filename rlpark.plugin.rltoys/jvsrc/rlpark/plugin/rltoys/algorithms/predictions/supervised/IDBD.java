@@ -6,13 +6,17 @@ import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVectors;
 import rlpark.plugin.rltoys.math.vector.pool.VectorPool;
 import rlpark.plugin.rltoys.math.vector.pool.VectorPools;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class IDBD implements LearningAlgorithm {
   private static final long serialVersionUID = 6961877310325699208L;
   public final static double MinimumStepsize = 1e-6;
   private final double theta;
+  @Monitor(level = 4)
   private final PVector weights;
+  @Monitor(level = 4)
   private final PVector alphas;
+  @Monitor(level = 4)
   private final PVector hs;
 
   public IDBD(int size, double theta) {
@@ -49,7 +53,7 @@ public class IDBD implements LearningAlgorithm {
     return weights.dotProduct(x);
   }
 
-  public RealVector alphas() {
+  public PVector alphas() {
     return alphas;
   }
 
