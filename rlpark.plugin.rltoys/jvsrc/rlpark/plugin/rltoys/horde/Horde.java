@@ -1,5 +1,6 @@
 package rlpark.plugin.rltoys.horde;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,8 @@ import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 @Monitor
-public class Horde {
+public class Horde implements Serializable {
+  private static final long serialVersionUID = -437180206156496271L;
   final List<HordeUpdatable> beforeFunctions = new ArrayList<HordeUpdatable>();
   final List<Demon> demons = new ArrayList<Demon>();
   final List<HordeUpdatable> afterFunctions = new ArrayList<HordeUpdatable>();
