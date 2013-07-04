@@ -21,7 +21,7 @@ public class EpisodeTrajectories implements Listener<Clock> {
     TRStep step = current.lastStep();
     if (step == null)
       return;
-    if (trajectories[0] == null || step.o_tp1 == null) {
+    if (trajectories[0] == null || step.isEpisodeEnding()) {
       System.arraycopy(trajectories, 0, trajectories, 1, trajectories.length - 1);
       trajectories[0] = new Trajectory(MaximumTrajectoryLength);
       nbTrajectory += 1;
