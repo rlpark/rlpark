@@ -3,7 +3,7 @@ package rlpark.plugin.rltoys.junit.algorithms.control.mountaincar;
 import java.io.File;
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import rlpark.plugin.rltoys.agents.representations.ProjectorFactory;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;

@@ -2,7 +2,7 @@ package rlpark.plugin.rltoys.junit.algorithms.control.actorcritic.policystructur
 
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

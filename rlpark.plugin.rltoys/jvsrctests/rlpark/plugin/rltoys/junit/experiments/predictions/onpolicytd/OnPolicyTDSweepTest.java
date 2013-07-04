@@ -29,13 +29,14 @@ import rlpark.plugin.rltoys.junit.experiments.scheduling.SchedulerTest;
 public class OnPolicyTDSweepTest {
   static private final PredictionProblemFactory[] problemFactories = new PredictionProblemFactory[] {
       new OnPolicyTDProblemFactoryJUnit(.99, 10.0), new OnPolicyTDProblemFactoryJUnit(.8, 100.0) };
-  static private final PredictionLearnerFactory[] learnerFactories = new PredictionLearnerFactory[] { new OnPolicyTDLearnerFactoryJUnit() };
   protected static final String JUnitFolder = ".junittests_tdonpolicysweep";
   protected static final int NbRun = 4;
   protected SweepAll sweep = null;
+  private PredictionLearnerFactory[] learnerFactories;
 
   @Before
   public void before() throws IOException {
+    learnerFactories = new PredictionLearnerFactory[] { new OnPolicyTDLearnerFactoryJUnit() };
     FileUtils.deleteDirectory(new File(JUnitFolder));
     SchedulerTest.junitMode();
     // Sweep.disableVerbose();

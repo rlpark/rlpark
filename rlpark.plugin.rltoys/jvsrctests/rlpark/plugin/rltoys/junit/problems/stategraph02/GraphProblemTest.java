@@ -2,7 +2,7 @@ package rlpark.plugin.rltoys.junit.problems.stategraph02;
 
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

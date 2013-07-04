@@ -2,8 +2,7 @@ package rlpark.plugin.rltoys.junit.algorithms.control.actorcritic.policystructur
 
 import java.util.Random;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.algorithms.functions.policydistributions.PolicyDistribution;
@@ -71,7 +70,7 @@ public class ScaledPolicyDistributionTest {
       ActionArray a = scaledPolicy.sampleAction();
       for (int a_i = 0; a_i < actionRanges.length; a_i++)
         Assert.assertTrue(actionRanges[a_i].in(a.actions[a_i]));
-      Assert.assertEquals(1.0, scaledPolicy.pi(a));
+      Assert.assertEquals(1.0, scaledPolicy.pi(a), 0);
       scaledPolicy.computeGradLog(a);
     }
   }

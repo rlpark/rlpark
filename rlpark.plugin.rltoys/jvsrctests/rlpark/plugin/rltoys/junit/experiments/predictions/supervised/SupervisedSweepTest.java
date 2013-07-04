@@ -28,13 +28,14 @@ import rlpark.plugin.rltoys.junit.experiments.scheduling.SchedulerTest;
 public class SupervisedSweepTest {
   static private final PredictionProblemFactory[] problemFactories = new PredictionProblemFactory[] {
       new SupervisedProblemFactoryJUnit(10.0), new SupervisedProblemFactoryJUnit(100.0) };
-  static private final PredictionLearnerFactory[] learnerFactories = new PredictionLearnerFactory[] { new SupervisedLearnerFactoryJUnit() };
+  private PredictionLearnerFactory[] learnerFactories;
   protected static final String JUnitFolder = ".junittests_supervisedsweep";
   protected static final int NbRun = 4;
   protected SweepAll sweep = null;
 
   @Before
   public void before() throws IOException {
+    learnerFactories = new PredictionLearnerFactory[] { new SupervisedLearnerFactoryJUnit() };
     FileUtils.deleteDirectory(new File(JUnitFolder));
     SchedulerTest.junitMode();
     // Sweep.disableVerbose();
@@ -45,8 +46,8 @@ public class SupervisedSweepTest {
     FileUtils.deleteDirectory(new File(JUnitFolder));
   }
 
-  protected void testSweep(SweepDescriptor provider) {
-    ExperimentCounter counter = new ExperimentCounter(NbRun, JUnitFolder);
+  protected void testSweep(String folder, SweepDescriptor provider) {
+    ExperimentCounter counter = new ExperimentCounter(NbRun, JUnitFolder + "/" + folder);
     sweep = new SweepAll(new LocalScheduler(2));
     sweep.runSweep(provider, counter);
   }
@@ -58,10 +59,10 @@ public class SupervisedSweepTest {
       Assert.assertEquals(expected, value, 0.0);
   }
 
-  protected void checkFile(PredictionSweepDescriptor descriptor, boolean diverged) {
+  protected void checkFile(String folderSuffix, PredictionSweepDescriptor descriptor, boolean diverged) {
     List<? extends Context> contexts = descriptor.provideContexts();
     for (Context context : contexts) {
-      String testFolder = context.folderPath();
+      String testFolder = folderSuffix + "/" + context.folderPath();
       List<Parameters> parameters = descriptor.provideParameters(context);
       String[] parameterLabels = parameters.get(0).labels();
       checkFile(testFolder, diverged, parameterLabels);
@@ -100,8 +101,9 @@ public class SupervisedSweepTest {
   @Test
   public void testLearner() {
     PredictionSweepDescriptor descriptor = new SupervisedSweepDescriptor(problemFactories, learnerFactories);
-    testSweep(descriptor);
-    checkFile(descriptor, false);
+    String folderSuffix = "goodlearner";
+    testSweep(folderSuffix, descriptor);
+    checkFile(folderSuffix, descriptor, false);
   }
 
   @Test
@@ -110,8 +112,9 @@ public class SupervisedSweepTest {
     for (PredictionLearnerFactory learnerFactory : learnerFactories)
       ((SupervisedLearnerFactoryJUnit) learnerFactory)
           .divergeAt((int) (SupervisedProblemFactoryJUnit.NbLearningSteps / 2));
-    testSweep(descriptor);
-    checkFile(descriptor, true);
+    String folderSuffix = "badlearner01";
+    testSweep(folderSuffix, descriptor);
+    checkFile(folderSuffix, descriptor, true);
   }
 
   @Test
@@ -120,7 +123,8 @@ public class SupervisedSweepTest {
     for (PredictionLearnerFactory learnerFactory : learnerFactories)
       ((SupervisedLearnerFactoryJUnit) learnerFactory)
           .divergeAt((int) (SupervisedProblemFactoryJUnit.NbLearningSteps + SupervisedProblemFactoryJUnit.NbEvaluationSteps / 2));
-    testSweep(descriptor);
-    checkFile(descriptor, true);
+    String folderSuffix = "badlearner02";
+    testSweep(folderSuffix, descriptor);
+    checkFile(folderSuffix, descriptor, true);
   }
 }

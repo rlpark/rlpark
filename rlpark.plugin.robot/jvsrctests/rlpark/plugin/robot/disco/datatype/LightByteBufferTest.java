@@ -2,8 +2,7 @@ package rlpark.plugin.robot.disco.datatype;
 
 import java.nio.ByteOrder;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.robot.internal.sync.LiteByteBuffer;
@@ -70,6 +69,6 @@ public class LightByteBufferTest {
       buffer.putFloat(value);
     buffer.reset();
     for (float value : values)
-      Assert.assertEquals(value, buffer.getFloat());
+      Assert.assertEquals(value, buffer.getFloat(), 0);
   }
 }

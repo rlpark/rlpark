@@ -109,6 +109,32 @@ public class Filters {
     return operate(maxOperation, filter);
   }
 
+  public static MutableVector boundAbsToSelf(final MutableVector result, final double other, RealVector filter) {
+    FilteredOperation maxOperation = new FilteredOperation() {
+      @Override
+      public MutableVector sparseOperate(int[] indexes, int nbActive) {
+        for (int i = 0; i < nbActive; i++) {
+          int index = indexes[i];
+          result.setEntry(index, boundValue(result.getEntry(index)));
+        }
+        return result;
+      }
+
+      @Override
+      public MutableVector operate() {
+        int dimension = result.getDimension();
+        for (int index = 0; index < dimension; index++)
+          result.setEntry(index, boundValue(result.getEntry(index)));
+        return result;
+      }
+
+      public double boundValue(double value) {
+        return Math.min(Math.abs(value), other) * Math.signum(value);
+      }
+    };
+    return operate(maxOperation, filter);
+  }
+
   public static MutableVector mapMultiplyToSelf(final PVector result, final double d, RealVector filter) {
     FilteredOperation mapMultiplySelfOperation = new FilteredOperation() {
       @Override

@@ -1,7 +1,6 @@
 package rlpark.plugin.rltoys.junit.experiments.helpers;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
@@ -118,7 +117,7 @@ public class RunnerTest {
     Runner runner = new Runner(environment, agent, -1, NbTimeSteps);
     runner.runEpisode();
     RunnerEvent runnerEvent = runner.runnerEvent();
-    Assert.assertEquals(Reward * NbTimeSteps, runnerEvent.episodeReward);
+    Assert.assertEquals(Reward * NbTimeSteps, runnerEvent.episodeReward, 0);
     Assert.assertEquals(NbTimeSteps, runnerEvent.step.time);
   }
 

@@ -1,6 +1,6 @@
 package rlpark.plugin.rltoys.junit.algorithms.representations.rbf;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

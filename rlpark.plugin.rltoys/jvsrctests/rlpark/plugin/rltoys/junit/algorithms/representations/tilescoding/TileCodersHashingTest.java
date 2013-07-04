@@ -4,7 +4,7 @@ import static rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCo
 
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 package rlpark.plugin.robot.disco.datagroup;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

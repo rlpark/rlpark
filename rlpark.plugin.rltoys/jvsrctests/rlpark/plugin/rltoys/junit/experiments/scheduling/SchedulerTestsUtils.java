@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobDoneEvent;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobPool;
 import rlpark.plugin.rltoys.experiments.scheduling.interfaces.JobPool.JobPoolListener;
