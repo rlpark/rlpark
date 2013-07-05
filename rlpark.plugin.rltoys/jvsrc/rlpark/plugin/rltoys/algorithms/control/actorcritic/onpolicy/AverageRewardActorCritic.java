@@ -1,6 +1,7 @@
 package rlpark.plugin.rltoys.algorithms.control.actorcritic.onpolicy;
 
 import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
+import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
@@ -20,6 +21,11 @@ public class AverageRewardActorCritic extends AbstractActorCritic {
     double delta = critic.update(x_t, x_tp1, r_tp1 - averageReward);
     averageReward += alpha_r * delta;
     return delta;
+  }
+
+  @Override
+  protected void updateActor(RealVector x_t, Action a_t, double actorDelta) {
+    actor.update(x_t, a_t, actorDelta);
   }
 
   public double currentAverage() {
