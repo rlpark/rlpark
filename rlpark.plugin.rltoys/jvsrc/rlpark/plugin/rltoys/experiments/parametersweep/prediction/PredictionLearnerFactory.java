@@ -8,5 +8,5 @@ import rlpark.plugin.rltoys.problems.PredictionProblem;
 import zephyr.plugin.core.api.labels.Labeled;
 
 public interface PredictionLearnerFactory extends Labeled, Serializable {
-  Predictor createLearner(int counter, PredictionProblem problem, Parameters parameters);
+  Predictor createLearner(long seed, PredictionProblem problem, Parameters parameters);
 }

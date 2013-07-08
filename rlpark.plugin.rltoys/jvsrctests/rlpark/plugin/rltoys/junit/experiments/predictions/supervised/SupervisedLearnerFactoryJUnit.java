@@ -21,7 +21,7 @@ public class SupervisedLearnerFactoryJUnit implements PredictionLearnerFactory, 
   }
 
   @Override
-  public LearningAlgorithm createLearner(int counter, PredictionProblem problem, Parameters parameters) {
+  public LearningAlgorithm createLearner(long seed, PredictionProblem problem, Parameters parameters) {
     final double value = parameters.get(Parameter);
     final double localDivergeAt = divergeAt;
     final boolean divergeAtLearning = parameters.get(Divergence) < 0;
