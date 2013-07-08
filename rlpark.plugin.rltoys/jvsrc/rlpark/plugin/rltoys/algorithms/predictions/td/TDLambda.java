@@ -12,6 +12,7 @@ public class TDLambda extends TD implements EligibilityTraceAlgorithm {
   private final double lambda;
   @Monitor
   public final Traces e;
+  double gamma_t;
 
   public TDLambda(double lambda, double gamma, double alpha, int nbFeatures) {
     this(lambda, gamma, alpha, nbFeatures, new ATraces());
@@ -26,6 +27,7 @@ public class TDLambda extends TD implements EligibilityTraceAlgorithm {
   @Override
   protected double initEpisode() {
     e.clear();
+    gamma_t = 1;
     return super.initEpisode();
   }
 
@@ -35,8 +37,9 @@ public class TDLambda extends TD implements EligibilityTraceAlgorithm {
       return initEpisode();
     v_t = v.dotProduct(x_t);
     delta_t = r_tp1 + gamma_tp1 * v.dotProduct(x_tp1) - v_t;
-    e.update(lambda * gamma_tp1, x_t);
+    e.update(lambda * gamma_t, x_t);
     v.addToSelf(alpha_v * delta_t, e.vect());
+    gamma_t = gamma_tp1;
     return delta_t;
   }
 
