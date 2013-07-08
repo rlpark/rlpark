@@ -27,7 +27,7 @@ public class TDLambda extends TD implements EligibilityTraceAlgorithm {
   @Override
   protected double initEpisode() {
     e.clear();
-    gamma_t = 1;
+    gamma_t = gamma;
     return super.initEpisode();
   }
 
