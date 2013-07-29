@@ -6,7 +6,6 @@ import rlpark.plugin.rltoys.agents.functions.FunctionProjected2D;
 import rlpark.plugin.rltoys.agents.functions.ValueFunction2D;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentDirect;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
-import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentFA;
 import rlpark.plugin.rltoys.algorithms.control.actorcritic.offpolicy.ActorLambdaOffPolicy;
 import rlpark.plugin.rltoys.algorithms.control.actorcritic.offpolicy.ActorOffPolicy;
 import rlpark.plugin.rltoys.algorithms.control.actorcritic.offpolicy.CriticAdapterFA;
@@ -62,7 +61,7 @@ public class OffPACPuddleWorld implements Runnable {
     OffPolicyAgentEvaluable agent = createOffPACAgent(random, behaviourEnvironment, behaviour, .99);
     learningRunner = new Runner(behaviourEnvironment, agent, -1, 5000);
     evaluationRunner = new Runner(evaluationEnvironment, agent.createEvaluatedAgent(), -1, 5000);
-    CriticAdapterFA criticAdapter = (CriticAdapterFA) ((OffPolicyAgentFA) agent).learner().predictor();
+    CriticAdapterFA criticAdapter = (CriticAdapterFA) ((OffPolicyAgentDirect) agent).learner().predictor();
     valueFunction = new ValueFunction2D(criticAdapter.projector(), behaviourEnvironment, criticAdapter.predictor());
     connectEpisodesEventsForZephyr();
     Zephyr.advertise(clock, this);

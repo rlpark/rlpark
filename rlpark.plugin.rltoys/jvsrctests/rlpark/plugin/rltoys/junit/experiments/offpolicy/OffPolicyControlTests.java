@@ -3,7 +3,6 @@ package rlpark.plugin.rltoys.junit.experiments.offpolicy;
 import java.util.Random;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentDirect;
@@ -63,7 +62,7 @@ public class OffPolicyControlTests {
         return new OffPolicyAgentDirect(behaviour, learner);
       }
     };
-    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 165);
+    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 270);
   }
 
   @Test
@@ -81,7 +80,7 @@ public class OffPolicyControlTests {
         return new OffPolicyAgentDirect(behaviour, learner);
       }
     };
-    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 160);
+    Assert.assertTrue(MountainCarOffPolicyLearning.evaluate(factory) < 190);
   }
 
   @Test

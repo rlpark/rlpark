@@ -152,12 +152,14 @@ public class Filters {
     return operate(mapMultiplySelfOperation, filter);
   }
 
-  public static MutableVector mapDivideToSelf(final PVector result, final double d, RealVector filter) {
+  public static MutableVector mapDivideToSelf(final MutableVector result, final double d, RealVector filter) {
     FilteredOperation mapDivideSelfOperation = new FilteredOperation() {
       @Override
       public MutableVector sparseOperate(int[] indexes, int nbActive) {
-        for (int i = 0; i < nbActive; i++)
-          result.data[indexes[i]] /= d;
+        for (int i = 0; i < nbActive; i++) {
+          int index = indexes[i];
+          result.setEntry(index, result.getEntry(index) / d);
+        }
         return result;
       }
 
@@ -207,5 +209,49 @@ public class Filters {
       }
     };
     return operate(powSelfOperation, filter);
+  }
+
+  public static MutableVector expTo(final RealVector source, final MutableVector result, RealVector filter) {
+    FilteredOperation expOperation = new FilteredOperation() {
+      @Override
+      public MutableVector sparseOperate(int[] indexes, int nbActive) {
+        for (int i = 0; i < nbActive; i++) {
+          int entryIndex = indexes[i];
+          result.setEntry(entryIndex, Math.exp(source.getEntry(entryIndex)));
+        }
+        return result;
+      }
+
+      @Override
+      public MutableVector operate() {
+        int dimension = result.getDimension();
+        for (int index = 0; index < dimension; index++)
+          result.setEntry(index, Math.exp(source.getEntry(index)));
+        return result;
+      }
+    };
+    return operate(expOperation, filter);
+  }
+
+  public static MutableVector set(final MutableVector result, final MutableVector x) {
+    FilteredOperation setOperation = new FilteredOperation() {
+      @Override
+      public MutableVector sparseOperate(int[] indexes, int nbActive) {
+        for (int i = 0; i < nbActive; i++) {
+          int entryIndex = indexes[i];
+          result.setEntry(entryIndex, x.getEntry(entryIndex));
+        }
+        return result;
+      }
+
+      @Override
+      public MutableVector operate() {
+        int dimension = result.getDimension();
+        for (int index = 0; index < dimension; index++)
+          result.setEntry(index, x.getEntry(index));
+        return result;
+      }
+    };
+    return operate(setOperation, x);
   }
 }

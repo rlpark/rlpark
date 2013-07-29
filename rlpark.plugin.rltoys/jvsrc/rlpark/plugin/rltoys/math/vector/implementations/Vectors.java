@@ -3,6 +3,7 @@ package rlpark.plugin.rltoys.math.vector.implementations;
 
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
+import rlpark.plugin.rltoys.math.vector.SparseVector;
 import rlpark.plugin.rltoys.utils.NotImplemented;
 import rlpark.plugin.rltoys.utils.Utils;
 
@@ -114,6 +115,12 @@ public class Vectors {
   }
 
   public static boolean isNull(RealVector v) {
+    if (v == null)
+      return true;
+    if (v instanceof VectorNull)
+      return true;
+    if (v instanceof SparseVector)
+      return ((SparseVector) v).nonZeroElements() == 0;
     for (double value : v.accessData())
       if (value != 0)
         return false;
@@ -155,5 +162,22 @@ public class Vectors {
     else
       ((MutableVector) result).set(source);
     return result;
+  }
+
+  public static MutableVector logToSelf(MutableVector v) {
+    if (v instanceof SVector) {
+      logToSelf(((SVector) v).values, ((SVector) v).nbActive);
+      return v;
+    }
+    if (v instanceof PVector) {
+      logToSelf(((PVector) v).data, v.getDimension());
+      return v;
+    }
+    throw new NotImplemented();
+  }
+
+  private static void logToSelf(double[] data, int length) {
+    for (int i = 0; i < length; i++)
+      data[i] = Math.log(data[i]);
   }
 }

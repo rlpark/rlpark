@@ -105,4 +105,8 @@ public class Runner implements Serializable, MonitorContainer {
       }
     });
   }
+
+  public int nbEpisodeDone() {
+    return runnerEvent.nbEpisodeDone;
+  }
 }

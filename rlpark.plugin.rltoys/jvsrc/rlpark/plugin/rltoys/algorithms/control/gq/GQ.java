@@ -8,6 +8,7 @@ import rlpark.plugin.rltoys.algorithms.traces.Traces;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.math.vector.pool.VectorPool;
 import rlpark.plugin.rltoys.math.vector.pool.VectorPools;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -53,7 +54,7 @@ public class GQ implements Predictor, LinearLearner, EligibilityTraceAlgorithm {
     e.update((1 - beta_tp1) * lambda_t * rho_t, x_t);
     MutableVector delta_e = pool.newVector(e.vect()).mapMultiplyToSelf(delta_t);
     MutableVector tdCorrection = pool.newVector();
-    if (x_bar_tp1 != null)
+    if (!Vectors.isNull(x_bar_tp1))
       tdCorrection.set(x_bar_tp1).mapMultiplyToSelf((1 - beta_tp1) * (1 - lambda_t) * e.vect().dotProduct(w));
     v.addToSelf(alpha_v, pool.newVector(delta_e).subtractToSelf(tdCorrection));
     w.addToSelf(alpha_w, delta_e.subtractToSelf(pool.newVector(x_t).mapMultiplyToSelf(w.dotProduct(x_t))));

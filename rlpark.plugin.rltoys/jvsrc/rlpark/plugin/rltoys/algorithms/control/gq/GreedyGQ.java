@@ -8,6 +8,7 @@ import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.math.vector.MutableVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import rlpark.plugin.rltoys.math.vector.pool.VectorPool;
 import rlpark.plugin.rltoys.math.vector.pool.VectorPools;
 import rlpark.plugin.rltoys.utils.Prototype;
@@ -41,7 +42,7 @@ public class GreedyGQ implements OffPolicyLearner {
   public double update(RealVector x_t, Action a_t, double r_tp1, double gamma_tp1, double z_tp1, RealVector x_tp1,
       Action a_tp1) {
     rho_t = 0.0;
-    if (a_t != null) {
+    if (a_t != null && !Vectors.isNull(x_t)) {
       target.update(x_t);
       behaviour.update(x_t);
       rho_t = target.pi(a_t) / behaviour.pi(a_t);
@@ -49,7 +50,7 @@ public class GreedyGQ implements OffPolicyLearner {
     assert Utils.checkValue(rho_t);
     VectorPool pool = VectorPools.pool(prototype, gq.v.size);
     MutableVector sa_bar_tp1 = pool.newVector();
-    if (x_t != null && x_tp1 != null) {
+    if (!Vectors.isNull(x_t) && !Vectors.isNull(x_tp1)) {
       target.update(x_tp1);
       for (Action a : actions) {
         double pi = target.pi(a);
@@ -58,7 +59,7 @@ public class GreedyGQ implements OffPolicyLearner {
         sa_bar_tp1.addToSelf(pi, toStateAction.stateAction(x_tp1, a));
       }
     }
-    RealVector phi_stat = x_t != null ? toStateAction.stateAction(x_t, a_t) : null;
+    RealVector phi_stat = !Vectors.isNull(x_t) ? toStateAction.stateAction(x_t, a_t) : null;
     delta_t = gq.update(phi_stat, rho_t, r_tp1, sa_bar_tp1, z_tp1);
     pool.releaseAll();
     return delta_t;

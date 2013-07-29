@@ -5,6 +5,7 @@ import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.predictions.td.OffPolicyTD;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
+import rlpark.plugin.rltoys.math.vector.implementations.VectorNull;
 import rlpark.plugin.rltoys.math.vector.implementations.Vectors;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
@@ -14,7 +15,6 @@ public class CriticAdapterFA implements OffPolicyTD {
   @Monitor
   private final OffPolicyTD offPolicyTD;
   private final Projector projector;
-  private RealVector o_t = null;
   private RealVector x_t = null;
 
   public CriticAdapterFA(Projector projector, OffPolicyTD offPolicyTD) {
@@ -33,7 +33,9 @@ public class CriticAdapterFA implements OffPolicyTD {
   }
 
   private RealVector projectIFN(RealVector o) {
-    return projector.project(o instanceof PVector ? ((PVector) o).data : null);
+    if (o == null)
+      return new VectorNull(projector.vectorSize());
+    return projector.project(((PVector) o).data);
   }
 
   @Override
@@ -48,14 +50,9 @@ public class CriticAdapterFA implements OffPolicyTD {
 
   @Override
   public double update(double pi_t, double b_t, RealVector o_t, RealVector o_tp1, double r_tp1) {
-    if (o_t != this.o_t) {
-      x_t = Vectors.bufferedCopy(projectIFN(o_t), x_t);
-      this.o_t = o_t;
-    }
     RealVector x_tp1 = projectIFN(o_tp1);
     double delta = offPolicyTD.update(pi_t, b_t, x_t, x_tp1, r_tp1);
-    x_t = Vectors.bufferedCopy(x_tp1, x_t);
-    this.o_t = o_tp1;
+    x_t = Vectors.isNull(x_tp1) ? null : Vectors.bufferedCopy(x_tp1, x_t);
     return delta;
   }
 
