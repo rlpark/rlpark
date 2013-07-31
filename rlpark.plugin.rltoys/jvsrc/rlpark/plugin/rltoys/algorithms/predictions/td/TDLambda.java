@@ -9,7 +9,7 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 public class TDLambda extends TD implements EligibilityTraceAlgorithm {
   private static final long serialVersionUID = 8613865620293286722L;
-  private final double lambda;
+  protected final double lambda;
   @Monitor
   public final Traces e;
   double gamma_t;

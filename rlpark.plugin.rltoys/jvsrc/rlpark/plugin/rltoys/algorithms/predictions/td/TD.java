@@ -10,7 +10,7 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 @SuppressWarnings("restriction")
 public class TD implements OnPolicyTD {
   private static final long serialVersionUID = -3640476464100200081L;
-  final public double alpha_v;
+  protected double alpha_v;
   protected double gamma;
   @Monitor(level = 4)
   final public PVector v;
@@ -75,5 +75,9 @@ public class TD implements OnPolicyTD {
   @Override
   public double prediction() {
     return v_t;
+  }
+
+  public double alpha() {
+    return alpha_v;
   }
 }
