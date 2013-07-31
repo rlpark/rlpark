@@ -19,7 +19,7 @@ public class LearnerAgentFA implements RLAgent {
   protected double reward;
   @IgnoreMonitor
   protected RealVector x_t;
-  private static BVector absorbingState;
+  private final BVector absorbingState;
 
   public LearnerAgentFA(ControlLearner control, Projector projector) {
     this.control = control;
