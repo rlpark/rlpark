@@ -1,14 +1,14 @@
 package rlpark.plugin.rltoys.junit.algorithms.predictions.td;
 
 import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
-import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambdaAS;
+import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambdaAlphaBound;
 import rlpark.plugin.rltoys.experiments.testing.predictions.OnPolicyTests;
 
-public class TDLambdaASTest extends OnPolicyTests {
+public class TDLambdaAlphaBoundTest extends OnPolicyTests {
 
   @Override
   protected OnPolicyTD newOnPolicyTD(double lambda, double gamma, double vectorNorm, int vectorSize) {
-    return new TDLambdaAS(lambda, gamma, .4 / vectorNorm, vectorSize);
+    return new TDLambdaAlphaBound(lambda, gamma, .4 / vectorNorm, vectorSize);
   }
 
   @Override

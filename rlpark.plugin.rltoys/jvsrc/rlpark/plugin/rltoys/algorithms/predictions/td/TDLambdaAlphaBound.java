@@ -14,14 +14,14 @@ import rlpark.plugin.rltoys.math.vector.pool.VectorPools;
  * and Andrew G. Barto (2012)
  * 
  */
-public class TDLambdaAS extends TDLambda {
+public class TDLambdaAlphaBound extends TDLambda {
   private static final long serialVersionUID = -1404196112258948883L;
 
-  public TDLambdaAS(double lambda, double gamma, double alpha, int nbFeatures) {
+  public TDLambdaAlphaBound(double lambda, double gamma, double alpha, int nbFeatures) {
     this(lambda, gamma, alpha, nbFeatures, new ATraces());
   }
 
-  public TDLambdaAS(double lambda, double gamma, double alpha, int nbFeatures, Traces prototype) {
+  public TDLambdaAlphaBound(double lambda, double gamma, double alpha, int nbFeatures, Traces prototype) {
     super(lambda, gamma, alpha, nbFeatures, prototype);
   }
 
