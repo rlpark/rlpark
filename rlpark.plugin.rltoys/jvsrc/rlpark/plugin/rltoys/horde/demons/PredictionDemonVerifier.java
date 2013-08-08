@@ -18,17 +18,21 @@ public class PredictionDemonVerifier implements Serializable {
   private final TDErrorMonitor errorMonitor;
 
   public PredictionDemonVerifier(PredictionDemon predictionDemon) {
-    this(predictionDemon, 0.01);
+    this(extractGamma(predictionDemon.predicter()), predictionDemon);
   }
 
-  public PredictionDemonVerifier(PredictionDemon predictionDemon, double precision) {
+
+  public PredictionDemonVerifier(double gamma, PredictionDemon predictionDemon) {
+    this(gamma, predictionDemon, 0.01);
+  }
+
+  public PredictionDemonVerifier(double gamma, PredictionDemon predictionDemon, double precision) {
     this.predictionDemon = predictionDemon;
     rewardFunction = predictionDemon.rewardFunction();
-    double gamma = extractGamma(predictionDemon.predicter());
     errorMonitor = new TDErrorMonitor(gamma, precision);
   }
 
-  public double extractGamma(OnPolicyTD learner) {
+  static public double extractGamma(OnPolicyTD learner) {
     if (learner instanceof TD)
       return ((TD) learner).gamma();
     if (learner instanceof TDLambdaAutostep)
