@@ -17,7 +17,7 @@ public class Sarsa implements Predictor, ParameterizedFunction {
   protected final PVector q;
   protected final double lambda;
   protected final double gamma;
-  protected final double alpha;
+  protected double alpha;
   protected double delta;
   protected double v_t;
   protected double v_tp1;
