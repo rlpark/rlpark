@@ -51,4 +51,8 @@ public class MinMaxNormalizer implements Normalizer {
   public Range targetRange() {
     return targetRange;
   }
+
+  public Range valueRange() {
+    return valueRange;
+  }
 }

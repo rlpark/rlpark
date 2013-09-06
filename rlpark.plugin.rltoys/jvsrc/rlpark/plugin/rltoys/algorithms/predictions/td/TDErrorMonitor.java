@@ -99,4 +99,8 @@ public class TDErrorMonitor implements Serializable {
   public int bufferSize() {
     return bufferSize;
   }
+
+  public double prediction() {
+    return prediction;
+  }
 }

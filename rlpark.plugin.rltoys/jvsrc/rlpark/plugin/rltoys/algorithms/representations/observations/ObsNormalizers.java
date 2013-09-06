@@ -1,12 +1,15 @@
 package rlpark.plugin.rltoys.algorithms.representations.observations;
 
+import java.io.Serializable;
+
 import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.rltoys.math.normalization.MinMaxNormalizer;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-public class ObsNormalizers {
+public class ObsNormalizers implements Serializable {
+  private static final long serialVersionUID = 5380060422826193962L;
   private final MinMaxNormalizer[] normalizers;
   private final Legend legend;
   @Monitor(level = 1)
