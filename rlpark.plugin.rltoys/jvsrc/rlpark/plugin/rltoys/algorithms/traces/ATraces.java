@@ -35,6 +35,7 @@ public class ATraces implements Traces, Prototype<RealVector> {
 
   protected ATraces(MutableVector prototype, double threshold, int size) {
     this.prototype = prototype;
+    this.threshold = threshold;
     vector = size > 0 ? prototype.newInstance(size) : null;
   }
 
