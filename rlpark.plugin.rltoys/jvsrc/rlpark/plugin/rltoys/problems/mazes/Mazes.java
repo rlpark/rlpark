@@ -27,7 +27,7 @@ public class Mazes {
     return new Maze(layout, rewardFunction, endEpisodeFunction, start);
   }
 
-  private static double[][] createDefaultRewardFunction(byte[][] layout, double reward) {
+  public static double[][] createDefaultRewardFunction(byte[][] layout, double reward) {
     double[][] rewardFunction = new double[layout.length][];
     for (int i = 0; i < rewardFunction.length; i++) {
       rewardFunction[i] = new double[layout[i].length];
@@ -36,7 +36,7 @@ public class Mazes {
     return rewardFunction;
   }
 
-  private static boolean[][] createDefaultEndEpisode(byte[][] layout) {
+  public static boolean[][] createDefaultEndEpisode(byte[][] layout) {
     boolean[][] endEpisodeFunction = new boolean[layout.length][];
     for (int i = 0; i < endEpisodeFunction.length; i++)
       endEpisodeFunction[i] = new boolean[layout[i].length];

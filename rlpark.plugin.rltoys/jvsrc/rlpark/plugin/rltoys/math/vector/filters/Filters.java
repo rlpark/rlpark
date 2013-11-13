@@ -233,6 +233,30 @@ public class Filters {
     return operate(expOperation, filter);
   }
 
+
+  public static MutableVector logTo(final RealVector source, final MutableVector result, RealVector filter) {
+    FilteredOperation expOperation = new FilteredOperation() {
+      @Override
+      public MutableVector sparseOperate(int[] indexes, int nbActive) {
+        for (int i = 0; i < nbActive; i++) {
+          int entryIndex = indexes[i];
+          result.setEntry(entryIndex, Math.log(source.getEntry(entryIndex)));
+        }
+        return result;
+      }
+
+      @Override
+      public MutableVector operate() {
+        int dimension = result.getDimension();
+        for (int index = 0; index < dimension; index++)
+          result.setEntry(index, Math.log(source.getEntry(index)));
+        return result;
+      }
+    };
+    return operate(expOperation, filter);
+  }
+
+
   public static MutableVector set(final MutableVector result, final MutableVector x) {
     FilteredOperation setOperation = new FilteredOperation() {
       @Override
