@@ -52,7 +52,7 @@ public class ActorCriticOnPolicyOnPendulumTest {
         Actor actor = new Actor(policyDistribution, 0.05 / vectorNorm, vectorSize);
         return new AverageRewardActorCritic(0.01, critic, actor);
       }
-    }) > .75);
+    }) > .65);
   }
 
   @Test
