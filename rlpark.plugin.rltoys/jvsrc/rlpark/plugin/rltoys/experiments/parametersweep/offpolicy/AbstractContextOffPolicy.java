@@ -1,6 +1,5 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy;
 
-import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
 import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
@@ -73,12 +72,6 @@ public abstract class AbstractContextOffPolicy implements OffPolicyEvaluationCon
     OnPolicyRewardMonitor monitor = createRewardMonitor("Behaviour", evaluation.nbRewardCheckpoint(), parameters);
     monitor.connect(runner);
     return monitor;
-  }
-
-  @Override
-  public PerformanceEvaluator connectTargetRewardMonitor(int counter, AbstractRunner runner, Parameters parameters) {
-    OffPolicyAgentEvaluable agent = (OffPolicyAgentEvaluable) runner.agent();
-    return evaluation.connectEvaluator(counter, runner, environmentFactory, projectorFactory, agent, parameters);
   }
 
   @Override

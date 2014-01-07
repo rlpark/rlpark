@@ -9,9 +9,11 @@ import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner.RunnerEvent;
 import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.signals.Signal;
 
 public class EpisodeBasedOffPolicyEvaluation extends AbstractOffPolicyEvaluation {
   private static final long serialVersionUID = -654783411988105997L;
@@ -26,17 +28,17 @@ public class EpisodeBasedOffPolicyEvaluation extends AbstractOffPolicyEvaluation
 
   @Override
   public PerformanceEvaluator connectEvaluator(final int counter, AbstractRunner behaviourRunner,
-      final OffPolicyProblemFactory problemFactory, final RepresentationFactory projectorFactory,
-      final OffPolicyAgentEvaluable learningAgent, final Parameters parameters) {
+      Signal<RunnerEvent> signal, final OffPolicyProblemFactory problemFactory,
+      final RepresentationFactory projectorFactory, final OffPolicyAgentEvaluable learningAgent,
+      final Parameters parameters) {
     RLProblem problem = createEvaluationProblem(counter, problemFactory);
     RLAgent evaluatedAgent = learningAgent.createEvaluatedAgent();
     Runner runner = new Runner(problem, evaluatedAgent, Integer.MAX_VALUE, maxTimeStepsPerEpisode);
     final int nbEpisode = RLParameters.nbEpisode(parameters);
-    final OffPolicyRewardMonitor rewardMonitor = new OffPolicyRewardMonitor(runner, nbRewardCheckpoint,
-                                                                                          nbEpisode,
-                                                                                          nbEpisodePerEvaluation);
+    final OffPolicyRewardMonitor rewardMonitor = new OffPolicyRewardMonitor(runner, nbRewardCheckpoint, nbEpisode,
+                                                                            nbEpisodePerEvaluation);
     rewardMonitor.runEvaluationIFN(0);
-    behaviourRunner.onEpisodeEnd.connect(new Listener<AbstractRunner.RunnerEvent>() {
+    signal.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
       public void listen(AbstractRunner.RunnerEvent eventInfo) {
         rewardMonitor.runEvaluationIFN(eventInfo.nbEpisodeDone);

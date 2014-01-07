@@ -1,8 +1,10 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy;
 
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgent;
+import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
 import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
+import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluation;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
@@ -18,6 +20,13 @@ public class TimeStepContextOffPolicy extends AbstractContextOffPolicy {
   public TimeStepContextOffPolicy(OffPolicyProblemFactory environmentFactory, RepresentationFactory projectorFactory,
       OffPolicyAgentFactory agentFactory, OffPolicyEvaluation evaluation) {
     super(environmentFactory, projectorFactory, agentFactory, evaluation);
+  }
+
+  @Override
+  public PerformanceEvaluator connectTargetRewardMonitor(int counter, AbstractRunner runner, Parameters parameters) {
+    OffPolicyAgentEvaluable agent = (OffPolicyAgentEvaluable) runner.agent();
+    return evaluation.connectEvaluator(counter, runner, runner.onTimeStep, environmentFactory, projectorFactory, agent,
+                                       parameters);
   }
 
   @Override

@@ -11,9 +11,11 @@ import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner.RunnerEvent;
 import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.signals.Signal;
 
 public class ContinuousOffPolicyEvaluation extends AbstractOffPolicyEvaluation {
   private static final long serialVersionUID = -654783411988105997L;
@@ -35,7 +37,7 @@ public class ContinuousOffPolicyEvaluation extends AbstractOffPolicyEvaluation {
   }
 
   @Override
-  public PerformanceEvaluator connectEvaluator(int counter, AbstractRunner behaviourRunner,
+  public PerformanceEvaluator connectEvaluator(int counter, AbstractRunner behaviourRunner, Signal<RunnerEvent> signal,
       OffPolicyProblemFactory problemFactory, RepresentationFactory projectorFactory,
       OffPolicyAgentEvaluable learningAgent, Parameters parameters) {
     if (RLParameters.nbEpisode(parameters) != 1)
