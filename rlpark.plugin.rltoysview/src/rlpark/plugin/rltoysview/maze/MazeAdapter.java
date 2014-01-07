@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoysview.internal.maze;
+package rlpark.plugin.rltoysview.maze;
 
 import rlpark.plugin.rltoys.problems.mazes.MazeProjector;
 import rlpark.plugin.rltoysview.internal.adapters.FunctionAdapter;

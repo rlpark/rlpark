@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoysview.internal.maze;
+package rlpark.plugin.rltoysview.maze;
 
 import rlpark.plugin.rltoys.envio.actions.Action;
 

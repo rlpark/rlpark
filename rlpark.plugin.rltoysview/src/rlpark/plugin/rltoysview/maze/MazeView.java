@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoysview.internal.maze;
+package rlpark.plugin.rltoysview.maze;
 
 import java.awt.Point;
 

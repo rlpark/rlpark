@@ -16,4 +16,5 @@ Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
  org.junit;bundle-version="4.8.1";resolution:=optional
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: rlpark.plugin.rltoysview.internal.RLToysViewPlugin
-Export-Package: rlpark.plugin.rltoysview.tests
+Export-Package: rlpark.plugin.rltoysview.maze,
+ rlpark.plugin.rltoysview.tests

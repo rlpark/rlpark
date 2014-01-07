@@ -76,7 +76,7 @@
       </view>
       <view
             allowMultiple="true"
-            class="rlpark.plugin.rltoysview.internal.maze.MazeView"
+            class="rlpark.plugin.rltoysview.maze.MazeView"
             icon="icons/mazeview.png"
             id="zephyr.rlpark.plugin.rltoysview.mazeview"
             name="Maze"
@@ -142,7 +142,7 @@
             viewid="zephyr.rlpark.plugin.rltoysview.helicopterview">
       </client>
       <client
-            class="rlpark.plugin.rltoysview.internal.maze.MazeView$Provider"
+            class="rlpark.plugin.rltoysview.maze.MazeView$Provider"
             icon="icons/mazeview.png"
             name="Maze View"
             viewid="zephyr.rlpark.plugin.rltoysview.mazeview">
