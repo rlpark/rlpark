@@ -92,3 +92,4 @@ Export-Package: rlpark.plugin.rltoys.agents,
  rlpark.plugin.rltoys.problems.puddleworld;x-internal:=true,
  rlpark.plugin.rltoys.problems.stategraph02,
  rlpark.plugin.rltoys.utils
+Import-Package: rlpark.plugin.rltoys.experiments.runners

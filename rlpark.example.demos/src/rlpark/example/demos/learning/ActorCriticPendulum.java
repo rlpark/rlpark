@@ -50,7 +50,7 @@ public class ActorCriticPendulum implements Runnable {
     AverageRewardActorCritic actorCritic = new AverageRewardActorCritic(.0001, critic, actor);
     agent = new LearnerAgentFA(actorCritic, tileCoders);
     valueFunction = new ValueFunction2D(tileCoders, problem, critic);
-    runner = new Runner(problem, agent, -1, 1000);
+    runner = new Runner(problem, agent, 1000, -1);
     runner.onEpisodeEnd.connect(new Listener<RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {

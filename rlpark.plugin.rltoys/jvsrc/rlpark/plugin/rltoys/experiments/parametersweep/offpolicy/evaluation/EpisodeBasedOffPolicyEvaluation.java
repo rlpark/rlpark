@@ -4,7 +4,7 @@ import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
 import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
-import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal.OffPolicyEpisodeRewardMonitor;
+import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal.OffPolicyRewardMonitor;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
@@ -32,7 +32,7 @@ public class EpisodeBasedOffPolicyEvaluation extends AbstractOffPolicyEvaluation
     RLAgent evaluatedAgent = learningAgent.createEvaluatedAgent();
     Runner runner = new Runner(problem, evaluatedAgent, Integer.MAX_VALUE, maxTimeStepsPerEpisode);
     final int nbEpisode = RLParameters.nbEpisode(parameters);
-    final OffPolicyEpisodeRewardMonitor rewardMonitor = new OffPolicyEpisodeRewardMonitor(runner, nbRewardCheckpoint,
+    final OffPolicyRewardMonitor rewardMonitor = new OffPolicyRewardMonitor(runner, nbRewardCheckpoint,
                                                                                           nbEpisode,
                                                                                           nbEpisodePerEvaluation);
     rewardMonitor.runEvaluationIFN(0);

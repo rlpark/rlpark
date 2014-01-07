@@ -25,7 +25,7 @@ public class TestMazeRunnable implements Runnable {
   @Override
   public void run() {
     maze.initialize();
-    Runner runner = new Runner(maze, new RandomAgent(random, maze.actions()), -1, 6000);
+    Runner runner = new Runner(maze, new RandomAgent(random, maze.actions()), 6000, -1);
     while (clock.tick())
       runner.step();
   }

@@ -15,7 +15,7 @@ import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.Context;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.SweepDescriptor;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.AbstractContextOffPolicy;
-import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.ContextEvaluation;
+import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.EpisodeContextOffPolicy;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluation;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
@@ -41,9 +41,9 @@ public class OffPolicyComponentTest {
       OffPolicyAgentFactoryTest[] factories = new OffPolicyAgentFactoryTest[] {
           new OffPolicyAgentFactoryTest("Action01", AbstractRLProblemFactoryTest.Action01),
           new OffPolicyAgentFactoryTest("Action02", AbstractRLProblemFactoryTest.Action02) };
-      List<ContextEvaluation> result = new ArrayList<ContextEvaluation>();
+      List<EpisodeContextOffPolicy> result = new ArrayList<EpisodeContextOffPolicy>();
       for (OffPolicyAgentFactoryTest factory : factories)
-        result.add(new ContextEvaluation(problemFactory, null, factory, evaluation));
+        result.add(new EpisodeContextOffPolicy(problemFactory, null, factory, evaluation));
       return result;
     }
 

@@ -59,8 +59,8 @@ public class OffPACPuddleWorld implements Runnable {
   public OffPACPuddleWorld() {
     Policy behaviour = new RandomPolicy(random, behaviourEnvironment.actions());
     OffPolicyAgentEvaluable agent = createOffPACAgent(random, behaviourEnvironment, behaviour, .99);
-    learningRunner = new Runner(behaviourEnvironment, agent, -1, 5000);
-    evaluationRunner = new Runner(evaluationEnvironment, agent.createEvaluatedAgent(), -1, 5000);
+    learningRunner = new Runner(behaviourEnvironment, agent, 5000, -1);
+    evaluationRunner = new Runner(evaluationEnvironment, agent.createEvaluatedAgent(), 5000, -1);
     CriticAdapterFA criticAdapter = (CriticAdapterFA) ((OffPolicyAgentDirect) agent).learner().predictor();
     valueFunction = new ValueFunction2D(criticAdapter.projector(), behaviourEnvironment, criticAdapter.predictor());
     connectEpisodesEventsForZephyr();

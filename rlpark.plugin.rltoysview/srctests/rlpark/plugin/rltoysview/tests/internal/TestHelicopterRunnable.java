@@ -28,7 +28,7 @@ public class TestHelicopterRunnable implements Runnable, RLAgent {
   @Override
   public void run() {
     heli.initialize();
-    Runner runner = new Runner(heli, this, -1, 6000);
+    Runner runner = new Runner(heli, this, 6000, -1);
     while (clock.tick())
       runner.step();
   }

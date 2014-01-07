@@ -32,7 +32,7 @@ public class TestProblem implements Runnable, RLAgent {
   @Override
   public void run() {
     RandomAgent agent = new RandomAgent(random, problem.actions());
-    Runner runner = new Runner(problem, agent, -1, 6000);
+    Runner runner = new Runner(problem, agent, 6000, -1);
     while (clock.tick())
       runner.step();
   }
