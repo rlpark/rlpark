@@ -3,9 +3,11 @@ package rlpark.plugin.rltoys.junit.experiments.reinforcementlearning;
 import org.junit.Assert;
 import org.junit.Test;
 
-import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.ContinuousOffPolicyEvaluation;
+import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.EpisodeTriggeredContinuousEvaluationOffPolicy;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.FrozenParameters;
+import rlpark.plugin.rltoys.experiments.parametersweep.parameters.RunInfo;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
+import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.junit.experiments.reinforcementlearning.OffPolicyComponentTest.OffPolicySweepDescriptor;
 import rlpark.plugin.rltoys.junit.experiments.reinforcementlearning.problemtest.OffPolicyRLProblemFactoryTest;
 
@@ -13,8 +15,10 @@ public class OffPolicyContinuousEvaluationSweepTest extends AbstractOffPolicyRLS
   @Test
   public void testSweepOneEpisode() {
     OffPolicyProblemFactory problemFactory = new OffPolicyRLProblemFactoryTest(1, NbTimeSteps);
-    ContinuousOffPolicyEvaluation evaluation = new ContinuousOffPolicyEvaluation(10);
-    OffPolicySweepDescriptor descriptor = new OffPolicySweepDescriptor(problemFactory, evaluation);
+    // nbRewardCheckpoint = 10
+    EpisodeTriggeredContinuousEvaluationOffPolicy evaluation = new EpisodeTriggeredContinuousEvaluationOffPolicy();
+    RunInfo infos = new RunInfo(RLParameters.NbRewardCheckpoint, 10.0);
+    OffPolicySweepDescriptor descriptor = new OffPolicySweepDescriptor(problemFactory, evaluation, infos);
     testSweep(descriptor);
     checkFile(descriptor, Integer.MAX_VALUE);
     Assert.assertTrue(isBehaviourPerformanceChecked());

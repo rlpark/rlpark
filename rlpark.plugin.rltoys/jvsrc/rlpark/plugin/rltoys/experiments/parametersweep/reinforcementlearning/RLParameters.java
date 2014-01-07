@@ -1,6 +1,7 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning;
 
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.AbstractParameters;
+import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.prediction.PredictionParameters;
 
 public class RLParameters {
@@ -20,6 +21,9 @@ public class RLParameters {
   public static final String ValueFunctionSecondStepSize = "ValueFunctionSecondStepSize";
   public static final String Temperature = "Temperature";
   public static final String Epsilon = "Epsilon";
+  public static final String NbEpisodePerEvaluation = "NbEpisodePerEvaluation";
+  public static final String NbRewardCheckpoint = "NbRewardCheckpoint";
+  public static final String NbTimeStepsPerEvaluation = "NbTimeStepsPerEvaluation";
 
   final static public double[] getSoftmaxValues() {
     return new double[] { 100.0, 50.0, 10.0, 5.0, 1.0, .5, .1, .05, .01 };
@@ -35,5 +39,17 @@ public class RLParameters {
 
   static public int totalNumberOfTimeSteps(AbstractParameters parameters) {
     return (int) parameters.get(TotalNumberOfTimeSteps);
+  }
+
+  public static int nbEpisodePerEvaluation(Parameters parameters) {
+    return (int) parameters.get(NbEpisodePerEvaluation);
+  }
+
+  public static int nbTimeStepsPerEvaluation(Parameters parameters) {
+    return (int) parameters.get(NbTimeStepsPerEvaluation);
+  }
+
+  public static int nbRewardCheckpoint(Parameters parameters) {
+    return (int) parameters.get(NbRewardCheckpoint);
   }
 }

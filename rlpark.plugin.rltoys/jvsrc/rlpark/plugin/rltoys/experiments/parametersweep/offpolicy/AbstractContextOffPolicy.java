@@ -3,7 +3,6 @@ package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy;
 import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
-import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluation;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal.OffPolicyEvaluationContext;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal.SweepJob;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyRewardMonitor;
@@ -21,12 +20,10 @@ public abstract class AbstractContextOffPolicy implements OffPolicyEvaluationCon
   private static final long serialVersionUID = -6212106048889219995L;
   protected final OffPolicyAgentFactory agentFactory;
   protected final OffPolicyProblemFactory environmentFactory;
-  protected final OffPolicyEvaluation evaluation;
   protected final RepresentationFactory projectorFactory;
 
-  public AbstractContextOffPolicy(OffPolicyProblemFactory environmentFactory, RepresentationFactory projectorFactory,
-      OffPolicyAgentFactory agentFactory, OffPolicyEvaluation evaluation) {
-    this.evaluation = evaluation;
+  protected AbstractContextOffPolicy(OffPolicyProblemFactory environmentFactory,
+      RepresentationFactory projectorFactory, OffPolicyAgentFactory agentFactory) {
     this.projectorFactory = projectorFactory;
     this.environmentFactory = environmentFactory;
     this.agentFactory = agentFactory;
@@ -50,8 +47,8 @@ public abstract class AbstractContextOffPolicy implements OffPolicyEvaluationCon
     return environmentFactory;
   }
 
-  public Parameters contextParameters() {
-    RunInfo infos = new RunInfo();
+  public Parameters contextParameters(RunInfo parentInfos) {
+    RunInfo infos = parentInfos.clone();
     infos.enableFlag(agentFactory.label());
     infos.enableFlag(environmentFactory.label());
     Parameters parameters = new Parameters(infos);
@@ -69,7 +66,8 @@ public abstract class AbstractContextOffPolicy implements OffPolicyEvaluationCon
 
   @Override
   public PerformanceEvaluator connectBehaviourRewardMonitor(AbstractRunner runner, Parameters parameters) {
-    OnPolicyRewardMonitor monitor = createRewardMonitor("Behaviour", evaluation.nbRewardCheckpoint(), parameters);
+    OnPolicyRewardMonitor monitor = createRewardMonitor("Behaviour", RLParameters.nbRewardCheckpoint(parameters),
+                                                        parameters);
     monitor.connect(runner);
     return monitor;
   }
@@ -78,4 +76,7 @@ public abstract class AbstractContextOffPolicy implements OffPolicyEvaluationCon
   public Runnable createJob(Parameters parameters, ExperimentCounter counter) {
     return new SweepJob(this, parameters, counter);
   }
+
+  abstract public AbstractContextOffPolicy newContext(OffPolicyProblemFactory environmentFactory,
+      RepresentationFactory projectorFactory, OffPolicyAgentFactory agentFactory);
 }

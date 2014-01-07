@@ -13,19 +13,18 @@ import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.Off
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
 import rlpark.plugin.rltoys.experiments.runners.Runner;
-import rlpark.plugin.rltoys.experiments.runners.RunnerTimeSteps;
 import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.signals.Listener;
 
-public class TimeStepContextOffPolicy extends AbstractContextOffPolicy {
+public class EpisodeTriggeredEpisodeEvaluationOffPolicy extends AbstractContextOffPolicy {
   private static final long serialVersionUID = -593900122821568271L;
 
-  private TimeStepContextOffPolicy() {
+  public EpisodeTriggeredEpisodeEvaluationOffPolicy() {
     super(null, null, null);
   }
 
-  private TimeStepContextOffPolicy(OffPolicyProblemFactory environmentFactory, RepresentationFactory projectorFactory,
-      OffPolicyAgentFactory agentFactory) {
+  private EpisodeTriggeredEpisodeEvaluationOffPolicy(OffPolicyProblemFactory environmentFactory,
+      RepresentationFactory projectorFactory, OffPolicyAgentFactory agentFactory) {
     super(environmentFactory, projectorFactory, agentFactory);
   }
 
@@ -35,14 +34,15 @@ public class TimeStepContextOffPolicy extends AbstractContextOffPolicy {
     OffPolicyAgentEvaluable learningAgent = (OffPolicyAgentEvaluable) behaviourRunner.agent();
     RLProblem problem = environmentFactory.createEvaluationEnvironment(ExperimentCounter.newRandom(counter));
     RLAgent evaluatedAgent = learningAgent.createEvaluatedAgent();
-    Runner runner = new Runner(problem, evaluatedAgent, Integer.MAX_VALUE, RLParameters.maxEpisodeTimeSteps(parameters));
+    int nbTimeStepsPerEvaluation = RLParameters.nbTimeStepsPerEvaluation(parameters);
+    Runner runner = new Runner(problem, evaluatedAgent, Integer.MAX_VALUE, nbTimeStepsPerEvaluation);
     final int nbEpisode = RLParameters.nbEpisode(parameters);
     int nbRewardCheckpoint = RLParameters.nbRewardCheckpoint(parameters);
     int nbEpisodePerEvaluation = RLParameters.nbEpisodePerEvaluation(parameters);
     final OffPolicyRewardMonitor rewardMonitor = new OffPolicyRewardMonitor(runner, nbRewardCheckpoint, nbEpisode,
                                                                             nbEpisodePerEvaluation);
     rewardMonitor.runEvaluationIFN(0);
-    behaviourRunner.onTimeStep.connect(new Listener<AbstractRunner.RunnerEvent>() {
+    behaviourRunner.onEpisodeEnd.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
       public void listen(AbstractRunner.RunnerEvent eventInfo) {
         rewardMonitor.runEvaluationIFN(eventInfo.nbEpisodeDone);
@@ -55,14 +55,14 @@ public class TimeStepContextOffPolicy extends AbstractContextOffPolicy {
   public AbstractRunner createRunner(int seed, Parameters parameters) {
     RLProblem problem = environmentFactory.createEnvironment(ExperimentCounter.newRandom(seed));
     OffPolicyAgent agent = agentFactory.createAgent(seed, problem, parameters, projectorFactory);
-    int totalNumberOfTimeSteps = RLParameters.totalNumberOfTimeSteps(parameters);
+    int nbEpisode = RLParameters.nbEpisode(parameters);
     int maxEpisodeTimeSteps = RLParameters.maxEpisodeTimeSteps(parameters);
-    return new RunnerTimeSteps(problem, agent, maxEpisodeTimeSteps, totalNumberOfTimeSteps);
+    return new Runner(problem, agent, nbEpisode, maxEpisodeTimeSteps);
   }
 
   @Override
   public AbstractContextOffPolicy newContext(OffPolicyProblemFactory environmentFactory,
       RepresentationFactory projectorFactory, OffPolicyAgentFactory agentFactory) {
-    return new TimeStepContextOffPolicy(environmentFactory, projectorFactory, agentFactory);
+    return new EpisodeTriggeredEpisodeEvaluationOffPolicy(environmentFactory, projectorFactory, agentFactory);
   }
 }

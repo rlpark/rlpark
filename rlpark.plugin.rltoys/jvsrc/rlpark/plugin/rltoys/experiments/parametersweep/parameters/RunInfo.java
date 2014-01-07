@@ -10,6 +10,12 @@ public class RunInfo implements Serializable {
   private static final long serialVersionUID = 4114752829910485352L;
   private final Map<String, Double> infos = new LinkedHashMap<String, Double>();
 
+  public RunInfo(Object... objects) {
+    assert (objects.length % 2 == 0);
+    for (int i = 0; i < objects.length / 2; i++)
+      put((String) objects[i * 2], (Double) objects[i * 2 + 1]);
+  }
+
   public void enableFlag(String flag) {
     infos.put(flag, 1.0);
   }
@@ -77,5 +83,12 @@ public class RunInfo implements Serializable {
   @Override
   public String toString() {
     return infos.toString();
+  }
+
+  @Override
+  public RunInfo clone() {
+    RunInfo result = new RunInfo();
+    result.infos.putAll(infos);
+    return result;
   }
 }

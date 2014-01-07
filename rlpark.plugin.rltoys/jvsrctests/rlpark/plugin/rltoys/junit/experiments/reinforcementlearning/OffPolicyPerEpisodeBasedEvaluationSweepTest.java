@@ -5,11 +5,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.EpisodeBasedOffPolicyEvaluation;
-import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluation;
+import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.EpisodeTriggeredEpisodeEvaluationOffPolicy;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.FrozenParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.RunInfo;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
+import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.junit.experiments.reinforcementlearning.OffPolicyComponentTest.OffPolicySweepDescriptor;
 import rlpark.plugin.rltoys.junit.experiments.reinforcementlearning.problemtest.OffPolicyRLProblemFactoryTest;
 
@@ -22,11 +22,14 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
 
   @Test
   public void testSweepEvaluationPerEpisode() {
-    OffPolicyEvaluation evaluation = new EpisodeBasedOffPolicyEvaluation(NbBehaviourRewardCheckpoint,
-                                                                         NbTimeStepsPerEvaluation,
-                                                                         NbEpisodePerEvaluation);
+    // RLParameters.NbTimeStepsPerEvaluation , NbTimeStepsPerEvaluation,
     OffPolicyProblemFactory problemFactory = new OffPolicyRLProblemFactoryTest(NbEpisode, NbTimeSteps);
-    OffPolicySweepDescriptor provider = new OffPolicySweepDescriptor(problemFactory, evaluation);
+    RunInfo infos = new RunInfo(RLParameters.NbRewardCheckpoint, (double) NbBehaviourRewardCheckpoint,
+                                RLParameters.NbTimeStepsPerEvaluation, (double) NbTimeStepsPerEvaluation,
+                                RLParameters.NbEpisodePerEvaluation, (double) NbEpisodePerEvaluation);
+    OffPolicySweepDescriptor provider = new OffPolicySweepDescriptor(problemFactory,
+                                                                     new EpisodeTriggeredEpisodeEvaluationOffPolicy(),
+                                                                     infos);
     testSweep(provider);
     List<RunInfo> infosList = checkFile(provider, Integer.MAX_VALUE);
     checkInfos("Problem/Action01", Integer.MAX_VALUE, infosList.get(0));
@@ -36,7 +39,7 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
 
   private void checkInfos(String testFolder, int divergedOnSlice, RunInfo infos) {
     for (String label : infos.infoLabels()) {
-      if (!label.contains("Reward"))
+      if (!label.contains("Reward") || label.equals(RLParameters.NbRewardCheckpoint))
         continue;
       checkRewardEntry(testFolder, null, infos.get(label), label);
     }
@@ -88,7 +91,7 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
     int multiplier = Integer.parseInt(testFolder.substring(testFolder.length() - 2));
     Assert.assertTrue(checkPoint < NbBehaviourRewardCheckpoint);
     if (label.contains("Start")) {
-      double binSize = (double) NbEpisode / (NbBehaviourRewardCheckpoint - 1);
+      double binSize = NbEpisode / (NbBehaviourRewardCheckpoint - 1);
       Assert.assertEquals(checkPoint * binSize, value, 1.0);
     }
     if (label.contains("Slice"))

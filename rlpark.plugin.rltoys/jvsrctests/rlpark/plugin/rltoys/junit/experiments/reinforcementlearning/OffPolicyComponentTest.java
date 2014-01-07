@@ -15,9 +15,8 @@ import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.Context;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.SweepDescriptor;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.AbstractContextOffPolicy;
-import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.EpisodeContextOffPolicy;
-import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluation;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
+import rlpark.plugin.rltoys.experiments.parametersweep.parameters.RunInfo;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.junit.experiments.reinforcementlearning.problemtest.AbstractRLProblemFactoryTest;
@@ -28,12 +27,15 @@ import rlpark.plugin.rltoys.utils.Utils;
 @SuppressWarnings("serial")
 public class OffPolicyComponentTest {
   static class OffPolicySweepDescriptor implements SweepDescriptor {
-    private final OffPolicyEvaluation evaluation;
+    private final AbstractContextOffPolicy evaluation;
     private final OffPolicyProblemFactory problemFactory;
+    private final RunInfo infos;
 
-    public OffPolicySweepDescriptor(OffPolicyProblemFactory problemFactory, OffPolicyEvaluation evaluation) {
+    public OffPolicySweepDescriptor(OffPolicyProblemFactory problemFactory, AbstractContextOffPolicy evaluation,
+        RunInfo infos) {
       this.evaluation = evaluation;
       this.problemFactory = problemFactory;
+      this.infos = infos;
     }
 
     @Override
@@ -41,15 +43,16 @@ public class OffPolicyComponentTest {
       OffPolicyAgentFactoryTest[] factories = new OffPolicyAgentFactoryTest[] {
           new OffPolicyAgentFactoryTest("Action01", AbstractRLProblemFactoryTest.Action01),
           new OffPolicyAgentFactoryTest("Action02", AbstractRLProblemFactoryTest.Action02) };
-      List<EpisodeContextOffPolicy> result = new ArrayList<EpisodeContextOffPolicy>();
+      List<AbstractContextOffPolicy> result = new ArrayList<AbstractContextOffPolicy>();
       for (OffPolicyAgentFactoryTest factory : factories)
-        result.add(new EpisodeContextOffPolicy(problemFactory, null, factory, evaluation));
+        result.add(evaluation.newContext(problemFactory, null, factory));
       return result;
     }
 
     @Override
     public List<Parameters> provideParameters(Context context) {
-      return Utils.asList(((AbstractContextOffPolicy) context).contextParameters());
+    	Parameters contextParameters = ((AbstractContextOffPolicy) context).contextParameters(infos);
+      return Utils.asList(contextParameters);
     }
   }
 
