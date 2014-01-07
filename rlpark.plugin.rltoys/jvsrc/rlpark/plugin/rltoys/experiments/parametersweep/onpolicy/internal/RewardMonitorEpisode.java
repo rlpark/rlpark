@@ -1,8 +1,8 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal;
 
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.internal.AbstractEpisodeRewardMonitor;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class RewardMonitorEpisode extends AbstractEpisodeRewardMonitor implements OnPolicyRewardMonitor {
@@ -12,9 +12,9 @@ public class RewardMonitorEpisode extends AbstractEpisodeRewardMonitor implement
 
   @Override
   public void connect(Runner runner) {
-    runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
+    runner.onEpisodeEnd.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
+      public void listen(AbstractRunner.RunnerEvent eventInfo) {
         registerMeasurement(eventInfo.nbEpisodeDone, eventInfo.episodeReward, eventInfo.step.time);
       }
     });

@@ -5,7 +5,7 @@ import rlpark.plugin.rltoys.algorithms.control.ControlLearner;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCoders;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.problems.pendulum.SwingPendulum;
 
 public class PendulumOnPolicyLearning {

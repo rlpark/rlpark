@@ -7,7 +7,7 @@ import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.actions.ActionArray;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.problems.ProblemDiscreteAction;
 import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.Zephyr;

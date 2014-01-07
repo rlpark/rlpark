@@ -3,13 +3,13 @@ package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
 import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal.OffPolicyEpisodeRewardMonitor;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.signals.Listener;
 
@@ -36,9 +36,9 @@ public class EpisodeBasedOffPolicyEvaluation extends AbstractOffPolicyEvaluation
                                                                                           nbEpisode,
                                                                                           nbEpisodePerEvaluation);
     rewardMonitor.runEvaluationIFN(0);
-    behaviourRunner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
+    behaviourRunner.onEpisodeEnd.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
+      public void listen(AbstractRunner.RunnerEvent eventInfo) {
         rewardMonitor.runEvaluationIFN(eventInfo.nbEpisodeDone);
       }
     });

@@ -14,8 +14,8 @@ import rlpark.plugin.rltoys.algorithms.predictions.td.OnPolicyTD;
 import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambda;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner.RunnerEvent;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.pendulum.SwingPendulum;
 import zephyr.plugin.core.api.Zephyr;
@@ -51,7 +51,7 @@ public class ActorCriticPendulum implements Runnable {
     agent = new LearnerAgentFA(actorCritic, tileCoders);
     valueFunction = new ValueFunction2D(tileCoders, problem, critic);
     runner = new Runner(problem, agent, -1, 1000);
-    runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
+    runner.onEpisodeEnd.connect(new Listener<RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {
         System.out.println(String.format("Episode %d: %f", eventInfo.nbEpisodeDone, eventInfo.episodeReward));

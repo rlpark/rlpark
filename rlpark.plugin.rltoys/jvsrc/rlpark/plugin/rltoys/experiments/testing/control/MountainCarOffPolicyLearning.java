@@ -15,7 +15,7 @@ import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersHas
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.Hashing;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.MurmurHashing;
 import rlpark.plugin.rltoys.envio.policy.Policy;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.ProblemBounded;
 import rlpark.plugin.rltoys.problems.mountaincar.MountainCar;

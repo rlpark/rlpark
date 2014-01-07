@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ReinforcementLearningContext;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import zephyr.plugin.core.api.internal.monitoring.fileloggers.LoggerRow;
 import zephyr.plugin.core.api.signals.Listener;
 
@@ -25,19 +25,19 @@ public class LearningCurveJob implements Runnable, Serializable {
     this.counter = counter.clone();
   }
 
-  protected Listener<RunnerEvent> createRewardListener(final LoggerRow loggerRow) {
-    return new Listener<Runner.RunnerEvent>() {
+  protected Listener<AbstractRunner.RunnerEvent> createRewardListener(final LoggerRow loggerRow) {
+    return new Listener<AbstractRunner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
+      public void listen(AbstractRunner.RunnerEvent eventInfo) {
         loggerRow.writeRow(eventInfo.step.time, eventInfo.step.r_tp1);
       }
     };
   }
 
-  protected Listener<RunnerEvent> createEpisodeListener(final LoggerRow loggerRow) {
-    return new Listener<Runner.RunnerEvent>() {
+  protected Listener<AbstractRunner.RunnerEvent> createEpisodeListener(final LoggerRow loggerRow) {
+    return new Listener<AbstractRunner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
+      public void listen(AbstractRunner.RunnerEvent eventInfo) {
         loggerRow.writeRow(eventInfo.nbEpisodeDone, eventInfo.step.time);
       }
     };

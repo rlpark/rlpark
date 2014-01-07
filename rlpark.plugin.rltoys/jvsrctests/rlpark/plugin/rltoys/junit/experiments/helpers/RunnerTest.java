@@ -7,8 +7,8 @@ import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.observations.Legend;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.signals.Listener;
 
@@ -116,7 +116,7 @@ public class RunnerTest {
     TestEnvironment environment = new TestEnvironment();
     Runner runner = new Runner(environment, agent, -1, NbTimeSteps);
     runner.runEpisode();
-    RunnerEvent runnerEvent = runner.runnerEvent();
+    AbstractRunner.RunnerEvent runnerEvent = runner.runnerEvent();
     Assert.assertEquals(Reward * NbTimeSteps, runnerEvent.episodeReward, 0);
     Assert.assertEquals(NbTimeSteps, runnerEvent.step.time);
   }
@@ -125,16 +125,16 @@ public class RunnerTest {
   private void testRunner(TestEnvironment environment, final int nbEpisode, final int maxEpisodeTimeSteps) {
     Runner runner = new Runner(environment, agent, nbEpisode, maxEpisodeTimeSteps);
     final int[] nbTimeSteps = new int[1];
-    runner.onTimeStep.connect(new Listener<Runner.RunnerEvent>() {
+    runner.onTimeStep.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
+      public void listen(AbstractRunner.RunnerEvent eventInfo) {
         nbTimeSteps[0]++;
       }
     });
     final int[] nbEpisodeTerminated = new int[1];
-    runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
+    runner.onEpisodeEnd.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
+      public void listen(AbstractRunner.RunnerEvent eventInfo) {
         Assert.assertEquals(maxEpisodeTimeSteps + 1, nbTimeSteps[0]);
         Assert.assertEquals(Reward * maxEpisodeTimeSteps, eventInfo.episodeReward, 0.0);
         nbTimeSteps[0] = 0;
@@ -153,16 +153,16 @@ public class RunnerTest {
   private void testRunnerEndEpisode(final TestEnvironmentFinalReward environment, final int nbEpisode) {
     Runner runner = new Runner(environment, agent, nbEpisode, -1);
     final int[] nbTimeSteps = new int[1];
-    runner.onTimeStep.connect(new Listener<Runner.RunnerEvent>() {
+    runner.onTimeStep.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
+      public void listen(AbstractRunner.RunnerEvent eventInfo) {
         nbTimeSteps[0]++;
       }
     });
     final int[] nbEpisodeTerminated = new int[1];
-    runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
+    runner.onEpisodeEnd.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
+      public void listen(AbstractRunner.RunnerEvent eventInfo) {
         Assert.assertEquals(environment.nbTimeStep + 1, nbTimeSteps[0]);
         Assert.assertEquals(Reward, eventInfo.episodeReward, 0.0);
         nbTimeSteps[0] = 0;

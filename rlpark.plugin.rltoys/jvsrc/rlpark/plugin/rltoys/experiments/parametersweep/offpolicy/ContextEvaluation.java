@@ -3,7 +3,6 @@ package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
 import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation.OffPolicyEvaluation;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal.OffPolicyEvaluationContext;
@@ -15,6 +14,7 @@ import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 
 public class ContextEvaluation extends AbstractContextOffPolicy implements OffPolicyEvaluationContext {
   private static final long serialVersionUID = -593900122821568271L;

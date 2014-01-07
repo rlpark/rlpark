@@ -17,7 +17,7 @@ import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.predictions.td.TD;
 import rlpark.plugin.rltoys.algorithms.predictions.td.TDLambda;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.math.vector.implementations.VectorNull;

@@ -28,8 +28,8 @@ import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.Hashi
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.MurmurHashing;
 import rlpark.plugin.rltoys.algorithms.traces.ATraces;
 import rlpark.plugin.rltoys.envio.policy.Policy;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner.RunnerEvent;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.ProblemBounded;
 import rlpark.plugin.rltoys.problems.puddleworld.ConstantFunction;
@@ -69,7 +69,7 @@ public class OffPACPuddleWorld implements Runnable {
 
   private void connectEpisodesEventsForZephyr() {
     final double[] episodeInfos = new double[2];
-    evaluationRunner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
+    evaluationRunner.onEpisodeEnd.connect(new Listener<RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {
         episodeInfos[0] = eventInfo.step.time;

@@ -3,7 +3,7 @@ package rlpark.plugin.rltoysview.tests.internal;
 import java.util.Random;
 
 import rlpark.plugin.rltoys.agents.rl.RandomAgent;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.problems.mazes.Maze;
 import rlpark.plugin.rltoys.problems.mazes.Mazes;
 import zephyr.plugin.core.api.Zephyr;

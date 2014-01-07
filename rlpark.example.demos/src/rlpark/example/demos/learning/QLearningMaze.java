@@ -11,8 +11,8 @@ import rlpark.plugin.rltoys.algorithms.functions.stateactions.TabularAction;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.traces.RTraces;
 import rlpark.plugin.rltoys.envio.policy.Policy;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner.RunnerEvent;
 import rlpark.plugin.rltoys.math.vector.implementations.PVector;
 import rlpark.plugin.rltoys.problems.mazes.Maze;
 import rlpark.plugin.rltoys.problems.mazes.MazeValueFunction;
@@ -51,7 +51,7 @@ public class QLearningMaze implements Runnable {
   @Override
   public void run() {
     Runner runner = new Runner(problem, agent);
-    runner.onEpisodeEnd.connect(new Listener<Runner.RunnerEvent>() {
+    runner.onEpisodeEnd.connect(new Listener<RunnerEvent>() {
       @Override
       public void listen(RunnerEvent eventInfo) {
         System.out.println(String.format("Episode %d: %d steps", eventInfo.nbEpisodeDone, eventInfo.step.time));

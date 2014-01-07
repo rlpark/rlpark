@@ -3,7 +3,6 @@ package rlpark.plugin.rltoys.junit.problems.stategraph02;
 import java.util.Random;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
@@ -11,8 +10,8 @@ import rlpark.plugin.rltoys.envio.actions.Action;
 import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.envio.policy.SingleActionPolicy;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.math.vector.implementations.BVector;
 import rlpark.plugin.rltoys.problems.stategraph02.GraphProblem;
 import rlpark.plugin.rltoys.problems.stategraph02.LineProblem;
@@ -48,9 +47,9 @@ public class GraphProblemTest {
     GraphProblem problem = create(new Random(0));
     Runner runner = new Runner(problem, Policies.toAgent(acting), 10000, -1);
     final int[] count = new int[problem.stateGraph().nbStates()];
-    runner.onTimeStep.connect(new Listener<Runner.RunnerEvent>() {
+    runner.onTimeStep.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
+      public void listen(AbstractRunner.RunnerEvent eventInfo) {
         TRStep step = eventInfo.step;
         if (!step.isEpisodeEnding())
           return;

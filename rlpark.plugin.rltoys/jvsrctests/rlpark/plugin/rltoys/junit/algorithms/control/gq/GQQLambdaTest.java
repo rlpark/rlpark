@@ -24,7 +24,7 @@ import rlpark.plugin.rltoys.envio.policy.Policies;
 import rlpark.plugin.rltoys.envio.policy.Policy;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.envio.rl.TRStep;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.math.vector.BinaryVector;
 import rlpark.plugin.rltoys.math.vector.RealVector;
 import rlpark.plugin.rltoys.math.vector.implementations.Vectors;

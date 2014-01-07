@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Random;
 
 import org.junit.Assert;
+
 import rlpark.plugin.rltoys.agents.representations.ProjectorFactory;
 import rlpark.plugin.rltoys.algorithms.functions.states.Projector;
 import rlpark.plugin.rltoys.algorithms.representations.discretizer.partitions.AbstractPartitionFactory;
@@ -13,8 +14,8 @@ import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersHas
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.TileCodersNoHashing;
 import rlpark.plugin.rltoys.algorithms.representations.tilescoding.hashing.UNH;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.math.ranges.Range;
 import rlpark.plugin.rltoys.problems.ProblemBounded;
 import rlpark.plugin.rltoys.problems.RLProblem;
@@ -24,9 +25,9 @@ import zephyr.plugin.core.api.signals.Listener;
 
 @SuppressWarnings("serial")
 public abstract class MountainCarOnPolicyTest {
-  private class PerformanceVerifier implements Listener<RunnerEvent> {
+  private class PerformanceVerifier implements Listener<AbstractRunner.RunnerEvent> {
     @Override
-    public void listen(RunnerEvent eventInfo) {
+    public void listen(AbstractRunner.RunnerEvent eventInfo) {
       if (eventInfo.nbEpisodeDone < 200)
         return;
       final double minEpisodeReward = -350;

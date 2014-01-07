@@ -1,8 +1,8 @@
 package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal;
 
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.internal.AbstractEpisodeRewardMonitor;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 
 public class OffPolicyEpisodeRewardMonitor extends AbstractEpisodeRewardMonitor {
   private final Runner runner;
@@ -30,7 +30,7 @@ public class OffPolicyEpisodeRewardMonitor extends AbstractEpisodeRewardMonitor 
       return;
     for (int i = 0; i < nbEpisodePerEvaluation; i++) {
       runner.runEpisode();
-      RunnerEvent runnerEvent = runner.runnerEvent();
+      AbstractRunner.RunnerEvent runnerEvent = runner.runnerEvent();
       registerMeasurement(episodeIndex, runnerEvent.episodeReward, runnerEvent.step.time);
     }
     nextEvaluationIndex++;

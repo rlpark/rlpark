@@ -1,4 +1,4 @@
-package rlpark.plugin.rltoys.experiments.helpers;
+package rlpark.plugin.rltoys.experiments.runners;
 
 import java.io.Serializable;
 
@@ -12,8 +12,8 @@ import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.signals.Signal;
 
-public class Runner implements Serializable, MonitorContainer {
-  private static final long serialVersionUID = 465593140388569561L;
+public abstract class AbstractRunner implements Serializable, MonitorContainer {
+  private static final long serialVersionUID = 511454210699491736L;
 
   @SuppressWarnings("serial")
   static public class RunnerEvent implements Serializable {
@@ -28,32 +28,24 @@ public class Runner implements Serializable, MonitorContainer {
     }
   }
 
-  public final Signal<RunnerEvent> onEpisodeEnd = new Signal<RunnerEvent>();
-  public final Signal<RunnerEvent> onTimeStep = new Signal<RunnerEvent>();
-  protected final RunnerEvent runnerEvent = new RunnerEvent();
+
+  public final Signal<AbstractRunner.RunnerEvent> onEpisodeEnd = new Signal<AbstractRunner.RunnerEvent>();
+  public final Signal<AbstractRunner.RunnerEvent> onTimeStep = new Signal<AbstractRunner.RunnerEvent>();
+  protected final AbstractRunner.RunnerEvent runnerEvent = new AbstractRunner.RunnerEvent();
   @Monitor
   private final RLAgent agent;
   @Monitor
   private final RLProblem problem;
   private Action agentAction = null;
   private final int maxEpisodeTimeSteps;
-  private final int nbEpisode;
 
-  public Runner(RLProblem problem, RLAgent agent) {
-    this(problem, agent, -1, -1);
-  }
-
-  public Runner(RLProblem environment, RLAgent agent, int nbEpisode, int maxEpisodeTimeSteps) {
+  public AbstractRunner(RLProblem environment, RLAgent agent, int maxEpisodeTimeSteps) {
     this.problem = environment;
     this.agent = agent;
-    this.nbEpisode = nbEpisode;
     this.maxEpisodeTimeSteps = maxEpisodeTimeSteps;
   }
 
-  public void run() {
-    for (int i = 0; i < nbEpisode; i++)
-      runEpisode();
-  }
+  abstract public void run();
 
   public void runEpisode() {
     assert runnerEvent.step == null || runnerEvent.step.isEpisodeEnding();
@@ -65,7 +57,6 @@ public class Runner implements Serializable, MonitorContainer {
   }
 
   public void step() {
-    assert nbEpisode < 0 || runnerEvent.nbEpisodeDone < nbEpisode;
     if (runnerEvent.step == null || runnerEvent.step.isEpisodeEnding()) {
       runnerEvent.step = problem.initialize();
       runnerEvent.episodeReward = 0;
@@ -86,7 +77,7 @@ public class Runner implements Serializable, MonitorContainer {
     }
   }
 
-  public RunnerEvent runnerEvent() {
+  public AbstractRunner.RunnerEvent runnerEvent() {
     return runnerEvent;
   }
 

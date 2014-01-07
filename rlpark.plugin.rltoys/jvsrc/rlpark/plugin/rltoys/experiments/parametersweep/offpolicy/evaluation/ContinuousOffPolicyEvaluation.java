@@ -3,8 +3,6 @@ package rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.evaluation;
 import rlpark.plugin.rltoys.agents.offpolicy.OffPolicyAgentEvaluable;
 import rlpark.plugin.rltoys.agents.representations.RepresentationFactory;
 import rlpark.plugin.rltoys.envio.rl.RLAgent;
-import rlpark.plugin.rltoys.experiments.helpers.Runner;
-import rlpark.plugin.rltoys.experiments.helpers.Runner.RunnerEvent;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyRewardMonitor;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorAverage;
@@ -12,6 +10,8 @@ import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.RewardM
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
+import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.problems.RLProblem;
 import zephyr.plugin.core.api.signals.Listener;
 
@@ -35,8 +35,9 @@ public class ContinuousOffPolicyEvaluation extends AbstractOffPolicyEvaluation {
   }
 
   @Override
-  public PerformanceEvaluator connectEvaluator(int counter, Runner behaviourRunner, OffPolicyProblemFactory problemFactory,
-      RepresentationFactory projectorFactory, OffPolicyAgentEvaluable learningAgent, Parameters parameters) {
+  public PerformanceEvaluator connectEvaluator(int counter, Runner behaviourRunner,
+      OffPolicyProblemFactory problemFactory, RepresentationFactory projectorFactory,
+      OffPolicyAgentEvaluable learningAgent, Parameters parameters) {
     if (RLParameters.nbEpisode(parameters) != 1)
       throw new RuntimeException("This evaluation does not support multiple episode for the behaviour");
     RLProblem problem = createEvaluationProblem(counter, problemFactory);
@@ -46,9 +47,9 @@ public class ContinuousOffPolicyEvaluation extends AbstractOffPolicyEvaluation {
     final Runner runner = new Runner(problem, evaluatedAgent, nbEpisode, resetPeriod);
     OnPolicyRewardMonitor monitor = createRewardMonitor("Target", nbRewardCheckpoint, nbTimeSteps, nbEpisode);
     monitor.connect(runner);
-    behaviourRunner.onTimeStep.connect(new Listener<Runner.RunnerEvent>() {
+    behaviourRunner.onTimeStep.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
-      public void listen(RunnerEvent eventInfo) {
+      public void listen(AbstractRunner.RunnerEvent eventInfo) {
         runner.step();
       }
     });
