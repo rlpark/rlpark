@@ -9,6 +9,7 @@ import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.Age
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ReinforcementLearningContext;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
 import rlpark.plugin.rltoys.experiments.runners.Runner;
 import rlpark.plugin.rltoys.problems.RLProblem;
 
@@ -26,7 +27,7 @@ public abstract class AbstractContextOnPolicy implements ReinforcementLearningCo
   }
 
   @Override
-  public Runner createRunner(int counter, Parameters parameters) {
+  public AbstractRunner createRunner(int counter, Parameters parameters) {
     RLProblem problem = environmentFactory.createEnvironment(ExperimentCounter.newRandom(counter));
     RLAgent agent = agentFactory.createAgent(counter, problem, parameters, representationFactory);
     int nbEpisode = RLParameters.nbEpisode(parameters);

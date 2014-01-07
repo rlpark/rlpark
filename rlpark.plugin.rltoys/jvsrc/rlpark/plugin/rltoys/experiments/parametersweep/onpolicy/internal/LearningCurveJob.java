@@ -8,7 +8,6 @@ import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ReinforcementLearningContext;
 import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
-import rlpark.plugin.rltoys.experiments.runners.Runner;
 import zephyr.plugin.core.api.internal.monitoring.fileloggers.LoggerRow;
 import zephyr.plugin.core.api.signals.Listener;
 
@@ -43,19 +42,19 @@ public class LearningCurveJob implements Runnable, Serializable {
     };
   }
 
-  protected void setupEpisodeListener(Runner runner, LoggerRow loggerRow) {
+  protected void setupEpisodeListener(AbstractRunner runner, LoggerRow loggerRow) {
     loggerRow.writeLegend("Episode", "Steps");
     runner.onEpisodeEnd.connect(createEpisodeListener(loggerRow));
   }
 
-  protected void setupRewardListener(Runner runner, LoggerRow loggerRow) {
+  protected void setupRewardListener(AbstractRunner runner, LoggerRow loggerRow) {
     loggerRow.writeLegend("Time", "Reward");
     runner.onTimeStep.connect(createRewardListener(loggerRow));
   }
 
   @Override
   public void run() {
-    Runner runner = context.createRunner(counter.currentIndex(), parameters);
+    AbstractRunner runner = context.createRunner(counter.currentIndex(), parameters);
     String fileName = counter.folderFilename(context.folderPath(), context.fileName());
     System.out.println(fileName);
     LoggerRow loggerRow = null;

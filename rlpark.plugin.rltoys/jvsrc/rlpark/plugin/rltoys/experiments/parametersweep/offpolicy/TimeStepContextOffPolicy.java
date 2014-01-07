@@ -9,14 +9,14 @@ import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.Off
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
 import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
-import rlpark.plugin.rltoys.experiments.runners.Runner;
+import rlpark.plugin.rltoys.experiments.runners.RunnerTimeSteps;
 import rlpark.plugin.rltoys.problems.RLProblem;
 
-public class EpisodeContextOffPolicy extends AbstractContextOffPolicy {
+public class TimeStepContextOffPolicy extends AbstractContextOffPolicy {
   private static final long serialVersionUID = -593900122821568271L;
 
-  public EpisodeContextOffPolicy(OffPolicyProblemFactory environmentFactory,
-      RepresentationFactory projectorFactory, OffPolicyAgentFactory agentFactory, OffPolicyEvaluation evaluation) {
+  public TimeStepContextOffPolicy(OffPolicyProblemFactory environmentFactory, RepresentationFactory projectorFactory,
+      OffPolicyAgentFactory agentFactory, OffPolicyEvaluation evaluation) {
     super(environmentFactory, projectorFactory, agentFactory, evaluation);
   }
 
@@ -24,8 +24,8 @@ public class EpisodeContextOffPolicy extends AbstractContextOffPolicy {
   public AbstractRunner createRunner(int seed, Parameters parameters) {
     RLProblem problem = environmentFactory.createEnvironment(ExperimentCounter.newRandom(seed));
     OffPolicyAgent agent = agentFactory.createAgent(seed, problem, parameters, projectorFactory);
-    int nbEpisode = RLParameters.nbEpisode(parameters);
+    int totalNumberOfTimeSteps = RLParameters.totalNumberOfTimeSteps(parameters);
     int maxEpisodeTimeSteps = RLParameters.maxEpisodeTimeSteps(parameters);
-    return new Runner(problem, agent, nbEpisode, maxEpisodeTimeSteps);
+    return new RunnerTimeSteps(problem, agent, maxEpisodeTimeSteps, totalNumberOfTimeSteps);
   }
 }

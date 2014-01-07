@@ -8,6 +8,7 @@ public class RLParameters {
   public static final String MaxEpisodeTimeSteps = "maxEpisodeTimeSteps";
   public static final String NbEpisode = "nbEpisode";
   public static final String AverageReward = "averageReward";
+  public static final String TotalNumberOfTimeSteps = "totalNumberOfTimeSteps";
   public static final String AveRewardStepSize = "AveRewardStepSize";
 
   public static final String ActorPrefix = "Actor";
@@ -30,5 +31,9 @@ public class RLParameters {
 
   static public int nbEpisode(AbstractParameters parameters) {
     return (int) parameters.get(NbEpisode);
+  }
+
+  static public int totalNumberOfTimeSteps(AbstractParameters parameters) {
+    return (int) parameters.get(TotalNumberOfTimeSteps);
   }
 }

@@ -16,7 +16,7 @@ import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.Off
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.ProblemFactory;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.RLParameters;
-import rlpark.plugin.rltoys.experiments.runners.Runner;
+import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
 
 public abstract class AbstractContextOffPolicy implements OffPolicyEvaluationContext {
   private static final long serialVersionUID = -6212106048889219995L;
@@ -69,14 +69,14 @@ public abstract class AbstractContextOffPolicy implements OffPolicyEvaluationCon
   }
 
   @Override
-  public PerformanceEvaluator connectBehaviourRewardMonitor(Runner runner, Parameters parameters) {
+  public PerformanceEvaluator connectBehaviourRewardMonitor(AbstractRunner runner, Parameters parameters) {
     OnPolicyRewardMonitor monitor = createRewardMonitor("Behaviour", evaluation.nbRewardCheckpoint(), parameters);
     monitor.connect(runner);
     return monitor;
   }
 
   @Override
-  public PerformanceEvaluator connectTargetRewardMonitor(int counter, Runner runner, Parameters parameters) {
+  public PerformanceEvaluator connectTargetRewardMonitor(int counter, AbstractRunner runner, Parameters parameters) {
     OffPolicyAgentEvaluable agent = (OffPolicyAgentEvaluable) runner.agent();
     return evaluation.connectEvaluator(counter, runner, environmentFactory, projectorFactory, agent, parameters);
   }

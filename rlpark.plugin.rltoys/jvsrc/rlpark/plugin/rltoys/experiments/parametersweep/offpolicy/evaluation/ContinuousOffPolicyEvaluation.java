@@ -35,7 +35,7 @@ public class ContinuousOffPolicyEvaluation extends AbstractOffPolicyEvaluation {
   }
 
   @Override
-  public PerformanceEvaluator connectEvaluator(int counter, Runner behaviourRunner,
+  public PerformanceEvaluator connectEvaluator(int counter, AbstractRunner behaviourRunner,
       OffPolicyProblemFactory problemFactory, RepresentationFactory projectorFactory,
       OffPolicyAgentEvaluable learningAgent, Parameters parameters) {
     if (RLParameters.nbEpisode(parameters) != 1)

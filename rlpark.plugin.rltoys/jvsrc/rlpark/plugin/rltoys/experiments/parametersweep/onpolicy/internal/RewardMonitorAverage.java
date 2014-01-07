@@ -2,7 +2,6 @@ package rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal;
 
 import rlpark.plugin.rltoys.experiments.parametersweep.internal.AbstractPerformanceMonitor;
 import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
-import rlpark.plugin.rltoys.experiments.runners.Runner;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class RewardMonitorAverage extends AbstractPerformanceMonitor implements OnPolicyRewardMonitor {
@@ -11,7 +10,7 @@ public class RewardMonitorAverage extends AbstractPerformanceMonitor implements 
   }
 
   @Override
-  public void connect(Runner runner) {
+  public void connect(AbstractRunner runner) {
     runner.onTimeStep.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @SuppressWarnings("synthetic-access")
       @Override

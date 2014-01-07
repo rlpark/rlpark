@@ -25,7 +25,7 @@ public class EpisodeBasedOffPolicyEvaluation extends AbstractOffPolicyEvaluation
   }
 
   @Override
-  public PerformanceEvaluator connectEvaluator(final int counter, Runner behaviourRunner,
+  public PerformanceEvaluator connectEvaluator(final int counter, AbstractRunner behaviourRunner,
       final OffPolicyProblemFactory problemFactory, final RepresentationFactory projectorFactory,
       final OffPolicyAgentEvaluable learningAgent, final Parameters parameters) {
     RLProblem problem = createEvaluationProblem(counter, problemFactory);
