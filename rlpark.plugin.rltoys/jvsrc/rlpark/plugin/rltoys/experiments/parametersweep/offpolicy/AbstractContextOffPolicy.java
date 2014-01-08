@@ -18,6 +18,7 @@ import rlpark.plugin.rltoys.experiments.runners.AbstractRunner;
 
 public abstract class AbstractContextOffPolicy implements OffPolicyEvaluationContext {
   private static final long serialVersionUID = -6212106048889219995L;
+  protected static final String BehaviourPrefix = "Behaviour";
   protected final OffPolicyAgentFactory agentFactory;
   protected final OffPolicyProblemFactory environmentFactory;
   protected final RepresentationFactory projectorFactory;
@@ -56,18 +57,16 @@ public abstract class AbstractContextOffPolicy implements OffPolicyEvaluationCon
     return parameters;
   }
 
-  private OnPolicyRewardMonitor createRewardMonitor(String prefix, int nbBins, Parameters parameters) {
-    int nbEpisode = RLParameters.nbEpisode(parameters);
-    int maxEpisodeTimeSteps = RLParameters.maxEpisodeTimeSteps(parameters);
-    if (nbEpisode == 1)
-      return new RewardMonitorAverage(prefix, nbBins, maxEpisodeTimeSteps);
-    return new RewardMonitorEpisode(prefix, nbBins, nbEpisode);
-  }
-
   @Override
   public PerformanceEvaluator connectBehaviourRewardMonitor(AbstractRunner runner, Parameters parameters) {
-    OnPolicyRewardMonitor monitor = createRewardMonitor("Behaviour", RLParameters.nbRewardCheckpoint(parameters),
-                                                        parameters);
+    int nbEpisode = RLParameters.nbEpisode(parameters);
+    int maxEpisodeTimeSteps = RLParameters.maxEpisodeTimeSteps(parameters);
+    int nbBins = RLParameters.nbRewardCheckpoint(parameters);
+    OnPolicyRewardMonitor monitor = null;
+    if (nbEpisode == 1)
+      monitor = new RewardMonitorAverage(BehaviourPrefix, nbBins, maxEpisodeTimeSteps);
+    else
+      monitor = new RewardMonitorEpisode(BehaviourPrefix, nbBins, nbEpisode);
     monitor.connect(runner);
     return monitor;
   }
