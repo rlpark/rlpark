@@ -10,14 +10,14 @@ public class RewardMonitorAverage extends AbstractPerformanceMonitor implements 
   }
 
   @Override
-  public void connect(AbstractRunner runner) {
+  public void connect(final AbstractRunner runner) {
     runner.onTimeStep.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @SuppressWarnings("synthetic-access")
       @Override
       public void listen(AbstractRunner.RunnerEvent runnerEvent) {
-        if (runnerEvent.step.time == 0)
+        if (runnerEvent.nbTotalTimeSteps - 1 == 0)
           return;
-        registerMeasurement(runnerEvent.step.time - 1, runnerEvent.step.r_tp1);
+        registerMeasurement(runnerEvent.nbTotalTimeSteps - 1, runnerEvent.step.r_tp1);
       }
     });
   }

@@ -15,7 +15,6 @@ public class OffPolicyContinuousEvaluationSweepTest extends AbstractOffPolicyRLS
   @Test
   public void testSweepOneEpisode() {
     OffPolicyProblemFactory problemFactory = new OffPolicyRLProblemFactoryTest(1, NbTimeSteps);
-    // nbRewardCheckpoint = 10
     EpisodeTriggeredContinuousEvaluationOffPolicy evaluation = new EpisodeTriggeredContinuousEvaluationOffPolicy();
     RunInfo infos = new RunInfo(RLParameters.NbRewardCheckpoint, 10.0);
     OffPolicySweepDescriptor descriptor = new OffPolicySweepDescriptor(problemFactory, evaluation, infos);

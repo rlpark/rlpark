@@ -7,7 +7,6 @@ import rlpark.plugin.rltoys.envio.rl.RLAgent;
 import rlpark.plugin.rltoys.experiments.helpers.ExperimentCounter;
 import rlpark.plugin.rltoys.experiments.parametersweep.interfaces.PerformanceEvaluator;
 import rlpark.plugin.rltoys.experiments.parametersweep.offpolicy.internal.OffPolicyRewardMonitor;
-import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.OnPolicyRewardMonitor;
 import rlpark.plugin.rltoys.experiments.parametersweep.onpolicy.internal.RewardMonitorAverage;
 import rlpark.plugin.rltoys.experiments.parametersweep.parameters.Parameters;
 import rlpark.plugin.rltoys.experiments.parametersweep.reinforcementlearning.OffPolicyAgentFactory;
@@ -35,7 +34,7 @@ public class TimeStepContextOffPolicy extends AbstractContextOffPolicy {
   public PerformanceEvaluator connectBehaviourRewardMonitor(AbstractRunner runner, Parameters parameters) {
     int nbBins = RLParameters.nbRewardCheckpoint(parameters);
     int totalNumberOfTimeSteps = RLParameters.totalNumberOfTimeSteps(parameters);
-    OnPolicyRewardMonitor monitor = new RewardMonitorAverage(BehaviourPrefix, nbBins, totalNumberOfTimeSteps);
+    RewardMonitorAverage monitor = new RewardMonitorAverage(BehaviourPrefix, nbBins, totalNumberOfTimeSteps);
     monitor.connect(runner);
     return monitor;
   }

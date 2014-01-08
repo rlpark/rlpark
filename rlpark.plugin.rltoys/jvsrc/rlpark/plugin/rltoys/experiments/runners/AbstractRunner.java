@@ -64,10 +64,10 @@ public abstract class AbstractRunner implements Serializable, MonitorContainer {
       assert runnerEvent.step.isEpisodeStarting();
     } else {
       runnerEvent.step = problem.step(agentAction);
-      if (runnerEvent.step.time == maxEpisodeTimeSteps)
-        runnerEvent.step = problem.forceEndEpisode();
     }
     agentAction = agent.getAtp1(runnerEvent.step);
+    if (runnerEvent.step.time == maxEpisodeTimeSteps)
+      runnerEvent.step = problem.forceEndEpisode();
     runnerEvent.episodeReward += runnerEvent.step.r_tp1;
     runnerEvent.nbTotalTimeSteps++;
     onTimeStep.fire(runnerEvent);
