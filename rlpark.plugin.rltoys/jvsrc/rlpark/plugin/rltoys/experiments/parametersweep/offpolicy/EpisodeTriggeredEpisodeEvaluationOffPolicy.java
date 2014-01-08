@@ -34,8 +34,8 @@ public class EpisodeTriggeredEpisodeEvaluationOffPolicy extends AbstractContextO
     OffPolicyAgentEvaluable learningAgent = (OffPolicyAgentEvaluable) behaviourRunner.agent();
     RLProblem problem = environmentFactory.createEvaluationEnvironment(ExperimentCounter.newRandom(counter));
     RLAgent evaluatedAgent = learningAgent.createEvaluatedAgent();
-    int nbTimeStepsPerEvaluation = RLParameters.nbTimeStepsPerEvaluation(parameters);
-    Runner runner = new Runner(problem, evaluatedAgent, Integer.MAX_VALUE, nbTimeStepsPerEvaluation);
+    int maxEpisodeTimeSteps = RLParameters.maxEpisodeTimeSteps(parameters);
+    Runner runner = new Runner(problem, evaluatedAgent, Integer.MAX_VALUE, maxEpisodeTimeSteps);
     final int nbEpisode = RLParameters.nbEpisode(parameters);
     int nbRewardCheckpoint = RLParameters.nbRewardCheckpoint(parameters);
     int nbEpisodePerEvaluation = RLParameters.nbEpisodePerEvaluation(parameters);

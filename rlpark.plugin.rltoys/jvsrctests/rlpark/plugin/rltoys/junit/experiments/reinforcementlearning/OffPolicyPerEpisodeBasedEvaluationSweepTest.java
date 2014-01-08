@@ -18,14 +18,12 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
   final static private int NbTimeSteps = 100;
   final static private int NbBehaviourRewardCheckpoint = 10;
   final static private int NbEpisodePerEvaluation = 5;
-  final static private int NbTimeStepsPerEvaluation = 20;
 
   @Test
   public void testSweepEvaluationPerEpisode() {
     // RLParameters.NbTimeStepsPerEvaluation , NbTimeStepsPerEvaluation,
     OffPolicyProblemFactory problemFactory = new OffPolicyRLProblemFactoryTest(NbEpisode, NbTimeSteps);
     RunInfo infos = new RunInfo(RLParameters.NbRewardCheckpoint, (double) NbBehaviourRewardCheckpoint,
-                                RLParameters.NbTimeStepsPerEvaluation, (double) NbTimeStepsPerEvaluation,
                                 RLParameters.NbEpisodePerEvaluation, (double) NbEpisodePerEvaluation);
     OffPolicySweepDescriptor provider = new OffPolicySweepDescriptor(problemFactory,
                                                                      new EpisodeTriggeredEpisodeEvaluationOffPolicy(),
@@ -48,10 +46,8 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
   @Override
   protected void checkParameters(String testFolder, String filename, int divergedOnSlice, FrozenParameters parameters) {
     for (String label : parameters.labels()) {
-      if (label.contains("NbTimeStepSliceMeasured")) {
-        int expected = label.startsWith("Behaviour") ? NbTimeSteps : NbTimeStepsPerEvaluation;
-        Assert.assertEquals(expected, (int) parameters.get(label));
-      }
+      if (label.contains("NbTimeStepSliceMeasured"))
+        Assert.assertEquals(NbTimeSteps, (int) parameters.get(label));
       if (!label.contains("Reward"))
         continue;
       checkRewardEntry(testFolder, filename, parameters.get(label), label);
@@ -95,8 +91,8 @@ public class OffPolicyPerEpisodeBasedEvaluationSweepTest extends AbstractOffPoli
       Assert.assertEquals(checkPoint * binSize, value, 1.0);
     }
     if (label.contains("Slice"))
-      Assert.assertEquals(NbTimeStepsPerEvaluation * multiplier, value, multiplier);
+      Assert.assertEquals(NbTimeSteps * multiplier, value, multiplier);
     if (label.contains("Cumulated"))
-      Assert.assertEquals(NbTimeStepsPerEvaluation * multiplier, value, multiplier);
+      Assert.assertEquals(NbTimeSteps * multiplier, value, multiplier);
   }
 }

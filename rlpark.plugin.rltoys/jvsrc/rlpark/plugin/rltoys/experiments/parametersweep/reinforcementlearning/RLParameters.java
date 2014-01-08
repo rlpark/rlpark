@@ -23,7 +23,6 @@ public class RLParameters {
   public static final String Epsilon = "Epsilon";
   public static final String NbEpisodePerEvaluation = "NbEpisodePerEvaluation";
   public static final String NbRewardCheckpoint = "NbRewardCheckpoint";
-  public static final String NbTimeStepsPerEvaluation = "NbTimeStepsPerEvaluation";
 
   final static public double[] getSoftmaxValues() {
     return new double[] { 100.0, 50.0, 10.0, 5.0, 1.0, .5, .1, .05, .01 };
@@ -43,10 +42,6 @@ public class RLParameters {
 
   public static int nbEpisodePerEvaluation(Parameters parameters) {
     return (int) parameters.get(NbEpisodePerEvaluation);
-  }
-
-  public static int nbTimeStepsPerEvaluation(Parameters parameters) {
-    return (int) parameters.get(NbTimeStepsPerEvaluation);
   }
 
   public static int nbRewardCheckpoint(Parameters parameters) {

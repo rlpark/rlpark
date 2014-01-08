@@ -20,7 +20,7 @@ import zephyr.plugin.core.api.signals.Listener;
 public class TimeStepContextOffPolicy extends AbstractContextOffPolicy {
   private static final long serialVersionUID = -593900122821568271L;
 
-  private TimeStepContextOffPolicy() {
+  public TimeStepContextOffPolicy() {
     super(null, null, null);
   }
 
@@ -36,16 +36,16 @@ public class TimeStepContextOffPolicy extends AbstractContextOffPolicy {
     RLProblem problem = environmentFactory.createEvaluationEnvironment(ExperimentCounter.newRandom(counter));
     RLAgent evaluatedAgent = learningAgent.createEvaluatedAgent();
     Runner runner = new Runner(problem, evaluatedAgent, Integer.MAX_VALUE, RLParameters.maxEpisodeTimeSteps(parameters));
-    final int nbEpisode = RLParameters.nbEpisode(parameters);
     int nbRewardCheckpoint = RLParameters.nbRewardCheckpoint(parameters);
     int nbEpisodePerEvaluation = RLParameters.nbEpisodePerEvaluation(parameters);
-    final OffPolicyRewardMonitor rewardMonitor = new OffPolicyRewardMonitor(runner, nbRewardCheckpoint, nbEpisode,
-                                                                            nbEpisodePerEvaluation);
+    int nbTotalTimeSteps = RLParameters.totalNumberOfTimeSteps(parameters);
+    final OffPolicyRewardMonitor rewardMonitor = new OffPolicyRewardMonitor(runner, nbRewardCheckpoint,
+                                                                            nbTotalTimeSteps, nbEpisodePerEvaluation);
     rewardMonitor.runEvaluationIFN(0);
     behaviourRunner.onTimeStep.connect(new Listener<AbstractRunner.RunnerEvent>() {
       @Override
       public void listen(AbstractRunner.RunnerEvent eventInfo) {
-        rewardMonitor.runEvaluationIFN(eventInfo.nbEpisodeDone);
+        rewardMonitor.runEvaluationIFN(eventInfo.nbTotalTimeSteps);
       }
     });
     return rewardMonitor;
